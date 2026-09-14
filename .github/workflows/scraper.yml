@@ -1,0 +1,66 @@
+name: "Fixture Scraper (every 4h)"
+
+on:
+  schedule:
+    # Run every 4 hours at the start of the hour (00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC)
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    name: "Scrape, model & publish fixtures.json"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Run Scraper & Dixon-Coles Probability Modeler
+        env:
+          NODE_ENV: production
+        run: |
+          npm run scrape
+
+      - name: Validate Fixture Database Schema & Freshness
+        run: |
+          node -e "
+            import('fs').then(fs => {
+              const data = JSON.parse(fs.readFileSync('data/fixtures.json', 'utf8'));
+              if (!data.matches || !Array.isArray(data.matches) || data.matches.length < 10) {
+                console.error('Fixture validation failed: Insufficient matches in fixtures.json');
+                process.exit(1);
+              }
+              console.log('✓ Validation passed: ' + data.matches.length + ' fixtures active across ' + data.meta.league_count + ' leagues.');
+            });
+          "
+
+      - name: Commit and push updated fixtures.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "No new fixture or odds shifts to commit."
+          else
+            git commit -m "chore(data): live 4h fixture & Dixon-Coles model sync [$(date -u +'%Y-%m-%d %H:%M UTC')]"
+            git push origin main
+          fi

@@ -1,0 +1,9 @@
+{
+  "name": "HyenaX - The Ndlela Millionaires GoldPack",
+  "description": "Ndlela Millionaires Beast Mode Football Intelligence Engine featuring Multi-Model Ensembles, Empirical Probability Calibration, Fair Odds & +EV Detection, Trust & Volatility Scoring, Accumulator Optimizer & Weakest Link Analysis, Bet Slip Code X-Ray (Hollywoodbets, EasyBet, Betway), and Prediction Ledger.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
+

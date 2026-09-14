@@ -1,0 +1,44 @@
+{
+  "name": "HyenaX - The Ndlela Millionaires GoldPack",
+  "short_name": "HyenaX",
+  "description": "AI-consensus football predictions, Dixon-Coles bivariate probability models and odds intelligence across 40 global leagues.",
+  "id": "/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0D14",
+  "theme_color": "#0B0D14",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["sports", "utilities", "entertainment"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Big Matches Only",
+      "short_name": "Big Matches",
+      "description": "Jump straight to the high-profile fixtures",
+      "url": "./index.html?view=big",
+      "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}

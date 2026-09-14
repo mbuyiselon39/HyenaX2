@@ -1,0 +1,47 @@
+{
+  "17": {
+    "avgGoals": 3.21,
+    "sampleSize": 19,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  },
+  "8": {
+    "avgGoals": 2.44,
+    "sampleSize": 16,
+    "computed_at": "2026-08-25T04:35:53.569753+00:00"
+  },
+  "23": {
+    "avgGoals": 2.44,
+    "sampleSize": 18,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  },
+  "35": {
+    "avgGoals": 3.89,
+    "sampleSize": 9,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  },
+  "34": {
+    "avgGoals": 3.06,
+    "sampleSize": 17,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  },
+  "37": {
+    "avgGoals": 4.0,
+    "sampleSize": 32,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  },
+  "238": {
+    "avgGoals": 2.83,
+    "sampleSize": 30,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  },
+  "325": {
+    "avgGoals": 2.56,
+    "sampleSize": 63,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  },
+  "2": {
+    "avgGoals": null,
+    "sampleSize": 0,
+    "computed_at": "2026-08-31T14:58:39.149121+00:00"
+  }
+}

@@ -1,0 +1,2608 @@
+{
+  "_meta": {
+    "fd:17": "2026-08-31T14:58:39.149121+00:00",
+    "fd:8": "2026-08-31T14:58:39.149121+00:00",
+    "fd:23": "2026-08-31T14:58:39.149121+00:00",
+    "fd:35": "2026-08-31T14:58:39.149121+00:00",
+    "fd:34": "2026-08-31T14:58:39.149121+00:00",
+    "fd:37": "2026-08-31T14:58:39.149121+00:00",
+    "fd:238": "2026-08-31T14:58:39.149121+00:00",
+    "fd:325": "2026-08-31T14:58:39.149121+00:00",
+    "fd:2": "2026-08-27T07:16:57.360876+00:00"
+  },
+  "Arsenal FC": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Manchester City FC": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 6,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Manchester United FC": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 5,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Aston Villa FC": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 0,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Liverpool FC": {
+    "points": 2,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "AFC Bournemouth": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Sunderland AFC": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Brighton & Hove Albion FC": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 7,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Brentford FC": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Chelsea FC": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 7,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Fulham FC": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Newcastle United FC": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Everton FC": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Leeds United FC": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Crystal Palace FC": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 1,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Nottingham Forest FC": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Tottenham Hotspur FC": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 0,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "West Ham United FC": {
+    "points": 39,
+    "playedGames": 38,
+    "goalsFor": 46,
+    "goalsAgainst": 65,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Burnley FC": {
+    "points": 22,
+    "playedGames": 38,
+    "goalsFor": 38,
+    "goalsAgainst": 75,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Wolverhampton Wanderers FC": {
+    "points": 20,
+    "playedGames": 38,
+    "goalsFor": 27,
+    "goalsAgainst": 68,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "FC Barcelona": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 7,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Real Madrid CF": {
+    "points": 9,
+    "playedGames": 3,
+    "goalsFor": 10,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Villarreal CF": {
+    "points": 2,
+    "playedGames": 3,
+    "goalsFor": 4,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Club Atlético de Madrid": {
+    "points": 7,
+    "playedGames": 3,
+    "goalsFor": 7,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Real Betis Balompié": {
+    "points": 6,
+    "playedGames": 3,
+    "goalsFor": 4,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "RC Celta de Vigo": {
+    "points": 1,
+    "playedGames": 3,
+    "goalsFor": 1,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Getafe CF": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 1,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Rayo Vallecano de Madrid": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Valencia CF": {
+    "points": 1,
+    "playedGames": 3,
+    "goalsFor": 1,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Real Sociedad de Fútbol": {
+    "points": 3,
+    "playedGames": 3,
+    "goalsFor": 3,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "RCD Espanyol de Barcelona": {
+    "points": 3,
+    "playedGames": 3,
+    "goalsFor": 5,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Athletic Club": {
+    "points": 3,
+    "playedGames": 3,
+    "goalsFor": 3,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Elche CF": {
+    "points": 1,
+    "playedGames": 3,
+    "goalsFor": 3,
+    "goalsAgainst": 9,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Deportivo Alavés": {
+    "points": 7,
+    "playedGames": 3,
+    "goalsFor": 5,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Sevilla FC": {
+    "points": 6,
+    "playedGames": 3,
+    "goalsFor": 6,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "CA Osasuna": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "RCD Mallorca": {
+    "points": 42,
+    "playedGames": 38,
+    "goalsFor": 47,
+    "goalsAgainst": 57,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Levante UD": {
+    "points": 4,
+    "playedGames": 3,
+    "goalsFor": 5,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Girona FC": {
+    "points": 41,
+    "playedGames": 38,
+    "goalsFor": 39,
+    "goalsAgainst": 55,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Real Oviedo": {
+    "points": 29,
+    "playedGames": 38,
+    "goalsFor": 26,
+    "goalsAgainst": 60,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "FC Bayern München": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 5,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "Borussia Dortmund": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 2,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "RB Leipzig": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "VfB Stuttgart": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 1,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "TSG 1899 Hoffenheim": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 2,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "Bayer 04 Leverkusen": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 2,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "SC Freiburg": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 4,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "Eintracht Frankfurt": {
+    "points": 1,
+    "playedGames": 1,
+    "goalsFor": 3,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "FC Augsburg": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "1. FSV Mainz 05": {
+    "points": 1,
+    "playedGames": 1,
+    "goalsFor": 0,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "1. FC Union Berlin": {
+    "points": 1,
+    "playedGames": 1,
+    "goalsFor": 3,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "Borussia Mönchengladbach": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 0,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "Hamburger SV": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 0,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "1. FC Köln": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 3,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "SV Werder Bremen": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 1,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "VfL Wolfsburg": {
+    "points": 29,
+    "playedGames": 34,
+    "goalsFor": 45,
+    "goalsAgainst": 69,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "1. FC Heidenheim 1846": {
+    "points": 26,
+    "playedGames": 34,
+    "goalsFor": 41,
+    "goalsAgainst": 72,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "FC St. Pauli 1910": {
+    "points": 26,
+    "playedGames": 34,
+    "goalsFor": 29,
+    "goalsAgainst": 60,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "FC Porto": {
+    "points": 12,
+    "playedGames": 4,
+    "goalsFor": 9,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Sporting Clube de Portugal": {
+    "points": 10,
+    "playedGames": 4,
+    "goalsFor": 12,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Sport Lisboa e Benfica": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 9,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Sporting Clube de Braga": {
+    "points": 1,
+    "playedGames": 1,
+    "goalsFor": 2,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "FC Famalicão": {
+    "points": 2,
+    "playedGames": 4,
+    "goalsFor": 2,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Gil Vicente FC": {
+    "points": 7,
+    "playedGames": 3,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Moreirense FC": {
+    "points": 4,
+    "playedGames": 3,
+    "goalsFor": 3,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "FC Arouca": {
+    "points": 9,
+    "playedGames": 4,
+    "goalsFor": 7,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "GD Estoril Praia": {
+    "points": 1,
+    "playedGames": 3,
+    "goalsFor": 1,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Vitória SC": {
+    "points": 3,
+    "playedGames": 3,
+    "goalsFor": 3,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "FC Alverca": {
+    "points": 2,
+    "playedGames": 4,
+    "goalsFor": 4,
+    "goalsAgainst": 8,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Rio Ave FC": {
+    "points": 3,
+    "playedGames": 4,
+    "goalsFor": 2,
+    "goalsAgainst": 7,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "CD Santa Clara": {
+    "points": 8,
+    "playedGames": 4,
+    "goalsFor": 5,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "CD Nacional": {
+    "points": 4,
+    "playedGames": 4,
+    "goalsFor": 6,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "CF Estrela da Amadora": {
+    "points": 5,
+    "playedGames": 3,
+    "goalsFor": 7,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Casa Pia AC": {
+    "points": 0,
+    "playedGames": 4,
+    "goalsFor": 0,
+    "goalsAgainst": 11,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "CD Tondela": {
+    "points": 27,
+    "playedGames": 32,
+    "goalsFor": 25,
+    "goalsAgainst": 51,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "AVS": {
+    "points": 20,
+    "playedGames": 33,
+    "goalsFor": 26,
+    "goalsAgainst": 66,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "SE Palmeiras": {
+    "points": 52,
+    "playedGames": 25,
+    "goalsFor": 45,
+    "goalsAgainst": 21,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "CR Flamengo": {
+    "points": 48,
+    "playedGames": 24,
+    "goalsFor": 48,
+    "goalsAgainst": 21,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "CA Paranaense": {
+    "points": 45,
+    "playedGames": 25,
+    "goalsFor": 37,
+    "goalsAgainst": 25,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Fluminense FC": {
+    "points": 42,
+    "playedGames": 25,
+    "goalsFor": 39,
+    "goalsAgainst": 32,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "EC Bahia": {
+    "points": 40,
+    "playedGames": 25,
+    "goalsFor": 37,
+    "goalsAgainst": 30,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "RB Bragantino": {
+    "points": 35,
+    "playedGames": 24,
+    "goalsFor": 29,
+    "goalsAgainst": 25,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Cruzeiro EC": {
+    "points": 39,
+    "playedGames": 25,
+    "goalsFor": 35,
+    "goalsAgainst": 36,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Botafogo FR": {
+    "points": 30,
+    "playedGames": 24,
+    "goalsFor": 37,
+    "goalsAgainst": 40,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "SC Corinthians Paulista": {
+    "points": 32,
+    "playedGames": 25,
+    "goalsFor": 26,
+    "goalsAgainst": 25,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "CA Mineiro": {
+    "points": 36,
+    "playedGames": 24,
+    "goalsFor": 32,
+    "goalsAgainst": 28,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Coritiba FBC": {
+    "points": 34,
+    "playedGames": 24,
+    "goalsFor": 30,
+    "goalsAgainst": 31,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "São Paulo FC": {
+    "points": 30,
+    "playedGames": 24,
+    "goalsFor": 29,
+    "goalsAgainst": 28,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "EC Vitória": {
+    "points": 29,
+    "playedGames": 25,
+    "goalsFor": 24,
+    "goalsAgainst": 37,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Mirassol FC": {
+    "points": 25,
+    "playedGames": 24,
+    "goalsFor": 27,
+    "goalsAgainst": 37,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Santos FC": {
+    "points": 29,
+    "playedGames": 24,
+    "goalsFor": 34,
+    "goalsAgainst": 36,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "SC Internacional": {
+    "points": 25,
+    "playedGames": 25,
+    "goalsFor": 26,
+    "goalsAgainst": 31,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Grêmio FBPA": {
+    "points": 28,
+    "playedGames": 24,
+    "goalsFor": 27,
+    "goalsAgainst": 32,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "CR Vasco da Gama": {
+    "points": 25,
+    "playedGames": 24,
+    "goalsFor": 27,
+    "goalsAgainst": 39,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Clube do Remo": {
+    "points": 23,
+    "playedGames": 24,
+    "goalsFor": 28,
+    "goalsAgainst": 39,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "Chapecoense AF": {
+    "points": 14,
+    "playedGames": 24,
+    "goalsFor": 25,
+    "goalsAgainst": 49,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Brasileirão Série A"
+  },
+  "FC Internazionale Milano": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 5,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Paris Saint-Germain FC": {
+    "points": 2,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Juventus FC": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Atalanta BC": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 2,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "PAE Olympiakos SFP": {
+    "points": 11,
+    "playedGames": 8,
+    "goalsFor": 10,
+    "goalsAgainst": 14,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "Club Brugge KV": {
+    "points": 10,
+    "playedGames": 8,
+    "goalsFor": 15,
+    "goalsAgainst": 17,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "Galatasaray SK": {
+    "points": 10,
+    "playedGames": 8,
+    "goalsFor": 9,
+    "goalsAgainst": 11,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "AS Monaco FC": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Qarabağ Ağdam FK": {
+    "points": 10,
+    "playedGames": 8,
+    "goalsFor": 13,
+    "goalsAgainst": 21,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "FK Bodø/Glimt": {
+    "points": 9,
+    "playedGames": 8,
+    "goalsFor": 14,
+    "goalsAgainst": 15,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "Olympique de Marseille": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Paphos FC": {
+    "points": 9,
+    "playedGames": 8,
+    "goalsFor": 8,
+    "goalsAgainst": 11,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "Royale Union Saint-Gilloise": {
+    "points": 9,
+    "playedGames": 8,
+    "goalsFor": 8,
+    "goalsAgainst": 17,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "PSV": {
+    "points": 10,
+    "playedGames": 4,
+    "goalsFor": 15,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "SSC Napoli": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "FC København": {
+    "points": 8,
+    "playedGames": 8,
+    "goalsFor": 12,
+    "goalsAgainst": 21,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "AFC Ajax": {
+    "points": 7,
+    "playedGames": 3,
+    "goalsFor": 8,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "SK Slavia Praha": {
+    "points": 3,
+    "playedGames": 8,
+    "goalsFor": 5,
+    "goalsAgainst": 19,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "FK Kairat": {
+    "points": 1,
+    "playedGames": 8,
+    "goalsFor": 7,
+    "goalsAgainst": 22,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "UEFA Champions League"
+  },
+  "SBV Excelsior": {
+    "points": 6,
+    "playedGames": 3,
+    "goalsFor": 7,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "Go Ahead Eagles": {
+    "points": 7,
+    "playedGames": 4,
+    "goalsFor": 11,
+    "goalsAgainst": 9,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "AZ": {
+    "points": 12,
+    "playedGames": 4,
+    "goalsFor": 13,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "Telstar 1963": {
+    "points": 3,
+    "playedGames": 3,
+    "goalsFor": 3,
+    "goalsAgainst": 8,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "Fortuna Sittard": {
+    "points": 7,
+    "playedGames": 4,
+    "goalsFor": 8,
+    "goalsAgainst": 7,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "NEC": {
+    "points": 6,
+    "playedGames": 3,
+    "goalsFor": 8,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "ADO Den Haag": {
+    "points": 1,
+    "playedGames": 4,
+    "goalsFor": 4,
+    "goalsAgainst": 11,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "Willem II Tilburg": {
+    "points": 1,
+    "playedGames": 3,
+    "goalsFor": 4,
+    "goalsAgainst": 10,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "SC Cambuur-Leeuwarden": {
+    "points": 0,
+    "playedGames": 4,
+    "goalsFor": 4,
+    "goalsAgainst": 16,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "CS Marítimo": {
+    "points": 7,
+    "playedGames": 4,
+    "goalsFor": 6,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "FC Groningen": {
+    "points": 6,
+    "playedGames": 4,
+    "goalsFor": 9,
+    "goalsAgainst": 10,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "Feyenoord Rotterdam": {
+    "points": 8,
+    "playedGames": 4,
+    "goalsFor": 10,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "SC Heerenveen": {
+    "points": 5,
+    "playedGames": 4,
+    "goalsFor": 5,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "FC Utrecht": {
+    "points": 1,
+    "playedGames": 4,
+    "goalsFor": 6,
+    "goalsAgainst": 15,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "FC Twente '65": {
+    "points": 6,
+    "playedGames": 3,
+    "goalsFor": 7,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "Sparta Rotterdam": {
+    "points": 4,
+    "playedGames": 4,
+    "goalsFor": 7,
+    "goalsAgainst": 7,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "PEC Zwolle": {
+    "points": 3,
+    "playedGames": 4,
+    "goalsFor": 4,
+    "goalsAgainst": 8,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Eredivisie"
+  },
+  "Académico de Viseu FC": {
+    "points": 2,
+    "playedGames": 4,
+    "goalsFor": 4,
+    "goalsAgainst": 8,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Liga Portugal"
+  },
+  "Real Racing Club de Santander": {
+    "points": 4,
+    "playedGames": 3,
+    "goalsFor": 5,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "RC Deportivo La Coruña": {
+    "points": 5,
+    "playedGames": 3,
+    "goalsFor": 5,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Málaga CF": {
+    "points": 1,
+    "playedGames": 3,
+    "goalsFor": 1,
+    "goalsAgainst": 7,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "LaLiga"
+  },
+  "Hull City AFC": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Coventry City FC": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 0,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Ipswich Town FC": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 6,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Premier League"
+  },
+  "Cagliari Calcio": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 1,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Como 1907": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Udinese Calcio": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Parma Calcio 1913": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 0,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Genoa CFC": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 0,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "AC Monza": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 7,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "US Lecce": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 2,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "AC Milan": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "US Sassuolo Calcio": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Torino FC": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Frosinone Calcio": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Venezia FC": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 0,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Racing Club de Lens": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 6,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Lille OSC": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Olympique Lyonnais": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Le Mans FC": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Stade Brestois 29": {
+    "points": 2,
+    "playedGames": 2,
+    "goalsFor": 4,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Stade Rennais FC 1901": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 5,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "ES Troyes AC": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "FC Lorient": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 1,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "OGC Nice": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 0,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Paris FC": {
+    "points": 4,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Le Havre AC": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 1,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Angers SCO": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "Toulouse FC": {
+    "points": 1,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 4,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "AJ Auxerre": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 3,
+    "goalsAgainst": 8,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "RC Strasbourg Alsace": {
+    "points": 3,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 5,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Ligue 1"
+  },
+  "AS Roma": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 4,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "SS Lazio": {
+    "points": 6,
+    "playedGames": 2,
+    "goalsFor": 2,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "Bologna FC 1909": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 0,
+    "goalsAgainst": 1,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "ACF Fiorentina": {
+    "points": 0,
+    "playedGames": 2,
+    "goalsFor": 0,
+    "goalsAgainst": 7,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Serie A"
+  },
+  "SV 07 Elversberg": {
+    "points": 3,
+    "playedGames": 1,
+    "goalsFor": 3,
+    "goalsAgainst": 2,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "SC Paderborn 07": {
+    "points": 1,
+    "playedGames": 1,
+    "goalsFor": 0,
+    "goalsAgainst": 0,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  },
+  "FC Schalke 04": {
+    "points": 0,
+    "playedGames": 1,
+    "goalsFor": 0,
+    "goalsAgainst": 3,
+    "form": [
+      "D",
+      "D",
+      "D",
+      "D",
+      "D"
+    ],
+    "source": "football-data.org",
+    "league": "Bundesliga"
+  }
+}
