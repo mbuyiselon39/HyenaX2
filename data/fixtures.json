@@ -1,7 +1,7 @@
 {
   "meta": {
     "dataSource": "LIVE SYNC",
-    "generated_at": "2026-09-01T19:34:59.174Z",
+    "generated_at": "2026-09-14T15:53:04.160Z",
     "source": "football-data.org & Dixon-Coles Live Engine (19/19 leagues active)",
     "schema_version": "2.5",
     "league_count": 19,
@@ -9,16 +9,16 @@
   },
   "matches": [
     {
-      "id": "psl-mamelodi-sundowns-kaizer-chiefs-1788283800000",
+      "id": "psl-mamelodi-sundowns-kaizer-chiefs-1789407000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-01T17:30:00Z",
+      "kickoff": "2026-09-14T17:30:00Z",
       "home": {
         "name": "Mamelodi Sundowns",
         "short": "MS",
@@ -357,16 +357,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-orlando-pirates-supersport-united-1788291000000",
+      "id": "psl-orlando-pirates-supersport-united-1789414200000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-01T19:30:00Z",
+      "kickoff": "2026-09-14T19:30:00Z",
       "home": {
         "name": "Orlando Pirates",
         "short": "OP",
@@ -705,16 +705,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-cape-town-city-stellenbosch-1788274800000",
+      "id": "psl-cape-town-city-stellenbosch-1789398000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-01T15:00:00Z",
+      "kickoff": "2026-09-14T15:00:00Z",
       "home": {
         "name": "Cape Town City",
         "short": "CTC",
@@ -1053,16 +1053,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-amazulu-ts-galaxy-1788274800000",
+      "id": "psl-amazulu-ts-galaxy-1789398000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-01T15:00:00Z",
+      "kickoff": "2026-09-14T15:00:00Z",
       "home": {
         "name": "AmaZulu",
         "short": "A",
@@ -1401,16 +1401,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-arsenal-chelsea-1788289200000",
+      "id": "epl-arsenal-chelsea-1789412400000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "19:00",
-      "kickoff": "2026-09-01T19:00:00Z",
+      "kickoff": "2026-09-14T19:00:00Z",
       "home": {
         "name": "Arsenal",
         "short": "A",
@@ -1749,16 +1749,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-newcastle-tottenham-1788274800000",
+      "id": "epl-newcastle-tottenham-1789398000000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-01T15:00:00Z",
+      "kickoff": "2026-09-14T15:00:00Z",
       "home": {
         "name": "Newcastle",
         "short": "N",
@@ -2097,16 +2097,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-aston-villa-brighton-1788283800000",
+      "id": "epl-aston-villa-brighton-1789407000000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-01T17:30:00Z",
+      "kickoff": "2026-09-14T17:30:00Z",
       "home": {
         "name": "Aston Villa",
         "short": "AV",
@@ -2445,16 +2445,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-everton-fulham-1788292800000",
+      "id": "epl-everton-fulham-1789416000000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-01T20:00:00Z",
+      "kickoff": "2026-09-14T20:00:00Z",
       "home": {
         "name": "Everton",
         "short": "E",
@@ -2793,16 +2793,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-real-madrid-barcelona-1788296400000",
+      "id": "laliga-real-madrid-barcelona-1789419600000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-01T21:00:00Z",
+      "kickoff": "2026-09-14T21:00:00Z",
       "home": {
         "name": "Real Madrid",
         "short": "RM",
@@ -3141,16 +3141,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-atl-tico-madrid-sevilla-1788287400000",
+      "id": "laliga-atl-tico-madrid-sevilla-1789410600000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "18:30",
-      "kickoff": "2026-09-01T18:30:00Z",
+      "kickoff": "2026-09-14T18:30:00Z",
       "home": {
         "name": "Atlético Madrid",
         "short": "AM",
@@ -3489,16 +3489,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-ca-osasuna-getafe-cf-1788283800000",
+      "id": "laliga-ca-osasuna-getafe-cf-1789407000000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-01T17:30:00Z",
+      "kickoff": "2026-09-14T17:30:00Z",
       "home": {
         "name": "CA Osasuna",
         "short": "CO",
@@ -3837,16 +3837,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-fc-barcelona-rayo-vallecano-1788291000000",
+      "id": "laliga-fc-barcelona-rayo-vallecano-1789414200000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-01T19:30:00Z",
+      "kickoff": "2026-09-14T19:30:00Z",
       "home": {
         "name": "FC Barcelona",
         "short": "FB",
@@ -4185,16 +4185,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "mls-inter-miami-lafc-1788305400000",
+      "id": "mls-inter-miami-lafc-1789428600000",
       "league": {
         "id": "mls",
         "name": "MLS",
         "country": "USA",
         "flag": "🇺🇸"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "23:30",
-      "kickoff": "2026-09-01T23:30:00Z",
+      "kickoff": "2026-09-14T23:30:00Z",
       "home": {
         "name": "Inter Miami",
         "short": "IM",
@@ -4533,16 +4533,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "mls-la-galaxy-atlanta-united-1788296400000",
+      "id": "mls-la-galaxy-atlanta-united-1789419600000",
       "league": {
         "id": "mls",
         "name": "MLS",
         "country": "USA",
         "flag": "🇺🇸"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-01T21:00:00Z",
+      "kickoff": "2026-09-14T21:00:00Z",
       "home": {
         "name": "LA Galaxy",
         "short": "LG",
@@ -4881,16 +4881,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "scotprem-celtic-rangers-1788265800000",
+      "id": "scotprem-celtic-rangers-1789389000000",
       "league": {
         "id": "scotprem",
         "name": "Scottish Premiership",
         "country": "Scotland",
         "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "12:30",
-      "kickoff": "2026-09-01T12:30:00Z",
+      "kickoff": "2026-09-14T12:30:00Z",
       "home": {
         "name": "Celtic",
         "short": "C",
@@ -5229,16 +5229,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "scotprem-aberdeen-hearts-1788274800000",
+      "id": "scotprem-aberdeen-hearts-1789398000000",
       "league": {
         "id": "scotprem",
         "name": "Scottish Premiership",
         "country": "Scotland",
         "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-01T15:00:00Z",
+      "kickoff": "2026-09-14T15:00:00Z",
       "home": {
         "name": "Aberdeen",
         "short": "A",
@@ -5577,16 +5577,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligamx-club-am-rica-tigres-uanl-1788300000000",
+      "id": "ligamx-club-am-rica-tigres-uanl-1789423200000",
       "league": {
         "id": "ligamx",
         "name": "Liga MX",
         "country": "Mexico",
         "flag": "🇲🇽"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "22:00",
-      "kickoff": "2026-09-01T22:00:00Z",
+      "kickoff": "2026-09-14T22:00:00Z",
       "home": {
         "name": "Club América",
         "short": "CA",
@@ -5925,16 +5925,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligamx-monterrey-chivas-guadalajara-1788292800000",
+      "id": "ligamx-monterrey-chivas-guadalajara-1789416000000",
       "league": {
         "id": "ligamx",
         "name": "Liga MX",
         "country": "Mexico",
         "flag": "🇲🇽"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-01T20:00:00Z",
+      "kickoff": "2026-09-14T20:00:00Z",
       "home": {
         "name": "Monterrey",
         "short": "M",
@@ -6273,16 +6273,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-us-lecce-as-roma-1788280200000",
+      "id": "seriea-us-lecce-as-roma-1789403400000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "16:30",
-      "kickoff": "2026-09-01T16:30:00Z",
+      "kickoff": "2026-09-14T16:30:00Z",
       "home": {
         "name": "US Lecce",
         "short": "UL",
@@ -6621,16 +6621,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-atalanta-bc-bologna-fc-1909-1788288300000",
+      "id": "seriea-atalanta-bc-bologna-fc-1909-1789411500000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "18:45",
-      "kickoff": "2026-09-01T18:45:00Z",
+      "kickoff": "2026-09-14T18:45:00Z",
       "home": {
         "name": "Atalanta BC",
         "short": "AB",
@@ -6969,16 +6969,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-inter-ac-milan-1788295500000",
+      "id": "seriea-inter-ac-milan-1789418700000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-01T20:45:00Z",
+      "kickoff": "2026-09-14T20:45:00Z",
       "home": {
         "name": "Inter",
         "short": "I",
@@ -7317,16 +7317,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "bundesliga-bayern-munich-borussia-dortmund-1788287400000",
+      "id": "bundesliga-bayern-munich-borussia-dortmund-1789410600000",
       "league": {
         "id": "bundesliga",
         "name": "Bundesliga",
         "country": "Germany",
         "flag": "🇩🇪"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "18:30",
-      "kickoff": "2026-09-01T18:30:00Z",
+      "kickoff": "2026-09-14T18:30:00Z",
       "home": {
         "name": "Bayern Munich",
         "short": "BM",
@@ -7665,16 +7665,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligue1-paris-saint-germain-marseille-1788295500000",
+      "id": "ligue1-paris-saint-germain-marseille-1789418700000",
       "league": {
         "id": "ligue1",
         "name": "Ligue 1",
         "country": "France",
         "flag": "🇫🇷"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-01T20:45:00Z",
+      "kickoff": "2026-09-14T20:45:00Z",
       "home": {
         "name": "Paris Saint-Germain",
         "short": "PS",
@@ -8013,16 +8013,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "saudi-al-hilal-al-nassr-1788289200000",
+      "id": "saudi-al-hilal-al-nassr-1789412400000",
       "league": {
         "id": "saudi",
         "name": "Saudi Pro League",
         "country": "Saudi Arabia",
         "flag": "🇸🇦"
       },
-      "matchDate": "2026-09-01",
+      "matchDate": "2026-09-14",
       "kickoffTime": "19:00",
-      "kickoff": "2026-09-01T19:00:00Z",
+      "kickoff": "2026-09-14T19:00:00Z",
       "home": {
         "name": "Al Hilal",
         "short": "AH",
@@ -8361,16 +8361,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-manchester-city-liverpool-1788193800000",
+      "id": "epl-manchester-city-liverpool-1789317000000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-08-31",
+      "matchDate": "2026-09-13",
       "kickoffTime": "16:30",
-      "kickoff": "2026-08-31T16:30:00Z",
+      "kickoff": "2026-09-13T16:30:00Z",
       "home": {
         "name": "Manchester City",
         "short": "MC",
@@ -8709,16 +8709,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-sekhukhune-united-golden-arrows-1788188400000",
+      "id": "psl-sekhukhune-united-golden-arrows-1789311600000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-08-31",
+      "matchDate": "2026-09-13",
       "kickoffTime": "15:00",
-      "kickoff": "2026-08-31T15:00:00Z",
+      "kickoff": "2026-09-13T15:00:00Z",
       "home": {
         "name": "Sekhukhune United",
         "short": "SU",
@@ -9057,16 +9057,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-real-sociedad-villarreal-1788204600000",
+      "id": "laliga-real-sociedad-villarreal-1789327800000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-08-31",
+      "matchDate": "2026-09-13",
       "kickoffTime": "19:30",
-      "kickoff": "2026-08-31T19:30:00Z",
+      "kickoff": "2026-09-13T19:30:00Z",
       "home": {
         "name": "Real Sociedad",
         "short": "RS",
@@ -9405,16 +9405,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-juventus-roma-1788209100000",
+      "id": "seriea-juventus-roma-1789332300000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-08-31",
+      "matchDate": "2026-09-13",
       "kickoffTime": "20:45",
-      "kickoff": "2026-08-31T20:45:00Z",
+      "kickoff": "2026-09-13T20:45:00Z",
       "home": {
         "name": "Juventus",
         "short": "J",
@@ -9753,16 +9753,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "bundesliga-bayer-leverkusen-rb-leipzig-1788197400000",
+      "id": "bundesliga-bayer-leverkusen-rb-leipzig-1789320600000",
       "league": {
         "id": "bundesliga",
         "name": "Bundesliga",
         "country": "Germany",
         "flag": "🇩🇪"
       },
-      "matchDate": "2026-08-31",
+      "matchDate": "2026-09-13",
       "kickoffTime": "17:30",
-      "kickoff": "2026-08-31T17:30:00Z",
+      "kickoff": "2026-09-13T17:30:00Z",
       "home": {
         "name": "Bayer Leverkusen",
         "short": "BL",
@@ -10101,16 +10101,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligaportugal-sporting-cp-porto-1788208200000",
+      "id": "ligaportugal-sporting-cp-porto-1789331400000",
       "league": {
         "id": "ligaportugal",
         "name": "Liga Portugal",
         "country": "Portugal",
         "flag": "🇵🇹"
       },
-      "matchDate": "2026-08-31",
+      "matchDate": "2026-09-13",
       "kickoffTime": "20:30",
-      "kickoff": "2026-08-31T20:30:00Z",
+      "kickoff": "2026-09-13T20:30:00Z",
       "home": {
         "name": "Sporting CP",
         "short": "SC",
@@ -10449,16 +10449,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "brasileirao-flamengo-palmeiras-1788210000000",
+      "id": "brasileirao-flamengo-palmeiras-1789333200000",
       "league": {
         "id": "brasileirao",
         "name": "Brasileirão Série A",
         "country": "Brazil",
         "flag": "🇧🇷"
       },
-      "matchDate": "2026-08-31",
+      "matchDate": "2026-09-13",
       "kickoffTime": "21:00",
-      "kickoff": "2026-08-31T21:00:00Z",
+      "kickoff": "2026-09-13T21:00:00Z",
       "home": {
         "name": "Flamengo",
         "short": "F",
@@ -10797,16 +10797,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-kaizer-chiefs-sekhukhune-united-1788370200000",
+      "id": "psl-kaizer-chiefs-sekhukhune-united-1789493400000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-02T17:30:00Z",
+      "kickoff": "2026-09-15T17:30:00Z",
       "home": {
         "name": "Kaizer Chiefs",
         "short": "KC",
@@ -11145,16 +11145,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-orlando-pirates-cape-town-city-1788377400000",
+      "id": "psl-orlando-pirates-cape-town-city-1789500600000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-02T19:30:00Z",
+      "kickoff": "2026-09-15T19:30:00Z",
       "home": {
         "name": "Orlando Pirates",
         "short": "OP",
@@ -11493,16 +11493,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-manchester-united-west-ham-1788379200000",
+      "id": "epl-manchester-united-west-ham-1789502400000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-02T20:00:00Z",
+      "kickoff": "2026-09-15T20:00:00Z",
       "home": {
         "name": "Manchester United",
         "short": "MU",
@@ -11841,16 +11841,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-fulham-tottenham-1788371100000",
+      "id": "epl-fulham-tottenham-1789494300000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "17:45",
-      "kickoff": "2026-09-02T17:45:00Z",
+      "kickoff": "2026-09-15T17:45:00Z",
       "home": {
         "name": "Fulham",
         "short": "F",
@@ -12189,16 +12189,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-athletic-club-real-betis-1788379200000",
+      "id": "laliga-athletic-club-real-betis-1789502400000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-02T20:00:00Z",
+      "kickoff": "2026-09-15T20:00:00Z",
       "home": {
         "name": "Athletic Club",
         "short": "AC",
@@ -12537,16 +12537,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-napoli-lazio-1788381900000",
+      "id": "seriea-napoli-lazio-1789505100000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-02T20:45:00Z",
+      "kickoff": "2026-09-15T20:45:00Z",
       "home": {
         "name": "Napoli",
         "short": "N",
@@ -12885,16 +12885,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-fiorentina-juventus-1788373800000",
+      "id": "seriea-fiorentina-juventus-1789497000000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "18:30",
-      "kickoff": "2026-09-02T18:30:00Z",
+      "kickoff": "2026-09-15T18:30:00Z",
       "home": {
         "name": "Fiorentina",
         "short": "F",
@@ -13233,16 +13233,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "bundesliga-eintracht-frankfurt-vfb-stuttgart-1788377400000",
+      "id": "bundesliga-eintracht-frankfurt-vfb-stuttgart-1789500600000",
       "league": {
         "id": "bundesliga",
         "name": "Bundesliga",
         "country": "Germany",
         "flag": "🇩🇪"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-02T19:30:00Z",
+      "kickoff": "2026-09-15T19:30:00Z",
       "home": {
         "name": "Eintracht Frankfurt",
         "short": "EF",
@@ -13581,16 +13581,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligue1-monaco-lens-1788379200000",
+      "id": "ligue1-monaco-lens-1789502400000",
       "league": {
         "id": "ligue1",
         "name": "Ligue 1",
         "country": "France",
         "flag": "🇫🇷"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-02T20:00:00Z",
+      "kickoff": "2026-09-15T20:00:00Z",
       "home": {
         "name": "Monaco",
         "short": "M",
@@ -13929,16 +13929,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "eredivisie-ajax-feyenoord-1788367500000",
+      "id": "eredivisie-ajax-feyenoord-1789490700000",
       "league": {
         "id": "eredivisie",
         "name": "Eredivisie",
         "country": "Netherlands",
         "flag": "🇳🇱"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "16:45",
-      "kickoff": "2026-09-02T16:45:00Z",
+      "kickoff": "2026-09-15T16:45:00Z",
       "home": {
         "name": "Ajax",
         "short": "A",
@@ -14277,16 +14277,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "eredivisie-psv-az-alkmaar-1788379200000",
+      "id": "eredivisie-psv-az-alkmaar-1789502400000",
       "league": {
         "id": "eredivisie",
         "name": "Eredivisie",
         "country": "Netherlands",
         "flag": "🇳🇱"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-02T20:00:00Z",
+      "kickoff": "2026-09-15T20:00:00Z",
       "home": {
         "name": "PSV",
         "short": "P",
@@ -14625,16 +14625,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligaportugal-benfica-sporting-cp-1788380100000",
+      "id": "ligaportugal-benfica-sporting-cp-1789503300000",
       "league": {
         "id": "ligaportugal",
         "name": "Liga Portugal",
         "country": "Portugal",
         "flag": "🇵🇹"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "20:15",
-      "kickoff": "2026-09-02T20:15:00Z",
+      "kickoff": "2026-09-15T20:15:00Z",
       "home": {
         "name": "Benfica",
         "short": "B",
@@ -14973,16 +14973,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "mls-columbus-crew-fc-cincinnati-1788390000000",
+      "id": "mls-columbus-crew-fc-cincinnati-1789513200000",
       "league": {
         "id": "mls",
         "name": "MLS",
         "country": "USA",
         "flag": "🇺🇸"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "23:00",
-      "kickoff": "2026-09-02T23:00:00Z",
+      "kickoff": "2026-09-15T23:00:00Z",
       "home": {
         "name": "Columbus Crew",
         "short": "CC",
@@ -15321,16 +15321,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "saudi-al-ittihad-al-ahli-1788375600000",
+      "id": "saudi-al-ittihad-al-ahli-1789498800000",
       "league": {
         "id": "saudi",
         "name": "Saudi Pro League",
         "country": "Saudi Arabia",
         "flag": "🇸🇦"
       },
-      "matchDate": "2026-09-02",
+      "matchDate": "2026-09-15",
       "kickoffTime": "19:00",
-      "kickoff": "2026-09-02T19:00:00Z",
+      "kickoff": "2026-09-15T19:00:00Z",
       "home": {
         "name": "Al Ittihad",
         "short": "AI",
@@ -15669,16 +15669,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-mamelodi-sundowns-stellenbosch-1788463800000",
+      "id": "psl-mamelodi-sundowns-stellenbosch-1789587000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-03T19:30:00Z",
+      "kickoff": "2026-09-16T19:30:00Z",
       "home": {
         "name": "Mamelodi Sundowns",
         "short": "MS",
@@ -16017,16 +16017,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-polokwane-city-amazulu-1788447600000",
+      "id": "psl-polokwane-city-amazulu-1789570800000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-03T15:00:00Z",
+      "kickoff": "2026-09-16T15:00:00Z",
       "home": {
         "name": "Polokwane City",
         "short": "PC",
@@ -16365,16 +16365,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-liverpool-everton-1788465600000",
+      "id": "epl-liverpool-everton-1789588800000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-03T20:00:00Z",
+      "kickoff": "2026-09-16T20:00:00Z",
       "home": {
         "name": "Liverpool",
         "short": "L",
@@ -16713,16 +16713,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-valencia-sevilla-1788469200000",
+      "id": "laliga-valencia-sevilla-1789592400000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-03T21:00:00Z",
+      "kickoff": "2026-09-16T21:00:00Z",
       "home": {
         "name": "Valencia",
         "short": "V",
@@ -17061,16 +17061,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "superlig-galatasaray-fenerbah-e-1788462000000",
+      "id": "superlig-galatasaray-fenerbah-e-1789585200000",
       "league": {
         "id": "superlig",
         "name": "Süper Lig",
         "country": "Türkiye",
         "flag": "🇹🇷"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "19:00",
-      "kickoff": "2026-09-03T19:00:00Z",
+      "kickoff": "2026-09-16T19:00:00Z",
       "home": {
         "name": "Galatasaray",
         "short": "G",
@@ -17409,16 +17409,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "jupiler-club-brugge-anderlecht-1788460200000",
+      "id": "jupiler-club-brugge-anderlecht-1789583400000",
       "league": {
         "id": "jupiler",
         "name": "Jupiler Pro League",
         "country": "Belgium",
         "flag": "🇧🇪"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "18:30",
-      "kickoff": "2026-09-03T18:30:00Z",
+      "kickoff": "2026-09-16T18:30:00Z",
       "home": {
         "name": "Club Brugge",
         "short": "CB",
@@ -17757,16 +17757,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "brasileirao-botafogo-s-o-paulo-1788474600000",
+      "id": "brasileirao-botafogo-s-o-paulo-1789597800000",
       "league": {
         "id": "brasileirao",
         "name": "Brasileirão Série A",
         "country": "Brazil",
         "flag": "🇧🇷"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "22:30",
-      "kickoff": "2026-09-03T22:30:00Z",
+      "kickoff": "2026-09-16T22:30:00Z",
       "home": {
         "name": "Botafogo",
         "short": "B",
@@ -18105,16 +18105,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "championship-leeds-united-burnley-1788464700000",
+      "id": "championship-leeds-united-burnley-1789587900000",
       "league": {
         "id": "championship",
         "name": "EFL Championship",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-03",
+      "matchDate": "2026-09-16",
       "kickoffTime": "19:45",
-      "kickoff": "2026-09-03T19:45:00Z",
+      "kickoff": "2026-09-16T19:45:00Z",
       "home": {
         "name": "Leeds United",
         "short": "LU",
@@ -18453,16 +18453,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-supersport-united-chippa-united-1788543000000",
+      "id": "psl-supersport-united-chippa-united-1789666200000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-04",
+      "matchDate": "2026-09-17",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-04T17:30:00Z",
+      "kickoff": "2026-09-17T17:30:00Z",
       "home": {
         "name": "SuperSport United",
         "short": "SU",
@@ -18801,16 +18801,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-chelsea-brighton-1788551100000",
+      "id": "epl-chelsea-brighton-1789674300000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-04",
+      "matchDate": "2026-09-17",
       "kickoffTime": "19:45",
-      "kickoff": "2026-09-04T19:45:00Z",
+      "kickoff": "2026-09-17T19:45:00Z",
       "home": {
         "name": "Chelsea",
         "short": "C",
@@ -19149,16 +19149,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "scotprem-hibernian-dundee-united-1788550200000",
+      "id": "scotprem-hibernian-dundee-united-1789673400000",
       "league": {
         "id": "scotprem",
         "name": "Scottish Premiership",
         "country": "Scotland",
         "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
       },
-      "matchDate": "2026-09-04",
+      "matchDate": "2026-09-17",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-04T19:30:00Z",
+      "kickoff": "2026-09-17T19:30:00Z",
       "home": {
         "name": "Hibernian",
         "short": "H",
@@ -19497,16 +19497,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligamx-cruz-azul-toluca-1788555600000",
+      "id": "ligamx-cruz-azul-toluca-1789678800000",
       "league": {
         "id": "ligamx",
         "name": "Liga MX",
         "country": "Mexico",
         "flag": "🇲🇽"
       },
-      "matchDate": "2026-09-04",
+      "matchDate": "2026-09-17",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-04T21:00:00Z",
+      "kickoff": "2026-09-17T21:00:00Z",
       "home": {
         "name": "Cruz Azul",
         "short": "CA",
@@ -19845,16 +19845,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "eliteserien-bod-glimt-molde-1788544800000",
+      "id": "eliteserien-bod-glimt-molde-1789668000000",
       "league": {
         "id": "eliteserien",
         "name": "Eliteserien",
         "country": "Norway",
         "flag": "🇳🇴"
       },
-      "matchDate": "2026-09-04",
+      "matchDate": "2026-09-17",
       "kickoffTime": "18:00",
-      "kickoff": "2026-09-04T18:00:00Z",
+      "kickoff": "2026-09-17T18:00:00Z",
       "home": {
         "name": "Bodø/Glimt",
         "short": "B",
@@ -20193,16 +20193,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "allsvenskan-malm-ff-aik-1788548400000",
+      "id": "allsvenskan-malm-ff-aik-1789671600000",
       "league": {
         "id": "allsvenskan",
         "name": "Allsvenskan",
         "country": "Sweden",
         "flag": "🇸🇪"
       },
-      "matchDate": "2026-09-04",
+      "matchDate": "2026-09-17",
       "kickoffTime": "19:00",
-      "kickoff": "2026-09-04T19:00:00Z",
+      "kickoff": "2026-09-17T19:00:00Z",
       "home": {
         "name": "Malmö FF",
         "short": "MF",
@@ -20541,16 +20541,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "superliga-fc-copenhagen-br-ndby-1788544800000",
+      "id": "superliga-fc-copenhagen-br-ndby-1789668000000",
       "league": {
         "id": "superliga",
         "name": "Danish Superliga",
         "country": "Denmark",
         "flag": "🇩🇰"
       },
-      "matchDate": "2026-09-04",
+      "matchDate": "2026-09-17",
       "kickoffTime": "18:00",
-      "kickoff": "2026-09-04T18:00:00Z",
+      "kickoff": "2026-09-17T18:00:00Z",
       "home": {
         "name": "FC Copenhagen",
         "short": "FC",
@@ -20889,16 +20889,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-orlando-pirates-kaizer-chiefs-1788622200000",
+      "id": "psl-orlando-pirates-kaizer-chiefs-1789745400000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-05",
+      "matchDate": "2026-09-18",
       "kickoffTime": "15:30",
-      "kickoff": "2026-09-05T15:30:00Z",
+      "kickoff": "2026-09-18T15:30:00Z",
       "home": {
         "name": "Orlando Pirates",
         "short": "OP",
@@ -21237,16 +21237,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-arsenal-newcastle-1788638400000",
+      "id": "epl-arsenal-newcastle-1789761600000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-05",
+      "matchDate": "2026-09-18",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-05T20:00:00Z",
+      "kickoff": "2026-09-18T20:00:00Z",
       "home": {
         "name": "Arsenal",
         "short": "A",
@@ -21585,16 +21585,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "bundesliga-borussia-dortmund-bayer-leverkusen-1788640200000",
+      "id": "bundesliga-borussia-dortmund-bayer-leverkusen-1789763400000",
       "league": {
         "id": "bundesliga",
         "name": "Bundesliga",
         "country": "Germany",
         "flag": "🇩🇪"
       },
-      "matchDate": "2026-09-05",
+      "matchDate": "2026-09-18",
       "kickoffTime": "20:30",
-      "kickoff": "2026-09-05T20:30:00Z",
+      "kickoff": "2026-09-18T20:30:00Z",
       "home": {
         "name": "Borussia Dortmund",
         "short": "BD",
@@ -21933,16 +21933,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligue1-lyon-lille-1788641100000",
+      "id": "ligue1-lyon-lille-1789764300000",
       "league": {
         "id": "ligue1",
         "name": "Ligue 1",
         "country": "France",
         "flag": "🇫🇷"
       },
-      "matchDate": "2026-09-05",
+      "matchDate": "2026-09-18",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-05T20:45:00Z",
+      "kickoff": "2026-09-18T20:45:00Z",
       "home": {
         "name": "Lyon",
         "short": "L",
@@ -22281,16 +22281,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-roma-atalanta-bc-1788641100000",
+      "id": "seriea-roma-atalanta-bc-1789764300000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-05",
+      "matchDate": "2026-09-18",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-05T20:45:00Z",
+      "kickoff": "2026-09-18T20:45:00Z",
       "home": {
         "name": "Roma",
         "short": "R",
@@ -22629,16 +22629,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "brasileirao-corinthians-atl-tico-mineiro-1788643800000",
+      "id": "brasileirao-corinthians-atl-tico-mineiro-1789767000000",
       "league": {
         "id": "brasileirao",
         "name": "Brasileirão Série A",
         "country": "Brazil",
         "flag": "🇧🇷"
       },
-      "matchDate": "2026-09-05",
+      "matchDate": "2026-09-18",
       "kickoffTime": "21:30",
-      "kickoff": "2026-09-05T21:30:00Z",
+      "kickoff": "2026-09-18T21:30:00Z",
       "home": {
         "name": "Corinthians",
         "short": "C",
@@ -22977,16 +22977,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-mamelodi-sundowns-orlando-pirates-1788706800000",
+      "id": "psl-mamelodi-sundowns-orlando-pirates-1789830000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-06T15:00:00Z",
+      "kickoff": "2026-09-19T15:00:00Z",
       "home": {
         "name": "Mamelodi Sundowns",
         "short": "MS",
@@ -23325,16 +23325,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-kaizer-chiefs-cape-town-city-1788715800000",
+      "id": "psl-kaizer-chiefs-cape-town-city-1789839000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-06T17:30:00Z",
+      "kickoff": "2026-09-19T17:30:00Z",
       "home": {
         "name": "Kaizer Chiefs",
         "short": "KC",
@@ -23673,16 +23673,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-stellenbosch-supersport-united-1788724800000",
+      "id": "psl-stellenbosch-supersport-united-1789848000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-06T20:00:00Z",
+      "kickoff": "2026-09-19T20:00:00Z",
       "home": {
         "name": "Stellenbosch",
         "short": "S",
@@ -24021,16 +24021,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-manchester-city-arsenal-1788697800000",
+      "id": "epl-manchester-city-arsenal-1789821000000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "12:30",
-      "kickoff": "2026-09-06T12:30:00Z",
+      "kickoff": "2026-09-19T12:30:00Z",
       "home": {
         "name": "Manchester City",
         "short": "MC",
@@ -24369,16 +24369,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-chelsea-liverpool-1788706800000",
+      "id": "epl-chelsea-liverpool-1789830000000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-06T15:00:00Z",
+      "kickoff": "2026-09-19T15:00:00Z",
       "home": {
         "name": "Chelsea",
         "short": "C",
@@ -24717,16 +24717,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-tottenham-aston-villa-1788715800000",
+      "id": "epl-tottenham-aston-villa-1789839000000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-06T17:30:00Z",
+      "kickoff": "2026-09-19T17:30:00Z",
       "home": {
         "name": "Tottenham",
         "short": "T",
@@ -25065,16 +25065,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-barcelona-atl-tico-madrid-1788711300000",
+      "id": "laliga-barcelona-atl-tico-madrid-1789834500000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "16:15",
-      "kickoff": "2026-09-06T16:15:00Z",
+      "kickoff": "2026-09-19T16:15:00Z",
       "home": {
         "name": "Barcelona",
         "short": "B",
@@ -25413,16 +25413,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-real-madrid-real-sociedad-1788728400000",
+      "id": "laliga-real-madrid-real-sociedad-1789851600000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-06T21:00:00Z",
+      "kickoff": "2026-09-19T21:00:00Z",
       "home": {
         "name": "Real Madrid",
         "short": "RM",
@@ -25761,16 +25761,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "bundesliga-bayern-munich-rb-leipzig-1788719400000",
+      "id": "bundesliga-bayern-munich-rb-leipzig-1789842600000",
       "league": {
         "id": "bundesliga",
         "name": "Bundesliga",
         "country": "Germany",
         "flag": "🇩🇪"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "18:30",
-      "kickoff": "2026-09-06T18:30:00Z",
+      "kickoff": "2026-09-19T18:30:00Z",
       "home": {
         "name": "Bayern Munich",
         "short": "BM",
@@ -26109,16 +26109,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-juventus-inter-1788727500000",
+      "id": "seriea-juventus-inter-1789850700000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-06T20:45:00Z",
+      "kickoff": "2026-09-19T20:45:00Z",
       "home": {
         "name": "Juventus",
         "short": "J",
@@ -26457,16 +26457,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "scotprem-rangers-celtic-1788697800000",
+      "id": "scotprem-rangers-celtic-1789821000000",
       "league": {
         "id": "scotprem",
         "name": "Scottish Premiership",
         "country": "Scotland",
         "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "12:30",
-      "kickoff": "2026-09-06T12:30:00Z",
+      "kickoff": "2026-09-19T12:30:00Z",
       "home": {
         "name": "Rangers",
         "short": "R",
@@ -26805,16 +26805,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "mls-lafc-la-galaxy-1788733800000",
+      "id": "mls-lafc-la-galaxy-1789857000000",
       "league": {
         "id": "mls",
         "name": "MLS",
         "country": "USA",
         "flag": "🇺🇸"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "22:30",
-      "kickoff": "2026-09-06T22:30:00Z",
+      "kickoff": "2026-09-19T22:30:00Z",
       "home": {
         "name": "LAFC",
         "short": "L",
@@ -27153,16 +27153,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "saudi-al-nassr-al-ittihad-1788721200000",
+      "id": "saudi-al-nassr-al-ittihad-1789844400000",
       "league": {
         "id": "saudi",
         "name": "Saudi Pro League",
         "country": "Saudi Arabia",
         "flag": "🇸🇦"
       },
-      "matchDate": "2026-09-06",
+      "matchDate": "2026-09-19",
       "kickoffTime": "19:00",
-      "kickoff": "2026-09-06T19:00:00Z",
+      "kickoff": "2026-09-19T19:00:00Z",
       "home": {
         "name": "Al Nassr",
         "short": "AN",
@@ -27501,16 +27501,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-amazulu-sekhukhune-united-1788793200000",
+      "id": "psl-amazulu-sekhukhune-united-1789916400000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-07T15:00:00Z",
+      "kickoff": "2026-09-20T15:00:00Z",
       "home": {
         "name": "AmaZulu",
         "short": "A",
@@ -27849,16 +27849,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-liverpool-manchester-united-1788798600000",
+      "id": "epl-liverpool-manchester-united-1789921800000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "16:30",
-      "kickoff": "2026-09-07T16:30:00Z",
+      "kickoff": "2026-09-20T16:30:00Z",
       "home": {
         "name": "Liverpool",
         "short": "L",
@@ -28197,16 +28197,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-sevilla-real-betis-1788814800000",
+      "id": "laliga-sevilla-real-betis-1789938000000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-07T21:00:00Z",
+      "kickoff": "2026-09-20T21:00:00Z",
       "home": {
         "name": "Sevilla",
         "short": "S",
@@ -28545,16 +28545,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-ac-milan-napoli-1788813900000",
+      "id": "seriea-ac-milan-napoli-1789937100000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-07T20:45:00Z",
+      "kickoff": "2026-09-20T20:45:00Z",
       "home": {
         "name": "AC Milan",
         "short": "AM",
@@ -28893,16 +28893,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligue1-marseille-monaco-1788813900000",
+      "id": "ligue1-marseille-monaco-1789937100000",
       "league": {
         "id": "ligue1",
         "name": "Ligue 1",
         "country": "France",
         "flag": "🇫🇷"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-07T20:45:00Z",
+      "kickoff": "2026-09-20T20:45:00Z",
       "home": {
         "name": "Marseille",
         "short": "M",
@@ -29241,16 +29241,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "eredivisie-feyenoord-psv-1788791400000",
+      "id": "eredivisie-feyenoord-psv-1789914600000",
       "league": {
         "id": "eredivisie",
         "name": "Eredivisie",
         "country": "Netherlands",
         "flag": "🇳🇱"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "14:30",
-      "kickoff": "2026-09-07T14:30:00Z",
+      "kickoff": "2026-09-20T14:30:00Z",
       "home": {
         "name": "Feyenoord",
         "short": "F",
@@ -29589,16 +29589,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "superlig-be-ikta--trabzonspor-1788807600000",
+      "id": "superlig-be-ikta--trabzonspor-1789930800000",
       "league": {
         "id": "superlig",
         "name": "Süper Lig",
         "country": "Türkiye",
         "flag": "🇹🇷"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "19:00",
-      "kickoff": "2026-09-07T19:00:00Z",
+      "kickoff": "2026-09-20T19:00:00Z",
       "home": {
         "name": "Beşiktaş",
         "short": "B",
@@ -29937,16 +29937,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "brasileirao-palmeiras-flamengo-1788796800000",
+      "id": "brasileirao-palmeiras-flamengo-1789920000000",
       "league": {
         "id": "brasileirao",
         "name": "Brasileirão Série A",
         "country": "Brazil",
         "flag": "🇧🇷"
       },
-      "matchDate": "2026-09-07",
+      "matchDate": "2026-09-20",
       "kickoffTime": "16:00",
-      "kickoff": "2026-09-07T16:00:00Z",
+      "kickoff": "2026-09-20T16:00:00Z",
       "home": {
         "name": "Palmeiras",
         "short": "P",
@@ -30285,16 +30285,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-golden-arrows-mamelodi-sundowns-1788888600000",
+      "id": "psl-golden-arrows-mamelodi-sundowns-1790011800000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-08",
+      "matchDate": "2026-09-21",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-08T17:30:00Z",
+      "kickoff": "2026-09-21T17:30:00Z",
       "home": {
         "name": "Golden Arrows",
         "short": "GA",
@@ -30633,16 +30633,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-newcastle-aston-villa-1788897600000",
+      "id": "epl-newcastle-aston-villa-1790020800000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-08",
+      "matchDate": "2026-09-21",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-08T20:00:00Z",
+      "kickoff": "2026-09-21T20:00:00Z",
       "home": {
         "name": "Newcastle",
         "short": "N",
@@ -30981,16 +30981,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-villarreal-athletic-club-1788901200000",
+      "id": "laliga-villarreal-athletic-club-1790024400000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-08",
+      "matchDate": "2026-09-21",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-08T21:00:00Z",
+      "kickoff": "2026-09-21T21:00:00Z",
       "home": {
         "name": "Villarreal",
         "short": "V",
@@ -31329,16 +31329,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "mls-seattle-sounders-inter-miami-1788908400000",
+      "id": "mls-seattle-sounders-inter-miami-1790031600000",
       "league": {
         "id": "mls",
         "name": "MLS",
         "country": "USA",
         "flag": "🇺🇸"
       },
-      "matchDate": "2026-09-08",
+      "matchDate": "2026-09-21",
       "kickoffTime": "23:00",
-      "kickoff": "2026-09-08T23:00:00Z",
+      "kickoff": "2026-09-21T23:00:00Z",
       "home": {
         "name": "Seattle Sounders",
         "short": "SS",
@@ -31677,16 +31677,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-kaizer-chiefs-amazulu-1788982200000",
+      "id": "psl-kaizer-chiefs-amazulu-1790105400000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-09",
+      "matchDate": "2026-09-22",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-09T19:30:00Z",
+      "kickoff": "2026-09-22T19:30:00Z",
       "home": {
         "name": "Kaizer Chiefs",
         "short": "KC",
@@ -32025,16 +32025,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-lazio-fiorentina-1788986700000",
+      "id": "seriea-lazio-fiorentina-1790109900000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-09",
+      "matchDate": "2026-09-22",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-09T20:45:00Z",
+      "kickoff": "2026-09-22T20:45:00Z",
       "home": {
         "name": "Lazio",
         "short": "L",
@@ -32373,16 +32373,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "championship-sheffield-united-sunderland-1788983100000",
+      "id": "championship-sheffield-united-sunderland-1790106300000",
       "league": {
         "id": "championship",
         "name": "EFL Championship",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-09",
+      "matchDate": "2026-09-22",
       "kickoffTime": "19:45",
-      "kickoff": "2026-09-09T19:45:00Z",
+      "kickoff": "2026-09-22T19:45:00Z",
       "home": {
         "name": "Sheffield United",
         "short": "SU",
@@ -32721,16 +32721,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-supersport-united-orlando-pirates-1789068600000",
+      "id": "psl-supersport-united-orlando-pirates-1790191800000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-10",
+      "matchDate": "2026-09-23",
       "kickoffTime": "19:30",
-      "kickoff": "2026-09-10T19:30:00Z",
+      "kickoff": "2026-09-23T19:30:00Z",
       "home": {
         "name": "SuperSport United",
         "short": "SU",
@@ -33069,16 +33069,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-brighton-manchester-city-1789070400000",
+      "id": "epl-brighton-manchester-city-1790193600000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-10",
+      "matchDate": "2026-09-23",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-10T20:00:00Z",
+      "kickoff": "2026-09-23T20:00:00Z",
       "home": {
         "name": "Brighton",
         "short": "B",
@@ -33417,16 +33417,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "bundesliga-vfb-stuttgart-bayern-munich-1789072200000",
+      "id": "bundesliga-vfb-stuttgart-bayern-munich-1790195400000",
       "league": {
         "id": "bundesliga",
         "name": "Bundesliga",
         "country": "Germany",
         "flag": "🇩🇪"
       },
-      "matchDate": "2026-09-10",
+      "matchDate": "2026-09-23",
       "kickoffTime": "20:30",
-      "kickoff": "2026-09-10T20:30:00Z",
+      "kickoff": "2026-09-23T20:30:00Z",
       "home": {
         "name": "VfB Stuttgart",
         "short": "VS",
@@ -33765,16 +33765,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-stellenbosch-cape-town-city-1789138800000",
+      "id": "psl-stellenbosch-cape-town-city-1790262000000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-11",
+      "matchDate": "2026-09-24",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-11T15:00:00Z",
+      "kickoff": "2026-09-24T15:00:00Z",
       "home": {
         "name": "Stellenbosch",
         "short": "S",
@@ -34113,16 +34113,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligamx-tigres-uanl-monterrey-1789160400000",
+      "id": "ligamx-tigres-uanl-monterrey-1790283600000",
       "league": {
         "id": "ligamx",
         "name": "Liga MX",
         "country": "Mexico",
         "flag": "🇲🇽"
       },
-      "matchDate": "2026-09-11",
+      "matchDate": "2026-09-24",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-11T21:00:00Z",
+      "kickoff": "2026-09-24T21:00:00Z",
       "home": {
         "name": "Tigres UANL",
         "short": "TU",
@@ -34461,16 +34461,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "ligaportugal-porto-braga-1789158600000",
+      "id": "ligaportugal-porto-braga-1790281800000",
       "league": {
         "id": "ligaportugal",
         "name": "Liga Portugal",
         "country": "Portugal",
         "flag": "🇵🇹"
       },
-      "matchDate": "2026-09-11",
+      "matchDate": "2026-09-24",
       "kickoffTime": "20:30",
-      "kickoff": "2026-09-11T20:30:00Z",
+      "kickoff": "2026-09-24T20:30:00Z",
       "home": {
         "name": "Porto",
         "short": "P",
@@ -34809,16 +34809,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-manchester-united-chelsea-1789243200000",
+      "id": "epl-manchester-united-chelsea-1790366400000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-12",
+      "matchDate": "2026-09-25",
       "kickoffTime": "20:00",
-      "kickoff": "2026-09-12T20:00:00Z",
+      "kickoff": "2026-09-25T20:00:00Z",
       "home": {
         "name": "Manchester United",
         "short": "MU",
@@ -35157,16 +35157,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-atl-tico-madrid-real-madrid-1789246800000",
+      "id": "laliga-atl-tico-madrid-real-madrid-1790370000000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-12",
+      "matchDate": "2026-09-25",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-12T21:00:00Z",
+      "kickoff": "2026-09-25T21:00:00Z",
       "home": {
         "name": "Atlético Madrid",
         "short": "AM",
@@ -35505,16 +35505,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "scotprem-celtic-aberdeen-1789225200000",
+      "id": "scotprem-celtic-aberdeen-1790348400000",
       "league": {
         "id": "scotprem",
         "name": "Scottish Premiership",
         "country": "Scotland",
         "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
       },
-      "matchDate": "2026-09-12",
+      "matchDate": "2026-09-25",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-12T15:00:00Z",
+      "kickoff": "2026-09-25T15:00:00Z",
       "home": {
         "name": "Celtic",
         "short": "C",
@@ -35853,16 +35853,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-mamelodi-sundowns-kaizer-chiefs-1789313400000",
+      "id": "psl-mamelodi-sundowns-kaizer-chiefs-1790436600000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-13",
+      "matchDate": "2026-09-26",
       "kickoffTime": "15:30",
-      "kickoff": "2026-09-13T15:30:00Z",
+      "kickoff": "2026-09-26T15:30:00Z",
       "home": {
         "name": "Mamelodi Sundowns",
         "short": "MS",
@@ -36201,16 +36201,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-arsenal-liverpool-1789320600000",
+      "id": "epl-arsenal-liverpool-1790443800000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-13",
+      "matchDate": "2026-09-26",
       "kickoffTime": "17:30",
-      "kickoff": "2026-09-13T17:30:00Z",
+      "kickoff": "2026-09-26T17:30:00Z",
       "home": {
         "name": "Arsenal",
         "short": "A",
@@ -36549,16 +36549,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "seriea-inter-roma-1789332300000",
+      "id": "seriea-inter-roma-1790455500000",
       "league": {
         "id": "seriea",
         "name": "Serie A",
         "country": "Italy",
         "flag": "🇮🇹"
       },
-      "matchDate": "2026-09-13",
+      "matchDate": "2026-09-26",
       "kickoffTime": "20:45",
-      "kickoff": "2026-09-13T20:45:00Z",
+      "kickoff": "2026-09-26T20:45:00Z",
       "home": {
         "name": "Inter",
         "short": "I",
@@ -36897,16 +36897,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "psl-orlando-pirates-stellenbosch-1789398000000",
+      "id": "psl-orlando-pirates-stellenbosch-1790521200000",
       "league": {
         "id": "psl",
         "name": "Betway Premiership",
         "country": "South Africa",
         "flag": "🇿🇦"
       },
-      "matchDate": "2026-09-14",
+      "matchDate": "2026-09-27",
       "kickoffTime": "15:00",
-      "kickoff": "2026-09-14T15:00:00Z",
+      "kickoff": "2026-09-27T15:00:00Z",
       "home": {
         "name": "Orlando Pirates",
         "short": "OP",
@@ -37245,16 +37245,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "epl-chelsea-manchester-city-1789403400000",
+      "id": "epl-chelsea-manchester-city-1790526600000",
       "league": {
         "id": "epl",
         "name": "Premier League",
         "country": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
       },
-      "matchDate": "2026-09-14",
+      "matchDate": "2026-09-27",
       "kickoffTime": "16:30",
-      "kickoff": "2026-09-14T16:30:00Z",
+      "kickoff": "2026-09-27T16:30:00Z",
       "home": {
         "name": "Chelsea",
         "short": "C",
@@ -37593,16 +37593,16 @@
       "dataQuality": "HIGH DATA QUALITY / SYSTEM VERIFIED"
     },
     {
-      "id": "laliga-barcelona-sevilla-1789419600000",
+      "id": "laliga-barcelona-sevilla-1790542800000",
       "league": {
         "id": "laliga",
         "name": "LaLiga",
         "country": "Spain",
         "flag": "🇪🇸"
       },
-      "matchDate": "2026-09-14",
+      "matchDate": "2026-09-27",
       "kickoffTime": "21:00",
-      "kickoff": "2026-09-14T21:00:00Z",
+      "kickoff": "2026-09-27T21:00:00Z",
       "home": {
         "name": "Barcelona",
         "short": "B",

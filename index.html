@@ -1555,12 +1555,25 @@ function app(){
 
     async loadRemote(){
       try {
-        let res = await fetch('/api/fixtures?t=' + Date.now(), { cache: 'no-store' });
-        if (!res.ok) {
-          res = await fetch('data/fixtures.json?t=' + Date.now(), { cache: 'no-store' });
+        let json = null;
+        try {
+          const apiRes = await fetch('/api/fixtures?t=' + Date.now(), { cache: 'no-store' });
+          const contentType = apiRes.headers.get('content-type') || '';
+          if (apiRes.ok && (contentType.includes('application/json') || !contentType.includes('text/html'))) {
+            const data = await apiRes.json();
+            if (data && Array.isArray(data.matches) && data.matches.length > 0) {
+              json = data;
+            }
+          }
+        } catch (_) {}
+
+        if (!json) {
+          const staticRes = await fetch('data/fixtures.json?t=' + Date.now(), { cache: 'no-store' });
+          if (staticRes.ok) {
+            json = await staticRes.json();
+          }
         }
-        if (!res.ok) throw new Error('fixtures request failed (' + res.status + ')');
-        const json = await res.json();
+
         if (!json || !Array.isArray(json.matches) || !json.matches.length){
           throw new Error('fixtures payload contained no matches');
         }

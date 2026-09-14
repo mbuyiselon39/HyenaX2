@@ -593,12 +593,21 @@ app.get('/api/fixtures', (req, res) => {
   }
 });
 
-// Serve static assets from project root
+// Serve static assets (favor dist/ if built, otherwise project root)
+const distPath = path.join(__dirname, 'dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+}
 app.use(express.static(__dirname));
 
 // Fallback to index.html for SPA routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  const distIndex = path.join(__dirname, 'dist', 'index.html');
+  if (fs.existsSync(distIndex)) {
+    res.sendFile(distIndex);
+  } else {
+    res.sendFile(path.join(__dirname, 'index.html'));
+  }
 });
 
 // Ensure initial fixtures exist immediately on startup

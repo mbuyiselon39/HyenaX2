@@ -7,7 +7,7 @@
     "dev": "node server.js",
     "start": "node server.js",
     "scrape": "node scripts/generateFixtures.js",
-    "build": "node -e \"console.log('Build completed')\"",
+    "build": "node scripts/build.js",
     "lint": "node -e \"console.log('Lint passed without errors')\""
   },
   "dependencies": {
