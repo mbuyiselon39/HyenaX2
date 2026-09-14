@@ -1,7 +1,7 @@
 {
   "meta": {
     "dataSource": "OFFICIAL LIVE FEED & DIXON-COLES ENGINE",
-    "generated_at": "2026-09-14T16:02:53.017Z",
+    "generated_at": "2026-09-14T20:12:02.696Z",
     "source": "Official Live Sports Feed & Dixon-Coles Live Engine",
     "schema_version": "3.0",
     "league_count": 17,
@@ -13401,7 +13401,7 @@
         "short": "COMO",
         "rating": 86,
         "form": [
-          "WWWDW"
+          "WWWWD"
         ],
         "xgFor": 1.5,
         "xgAgainst": 1,
@@ -13413,7 +13413,7 @@
         "short": "PAR",
         "rating": 64,
         "form": [
-          "DLLLW"
+          "LDLLL"
         ],
         "xgFor": 0.5,
         "xgAgainst": 1.5,
@@ -13507,9 +13507,9 @@
           "selection": "1 · Como",
           "probability": 73,
           "odds": {
-            "hollywoodbets": 1.18,
-            "betway": 1.2,
-            "easybet": 1.19
+            "hollywoodbets": 1.29,
+            "betway": 1.31,
+            "easybet": 1.27
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -13689,9 +13689,9 @@
           "selection": "X · Draw",
           "probability": 20.9,
           "odds": {
-            "hollywoodbets": 5.88,
-            "betway": 6,
-            "easybet": 5.94
+            "hollywoodbets": 4.5,
+            "betway": 4.57,
+            "easybet": 4.45
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -13715,9 +13715,9 @@
           "selection": "2 · Parma",
           "probability": 6.1,
           "odds": {
-            "hollywoodbets": 11.76,
-            "betway": 12,
-            "easybet": 11.88
+            "hollywoodbets": 15.41,
+            "betway": 15.66,
+            "easybet": 15.25
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -13744,7 +13744,7 @@
         "short": "TOR",
         "rating": 64,
         "form": [
-          "WLLLW"
+          "LWLLL"
         ],
         "xgFor": 1,
         "xgAgainst": 2,
@@ -13756,7 +13756,7 @@
         "short": "ROMA",
         "rating": 95,
         "form": [
-          "DWWWW"
+          "WDWWW"
         ],
         "xgFor": 4,
         "xgAgainst": 1,
@@ -13889,9 +13889,9 @@
           "selection": "2 · AS Roma",
           "probability": 81.6,
           "odds": {
-            "hollywoodbets": 1.47,
-            "betway": 1.5,
-            "easybet": 1.48
+            "hollywoodbets": 1.15,
+            "betway": 1.17,
+            "easybet": 1.14
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -13980,9 +13980,9 @@
           "selection": "X · Draw",
           "probability": 11.3,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 8.32,
+            "betway": 8.45,
+            "easybet": 8.23
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -14032,9 +14032,9 @@
           "selection": "1 · Torino",
           "probability": 6.1,
           "odds": {
-            "hollywoodbets": 5.88,
-            "betway": 6,
-            "easybet": 5.94
+            "hollywoodbets": 15.41,
+            "betway": 15.66,
+            "easybet": 15.25
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -14323,9 +14323,9 @@
           "selection": "X · Draw",
           "probability": 10.7,
           "odds": {
-            "hollywoodbets": 4.31,
-            "betway": 4.4,
-            "easybet": 4.36
+            "hollywoodbets": 4.41,
+            "betway": 4.5,
+            "easybet": 4.46
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -14349,8 +14349,8 @@
           "selection": "2 · Fenerbahce",
           "probability": 7.5,
           "odds": {
-            "hollywoodbets": 1.47,
-            "betway": 1.5,
+            "hollywoodbets": 1.46,
+            "betway": 1.49,
             "easybet": 1.48
           },
           "marketEdge": -4.5,
@@ -14523,9 +14523,9 @@
           "selection": "2 · Estrela",
           "probability": 79,
           "odds": {
-            "hollywoodbets": 2.65,
-            "betway": 2.7,
-            "easybet": 2.67
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -14718,9 +14718,9 @@
           "selection": "X · Draw",
           "probability": 15.6,
           "odds": {
-            "hollywoodbets": 3.14,
-            "betway": 3.2,
-            "easybet": 3.17
+            "hollywoodbets": 3.19,
+            "betway": 3.25,
+            "easybet": 3.22
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -14744,9 +14744,9 @@
           "selection": "1 · Rio Ave",
           "probability": 5.3,
           "odds": {
-            "hollywoodbets": 2.65,
-            "betway": 2.7,
-            "easybet": 2.67
+            "hollywoodbets": 2.79,
+            "betway": 2.85,
+            "easybet": 2.82
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -14944,9 +14944,9 @@
           "selection": "1 · Internazionale",
           "probability": 60.9,
           "odds": {
-            "hollywoodbets": 1.17,
-            "betway": 1.19,
-            "easybet": 1.18
+            "hollywoodbets": 1.16,
+            "betway": 1.18,
+            "easybet": 1.17
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -14996,9 +14996,9 @@
           "selection": "2 · Udinese",
           "probability": 21.3,
           "odds": {
-            "hollywoodbets": 10.78,
-            "betway": 11,
-            "easybet": 10.89
+            "hollywoodbets": 12.74,
+            "betway": 13,
+            "easybet": 12.87
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -15391,9 +15391,9 @@
           "selection": "X · Draw",
           "probability": 23.8,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.38,
+            "betway": 3.45,
+            "easybet": 3.42
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -15404,9 +15404,9 @@
           "selection": "1 · Leeds United",
           "probability": 20.4,
           "odds": {
-            "hollywoodbets": 2.25,
-            "betway": 2.3,
-            "easybet": 2.28
+            "hollywoodbets": 2.3,
+            "betway": 2.35,
+            "easybet": 2.33
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -15708,9 +15708,9 @@
           "selection": "1 · Villarreal",
           "probability": 37.7,
           "odds": {
-            "hollywoodbets": 1.96,
-            "betway": 2,
-            "easybet": 1.98
+            "hollywoodbets": 1.91,
+            "betway": 1.95,
+            "easybet": 1.93
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -15747,9 +15747,9 @@
           "selection": "X · Draw",
           "probability": 27.8,
           "odds": {
-            "hollywoodbets": 3.77,
-            "betway": 3.85,
-            "easybet": 3.81
+            "hollywoodbets": 3.92,
+            "betway": 4,
+            "easybet": 3.96
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -17358,9 +17358,9 @@
           "selection": "2 · Espanyol",
           "probability": 49.1,
           "odds": {
-            "hollywoodbets": 3.23,
-            "betway": 3.3,
-            "easybet": 3.27
+            "hollywoodbets": 3.19,
+            "betway": 3.25,
+            "easybet": 3.22
           },
           "marketEdge": -4.3,
           "isValueBet": false
@@ -17475,9 +17475,9 @@
           "selection": "1 · Rayo Vallecano",
           "probability": 24.2,
           "odds": {
-            "hollywoodbets": 2.16,
-            "betway": 2.2,
-            "easybet": 2.18
+            "hollywoodbets": 2.21,
+            "betway": 2.25,
+            "easybet": 2.23
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -18400,9 +18400,9 @@
           "selection": "1 · Falkirk",
           "probability": 43.5,
           "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.65,
-            "easybet": 3.61
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -4.3,
           "isValueBet": false
@@ -18491,9 +18491,9 @@
           "selection": "X · Draw",
           "probability": 26.3,
           "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.65,
-            "easybet": 3.61
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -18743,8 +18743,8 @@
           "selection": "1 · Hibernian",
           "probability": 43.5,
           "odds": {
-            "hollywoodbets": 1.46,
-            "betway": 1.49,
+            "hollywoodbets": 1.47,
+            "betway": 1.5,
             "easybet": 1.48
           },
           "marketEdge": -4.3,
@@ -18821,9 +18821,9 @@
           "selection": "2 · Kilmarnock",
           "probability": 30.2,
           "odds": {
-            "hollywoodbets": 5.39,
-            "betway": 5.5,
-            "easybet": 5.45
+            "hollywoodbets": 5.63,
+            "betway": 5.75,
+            "easybet": 5.69
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -18834,9 +18834,9 @@
           "selection": "X · Draw",
           "probability": 26.3,
           "odds": {
-            "hollywoodbets": 4.41,
-            "betway": 4.5,
-            "easybet": 4.46
+            "hollywoodbets": 4.51,
+            "betway": 4.6,
+            "easybet": 4.55
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -19164,9 +19164,9 @@
           "selection": "2 · Aberdeen",
           "probability": 30.2,
           "odds": {
-            "hollywoodbets": 3.87,
-            "betway": 3.95,
-            "easybet": 3.91
+            "hollywoodbets": 3.92,
+            "betway": 4,
+            "easybet": 3.96
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -19177,9 +19177,9 @@
           "selection": "X · Draw",
           "probability": 26.3,
           "odds": {
-            "hollywoodbets": 3.63,
-            "betway": 3.7,
-            "easybet": 3.66
+            "hollywoodbets": 3.67,
+            "betway": 3.75,
+            "easybet": 3.71
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -23862,9 +23862,9 @@
           "selection": "1 · SK Sturm Graz",
           "probability": 62.3,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.53,
+            "betway": 3.6,
+            "easybet": 3.56
           },
           "marketEdge": -4.7,
           "isValueBet": false
@@ -23901,9 +23901,9 @@
           "selection": "2 · Stade Rennais",
           "probability": 21.4,
           "odds": {
-            "hollywoodbets": 1.91,
-            "betway": 1.95,
-            "easybet": 1.93
+            "hollywoodbets": 1.87,
+            "betway": 1.91,
+            "easybet": 1.89
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -23927,9 +23927,9 @@
           "selection": "X · Draw",
           "probability": 14.6,
           "odds": {
-            "hollywoodbets": 3.82,
-            "betway": 3.9,
-            "easybet": 3.86
+            "hollywoodbets": 3.92,
+            "betway": 4,
+            "easybet": 3.96
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -24179,9 +24179,9 @@
           "selection": "2 · AZ Alkmaar",
           "probability": 80.4,
           "odds": {
-            "hollywoodbets": 4.8,
-            "betway": 4.9,
-            "easybet": 4.85
+            "hollywoodbets": 4.9,
+            "betway": 5,
+            "easybet": 4.95
           },
           "marketEdge": -4.3,
           "isValueBet": false
@@ -24270,9 +24270,9 @@
           "selection": "X · Draw",
           "probability": 11.5,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 4.12,
+            "betway": 4.2,
+            "easybet": 4.16
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -24296,9 +24296,9 @@
           "selection": "1 · Sunderland",
           "probability": 7.1,
           "odds": {
-            "hollywoodbets": 1.64,
-            "betway": 1.67,
-            "easybet": 1.65
+            "hollywoodbets": 1.62,
+            "betway": 1.65,
+            "easybet": 1.63
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -25616,9 +25616,9 @@
           "selection": "1 · Levski Sofia",
           "probability": 42.3,
           "odds": {
-            "hollywoodbets": 2.79,
-            "betway": 2.85,
-            "easybet": 2.82
+            "hollywoodbets": 2.84,
+            "betway": 2.9,
+            "easybet": 2.87
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -25959,9 +25959,9 @@
           "selection": "2 · TSG Hoffenheim",
           "probability": 43,
           "odds": {
-            "hollywoodbets": 1.4,
-            "betway": 1.43,
-            "easybet": 1.42
+            "hollywoodbets": 1.38,
+            "betway": 1.41,
+            "easybet": 1.4
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -26354,9 +26354,9 @@
           "selection": "X · Draw",
           "probability": 25.4,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -26975,9 +26975,9 @@
           "selection": "2 · Marseille",
           "probability": 48.3,
           "odds": {
-            "hollywoodbets": 3.92,
-            "betway": 4,
-            "easybet": 3.96
+            "hollywoodbets": 4.02,
+            "betway": 4.1,
+            "easybet": 4.06
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -27053,9 +27053,9 @@
           "selection": "X · Draw",
           "probability": 23,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 4.12,
+            "betway": 4.2,
+            "easybet": 4.16
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -27396,9 +27396,9 @@
           "selection": "2 · Ferencvaros",
           "probability": 31.3,
           "odds": {
-            "hollywoodbets": 4.31,
-            "betway": 4.4,
-            "easybet": 4.36
+            "hollywoodbets": 4.41,
+            "betway": 4.5,
+            "easybet": 4.46
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -27409,9 +27409,9 @@
           "selection": "X · Draw",
           "probability": 26.4,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 4.12,
+            "betway": 4.2,
+            "easybet": 4.16
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -27713,9 +27713,9 @@
           "selection": "X · Draw",
           "probability": 28.2,
           "odds": {
-            "hollywoodbets": 4.8,
-            "betway": 4.9,
-            "easybet": 4.85
+            "hollywoodbets": 4.9,
+            "betway": 5,
+            "easybet": 4.95
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -27778,9 +27778,9 @@
           "selection": "1 · Crystal Palace",
           "probability": 12.1,
           "odds": {
-            "hollywoodbets": 1.37,
-            "betway": 1.4,
-            "easybet": 1.39
+            "hollywoodbets": 1.38,
+            "betway": 1.41,
+            "easybet": 1.4
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -27978,9 +27978,9 @@
           "selection": "2 · NEC Nijmegen",
           "probability": 53.8,
           "odds": {
-            "hollywoodbets": 10.78,
-            "betway": 11,
-            "easybet": 10.89
+            "hollywoodbets": 11.76,
+            "betway": 12,
+            "easybet": 11.88
           },
           "marketEdge": -4.2,
           "isValueBet": false
@@ -28056,9 +28056,9 @@
           "selection": "X · Draw",
           "probability": 19.8,
           "odds": {
-            "hollywoodbets": 5.88,
-            "betway": 6,
-            "easybet": 5.94
+            "hollywoodbets": 6.37,
+            "betway": 6.5,
+            "easybet": 6.43
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -28755,9 +28755,9 @@
           "selection": "X · Draw",
           "probability": 32.1,
           "odds": {
-            "hollywoodbets": 3.48,
-            "betway": 3.55,
-            "easybet": 3.51
+            "hollywoodbets": 3.53,
+            "betway": 3.6,
+            "easybet": 3.56
           },
           "marketEdge": -4.3,
           "isValueBet": false
@@ -28768,9 +28768,9 @@
           "selection": "2 · AFC Bournemouth",
           "probability": 28.6,
           "odds": {
-            "hollywoodbets": 2.35,
-            "betway": 2.4,
-            "easybet": 2.38
+            "hollywoodbets": 2.4,
+            "betway": 2.45,
+            "easybet": 2.43
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -29046,9 +29046,9 @@
           "selection": "1 · Viktoria Plzen",
           "probability": 42.3,
           "odds": {
-            "hollywoodbets": 2.6,
-            "betway": 2.65,
-            "easybet": 2.62
+            "hollywoodbets": 2.65,
+            "betway": 2.7,
+            "easybet": 2.67
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -29111,9 +29111,9 @@
           "selection": "2 · Union St.-Gilloise",
           "probability": 31.3,
           "odds": {
-            "hollywoodbets": 2.45,
-            "betway": 2.5,
-            "easybet": 2.48
+            "hollywoodbets": 2.5,
+            "betway": 2.55,
+            "easybet": 2.52
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -29124,9 +29124,9 @@
           "selection": "X · Draw",
           "probability": 26.4,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -29337,9 +29337,9 @@
           "selection": "2 · Villarreal",
           "probability": 60.6,
           "odds": {
-            "hollywoodbets": 1.96,
-            "betway": 2,
-            "easybet": 1.98
+            "hollywoodbets": 1.87,
+            "betway": 1.91,
+            "easybet": 1.89
           },
           "marketEdge": -4.3,
           "isValueBet": false
@@ -29389,9 +29389,9 @@
           "selection": "X · Draw",
           "probability": 30.1,
           "odds": {
-            "hollywoodbets": 3.72,
-            "betway": 3.8,
-            "easybet": 3.76
+            "hollywoodbets": 3.87,
+            "betway": 3.95,
+            "easybet": 3.91
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -29480,9 +29480,9 @@
           "selection": "1 · Málaga",
           "probability": 9.3,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -30774,9 +30774,9 @@
           "selection": "2 · Sassuolo",
           "probability": 37.4,
           "odds": {
-            "hollywoodbets": 2.35,
-            "betway": 2.4,
-            "easybet": 2.38
+            "hollywoodbets": 2.3,
+            "betway": 2.35,
+            "easybet": 2.33
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -30800,9 +30800,9 @@
           "selection": "1 · Monza",
           "probability": 36.2,
           "odds": {
-            "hollywoodbets": 2.6,
-            "betway": 2.65,
-            "easybet": 2.62
+            "hollywoodbets": 2.74,
+            "betway": 2.8,
+            "easybet": 2.77
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -35708,7 +35708,7 @@
         "short": "TOR",
         "rating": 64,
         "form": [
-          "WLLLW"
+          "LWLLL"
         ],
         "xgFor": 1,
         "xgAgainst": 2,
@@ -38993,9 +38993,9 @@
           "selection": "1 · OH Leuven",
           "probability": 42.3,
           "odds": {
-            "hollywoodbets": 1.96,
-            "betway": 2,
-            "easybet": 1.98
+            "hollywoodbets": 2.01,
+            "betway": 2.05,
+            "easybet": 2.03
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -45300,7 +45300,7 @@
         "short": "ROMA",
         "rating": 95,
         "form": [
-          "DWWWW"
+          "WDWWW"
         ],
         "xgFor": 4,
         "xgAgainst": 1,
@@ -49535,9 +49535,9 @@
           "selection": "2 · Lazio",
           "probability": 89.4,
           "odds": {
-            "hollywoodbets": 2.06,
-            "betway": 2.1,
-            "easybet": 2.08
+            "hollywoodbets": 2.01,
+            "betway": 2.05,
+            "easybet": 2.03
           },
           "marketEdge": -4.3,
           "isValueBet": false
@@ -49691,9 +49691,9 @@
           "selection": "X · Draw",
           "probability": 7.7,
           "odds": {
-            "hollywoodbets": 3.23,
-            "betway": 3.3,
-            "easybet": 3.27
+            "hollywoodbets": 3.28,
+            "betway": 3.35,
+            "easybet": 3.32
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -50047,9 +50047,9 @@
           "selection": "X · Draw",
           "probability": 26.7,
           "odds": {
-            "hollywoodbets": 3.23,
-            "betway": 3.3,
-            "easybet": 3.27
+            "hollywoodbets": 3.28,
+            "betway": 3.35,
+            "easybet": 3.32
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -50073,9 +50073,9 @@
           "selection": "2 · Troyes",
           "probability": 21,
           "odds": {
-            "hollywoodbets": 3.14,
-            "betway": 3.2,
-            "easybet": 3.17
+            "hollywoodbets": 3.19,
+            "betway": 3.25,
+            "easybet": 3.22
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -50195,9 +50195,9 @@
           "selection": "1 · Le Mans",
           "probability": 78.7,
           "odds": {
-            "hollywoodbets": 2.79,
-            "betway": 2.85,
-            "easybet": 2.82
+            "hollywoodbets": 2.84,
+            "betway": 2.9,
+            "easybet": 2.87
           },
           "marketEdge": -4.8,
           "isValueBet": false
@@ -50616,9 +50616,9 @@
           "selection": "2 · Stade Rennais",
           "probability": 51.6,
           "odds": {
-            "hollywoodbets": 3.04,
-            "betway": 3.1,
-            "easybet": 3.07
+            "hollywoodbets": 3.09,
+            "betway": 3.15,
+            "easybet": 3.12
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -50694,9 +50694,9 @@
           "selection": "X · Draw",
           "probability": 20.7,
           "odds": {
-            "hollywoodbets": 3.67,
-            "betway": 3.75,
-            "easybet": 3.71
+            "hollywoodbets": 3.72,
+            "betway": 3.8,
+            "easybet": 3.76
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -50998,9 +50998,9 @@
           "selection": "X · Draw",
           "probability": 34.2,
           "odds": {
-            "hollywoodbets": 3.48,
-            "betway": 3.55,
-            "easybet": 3.51
+            "hollywoodbets": 3.53,
+            "betway": 3.6,
+            "easybet": 3.56
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -51063,9 +51063,9 @@
           "selection": "2 · Le Havre AC",
           "probability": 14.3,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 4.12,
+            "betway": 4.2,
+            "easybet": 4.16
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -51988,9 +51988,9 @@
           "selection": "2 · Barcelona",
           "probability": 59.6,
           "odds": {
-            "hollywoodbets": 1.23,
-            "betway": 1.26,
-            "easybet": 1.25
+            "hollywoodbets": 1.22,
+            "betway": 1.24,
+            "easybet": 1.23
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -52027,9 +52027,9 @@
           "selection": "1 · Sevilla",
           "probability": 23.5,
           "odds": {
-            "hollywoodbets": 9.8,
-            "betway": 10,
-            "easybet": 9.9
+            "hollywoodbets": 10.78,
+            "betway": 11,
+            "easybet": 10.89
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -52053,9 +52053,9 @@
           "selection": "X · Draw",
           "probability": 15.8,
           "odds": {
-            "hollywoodbets": 5.88,
-            "betway": 6,
-            "easybet": 5.94
+            "hollywoodbets": 6.37,
+            "betway": 6.5,
+            "easybet": 6.43
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -53043,9 +53043,9 @@
           "selection": "2 · Arouca",
           "probability": 43.9,
           "odds": {
-            "hollywoodbets": 10.78,
-            "betway": 11,
-            "easybet": 10.89
+            "hollywoodbets": 12.74,
+            "betway": 13,
+            "easybet": 12.87
           },
           "marketEdge": -4.3,
           "isValueBet": false
@@ -53082,9 +53082,9 @@
           "selection": "1 · Sporting CP",
           "probability": 31.3,
           "odds": {
-            "hollywoodbets": 1.16,
-            "betway": 1.18,
-            "easybet": 1.17
+            "hollywoodbets": 1.15,
+            "betway": 1.17,
+            "easybet": 1.16
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -54797,9 +54797,9 @@
           "selection": "1 · Vasco da Gama",
           "probability": 37.8,
           "odds": {
-            "hollywoodbets": 1.58,
-            "betway": 1.61,
-            "easybet": 1.59
+            "hollywoodbets": 1.54,
+            "betway": 1.57,
+            "easybet": 1.55
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -54836,9 +54836,9 @@
           "selection": "2 · Coritiba",
           "probability": 32.5,
           "odds": {
-            "hollywoodbets": 4.9,
-            "betway": 5,
-            "easybet": 4.95
+            "hollywoodbets": 5.14,
+            "betway": 5.25,
+            "easybet": 5.2
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -54849,9 +54849,9 @@
           "selection": "X · Draw",
           "probability": 29.7,
           "odds": {
-            "hollywoodbets": 3.77,
-            "betway": 3.85,
-            "easybet": 3.81
+            "hollywoodbets": 3.87,
+            "betway": 3.95,
+            "easybet": 3.91
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -59547,9 +59547,9 @@
           "selection": "1 · Real Salt Lake",
           "probability": 45.1,
           "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.65,
-            "easybet": 3.61
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -59638,9 +59638,9 @@
           "selection": "2 · Vancouver Whitecaps",
           "probability": 29.6,
           "odds": {
-            "hollywoodbets": 1.76,
-            "betway": 1.8,
-            "easybet": 1.78
+            "hollywoodbets": 1.83,
+            "betway": 1.87,
+            "easybet": 1.85
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -59651,9 +59651,9 @@
           "selection": "X · Draw",
           "probability": 25.3,
           "odds": {
-            "hollywoodbets": 3.67,
-            "betway": 3.75,
-            "easybet": 3.71
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -61049,9 +61049,9 @@
           "selection": "1 · Fiorentina",
           "probability": 10,
           "odds": {
-            "hollywoodbets": 3.09,
-            "betway": 3.15,
-            "easybet": 3.12
+            "hollywoodbets": 3.04,
+            "betway": 3.1,
+            "easybet": 3.07
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -65549,7 +65549,7 @@
         "short": "COMO",
         "rating": 86,
         "form": [
-          "WWWDW"
+          "WWWWD"
         ],
         "xgFor": 1.5,
         "xgAgainst": 1,
@@ -65880,7 +65880,7 @@
         "short": "PAR",
         "rating": 64,
         "form": [
-          "DLLLW"
+          "LDLLL"
         ],
         "xgFor": 0.5,
         "xgAgainst": 1.5,
@@ -68452,9 +68452,9 @@
           "selection": "2 · Real Madrid",
           "probability": 63.7,
           "odds": {
-            "hollywoodbets": 1.91,
-            "betway": 1.95,
-            "easybet": 1.93
+            "hollywoodbets": 1.83,
+            "betway": 1.87,
+            "easybet": 1.85
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -68504,9 +68504,9 @@
           "selection": "1 · Atlético Madrid",
           "probability": 19.9,
           "odds": {
-            "hollywoodbets": 3.63,
-            "betway": 3.7,
-            "easybet": 3.66
+            "hollywoodbets": 3.72,
+            "betway": 3.8,
+            "easybet": 3.76
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -68530,9 +68530,9 @@
           "selection": "X · Draw",
           "probability": 15.4,
           "odds": {
-            "hollywoodbets": 3.63,
-            "betway": 3.7,
-            "easybet": 3.66
+            "hollywoodbets": 3.72,
+            "betway": 3.8,
+            "easybet": 3.76
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -69520,9 +69520,9 @@
           "selection": "2 · Go Ahead Eagles",
           "probability": 31.2,
           "odds": {
-            "hollywoodbets": 4.12,
-            "betway": 4.2,
-            "easybet": 4.16
+            "hollywoodbets": 3.92,
+            "betway": 4,
+            "easybet": 3.96
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -69533,9 +69533,9 @@
           "selection": "X · Draw",
           "probability": 16.5,
           "odds": {
-            "hollywoodbets": 3.92,
-            "betway": 4,
-            "easybet": 3.96
+            "hollywoodbets": 4.02,
+            "betway": 4.1,
+            "easybet": 4.06
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -71526,9 +71526,9 @@
           "selection": "1 · Deportivo",
           "probability": 56.1,
           "odds": {
-            "hollywoodbets": 2.84,
-            "betway": 2.9,
-            "easybet": 2.87
+            "hollywoodbets": 2.74,
+            "betway": 2.8,
+            "easybet": 2.77
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -71656,9 +71656,9 @@
           "selection": "2 · Real Betis",
           "probability": 20.8,
           "odds": {
-            "hollywoodbets": 2.4,
-            "betway": 2.45,
-            "easybet": 2.43
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -71921,9 +71921,9 @@
           "selection": "2 · Levante",
           "probability": 41.2,
           "odds": {
-            "hollywoodbets": 4.9,
-            "betway": 5,
-            "easybet": 4.95
+            "hollywoodbets": 5.14,
+            "betway": 5.25,
+            "easybet": 5.2
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -71973,9 +71973,9 @@
           "selection": "1 · Villarreal",
           "probability": 33,
           "odds": {
-            "hollywoodbets": 1.56,
-            "betway": 1.59,
-            "easybet": 1.57
+            "hollywoodbets": 1.54,
+            "betway": 1.57,
+            "easybet": 1.55
           },
           "marketEdge": -4.6,
           "isValueBet": false
@@ -71986,9 +71986,9 @@
           "selection": "X · Draw",
           "probability": 25.7,
           "odds": {
-            "hollywoodbets": 4.21,
-            "betway": 4.3,
-            "easybet": 4.26
+            "hollywoodbets": 4.31,
+            "betway": 4.4,
+            "easybet": 4.36
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -75325,9 +75325,9 @@
           "selection": "2 · Real Sociedad",
           "probability": 49.8,
           "odds": {
-            "hollywoodbets": 2.4,
-            "betway": 2.45,
-            "easybet": 2.43
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -4.4,
           "isValueBet": false
@@ -76380,9 +76380,9 @@
           "selection": "1 · FC Porto",
           "probability": 30.4,
           "odds": {
-            "hollywoodbets": 2.6,
-            "betway": 2.65,
-            "easybet": 2.62
+            "hollywoodbets": 2.65,
+            "betway": 2.7,
+            "easybet": 2.67
           },
           "marketEdge": -4.5,
           "isValueBet": false
@@ -76393,9 +76393,9 @@
           "selection": "X · Draw",
           "probability": 16.2,
           "odds": {
-            "hollywoodbets": 3.28,
-            "betway": 3.35,
-            "easybet": 3.32
+            "hollywoodbets": 3.23,
+            "betway": 3.3,
+            "easybet": 3.27
           },
           "marketEdge": -4.4,
           "isValueBet": false
