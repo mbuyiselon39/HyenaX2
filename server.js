@@ -552,7 +552,7 @@ app.get('/api/predict', (req, res) => {
 });
 
 // 0. Fixtures Feed API with Auto-Seeding & Freshness Guarantee
-app.get('/api/fixtures', (req, res) => {
+app.get('/api/fixtures', async (req, res) => {
   const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
   const force = req.query.force === '1' || req.query.refresh === '1' || req.query.force === 'true';
   let shouldRegenerate = force || !fs.existsSync(fixturesPath);
@@ -579,7 +579,7 @@ app.get('/api/fixtures', (req, res) => {
 
   if (shouldRegenerate) {
     try {
-      saveFixtures();
+      await saveFixtures();
     } catch (err) {
       console.error('[Fixtures API] Auto-generation error:', err);
     }

@@ -13,7 +13,7 @@ console.log('[Build] Starting HyenaX production build...');
 // 1. Generate fixtures and model data
 try {
   console.log('[Build] Ensuring latest fixtures and model predictions...');
-  saveFixtures();
+  await saveFixtures();
 } catch (err) {
   console.warn('[Build] Warning: Fixture generation encountered error:', err.message);
 }
