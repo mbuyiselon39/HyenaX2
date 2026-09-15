@@ -998,6 +998,16 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Paris Saint-Germain', a: 'Atlético Madrid', day: 3, hh: 19, mm: 0, big: true },
     { h: 'Barcelona', a: 'Borussia Dortmund', day: 3, hh: 19, mm: 0, big: true }
   ],
+  uel: [
+    { h: 'Manchester United', a: 'Porto', day: 3, hh: 19, mm: 0, big: true },
+    { h: 'AS Roma', a: 'Athletic Club', day: 3, hh: 19, mm: 0, big: true },
+    { h: 'Tottenham Hotspur', a: 'Eintracht Frankfurt', day: 3, hh: 19, mm: 0, big: true }
+  ],
+  uecl: [
+    { h: 'Chelsea', a: 'Fiorentina', day: 3, hh: 19, mm: 0, big: true },
+    { h: 'Real Betis', a: 'Gent', day: 3, hh: 19, mm: 0, big: true },
+    { h: 'Legia Warsaw', a: 'Panathinaikos', day: 3, hh: 17, mm: 45, big: false }
+  ],
   austria: [
     { h: 'Red Bull Salzburg', a: 'Rapid Wien', day: 4, hh: 15, mm: 0, big: true },
     { h: 'SK Sturm Graz', a: 'LASK', day: 5, hh: 13, mm: 30, big: true },

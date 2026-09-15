@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>HyenaX | The Ndlela Millionaires GoldPack - Predictive Football Intelligence</title>
-<meta name="description" content="HyenaX - The Ndlela Millionaires GoldPack: Dixon-Coles bivariate probability models, AI-consensus football predictions and odds intelligence across 40 global leagues." />
+<meta name="description" content="HyenaX - The Ndlela Millionaires GoldPack: Dixon-Coles bivariate probability models, AI-consensus football predictions and odds intelligence across 54 global leagues and competitions." />
 
 <!-- PWA / installability -->
 <meta name="theme-color" content="#080A0F" />
@@ -748,6 +748,7 @@ function app(){
     isOnline: (typeof navigator !== 'undefined') ? navigator.onLine : true,
     openLeagues: {},
     query: '',
+    selectedLeague: '',
     bigOnly: false,
     dataSource: 'DIXON-COLES SEED',
     updatedAt: null,
@@ -1655,6 +1656,7 @@ function app(){
         }
 
         this.fixtures = json.matches.map((m, n) => this.normalizeFixture(m, n));
+        this.openLeagues = Object.fromEntries(this.fixtures.map(m => [m.league.id, true]));
         this.dataSource = 'LIVE DIXON-COLES SYNC';
         this.updatedAt = json.meta && json.meta.generated_at ? new Date(json.meta.generated_at) : new Date();
 
@@ -1701,13 +1703,55 @@ function app(){
       }
     },
 
-    countByDay(key){ return this.fixtures.filter(m => (m.matchDate || this.dateKey(m.kickoff)) === key).length; },
-    dayMatches(key){ return this.fixtures.filter(m => (m.matchDate || this.dateKey(m.kickoff)) === key).sort((a,b)=>a.kickoff-b.kickoff); },
+    countByDay(key){
+      if (key === 'all') return this.fixtures.length;
+      return this.fixtures.filter(m => (m.matchDate || this.dateKey(m.kickoff)) === key).length;
+    },
+    dayMatches(key){
+      if (key === 'all') return this.fixtures.slice().sort((a,b)=>a.kickoff-b.kickoff);
+      return this.fixtures.filter(m => (m.matchDate || this.dateKey(m.kickoff)) === key).sort((a,b)=>a.kickoff-b.kickoff);
+    },
+
+    get allAvailableLeagues(){
+      const map = new Map();
+      this.fixtures.forEach(m => {
+        const lid = m.league.id;
+        if (!map.has(lid)) {
+          map.set(lid, { id: lid, name: m.league.name, country: m.league.country, flag: m.league.flag, count: 1 });
+        } else {
+          map.get(lid).count++;
+        }
+      });
+      return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+    },
+
+    selectLeague(id){
+      this.selectedLeague = id;
+      if (id) {
+        this.openLeagues[id] = true;
+        const hasMatchesOnDay = this.dayMatches(this.selectedDate).some(m => m.league.id === id);
+        if (!hasMatchesOnDay) {
+          const match = this.fixtures.find(m => m.league.id === id);
+          if (match) {
+            const mDay = match.matchDate || this.dateKey(match.kickoff);
+            if (this.days.some(d => d.key === mDay)) {
+              this.selectedDate = mDay;
+            } else {
+              this.selectedDate = 'all';
+            }
+          } else {
+            this.selectedDate = 'all';
+          }
+        }
+      }
+    },
 
     get filteredGroups(){
       const q = this.query.trim().toLowerCase();
+      const sel = this.selectedLeague;
       const list = this.dayMatches(this.selectedDate).filter(m =>
         (!this.bigOnly || m.isBig) &&
+        (!sel || m.league.id === sel) &&
         (!q || m.home.name.toLowerCase().includes(q) || m.away.name.toLowerCase().includes(q) || m.league.name.toLowerCase().includes(q))
       );
       const seen = new Set(this.fixtures.map(m => m.league.id));
@@ -1716,10 +1760,12 @@ function app(){
         .filter(id => !LEAGUES.some(l => l.id === id))
         .map(id => this.fixtures.find(m => m.league.id === id).league);
       return [...known, ...extra]
-        .filter(l => list.some(m => m.league.id === l.id))
+        .filter(l => (!sel || l.id === sel) && list.some(m => m.league.id === l.id))
         .map(l => ({ league: l, matches: list.filter(m => m.league.id === l.id) }));
     },
-    get dayTotal(){ return this.dayMatches(this.selectedDate).length; },
+    get dayTotal(){ 
+      return this.dayMatches(this.selectedDate).filter(m => !this.selectedLeague || m.league.id === this.selectedLeague).length; 
+    },
     get shownTotal(){ return this.filteredGroups.reduce((s,g)=>s+g.matches.length, 0); },
     get selectedMatch(){ return this.fixtures.find(m => m.id === this.selectedMatchId) || null; },
     get tickerItems(){
@@ -2484,6 +2530,21 @@ function app(){
   <nav x-show="activeView === 'fixtures'" class="border-b border-[#222E46] bg-[#080A0F]/90 relative z-20">
     <div class="mx-auto max-w-[1400px]">
       <div class="strip-in flex gap-2.5 py-3.5 overflow-x-auto no-scrollbar snap-x">
+        <!-- ALL FIXTURES / ALL ROUNDS CHIP -->
+        <button @click="selectedDate = 'all'"
+          class="day-chip snap-start shrink-0 w-[105px] rounded-xl border px-3.5 py-2.5 text-left relative overflow-hidden transition-all"
+          :class="selectedDate === 'all' ? 'active border-[#F59E0B] bg-gradient-to-b from-[#F59E0B]/20 to-[#121826] shadow-[0_0_20px_-4px_rgba(245,158,11,.45)]' : 'border-[#222E46] bg-[#0E131F] hover:bg-[#151D2E] hover:border-slate-600'">
+          <div class="font-display text-xs font-bold flex items-center gap-1" :class="selectedDate === 'all' ? 'text-amber-300' : 'text-slate-300'">
+            <span>🌐</span> ALL
+          </div>
+          <div class="font-num text-[10px] text-slate-400 mt-0.5">All Rounds</div>
+          <div class="mt-1.5 flex items-center gap-1.5">
+            <span class="font-num text-[11px] font-bold" :class="selectedDate === 'all' ? 'text-amber-400' : 'text-slate-300'" x-text="fixtures.length">151</span>
+            <span class="text-[9px] text-slate-500 uppercase tracking-wider">matches</span>
+          </div>
+          <span class="absolute bottom-0 left-0 h-1 bg-[#F59E0B] transition-all duration-300" :class="selectedDate === 'all' ? 'w-full' : 'w-0'"></span>
+        </button>
+
         <template x-for="d in days" :key="d.key">
           <button @click="selectedDate = d.key"
             class="day-chip snap-start shrink-0 w-[100px] rounded-xl border px-3.5 py-2.5 text-left relative overflow-hidden transition-all"
@@ -2511,21 +2572,37 @@ function app(){
       <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-[#222E46]">
         <div>
           <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-            <span x-text="(days.find(d => d.key === selectedDate)?.label || 'Today') + ' Fixtures · ' + (days.find(d => d.key === selectedDate)?.fullLabel || selectedDate)">Today Fixtures</span>
+            <span x-text="selectedDate === 'all' ? 'All Scheduled Rounds · 54 Global Leagues' : ((days.find(d => d.key === selectedDate)?.label || 'Today') + ' Fixtures · ' + (days.find(d => d.key === selectedDate)?.fullLabel || selectedDate))">Today Fixtures</span>
           </h2>
           <p class="text-xs text-slate-400 mt-1 font-num">
             <span class="text-white font-bold" x-text="dayTotal">0</span> fixtures tracked · <span class="text-amber-400 font-bold" x-text="filteredGroups.length">0</span> active leagues · Ranked by Dixon-Coles Probability Index
+            <span x-show="selectedLeague" class="ml-2 inline-flex items-center gap-1 text-amber-400">
+              · Filtered: <span class="font-bold" x-text="LEAGUES.find(l=>l.id===selectedLeague)?.name || selectedLeague"></span>
+              <button @click="selectedLeague=''" class="hover:text-amber-200 underline font-semibold ml-1">✕ Clear</button>
+            </span>
           </p>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- Competition Dropdown Selector -->
+          <div class="relative">
+            <select :value="selectedLeague" @change="selectLeague($event.target.value)"
+              class="rounded-xl border border-[#222E46] bg-[#0E131F] text-slate-200 text-xs font-semibold px-3 py-2.5 pr-8 outline-none focus:border-[#F59E0B] focus:shadow-[0_0_0_3px_rgba(245,158,11,.2)] transition-all appearance-none cursor-pointer">
+              <option value="">🏆 All 54 Competitions</option>
+              <template x-for="lg in allAvailableLeagues" :key="lg.id">
+                <option :value="lg.id" x-text="lg.flag + ' ' + lg.name + ' (' + lg.count + ')'"></option>
+              </template>
+            </select>
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+
           <div class="relative">
             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
             <input x-model="query" type="search" placeholder="Search team or league…"
-              class="w-48 sm:w-64 rounded-xl border border-[#222E46] bg-[#0E131F] pl-9 pr-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-[#F59E0B] focus:shadow-[0_0_0_3px_rgba(245,158,11,.2)] transition-all" />
+              class="w-36 sm:w-52 rounded-xl border border-[#222E46] bg-[#0E131F] pl-9 pr-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-[#F59E0B] focus:shadow-[0_0_0_3px_rgba(245,158,11,.2)] transition-all" />
           </div>
           <button @click="bigOnly = !bigOnly"
-            class="chip rounded-xl border px-4 py-2.5 text-xs font-bold font-display tracking-wide flex items-center gap-1.5"
+            class="chip rounded-xl border px-3.5 py-2.5 text-xs font-bold font-display tracking-wide flex items-center gap-1.5"
             :class="bigOnly ? 'border-[#F59E0B] bg-[#F59E0B]/20 text-amber-300 shadow-[0_0_16px_-4px_rgba(245,158,11,.6)]' : 'border-[#222E46] bg-[#0E131F] text-slate-400 hover:text-slate-200'">
             <span>🔥 BIG ONLY</span>
           </button>
