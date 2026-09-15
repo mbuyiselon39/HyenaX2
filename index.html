@@ -1427,15 +1427,19 @@ function app(){
     },
 
     _pick(obj, ...keys){ for (const k of keys){ if (obj && obj[k] !== undefined && obj[k] !== null) return obj[k]; } return undefined; },
-    normalizeTeam(t, fallbackName){
+    normalizeTeam(t, fallbackName, leagueId = 'epl'){
       const name = (t && t.name) || fallbackName || '-';
+      const hash = name.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
+      const hashOffset = (hash % 9) - 4; // -4 to +4
+      const defaultRating = 76 + hashOffset;
       return {
         name,
         short: (t && t.short) || initials(name),
-        rating: Number(this._pick(t, 'rating') ?? 75),
-        form: Array.isArray(t && t.form) ? t.form : ['D','D','D','D','D'],
-        xgFor: Number(this._pick(t, 'xgFor', 'xg_for') ?? 1.3),
-        xgAgainst: Number(this._pick(t, 'xgAgainst', 'xg_against') ?? 1.3),
+        rating: Number(this._pick(t, 'rating') ?? defaultRating),
+        form: Array.isArray(t && t.form) ? t.form : ['W','D','W','L','W'],
+        xgFor: Number(this._pick(t, 'xgFor', 'xg_for') ?? 1.4),
+        xgAgainst: Number(this._pick(t, 'xgAgainst', 'xg_against') ?? 1.2),
+        logo: t && t.logo ? t.logo : null
       };
     },
     normalizeH2H(h, homeName, awayName){
@@ -1458,8 +1462,12 @@ function app(){
       const kickoffTime = m.kickoffTime || (kickoffRaw && kickoffRaw.includes('T') ? kickoffRaw.slice(11, 16) : this.fmtTime(kickoff));
       const homeName = (m.home && m.home.name) || (typeof m.home === 'string' ? m.home : null);
       const awayName = (m.away && m.away.name) || (typeof m.away === 'string' ? m.away : null);
-      const home = this.normalizeTeam(typeof m.home === 'object' ? m.home : null, homeName || 'Home');
-      const away = this.normalizeTeam(typeof m.away === 'object' ? m.away : null, awayName || 'Away');
+      let league = m.league;
+      if (typeof league === 'string') league = { id: league.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name: league, country: '', flag: '🌐' };
+      if (!league || !league.id) league = { id: 'other', name: (league && league.name) || 'Other', country: '', flag: '🌐' };
+
+      const home = this.normalizeTeam(typeof m.home === 'object' ? m.home : null, homeName || 'Home', league.id);
+      const away = this.normalizeTeam(typeof m.away === 'object' ? m.away : null, awayName || 'Away', league.id);
 
       const oddsFor = (p) => {
         const existing = p.odds && (p.odds.hollywoodbets || p.odds.betway || p.odds.easybet);
@@ -1471,23 +1479,31 @@ function app(){
           easybet: +(0.93 / (prob / 100)).toFixed(2),
         };
       };
-      
-      let league = m.league;
-      if (typeof league === 'string') league = { id: league.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name: league, country: '', flag: '🌐' };
-      if (!league || !league.id) league = { id: 'other', name: (league && league.name) || 'Other', country: '', flag: '🌐' };
 
       const seedKey = `${home.name}-${away.name}-${kickoff.getTime()}`;
       const dcPredictions = buildDixonColesPredictions(home, away, seedKey, league.id);
 
-      let preds = Array.isArray(m.predictions) && m.predictions.length ? m.predictions : dcPredictions;
-      preds = preds.slice().sort((a, b) => b.probability - a.probability).map((p, i) => ({
-        ...p,
-        rank: i + 1,
-        probability: +Number(p.probability).toFixed(1),
-        odds: oddsFor(p),
-      }));
+      // Preserve backend's intelligent ranking if predictions exist; otherwise use client Dixon-Coles
+      let preds;
+      if (Array.isArray(m.predictions) && m.predictions.length) {
+        preds = m.predictions.map((p, i) => ({
+          ...p,
+          rank: i + 1,
+          probability: +Number(p.probability).toFixed(1),
+          odds: oddsFor(p),
+        }));
+      } else {
+        preds = dcPredictions.slice().sort((a, b) => b.probability - a.probability).map((p, i) => ({
+          ...p,
+          rank: i + 1,
+          probability: +Number(p.probability).toFixed(1),
+          odds: oddsFor(p),
+        }));
+      }
 
-      const top = preds[0] || { market: '-', selection: '-', probability: 0 };
+      // Respect backend's selected topPick
+      const backendTopPick = m.topPick && m.topPick.selection ? m.topPick : null;
+      const top = backendTopPick || preds[0] || { market: '-', selection: '-', probability: 0 };
       const topOddsVal = top.odds ? (top.odds.betway || top.odds.hollywoodbets || top.odds.easybet || (typeof top.odds === 'number' ? top.odds : +(100 / (top.probability || 70) * 1.05).toFixed(2))) : +(100 / (top.probability || 70) * 1.05).toFixed(2);
 
       const cal = window.BeastEngine ? window.BeastEngine.calibrateProbability(top.probability, league.id) : { calibratedProbability: top.probability, calibrationDelta: 0, brierScore: 0.16 };
