@@ -1,7 +1,7 @@
 {
   "meta": {
     "dataSource": "OFFICIAL LIVE FEED & DIXON-COLES ENGINE",
-    "generated_at": "2026-09-15T19:19:00.985Z",
+    "generated_at": "2026-09-15T19:39:53.189Z",
     "source": "Official Live Sports Feed & Dixon-Coles Live Engine",
     "schema_version": "3.0",
     "league_count": 54,
@@ -48,7 +48,7 @@
         "xgFor": 1.4,
         "xgAgainst": 1.17,
         "statsSource": "telemetry-modeled",
-        "short": "THUN",
+        "short": "THU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3024.png"
       },
       "venue": "Stadion Wankdorf",
@@ -389,7 +389,7 @@
         "xgFor": 2.1,
         "xgAgainst": 1.1,
         "statsSource": "authoritative-club-registry",
-        "short": "FCB",
+        "short": "BAS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/989.png"
       },
       "away": {
@@ -405,7 +405,7 @@
         "xgFor": 1.27,
         "xgAgainst": 1.27,
         "statsSource": "telemetry-modeled",
-        "short": "FCL",
+        "short": "LUZ",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7640.png"
       },
       "venue": "St. Jakob-Park",
@@ -746,7 +746,7 @@
         "xgFor": 1.27,
         "xgAgainst": 1.27,
         "statsSource": "telemetry-modeled",
-        "short": "SION",
+        "short": "SIO",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3076.png"
       },
       "away": {
@@ -762,7 +762,7 @@
         "xgFor": 0.9,
         "xgAgainst": 1.57,
         "statsSource": "telemetry-modeled",
-        "short": "FCL",
+        "short": "LS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/11551.png"
       },
       "venue": "Stade de Tourbillon",
@@ -1104,7 +1104,7 @@
         "xgAgainst": 1.15,
         "statsSource": "authoritative-club-registry",
         "short": "FEN",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/436.png"
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/430.png"
       },
       "away": {
         "name": "AS Roma",
@@ -1119,7 +1119,7 @@
         "xgFor": 2.18,
         "xgAgainst": 0.93,
         "statsSource": "authoritative-club-registry",
-        "short": "ROMA",
+        "short": "AR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/104.png"
       },
       "venue": "Şükrü Saracoğlu Stadium",
@@ -1460,11 +1460,11 @@
         "xgFor": 2.81,
         "xgAgainst": 1.06,
         "statsSource": "authoritative-club-registry",
-        "short": "PSV",
+        "short": "PE",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/148.png"
       },
       "away": {
-        "name": "Shakhtar Donetsk",
+        "name": "FC Shakhtar Donetsk",
         "rating": 83,
         "form": [
           "W",
@@ -1476,8 +1476,8 @@
         "xgFor": 2.28,
         "xgAgainst": 0.86,
         "statsSource": "authoritative-club-registry",
-        "short": "SHK",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/493.png"
+        "short": "SD",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/438.png"
       },
       "venue": "Philips Stadion",
       "isBig": true,
@@ -1789,7 +1789,7 @@
         }
       },
       "probabilityIndex": 86.7,
-      "rationale": "PSV Eindhoven (Elo 85, xG 2.81) vs Shakhtar Donetsk (Elo 83, xG 2.28) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (86.7% calibrated probability).",
+      "rationale": "PSV Eindhoven (Elo 85, xG 2.81) vs FC Shakhtar Donetsk (Elo 83, xG 2.28) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (86.7% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -1805,7 +1805,7 @@
       "kickoffTime": "19:00",
       "kickoff": "2026-09-10T19:00Z",
       "home": {
-        "name": "Bayern Munich",
+        "name": "FC Bayern München",
         "rating": 93,
         "form": [
           "W",
@@ -1817,7 +1817,7 @@
         "xgFor": 2.44,
         "xgAgainst": 0.86,
         "statsSource": "authoritative-club-registry",
-        "short": "MUN",
+        "short": "BM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/132.png"
       },
       "away": {
@@ -1833,7 +1833,7 @@
         "xgFor": 2.05,
         "xgAgainst": 1.2,
         "statsSource": "authoritative-club-registry",
-        "short": "BODO",
+        "short": "BOD",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2980.png"
       },
       "venue": "Allianz Arena",
@@ -2146,7 +2146,7 @@
         }
       },
       "probabilityIndex": 83.4,
-      "rationale": "Bayern Munich (Elo 93, xG 2.44) vs Bodo/Glimt (Elo 78, xG 2.05) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (83.4% calibrated probability).",
+      "rationale": "FC Bayern München (Elo 93, xG 2.44) vs Bodo/Glimt (Elo 78, xG 2.05) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (83.4% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -2162,7 +2162,7 @@
       "kickoffTime": "19:00",
       "kickoff": "2026-09-10T19:00Z",
       "home": {
-        "name": "Como",
+        "name": "Como 1907",
         "rating": 75,
         "form": [
           "W",
@@ -2174,7 +2174,7 @@
         "xgFor": 1.56,
         "xgAgainst": 1.26,
         "statsSource": "authoritative-club-registry",
-        "short": "COMO",
+        "short": "C1",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2572.png"
       },
       "away": {
@@ -2192,7 +2192,7 @@
         "rank": 5,
         "ppg": 2,
         "statsSource": "official-standings-bundesliga",
-        "short": "RBL",
+        "short": "RL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/11420.png"
       },
       "venue": "Giuseppe Sinigaglia",
@@ -2505,7 +2505,7 @@
         }
       },
       "probabilityIndex": 80.1,
-      "rationale": "Como (Elo 75, xG 1.56) vs RB Leipzig (Elo 87, xG 2.78) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (80.1% calibrated probability).",
+      "rationale": "Como 1907 (Elo 75, xG 1.56) vs RB Leipzig (Elo 87, xG 2.78) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (80.1% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -2521,7 +2521,7 @@
       "kickoffTime": "19:00",
       "kickoff": "2026-09-10T19:00Z",
       "home": {
-        "name": "Manchester United",
+        "name": "Manchester United FC",
         "rating": 79,
         "form": [
           "W",
@@ -2533,7 +2533,7 @@
         "xgFor": 1.61,
         "xgAgainst": 1.52,
         "statsSource": "authoritative-club-registry",
-        "short": "MAN",
+        "short": "MU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/360.png"
       },
       "away": {
@@ -2549,7 +2549,7 @@
         "xgFor": 0.9,
         "xgAgainst": 1.82,
         "statsSource": "telemetry-modeled",
-        "short": "SAB",
+        "short": "SF",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/21922.png"
       },
       "venue": "Old Trafford",
@@ -2862,7 +2862,7 @@
         }
       },
       "probabilityIndex": 89.1,
-      "rationale": "Manchester United (Elo 79, xG 1.61) vs Sabah FK (Elo 81, xG 0.9) in UEFA Champions League. Dixon-Coles model favors 1X · Home or Draw (89.1% calibrated probability).",
+      "rationale": "Manchester United FC (Elo 79, xG 1.61) vs Sabah FK (Elo 81, xG 0.9) in UEFA Champions League. Dixon-Coles model favors 1X · Home or Draw (89.1% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -2890,11 +2890,11 @@
         "xgFor": 1.95,
         "xgAgainst": 0.95,
         "statsSource": "authoritative-club-registry",
-        "short": "SLP",
+        "short": "SP",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/494.png"
       },
       "away": {
-        "name": "Lens",
+        "name": "RC Lens",
         "rating": 77,
         "form": [
           "W",
@@ -2906,7 +2906,7 @@
         "xgFor": 1.69,
         "xgAgainst": 1.4,
         "statsSource": "authoritative-club-registry",
-        "short": "RCL",
+        "short": "RL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/175.png"
       },
       "venue": "Fortuna Arena",
@@ -3219,7 +3219,7 @@
         }
       },
       "probabilityIndex": 75.1,
-      "rationale": "Slavia Prague (Elo 78, xG 1.95) vs Lens (Elo 77, xG 1.69) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (75.1% calibrated probability).",
+      "rationale": "Slavia Prague (Elo 78, xG 1.95) vs RC Lens (Elo 77, xG 1.69) in UEFA Champions League. Dixon-Coles model favors Over 2.5 (75.1% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -3249,7 +3249,7 @@
         "rank": 23,
         "ppg": 0.67,
         "statsSource": "official-standings",
-        "short": "CRA",
+        "short": "CT",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2594.png"
       },
       "away": {
@@ -3267,7 +3267,7 @@
         "rank": 4,
         "ppg": 1.83,
         "statsSource": "official-standings",
-        "short": "CHL",
+        "short": "CT",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/320.png"
       },
       "venue": "Broadfield Stadium",
@@ -3610,7 +3610,7 @@
         "rank": 6,
         "ppg": 1.67,
         "statsSource": "official-standings",
-        "short": "GRI",
+        "short": "GT",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/386.png"
       },
       "away": {
@@ -3628,7 +3628,7 @@
         "rank": 2,
         "ppg": 2,
         "statsSource": "official-standings",
-        "short": "BRI",
+        "short": "BR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/308.png"
       },
       "venue": "Blundell Park",
@@ -3989,7 +3989,7 @@
         "rank": 21,
         "ppg": 0.83,
         "statsSource": "official-standings",
-        "short": "ACC",
+        "short": "AS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2731.png"
       },
       "venue": "The Hive Stadium",
@@ -4332,7 +4332,7 @@
         "rank": 13,
         "ppg": 1.33,
         "statsSource": "official-standings",
-        "short": "COL",
+        "short": "CU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/339.png"
       },
       "away": {
@@ -4350,7 +4350,7 @@
         "rank": 8,
         "ppg": 1.67,
         "statsSource": "official-standings",
-        "short": "CAX",
+        "short": "CA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/396.png"
       },
       "venue": "JobServe Community Stadium",
@@ -4711,7 +4711,7 @@
         "rank": 10,
         "ppg": 1.5,
         "statsSource": "official-standings",
-        "short": "TRN",
+        "short": "TR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/345.png"
       },
       "venue": "Priestfield Stadium",
@@ -5054,7 +5054,7 @@
         "rank": 19,
         "ppg": 0.83,
         "statsSource": "official-standings",
-        "short": "NEW",
+        "short": "NC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/635.png"
       },
       "away": {
@@ -5072,7 +5072,7 @@
         "rank": 7,
         "ppg": 1.67,
         "statsSource": "official-standings",
-        "short": "FLE",
+        "short": "FT",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3891.png"
       },
       "venue": "Rodney Parade",
@@ -5415,7 +5415,7 @@
         "rank": 14,
         "ppg": 1.17,
         "statsSource": "official-standings",
-        "short": "OLD",
+        "short": "OA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/332.png"
       },
       "away": {
@@ -5433,7 +5433,7 @@
         "rank": 12,
         "ppg": 1.33,
         "statsSource": "official-standings",
-        "short": "CHES",
+        "short": "CHE",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/343.png"
       },
       "venue": "Boundary Park",
@@ -5776,7 +5776,7 @@
         "rank": 22,
         "ppg": 0.83,
         "statsSource": "official-standings",
-        "short": "PTV",
+        "short": "PV",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/348.png"
       },
       "away": {
@@ -5794,7 +5794,7 @@
         "rank": 20,
         "ppg": 0.83,
         "statsSource": "official-standings",
-        "short": "EXE",
+        "short": "EC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/324.png"
       },
       "venue": "Vale Park",
@@ -6137,7 +6137,7 @@
         "rank": 16,
         "ppg": 1,
         "statsSource": "official-standings",
-        "short": "ROT",
+        "short": "RU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/402.png"
       },
       "away": {
@@ -6155,7 +6155,7 @@
         "rank": 15,
         "ppg": 1.17,
         "statsSource": "official-standings",
-        "short": "SAL",
+        "short": "SC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/4703.png"
       },
       "venue": "AESSEAL New York Stadium",
@@ -6498,7 +6498,7 @@
         "rank": 18,
         "ppg": 1,
         "statsSource": "official-standings",
-        "short": "SHR",
+        "short": "ST",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/302.png"
       },
       "away": {
@@ -6516,7 +6516,7 @@
         "rank": 17,
         "ppg": 1,
         "statsSource": "official-standings",
-        "short": "NHT",
+        "short": "NT",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/353.png"
       },
       "venue": "The Croud Meadow",
@@ -6875,7 +6875,7 @@
         "rank": 24,
         "ppg": 0.67,
         "statsSource": "official-standings",
-        "short": "RCH",
+        "short": "ROC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/303.png"
       },
       "venue": "Bescot Stadium",
@@ -7218,7 +7218,7 @@
         "rank": 3,
         "ppg": 1.83,
         "statsSource": "official-standings",
-        "short": "YORK",
+        "short": "YC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/315.png"
       },
       "away": {
@@ -7236,7 +7236,7 @@
         "rank": 9,
         "ppg": 1.67,
         "statsSource": "official-standings",
-        "short": "SWI",
+        "short": "ST",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/341.png"
       },
       "venue": "LNER Community Stadium",
@@ -7579,7 +7579,7 @@
         "rank": 19,
         "ppg": 0.57,
         "statsSource": "official-standings",
-        "short": "TYKV",
+        "short": "TV1",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3393.png"
       },
       "away": {
@@ -7597,7 +7597,7 @@
         "rank": 20,
         "ppg": 0.57,
         "statsSource": "official-standings",
-        "short": "JEF",
+        "short": "JUI",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7111.png"
       },
       "venue": "Tokyo Stadium",
@@ -7940,7 +7940,7 @@
         "rank": 12,
         "ppg": 1.29,
         "statsSource": "official-standings",
-        "short": "URA",
+        "short": "URD",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3385.png"
       },
       "away": {
@@ -7958,7 +7958,7 @@
         "rank": 6,
         "ppg": 1.86,
         "statsSource": "official-standings",
-        "short": "OKA",
+        "short": "FO",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/22522.png"
       },
       "venue": "Saitama Stadium 2002",
@@ -8297,7 +8297,7 @@
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
         "short": "KVZ",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EKVZ%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Asswehly SC",
@@ -8309,8 +8309,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "ASW",
-        "logo": null
+        "short": "ASS",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EASS%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Amaan Stadium",
       "isBig": false,
@@ -8638,7 +8638,7 @@
       "kickoffTime": "13:00",
       "kickoff": "2026-09-13T13:00Z",
       "home": {
-        "name": "Simba SC",
+        "name": "Simba Sports Club",
         "rating": 79,
         "form": [
           "W",
@@ -8652,8 +8652,8 @@
         "rank": 4,
         "ppg": 0.83,
         "statsSource": "official-standings",
-        "short": "SIM",
-        "logo": null
+        "short": "SSC",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ESSC%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Mighty Wanderers",
@@ -8665,8 +8665,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "WND",
-        "logo": null
+        "short": "MW",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EMW%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Uhuru Stadium",
       "isBig": false,
@@ -8978,7 +8978,7 @@
         }
       },
       "probabilityIndex": 77.4,
-      "rationale": "Simba SC (Elo 79, xG 0.88) vs Mighty Wanderers (Elo 73, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1X · Home or Draw (77.4% calibrated probability).",
+      "rationale": "Simba Sports Club (Elo 79, xG 0.88) vs Mighty Wanderers (Elo 73, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1X · Home or Draw (77.4% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -9026,7 +9026,7 @@
         "rank": 11,
         "ppg": 0.5,
         "statsSource": "official-standings",
-        "short": "VOL",
+        "short": "VN",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/20043.png"
       },
       "venue": "Peristeri Stadium",
@@ -9369,8 +9369,8 @@
         "rank": 4,
         "ppg": 0.17,
         "statsSource": "official-standings",
-        "short": "RUFC",
-        "logo": null
+        "short": "RU",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ERU%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "San Pédro",
@@ -9387,8 +9387,8 @@
         "rank": 4,
         "ppg": 0.5,
         "statsSource": "official-standings-caf_cc",
-        "short": "FCSP",
-        "logo": null
+        "short": "SP",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ESP%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Godswill Akpabio International Stadium",
       "isBig": false,
@@ -9730,7 +9730,7 @@
         "rank": 13,
         "ppg": 0.25,
         "statsSource": "official-standings",
-        "short": "AST",
+        "short": "AT",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/8354.png"
       },
       "away": {
@@ -9746,7 +9746,7 @@
         "xgFor": 2.18,
         "xgAgainst": 0.78,
         "statsSource": "authoritative-club-registry",
-        "short": "AEK",
+        "short": "AA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/887.png"
       },
       "venue": "Theodoros Kolokotronis Stadium",
@@ -10087,8 +10087,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "ASEC",
-        "logo": null
+        "short": "AM",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EAM%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "ASC Kara",
@@ -10100,8 +10100,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "KARA",
-        "logo": null
+        "short": "AK",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EAK%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Felix Houphouet-Boigny",
       "isBig": false,
@@ -10429,7 +10429,7 @@
       "kickoffTime": "16:00",
       "kickoff": "2026-09-13T16:00Z",
       "home": {
-        "name": "Horoya",
+        "name": "Horoya AC",
         "rating": 78,
         "form": [
           "W",
@@ -10442,7 +10442,7 @@
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
         "short": "HOR",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EHOR%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "JS Saoura",
@@ -10457,8 +10457,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "JSS",
-        "logo": null
+        "short": "JS",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EJS%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Stade du 28 Septembre",
       "isBig": false,
@@ -10770,7 +10770,7 @@
         }
       },
       "probabilityIndex": 78.1,
-      "rationale": "Horoya (Elo 78, xG 1.14) vs JS Saoura (Elo 79, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1X · Home or Draw (78.1% calibrated probability).",
+      "rationale": "Horoya AC (Elo 78, xG 1.14) vs JS Saoura (Elo 79, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1X · Home or Draw (78.1% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -10795,8 +10795,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "SID",
-        "logo": null
+        "short": "SC",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ESC%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Aiglons FC",
@@ -10809,7 +10809,7 @@
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
         "short": "AIG",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EAIG%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Dire Dawa Stadium",
       "isBig": false,
@@ -11137,7 +11137,7 @@
       "kickoffTime": "16:00",
       "kickoff": "2026-09-13T16:00Z",
       "home": {
-        "name": "Stade Malien",
+        "name": "Stade Malien de Bamako",
         "rating": 84,
         "form": [
           "W",
@@ -11151,8 +11151,8 @@
         "rank": 1,
         "ppg": 1.83,
         "statsSource": "official-standings",
-        "short": "MAL",
-        "logo": null
+        "short": "SMD",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ESMD%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Colombe Sportiv Du Dja Et Lobo",
@@ -11164,8 +11164,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "COL",
-        "logo": null
+        "short": "CSD",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ECSD%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Stade du 26 Mars",
       "isBig": false,
@@ -11477,7 +11477,7 @@
         }
       },
       "probabilityIndex": 82.3,
-      "rationale": "Stade Malien (Elo 84, xG 0.88) vs Colombe Sportiv Du Dja Et Lobo (Elo 75, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1X · Home or Draw (82.3% calibrated probability).",
+      "rationale": "Stade Malien de Bamako (Elo 84, xG 0.88) vs Colombe Sportiv Du Dja Et Lobo (Elo 75, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1X · Home or Draw (82.3% calibrated probability).",
       "matchStatus": "FINISHED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -11507,7 +11507,7 @@
         "rank": 5,
         "ppg": 2.14,
         "statsSource": "official-standings",
-        "short": "NEOM",
+        "short": "NEO",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/130899.png"
       },
       "away": {
@@ -11525,7 +11525,7 @@
         "rank": 15,
         "ppg": 0.43,
         "statsSource": "official-standings",
-        "short": "FAT",
+        "short": "AF",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/13033.png"
       },
       "venue": "King Khalid Sport City Stadium",
@@ -11867,7 +11867,7 @@
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
         "short": "NOU",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ENOU%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Vipers SC",
@@ -11883,7 +11883,7 @@
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
         "short": "VIP",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EVIP%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Stade Cheikha Ould Boïdiya",
       "isBig": false,
@@ -12224,10 +12224,10 @@
         "xgAgainst": 0.82,
         "statsSource": "authoritative-club-registry",
         "short": "PYR",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EPYR%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Gor Mahia",
+        "name": "Gor Mahia FC",
         "rating": 77,
         "form": [
           "L",
@@ -12239,8 +12239,8 @@
         "xgFor": 1.14,
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
-        "short": "GOR",
-        "logo": null
+        "short": "GM",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EGM%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "30 June Stadium",
       "isBig": false,
@@ -12552,7 +12552,7 @@
         }
       },
       "probabilityIndex": 82.8,
-      "rationale": "Pyramids FC (Elo 82, xG 2.01) vs Gor Mahia (Elo 77, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1 · Pyramids FC (82.8% calibrated probability).",
+      "rationale": "Pyramids FC (Elo 82, xG 2.01) vs Gor Mahia FC (Elo 77, xG 1.14) in CAF Champions League. Dixon-Coles model favors 1 · Pyramids FC (82.8% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -12581,7 +12581,7 @@
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
         "short": "TEU",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ETEU%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Canchungo",
@@ -12594,7 +12594,7 @@
         "xgAgainst": 1.14,
         "statsSource": "telemetry-modeled",
         "short": "CAN",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ECAN%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Stade Léopold Sédar Senghor",
       "isBig": false,
@@ -13295,7 +13295,7 @@
         "xgFor": 2.07,
         "xgAgainst": 0.92,
         "statsSource": "authoritative-club-registry",
-        "short": "PAOK",
+        "short": "PAO",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/605.png"
       },
       "away": {
@@ -13656,7 +13656,7 @@
         "rank": 8,
         "ppg": 1.57,
         "statsSource": "official-standings",
-        "short": "DIR",
+        "short": "AD",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/131746.png"
       },
       "away": {
@@ -14017,7 +14017,7 @@
         "rank": 11,
         "ppg": 1.14,
         "statsSource": "official-standings",
-        "short": "RIY",
+        "short": "AR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/21965.png"
       },
       "away": {
@@ -14035,7 +14035,7 @@
         "rank": 7,
         "ppg": 1.71,
         "statsSource": "official-standings",
-        "short": "KHO",
+        "short": "AK",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/22028.png"
       },
       "venue": "Prince Faisal bin Fahd Stadium",
@@ -14376,7 +14376,7 @@
         "xgFor": 2.18,
         "xgAgainst": 0.72,
         "statsSource": "authoritative-club-registry",
-        "short": "PAO",
+        "short": "PAN",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/443.png"
       },
       "away": {
@@ -14737,7 +14737,7 @@
         "rank": 16,
         "ppg": 0.67,
         "statsSource": "official-standings",
-        "short": "RAFC",
+        "short": "RA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3822.png"
       },
       "away": {
@@ -15098,7 +15098,7 @@
         "rank": 9,
         "ppg": 1.17,
         "statsSource": "official-standings",
-        "short": "MFC",
+        "short": "MOR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3696.png"
       },
       "away": {
@@ -15457,7 +15457,7 @@
         "xgFor": 1.6,
         "xgAgainst": 1.17,
         "statsSource": "authoritative-club-registry",
-        "short": "SCB",
+        "short": "BRA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2994.png"
       },
       "away": {
@@ -15475,7 +15475,7 @@
         "rank": 17,
         "ppg": 0.33,
         "statsSource": "official-standings",
-        "short": "EPF",
+        "short": "EST",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/12216.png"
       },
       "venue": "Estádio Municipal de Braga",
@@ -15822,7 +15822,7 @@
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/19002.png"
       },
       "away": {
-        "name": "Liverpool",
+        "name": "Liverpool FC",
         "rating": 90,
         "form": [
           "W",
@@ -15835,7 +15835,7 @@
         "xgAgainst": 0.99,
         "statsSource": "authoritative-club-registry",
         "short": "LIV",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5492.png"
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/364.png"
       },
       "venue": "Estadio Charrúa",
       "isBig": true,
@@ -16147,7 +16147,7 @@
         }
       },
       "probabilityIndex": 87.2,
-      "rationale": "Montevideo City Torque (Elo 82, xG 2.56) vs Liverpool (Elo 90, xG 2.06) in Liga AUF Uruguaya. Dixon-Coles model favors Over 2.5 (87.2% calibrated probability).",
+      "rationale": "Montevideo City Torque (Elo 82, xG 2.56) vs Liverpool FC (Elo 90, xG 2.06) in Liga AUF Uruguaya. Dixon-Coles model favors Over 2.5 (87.2% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -16175,7 +16175,7 @@
         "xgFor": 1.33,
         "xgAgainst": 1.22,
         "statsSource": "telemetry-modeled",
-        "short": "UCA",
+        "short": "UC(",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/9283.png"
       },
       "away": {
@@ -16191,7 +16191,7 @@
         "xgFor": 1.06,
         "xgAgainst": 1.43,
         "statsSource": "telemetry-modeled",
-        "short": "ORS",
+        "short": "ORE",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/20695.png"
       },
       "venue": "Estadio Banco Guayaquil",
@@ -16520,7 +16520,7 @@
       "kickoffTime": "10:00",
       "kickoff": "2026-09-15T10:00Z",
       "home": {
-        "name": "Daejeon Hana Citizen",
+        "name": "Daejeon Hana Citizen FC",
         "rating": 87,
         "form": [
           "W"
@@ -16528,8 +16528,8 @@
         "xgFor": 1.91,
         "xgAgainst": 0.8,
         "statsSource": "telemetry-modeled",
-        "short": "DAE",
-        "logo": null
+        "short": "DHC",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EDHC%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Kyoto Sanga",
@@ -16546,7 +16546,7 @@
         "rank": 17,
         "ppg": 0.71,
         "statsSource": "official-standings-j1",
-        "short": "KYO",
+        "short": "KS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/21361.png"
       },
       "venue": "Daejeon World Cup Stadium",
@@ -16859,7 +16859,7 @@
         }
       },
       "probabilityIndex": 83.8,
-      "rationale": "Daejeon Hana Citizen (Elo 87, xG 1.91) vs Kyoto Sanga (Elo 71, xG 1.29) in AFC Champions League Elite. Dixon-Coles model favors 1 · Daejeon Hana Citizen (83.8% calibrated probability).",
+      "rationale": "Daejeon Hana Citizen FC (Elo 87, xG 1.91) vs Kyoto Sanga (Elo 71, xG 1.29) in AFC Champions League Elite. Dixon-Coles model favors 1 · Daejeon Hana Citizen (83.8% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -16889,11 +16889,11 @@
         "rank": 15,
         "ppg": 0.86,
         "statsSource": "official-standings-j1",
-        "short": "GAM",
+        "short": "GO",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7102.png"
       },
       "away": {
-        "name": "Cong An Hanoi",
+        "name": "Cong An Hanoi FC",
         "rating": 73,
         "form": [
           "L",
@@ -16905,8 +16905,8 @@
         "xgFor": 0.9,
         "xgAgainst": 1.82,
         "statsSource": "telemetry-modeled",
-        "short": "CAHN",
-        "logo": null
+        "short": "CAH",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ECAH%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Suita City Football Stadium",
       "isBig": false,
@@ -17218,7 +17218,7 @@
         }
       },
       "probabilityIndex": 83.5,
-      "rationale": "Gamba Osaka (Elo 72, xG 1.17) vs Cong An Hanoi (Elo 73, xG 0.9) in AFC Champions League Elite. Dixon-Coles model favors 1X · Home or Draw (83.5% calibrated probability).",
+      "rationale": "Gamba Osaka (Elo 72, xG 1.17) vs Cong An Hanoi FC (Elo 73, xG 0.9) in AFC Champions League Elite. Dixon-Coles model favors 1X · Home or Draw (83.5% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -17248,7 +17248,7 @@
         "rank": 8,
         "ppg": 1.71,
         "statsSource": "official-standings-j1",
-        "short": "KAN",
+        "short": "KA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7115.png"
       },
       "away": {
@@ -17264,7 +17264,7 @@
         "xgFor": 0.9,
         "xgAgainst": 1.82,
         "statsSource": "telemetry-modeled",
-        "short": "NEW",
+        "short": "NJ",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5323.png"
       },
       "venue": "Kashima Soccer Stadium",
@@ -17621,7 +17621,7 @@
         "xgFor": 2.23,
         "xgAgainst": 1.18,
         "statsSource": "authoritative-club-registry",
-        "short": "SIPG",
+        "short": "SP",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/15515.png"
       },
       "venue": "Dragon Solar Park",
@@ -17980,7 +17980,7 @@
         "xgFor": 0.9,
         "xgAgainst": 1.82,
         "statsSource": "telemetry-modeled",
-        "short": "POH",
+        "short": "PS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/9693.png"
       },
       "venue": "Workers' Stadium",
@@ -18337,7 +18337,7 @@
         "xgFor": 1.01,
         "xgAgainst": 1.47,
         "statsSource": "telemetry-modeled",
-        "short": "BUR",
+        "short": "BU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7138.png"
       },
       "venue": "Sultan Ibrahim Stadium",
@@ -18678,7 +18678,7 @@
         "xgFor": 2.05,
         "xgAgainst": 1.25,
         "statsSource": "authoritative-club-registry",
-        "short": "AlN",
+        "short": "AA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7128.png"
       },
       "away": {
@@ -18694,7 +18694,7 @@
         "xgFor": 2.37,
         "xgAgainst": 1,
         "statsSource": "authoritative-club-registry",
-        "short": "NSR",
+        "short": "AN",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/817.png"
       },
       "venue": "Hazza Bin Zayed Stadium",
@@ -19023,7 +19023,7 @@
       "kickoffTime": "17:00",
       "kickoff": "2026-09-15T17:00Z",
       "home": {
-        "name": "Rayo Vallecano",
+        "name": "Rayo Vallecano de Madrid",
         "rating": 79,
         "form": [
           "W",
@@ -19037,11 +19037,11 @@
         "rank": 12,
         "ppg": 1.17,
         "statsSource": "official-standings",
-        "short": "RAY",
+        "short": "RVD",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/101.png"
       },
       "away": {
-        "name": "Espanyol",
+        "name": "RCD Espanyol de Barcelona",
         "rating": 84,
         "form": [
           "W",
@@ -19055,7 +19055,7 @@
         "rank": 8,
         "ppg": 1.17,
         "statsSource": "official-standings",
-        "short": "ESP",
+        "short": "EDB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/88.png"
       },
       "venue": "Estadio Municipal de Butarque",
@@ -19368,7 +19368,7 @@
         }
       },
       "probabilityIndex": 77.3,
-      "rationale": "Rayo Vallecano (Elo 79, xG 1.61) vs Espanyol (Elo 84, xG 1.46) in LaLiga. Dixon-Coles model favors Over 2.5 (77.3% calibrated probability).",
+      "rationale": "Rayo Vallecano de Madrid (Elo 79, xG 1.61) vs RCD Espanyol de Barcelona (Elo 84, xG 1.46) in LaLiga. Dixon-Coles model favors Over 2.5 (77.3% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -19384,7 +19384,7 @@
       "kickoffTime": "18:00",
       "kickoff": "2026-09-15T18:00Z",
       "home": {
-        "name": "Alavés",
+        "name": "Deportivo Alavés",
         "rating": 88,
         "form": [
           "W",
@@ -19398,11 +19398,11 @@
         "rank": 4,
         "ppg": 2,
         "statsSource": "official-standings",
-        "short": "ALA",
+        "short": "DA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/96.png"
       },
       "away": {
-        "name": "Valencia",
+        "name": "Valencia CF",
         "rating": 72,
         "form": [
           "W",
@@ -19729,7 +19729,7 @@
         }
       },
       "probabilityIndex": 88.4,
-      "rationale": "Alavés (Elo 88, xG 2.06) vs Valencia (Elo 72, xG 0.85) in LaLiga. Dixon-Coles model favors 1 · Alavés (88.4% calibrated probability).",
+      "rationale": "Deportivo Alavés (Elo 88, xG 2.06) vs Valencia CF (Elo 72, xG 0.85) in LaLiga. Dixon-Coles model favors 1 · Alavés (88.4% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -19757,7 +19757,7 @@
         "xgFor": 2.18,
         "xgAgainst": 1.28,
         "statsSource": "authoritative-club-registry",
-        "short": "AJA",
+        "short": "AA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/139.png"
       },
       "away": {
@@ -19775,7 +19775,7 @@
         "rank": 17,
         "ppg": 0.4,
         "statsSource": "official-standings",
-        "short": "WIL",
+        "short": "WI",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/156.png"
       },
       "venue": "Johan Cruijff Arena",
@@ -20116,7 +20116,7 @@
         "xgFor": 2.8,
         "xgAgainst": 0.81,
         "statsSource": "authoritative-club-registry",
-        "short": "HIL",
+        "short": "AH",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/929.png"
       },
       "away": {
@@ -20132,7 +20132,7 @@
         "xgFor": 1.46,
         "xgAgainst": 1.46,
         "statsSource": "telemetry-modeled",
-        "short": "GHA",
+        "short": "AG",
         "logo": "https://a.espncdn.com/guid/a0ee48aa-0d67-c802-ac49-7492db10d894/logos/default.png"
       },
       "venue": "Kingdom Arena",
@@ -20475,7 +20475,7 @@
         "rank": 11,
         "ppg": 0.4,
         "statsSource": "official-standings",
-        "short": "FALK",
+        "short": "FAL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/254.png"
       },
       "away": {
@@ -20836,7 +20836,7 @@
         "rank": 8,
         "ppg": 1.2,
         "statsSource": "official-standings",
-        "short": "HIBS",
+        "short": "HIB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/258.png"
       },
       "away": {
@@ -21168,7 +21168,7 @@
       },
       "probabilityIndex": 75.6,
       "rationale": "Hibernian (Elo 73, xG 1.39) vs Kilmarnock (Elo 68, xG 0.88) in Scottish Premiership. Dixon-Coles model favors 1 · Hibernian (75.6% calibrated probability).",
-      "matchStatus": "IN_PLAY",
+      "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
     {
@@ -21558,7 +21558,7 @@
         "rank": 11,
         "ppg": 1.67,
         "statsSource": "official-standings",
-        "short": "BRC",
+        "short": "BC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/333.png"
       },
       "away": {
@@ -21576,7 +21576,7 @@
         "rank": 16,
         "ppg": 1.33,
         "statsSource": "official-standings",
-        "short": "LCN",
+        "short": "LC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/314.png"
       },
       "venue": "Ashton Gate",
@@ -22251,7 +22251,7 @@
       },
       "probabilityIndex": 84.2,
       "rationale": "Middlesbrough (Elo 80, xG 1.9) vs Millwall (Elo 75, xG 1.75) in EFL Championship. Dixon-Coles model favors Over 2.5 (84.2% calibrated probability).",
-      "matchStatus": "TIMED",
+      "matchStatus": "IN_PLAY",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
     {
@@ -22280,7 +22280,7 @@
         "rank": 11,
         "ppg": 1.11,
         "statsSource": "official-standings",
-        "short": "ORU",
+        "short": "RO",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/22523.png"
       },
       "away": {
@@ -22298,7 +22298,7 @@
         "rank": 5,
         "ppg": 1.53,
         "statsSource": "official-standings",
-        "short": "RPO",
+        "short": "RP",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/6051.png"
       },
       "venue": "Estadio Jesús Bermúdez",
@@ -22627,7 +22627,7 @@
       "kickoffTime": "19:30",
       "kickoff": "2026-09-15T19:30Z",
       "home": {
-        "name": "Elche",
+        "name": "Elche CF",
         "rating": 73,
         "form": [
           "W",
@@ -22645,7 +22645,7 @@
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3751.png"
       },
       "away": {
-        "name": "Real Madrid",
+        "name": "Real Madrid CF",
         "rating": 94,
         "form": [
           "W",
@@ -22657,7 +22657,7 @@
         "xgFor": 2.53,
         "xgAgainst": 0.89,
         "statsSource": "authoritative-club-registry",
-        "short": "RMA",
+        "short": "RM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/86.png"
       },
       "venue": "Estadio Martínez Valero",
@@ -22970,7 +22970,7 @@
         }
       },
       "probabilityIndex": 85,
-      "rationale": "Elche (Elo 73, xG 1.21) vs Real Madrid (Elo 94, xG 2.53) in LaLiga. Dixon-Coles model favors Over 2.5 (85% calibrated probability).",
+      "rationale": "Elche CF (Elo 73, xG 1.21) vs Real Madrid CF (Elo 94, xG 2.53) in LaLiga. Dixon-Coles model favors Over 2.5 (85% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -23016,7 +23016,7 @@
         "xgFor": 2.01,
         "xgAgainst": 1.07,
         "statsSource": "authoritative-club-registry",
-        "short": "STR",
+        "short": "TS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2687.png"
       },
       "venue": "Municipal Villa Ingenio",
@@ -23720,12 +23720,12 @@
         "rank": 2,
         "ppg": 1.67,
         "statsSource": "official-standings",
-        "short": "VAS",
+        "short": "VDG",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3454.png"
       },
       "away": {
         "name": "Independiente Santa Fe",
-        "rating": 83,
+        "rating": 77,
         "form": [
           "W",
           "D",
@@ -23733,25 +23733,25 @@
           "L",
           "W"
         ],
-        "xgFor": 1.05,
-        "xgAgainst": 1.19,
-        "rank": 3,
-        "ppg": 1.33,
-        "statsSource": "official-standings-libertadores",
-        "short": "SFE",
+        "xgFor": 1.44,
+        "xgAgainst": 1.13,
+        "rank": 7,
+        "ppg": 1.63,
+        "statsSource": "official-standings-colombia",
+        "short": "ISF",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5488.png"
       },
       "venue": "Estádio São Januário",
       "isBig": false,
       "h2h": {
-        "homeWins": 3,
+        "homeWins": 4,
         "draws": 2,
-        "awayWins": 3,
+        "awayWins": 2,
         "lastFive": [
+          "D",
+          "H",
           "A",
           "H",
-          "D",
-          "A",
           "D"
         ],
         "h2hSource": "empirical-calibrated"
@@ -23761,217 +23761,203 @@
           "rank": 1,
           "market": "Double Chance",
           "selection": "1X · Home or Draw",
-          "probability": 88.3,
-          "odds": {
-            "hollywoodbets": 1.07,
-            "betway": 1.08,
-            "easybet": 1.05
-          },
-          "marketEdge": -4.7,
-          "isValueBet": false,
-          "convictionScore": 114.8
-        },
-        {
-          "rank": 2,
-          "market": "Match Winner",
-          "selection": "1 · Vasco da Gama",
-          "probability": 68.3,
-          "odds": {
-            "hollywoodbets": 1.34,
-            "betway": 1.37,
-            "easybet": 1.36
-          },
-          "marketEdge": -4.3,
-          "isValueBet": false,
-          "convictionScore": 109.3
-        },
-        {
-          "rank": 3,
-          "market": "Draw No Bet",
-          "selection": "DNB · Vasco da Gama",
-          "probability": 85.4,
-          "odds": {
-            "hollywoodbets": 1.1,
-            "betway": 1.12,
-            "easybet": 1.09
-          },
-          "marketEdge": -4.3,
-          "isValueBet": false,
-          "convictionScore": 106.8
-        },
-        {
-          "rank": 4,
-          "market": "Double Chance",
-          "selection": "12 · Either to Win",
-          "probability": 80,
-          "odds": {
-            "hollywoodbets": 1.18,
-            "betway": 1.19,
-            "easybet": 1.16
-          },
-          "marketEdge": -4.8,
-          "isValueBet": false,
-          "convictionScore": 104
-        },
-        {
-          "rank": 5,
-          "market": "Goals Over/Under",
-          "selection": "Over 2.5",
-          "probability": 63.4,
-          "odds": {
-            "hollywoodbets": 1.48,
-            "betway": 1.51,
-            "easybet": 1.47
-          },
-          "marketEdge": -4.3,
-          "isValueBet": false,
-          "convictionScore": 91.9
-        },
-        {
-          "rank": 6,
-          "market": "Corners Over/Under",
-          "selection": "Over 8.5 Corners",
           "probability": 82.9,
           "odds": {
             "hollywoodbets": 1.13,
             "betway": 1.15,
             "easybet": 1.12
           },
-          "marketEdge": -4.6,
+          "marketEdge": -4.7,
           "isValueBet": false,
-          "convictionScore": 82.9
+          "convictionScore": 107.8
         },
         {
-          "rank": 7,
-          "market": "Both Teams to Score",
-          "selection": "BTTS · Yes",
-          "probability": 55.3,
+          "rank": 2,
+          "market": "Double Chance",
+          "selection": "12 · Either to Win",
+          "probability": 78.9,
           "odds": {
-            "hollywoodbets": 1.7,
-            "betway": 1.73,
-            "easybet": 1.68
+            "hollywoodbets": 1.19,
+            "betway": 1.21,
+            "easybet": 1.18
+          },
+          "marketEdge": -4.5,
+          "isValueBet": false,
+          "convictionScore": 102.6
+        },
+        {
+          "rank": 3,
+          "market": "Goals Over/Under",
+          "selection": "Over 2.5",
+          "probability": 69.5,
+          "odds": {
+            "hollywoodbets": 1.35,
+            "betway": 1.37,
+            "easybet": 1.34
+          },
+          "marketEdge": -4.8,
+          "isValueBet": false,
+          "convictionScore": 100.8
+        },
+        {
+          "rank": 4,
+          "market": "Match Winner",
+          "selection": "1 · Vasco da Gama",
+          "probability": 61.9,
+          "odds": {
+            "hollywoodbets": 1.34,
+            "betway": 1.37,
+            "easybet": 1.36
+          },
+          "marketEdge": -4.7,
+          "isValueBet": false,
+          "convictionScore": 99
+        },
+        {
+          "rank": 5,
+          "market": "Draw No Bet",
+          "selection": "DNB · Vasco da Gama",
+          "probability": 78.4,
+          "odds": {
+            "hollywoodbets": 1.2,
+            "betway": 1.22,
+            "easybet": 1.19
           },
           "marketEdge": -4.3,
           "isValueBet": false,
-          "convictionScore": 77.4
+          "convictionScore": 98
+        },
+        {
+          "rank": 6,
+          "market": "Both Teams to Score",
+          "selection": "BTTS · Yes",
+          "probability": 64.9,
+          "odds": {
+            "hollywoodbets": 1.45,
+            "betway": 1.47,
+            "easybet": 1.43
+          },
+          "marketEdge": -4.6,
+          "isValueBet": false,
+          "convictionScore": 90.9
+        },
+        {
+          "rank": 7,
+          "market": "Corners Over/Under",
+          "selection": "Over 8.5 Corners",
+          "probability": 89.6,
+          "odds": {
+            "hollywoodbets": 1.05,
+            "betway": 1.07,
+            "easybet": 1.04
+          },
+          "marketEdge": -4.1,
+          "isValueBet": false,
+          "convictionScore": 89.6
         },
         {
           "rank": 8,
           "market": "Corners Over/Under",
           "selection": "Over 9.5 Corners",
-          "probability": 73.7,
+          "probability": 82.8,
           "odds": {
-            "hollywoodbets": 1.28,
-            "betway": 1.3,
-            "easybet": 1.26
+            "hollywoodbets": 1.13,
+            "betway": 1.15,
+            "easybet": 1.12
           },
-          "marketEdge": -4.2,
+          "marketEdge": -4.8,
           "isValueBet": false,
-          "convictionScore": 73.7
+          "convictionScore": 82.8
         },
         {
           "rank": 9,
           "market": "Goals Over/Under",
           "selection": "Over 1.5",
-          "probability": 84.9,
+          "probability": 88.4,
           "odds": {
-            "hollywoodbets": 1.11,
-            "betway": 1.12,
-            "easybet": 1.1
+            "hollywoodbets": 1.06,
+            "betway": 1.08,
+            "easybet": 1.05
           },
-          "marketEdge": -4.9,
+          "marketEdge": -4.5,
           "isValueBet": false,
-          "convictionScore": 69.6
+          "convictionScore": 72.5
         },
         {
           "rank": 10,
-          "market": "Both Teams to Score",
-          "selection": "BTTS · No",
-          "probability": 44.7,
+          "market": "Double Chance",
+          "selection": "X2 · Away or Draw",
+          "probability": 38,
           "odds": {
-            "hollywoodbets": 2.1,
-            "betway": 2.14,
-            "easybet": 2.08
+            "hollywoodbets": 2.47,
+            "betway": 2.51,
+            "easybet": 2.44
           },
-          "marketEdge": -4.4,
+          "marketEdge": -4.5,
           "isValueBet": false,
-          "convictionScore": 62.6
+          "convictionScore": 49.4
         },
         {
           "rank": 11,
-          "market": "Goals Over/Under",
-          "selection": "Under 3.5",
-          "probability": 58.8,
+          "market": "Both Teams to Score",
+          "selection": "BTTS · No",
+          "probability": 35.1,
           "odds": {
-            "hollywoodbets": 1.6,
-            "betway": 1.63,
-            "easybet": 1.58
+            "hollywoodbets": 2.68,
+            "betway": 2.72,
+            "easybet": 2.65
           },
-          "marketEdge": -4.2,
+          "marketEdge": -4.5,
           "isValueBet": false,
-          "convictionScore": 48.2
+          "convictionScore": 49.1
         },
         {
           "rank": 12,
           "market": "Goals Over/Under",
-          "selection": "Under 2.5",
-          "probability": 36.6,
+          "selection": "Over 3.5",
+          "probability": 48.2,
           "odds": {
-            "hollywoodbets": 2.57,
-            "betway": 2.61,
-            "easybet": 2.54
+            "hollywoodbets": 1.95,
+            "betway": 1.98,
+            "easybet": 1.93
           },
-          "marketEdge": -4.5,
+          "marketEdge": -4.6,
           "isValueBet": false,
-          "convictionScore": 42.1
+          "convictionScore": 43.4
         },
         {
           "rank": 13,
-          "market": "Double Chance",
-          "selection": "X2 · Away or Draw",
-          "probability": 31.6,
+          "market": "Goals Over/Under",
+          "selection": "Under 3.5",
+          "probability": 51.8,
           "odds": {
-            "hollywoodbets": 2.97,
-            "betway": 3.02,
-            "easybet": 2.94
+            "hollywoodbets": 1.81,
+            "betway": 1.84,
+            "easybet": 1.79
           },
-          "marketEdge": -4.6,
+          "marketEdge": -4.7,
           "isValueBet": false,
-          "convictionScore": 41.1
+          "convictionScore": 42.5
         },
         {
           "rank": 14,
-          "market": "Corners Over/Under",
-          "selection": "Under 10.5 Corners",
-          "probability": 37.1,
+          "market": "Goals Over/Under",
+          "selection": "Under 2.5",
+          "probability": 30.5,
           "odds": {
-            "hollywoodbets": 2.53,
-            "betway": 2.57,
-            "easybet": 2.51
+            "hollywoodbets": 3.08,
+            "betway": 3.13,
+            "easybet": 3.05
           },
-          "marketEdge": -4.6,
+          "marketEdge": -4.4,
           "isValueBet": false,
-          "convictionScore": 37.1
+          "convictionScore": 35.1
         },
         {
           "rank": 15,
-          "market": "Goals Over/Under",
-          "selection": "Over 3.5",
-          "probability": 41.2,
-          "odds": {
-            "hollywoodbets": 2.28,
-            "betway": 2.32,
-            "easybet": 2.25
-          },
-          "marketEdge": -4.3,
-          "isValueBet": false,
-          "convictionScore": 37.1
-        },
-        {
-          "rank": 16,
           "market": "Match Winner",
           "selection": "X · Draw",
-          "probability": 19.9,
+          "probability": 21,
           "odds": {
             "hollywoodbets": 4.61,
             "betway": 4.7,
@@ -23979,27 +23965,13 @@
           },
           "marketEdge": -4.5,
           "isValueBet": false,
-          "convictionScore": 31.8
+          "convictionScore": 33.6
         },
         {
-          "rank": 17,
-          "market": "Corners Over/Under",
-          "selection": "Under 9.5 Corners",
-          "probability": 26.3,
-          "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.64,
-            "easybet": 3.54
-          },
-          "marketEdge": -4.4,
-          "isValueBet": false,
-          "convictionScore": 26.3
-        },
-        {
-          "rank": 18,
+          "rank": 16,
           "market": "Match Winner",
           "selection": "2 · Independiente Santa Fe",
-          "probability": 11.7,
+          "probability": 17,
           "odds": {
             "hollywoodbets": 8.33,
             "betway": 8.5,
@@ -24007,51 +23979,79 @@
           },
           "marketEdge": -4.5,
           "isValueBet": false,
-          "convictionScore": 18.7
+          "convictionScore": 27.2
         },
         {
-          "rank": 19,
+          "rank": 17,
           "market": "Draw No Bet",
           "selection": "DNB · Independiente Santa Fe",
-          "probability": 14.6,
+          "probability": 21.6,
           "odds": {
-            "hollywoodbets": 6.44,
-            "betway": 6.55,
-            "easybet": 6.37
+            "hollywoodbets": 4.35,
+            "betway": 4.42,
+            "easybet": 4.31
+          },
+          "marketEdge": -4.5,
+          "isValueBet": false,
+          "convictionScore": 27
+        },
+        {
+          "rank": 18,
+          "market": "Corners Over/Under",
+          "selection": "Under 10.5 Corners",
+          "probability": 25.8,
+          "odds": {
+            "hollywoodbets": 3.64,
+            "betway": 3.7,
+            "easybet": 3.6
           },
           "marketEdge": -4.4,
           "isValueBet": false,
-          "convictionScore": 18.3
+          "convictionScore": 25.8
+        },
+        {
+          "rank": 19,
+          "market": "Corners Over/Under",
+          "selection": "Under 9.5 Corners",
+          "probability": 17.1,
+          "odds": {
+            "hollywoodbets": 5.5,
+            "betway": 5.59,
+            "easybet": 5.44
+          },
+          "marketEdge": -4.5,
+          "isValueBet": false,
+          "convictionScore": 17.1
         },
         {
           "rank": 20,
           "market": "Goals Over/Under",
           "selection": "Under 1.5",
-          "probability": 15.1,
+          "probability": 11.6,
           "odds": {
-            "hollywoodbets": 6.22,
-            "betway": 6.32,
-            "easybet": 6.16
+            "hollywoodbets": 8.11,
+            "betway": 8.24,
+            "easybet": 8.02
           },
           "marketEdge": -4.5,
           "isValueBet": false,
-          "convictionScore": 13.6
+          "convictionScore": 10.4
         }
       ],
       "topPick": {
         "market": "Double Chance",
         "selection": "1X · Home or Draw",
-        "probability": 88.3,
+        "probability": 82.9,
         "marketEdge": -4.7,
         "isValueBet": false,
         "odds": {
-          "hollywoodbets": 1.07,
-          "betway": 1.08,
-          "easybet": 1.05
+          "hollywoodbets": 1.13,
+          "betway": 1.15,
+          "easybet": 1.12
         }
       },
-      "probabilityIndex": 88.3,
-      "rationale": "Vasco da Gama (Elo 82, xG 1.61) vs Independiente Santa Fe (Elo 83, xG 1.05) in CONMEBOL Sudamericana. Dixon-Coles model favors 1X · Home or Draw (88.3% calibrated probability).",
+      "probabilityIndex": 82.9,
+      "rationale": "Vasco da Gama (Elo 82, xG 1.61) vs Independiente Santa Fe (Elo 77, xG 1.44) in CONMEBOL Sudamericana. Dixon-Coles model favors 1X · Home or Draw (82.9% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -24099,7 +24099,7 @@
         "rank": 3,
         "ppg": 1.78,
         "statsSource": "official-standings",
-        "short": "LGA",
+        "short": "DLG",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/17090.png"
       },
       "venue": "Estadio Misael Delgado",
@@ -24442,7 +24442,7 @@
         "rank": 2,
         "ppg": 2.11,
         "statsSource": "official-standings",
-        "short": "TAC",
+        "short": "DT",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/4818.png"
       },
       "away": {
@@ -25164,7 +25164,7 @@
         "rank": 15,
         "ppg": 1.14,
         "statsSource": "official-standings",
-        "short": "CHI",
+        "short": "BC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5480.png"
       },
       "away": {
@@ -25182,7 +25182,7 @@
         "rank": 19,
         "ppg": 0.63,
         "statsSource": "official-standings",
-        "short": "AFC",
+        "short": "ALI",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/9761.png"
       },
       "venue": "La Independencia",
@@ -25525,7 +25525,7 @@
         "rank": 1,
         "ppg": 2,
         "statsSource": "official-standings",
-        "short": "SAO",
+        "short": "SP",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2026.png"
       },
       "away": {
@@ -25541,7 +25541,7 @@
         "xgFor": 1.6,
         "xgAgainst": 0.96,
         "statsSource": "authoritative-club-registry",
-        "short": "CABJ",
+        "short": "BJ",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5.png"
       },
       "venue": "Estádio Cícero Pompeu de Toledo",
@@ -26240,7 +26240,7 @@
         "xgAgainst": 1.16,
         "statsSource": "telemetry-modeled",
         "short": "ASP",
-        "logo": null
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EASP%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "The Panthers FC",
@@ -26251,8 +26251,8 @@
         "xgFor": 1.16,
         "xgAgainst": 1.16,
         "statsSource": "telemetry-modeled",
-        "short": "PAN",
-        "logo": null
+        "short": "TP",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ETP%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "Stade de Kégué",
       "isBig": false,
@@ -26594,7 +26594,7 @@
         "rank": 15,
         "ppg": 0.5,
         "statsSource": "official-standings",
-        "short": "Rodina Moscow",
+        "short": "RM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/21927.png"
       },
       "away": {
@@ -26612,7 +26612,7 @@
         "rank": 8,
         "ppg": 1.38,
         "statsSource": "official-standings",
-        "short": "RUB",
+        "short": "RK",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3851.png"
       },
       "venue": "Arena Khimki",
@@ -26953,7 +26953,7 @@
         "xgFor": 1.86,
         "xgAgainst": 1.04,
         "statsSource": "authoritative-club-registry",
-        "short": "SPM",
+        "short": "SM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/1941.png"
       },
       "away": {
@@ -26971,7 +26971,7 @@
         "rank": 16,
         "ppg": 0.38,
         "statsSource": "official-standings",
-        "short": "VOR",
+        "short": "FV",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/21539.png"
       },
       "venue": "Lukoil Arena",
@@ -27328,7 +27328,7 @@
         "xgFor": 2.05,
         "xgAgainst": 1.05,
         "statsSource": "authoritative-club-registry",
-        "short": "SPP",
+        "short": "SP",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/433.png"
       },
       "venue": "Vazgen Sargsyan Republican Stadium",
@@ -27669,11 +27669,11 @@
         "xgFor": 1.1,
         "xgAgainst": 1.5,
         "statsSource": "authoritative-club-registry",
-        "short": "OMON",
+        "short": "ON",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/617.png"
       },
       "away": {
-        "name": "Celta Vigo",
+        "name": "RC Celta de Vigo",
         "rating": 77,
         "form": [
           "W",
@@ -27685,7 +27685,7 @@
         "xgFor": 1.27,
         "xgAgainst": 1.23,
         "statsSource": "authoritative-club-registry",
-        "short": "CEL",
+        "short": "RCD",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/85.png"
       },
       "venue": "GSP Stadium",
@@ -27998,7 +27998,7 @@
         }
       },
       "probabilityIndex": 70.4,
-      "rationale": "Omonia Nicosia (Elo 71, xG 1.1) vs Celta Vigo (Elo 77, xG 1.27) in UEFA Europa League. Dixon-Coles model favors 12 · Either to Win (70.4% calibrated probability).",
+      "rationale": "Omonia Nicosia (Elo 71, xG 1.1) vs RC Celta de Vigo (Elo 77, xG 1.27) in UEFA Europa League. Dixon-Coles model favors 12 · Either to Win (70.4% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -28046,7 +28046,7 @@
         "rank": 12,
         "ppg": 1.05,
         "statsSource": "official-standings",
-        "short": "MJA",
+        "short": "MA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/20301.png"
       },
       "venue": "Friends Arena",
@@ -28389,7 +28389,7 @@
         "rank": 7,
         "ppg": 1.38,
         "statsSource": "official-standings",
-        "short": "BAL",
+        "short": "BK",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/21949.png"
       },
       "away": {
@@ -28405,7 +28405,7 @@
         "xgFor": 2.14,
         "xgAgainst": 0.8,
         "statsSource": "authoritative-club-registry",
-        "short": "ZEN",
+        "short": "ZSP",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2533.png"
       },
       "venue": "Kaliningrad Stadium",
@@ -28748,7 +28748,7 @@
         "rank": 13,
         "ppg": 0.75,
         "statsSource": "official-standings",
-        "short": "LMO",
+        "short": "LM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/442.png"
       },
       "away": {
@@ -28766,7 +28766,7 @@
         "rank": 10,
         "ppg": 1.25,
         "statsSource": "official-standings",
-        "short": "KSS",
+        "short": "KS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3850.png"
       },
       "venue": "RZD Arena",
@@ -29123,8 +29123,8 @@
         "xgFor": 2.62,
         "xgAgainst": 0.81,
         "statsSource": "authoritative-club-registry",
-        "short": "SLB",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/1929.png"
+        "short": "BEN",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/226.png"
       },
       "venue": "San Siro",
       "isBig": true,
@@ -29468,7 +29468,7 @@
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/441.png"
       },
       "away": {
-        "name": "Lyon",
+        "name": "Olympique Lyonnais",
         "rating": 82,
         "form": [
           "W",
@@ -29480,7 +29480,7 @@
         "xgFor": 1.7,
         "xgAgainst": 1.03,
         "statsSource": "authoritative-club-registry",
-        "short": "LYON",
+        "short": "OL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/167.png"
       },
       "venue": "Lotto Park",
@@ -29793,7 +29793,7 @@
         }
       },
       "probabilityIndex": 73.3,
-      "rationale": "Anderlecht (Elo 79, xG 1.33) vs Lyon (Elo 82, xG 1.7) in UEFA Europa League. Dixon-Coles model favors 12 · Either to Win (73.3% calibrated probability).",
+      "rationale": "Anderlecht (Elo 79, xG 1.33) vs Olympique Lyonnais (Elo 82, xG 1.7) in UEFA Europa League. Dixon-Coles model favors 12 · Either to Win (73.3% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -29809,7 +29809,7 @@
       "kickoffTime": "19:00",
       "kickoff": "2026-09-16T19:00Z",
       "home": {
-        "name": "Bayer Leverkusen",
+        "name": "Bayer 04 Leverkusen",
         "rating": 88,
         "form": [
           "W",
@@ -29821,7 +29821,7 @@
         "xgFor": 2.47,
         "xgAgainst": 1.17,
         "statsSource": "authoritative-club-registry",
-        "short": "B04",
+        "short": "B0L",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/131.png"
       },
       "away": {
@@ -29837,7 +29837,7 @@
         "xgFor": 1.05,
         "xgAgainst": 1.55,
         "statsSource": "authoritative-club-registry",
-        "short": "NKC",
+        "short": "NC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3362.png"
       },
       "venue": "BayArena",
@@ -30150,7 +30150,7 @@
         }
       },
       "probabilityIndex": 86.9,
-      "rationale": "Bayer Leverkusen (Elo 88, xG 2.47) vs NK Celje (Elo 70, xG 1.05) in UEFA Europa League. Dixon-Coles model favors 1 · Bayer Leverkusen (86.9% calibrated probability).",
+      "rationale": "Bayer 04 Leverkusen (Elo 88, xG 2.47) vs NK Celje (Elo 70, xG 1.05) in UEFA Europa League. Dixon-Coles model favors 1 · Bayer Leverkusen (86.9% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -30178,7 +30178,7 @@
         "xgFor": 1.43,
         "xgAgainst": 1.43,
         "statsSource": "telemetry-modeled",
-        "short": "HBE",
+        "short": "HB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/13083.png"
       },
       "away": {
@@ -30194,7 +30194,7 @@
         "xgFor": 1.9,
         "xgAgainst": 1.1,
         "statsSource": "authoritative-club-registry",
-        "short": "DZG",
+        "short": "DZ",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/597.png"
       },
       "venue": "Giulesti Stadium",
@@ -30551,7 +30551,7 @@
         "xgFor": 1.9,
         "xgAgainst": 1.15,
         "statsSource": "authoritative-club-registry",
-        "short": "JAG",
+        "short": "JB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/11505.png"
       },
       "venue": "Georgios Karaiskakis Stadium",
@@ -30892,7 +30892,7 @@
         "xgFor": 1.8,
         "xgAgainst": 1.02,
         "statsSource": "authoritative-club-registry",
-        "short": "STG",
+        "short": "SSG",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3746.png"
       },
       "away": {
@@ -30908,7 +30908,7 @@
         "xgFor": 1.75,
         "xgAgainst": 1.25,
         "statsSource": "authoritative-club-registry",
-        "short": "REN",
+        "short": "SR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/169.png"
       },
       "venue": "Merkur Arena",
@@ -31237,7 +31237,7 @@
       "kickoffTime": "19:00",
       "kickoff": "2026-09-16T19:00Z",
       "home": {
-        "name": "Sunderland",
+        "name": "Sunderland AFC",
         "rating": 75,
         "form": [
           "W",
@@ -31249,7 +31249,7 @@
         "xgFor": 1.45,
         "xgAgainst": 1.25,
         "statsSource": "authoritative-club-registry",
-        "short": "SUN",
+        "short": "SA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/366.png"
       },
       "away": {
@@ -31265,7 +31265,7 @@
         "xgFor": 2.22,
         "xgAgainst": 1.12,
         "statsSource": "authoritative-club-registry",
-        "short": "AZ",
+        "short": "AA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/140.png"
       },
       "venue": "Stadium of Light",
@@ -31578,7 +31578,7 @@
         }
       },
       "probabilityIndex": 72.6,
-      "rationale": "Sunderland (Elo 75, xG 1.45) vs AZ Alkmaar (Elo 82, xG 2.22) in UEFA Europa League. Dixon-Coles model favors Over 2.5 (72.6% calibrated probability).",
+      "rationale": "Sunderland AFC (Elo 75, xG 1.45) vs AZ Alkmaar (Elo 82, xG 2.22) in UEFA Europa League. Dixon-Coles model favors Over 2.5 (72.6% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -31608,7 +31608,7 @@
         "rank": 10,
         "ppg": 1.32,
         "statsSource": "official-standings",
-        "short": "COQ",
+        "short": "CU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/8186.png"
       },
       "away": {
@@ -31985,7 +31985,7 @@
         "rank": 16,
         "ppg": 1.08,
         "statsSource": "official-standings",
-        "short": "GRE",
+        "short": "GRÊ",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/6273.png"
       },
       "venue": "Joao Havelange Stadium",
@@ -32314,7 +32314,7 @@
       "kickoffTime": "17:30",
       "kickoff": "2026-09-17T17:30Z",
       "home": {
-        "name": "Orlando Pirates",
+        "name": "Orlando Pirates FC",
         "rating": 84,
         "form": [
           "W",
@@ -32328,11 +32328,11 @@
         "rank": 2,
         "ppg": 2.6,
         "statsSource": "official-standings",
-        "short": "ORL",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7085.png"
+        "short": "OP",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/10379.png"
       },
       "away": {
-        "name": "Durban City",
+        "name": "Durban City FC",
         "rating": 76,
         "form": [
           "W",
@@ -32346,8 +32346,8 @@
         "rank": 9,
         "ppg": 1.2,
         "statsSource": "official-standings",
-        "short": "DUR",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/22348.png"
+        "short": "DC",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/18172.png"
       },
       "venue": "Orlando Stadium",
       "isBig": true,
@@ -32659,7 +32659,7 @@
         }
       },
       "probabilityIndex": 78.8,
-      "rationale": "Orlando Pirates (Elo 84, xG 2.2) vs Durban City (Elo 76, xG 0.85) in Betway Premiership. Dixon-Coles model favors 1 · Orlando Pirates (78.8% calibrated probability).",
+      "rationale": "Orlando Pirates FC (Elo 84, xG 2.2) vs Durban City FC (Elo 76, xG 0.85) in Betway Premiership. Dixon-Coles model favors 1 · Orlando Pirates (78.8% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -32689,7 +32689,7 @@
         "rank": 7,
         "ppg": 1.67,
         "statsSource": "official-standings",
-        "short": "WIM",
+        "short": "AW",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3802.png"
       },
       "away": {
@@ -33050,7 +33050,7 @@
         "rank": 10,
         "ppg": 1.12,
         "statsSource": "official-standings",
-        "short": "ZHE",
+        "short": "ZP",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/18203.png"
       },
       "away": {
@@ -33429,7 +33429,7 @@
         "rank": 4,
         "ppg": 1.8,
         "statsSource": "official-standings",
-        "short": "FCM",
+        "short": "1M",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/10382.png"
       },
       "venue": "Sportpark Ronhof - Thomas Sommer",
@@ -33772,7 +33772,7 @@
         "rank": 5,
         "ppg": 1.6,
         "statsSource": "official-standings",
-        "short": "WOB",
+        "short": "VW",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/138.png"
       },
       "away": {
@@ -33790,7 +33790,7 @@
         "rank": 16,
         "ppg": 0.8,
         "statsSource": "official-standings",
-        "short": "SVD",
+        "short": "SD9",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3812.png"
       },
       "venue": "Volkswagen Arena",
@@ -34151,7 +34151,7 @@
         "rank": 16,
         "ppg": 0.6,
         "statsSource": "official-standings",
-        "short": "KNY",
+        "short": "KON",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7648.png"
       },
       "venue": "Recep Tayyip Erdogan Stadium",
@@ -34494,7 +34494,7 @@
         "rank": 9,
         "ppg": 0.88,
         "statsSource": "official-standings",
-        "short": "LBK",
+        "short": "LB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7860.png"
       },
       "away": {
@@ -34512,7 +34512,7 @@
         "rank": 10,
         "ppg": 0.88,
         "statsSource": "official-standings",
-        "short": "SIF",
+        "short": "SI",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/607.png"
       },
       "venue": "Lyngby Stadion",
@@ -34855,7 +34855,7 @@
         "rank": 9,
         "ppg": 1.25,
         "statsSource": "official-standings",
-        "short": "SAR",
+        "short": "SF",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5002.png"
       },
       "away": {
@@ -34873,7 +34873,7 @@
         "rank": 12,
         "ppg": 1.1,
         "statsSource": "official-standings",
-        "short": "KFUM",
+        "short": "KO",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/22165.png"
       },
       "venue": "Sarpsborg Stadion",
@@ -35216,7 +35216,7 @@
         "rank": 2,
         "ppg": 2.5,
         "statsSource": "official-standings",
-        "short": "VIE",
+        "short": "RV",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/519.png"
       },
       "away": {
@@ -35595,7 +35595,7 @@
         "rank": 13,
         "ppg": 1,
         "statsSource": "official-standings",
-        "short": "DIJO",
+        "short": "DF",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3170.png"
       },
       "venue": "Parc des Sports",
@@ -35956,7 +35956,7 @@
         "rank": 16,
         "ppg": 0.83,
         "statsSource": "official-standings",
-        "short": "CLE",
+        "short": "CF",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3171.png"
       },
       "venue": "Stade des Alpes",
@@ -36660,7 +36660,7 @@
         "rank": 11,
         "ppg": 1.17,
         "statsSource": "official-standings",
-        "short": "AVE",
+        "short": "RA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7719.png"
       },
       "away": {
@@ -36678,7 +36678,7 @@
         "rank": 10,
         "ppg": 1.17,
         "statsSource": "official-standings",
-        "short": "ASNL",
+        "short": "ANL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3267.png"
       },
       "venue": "Stade Paul-Lignon",
@@ -37021,7 +37021,7 @@
         "rank": 2,
         "ppg": 2,
         "statsSource": "official-standings",
-        "short": "REIM",
+        "short": "SDR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3243.png"
       },
       "away": {
@@ -37382,7 +37382,7 @@
         "rank": 18,
         "ppg": 0.67,
         "statsSource": "official-standings",
-        "short": "SLFC",
+        "short": "SL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3266.png"
       },
       "away": {
@@ -37729,7 +37729,7 @@
       "kickoffTime": "18:30",
       "kickoff": "2026-09-18T18:30Z",
       "home": {
-        "name": "Bayern Munich",
+        "name": "FC Bayern München",
         "rating": 93,
         "form": [
           "W",
@@ -37741,7 +37741,7 @@
         "xgFor": 2.44,
         "xgAgainst": 0.86,
         "statsSource": "authoritative-club-registry",
-        "short": "MUN",
+        "short": "BM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/132.png"
       },
       "away": {
@@ -37759,7 +37759,7 @@
         "rank": 16,
         "ppg": 0.33,
         "statsSource": "official-standings",
-        "short": "FCU",
+        "short": "1UB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/598.png"
       },
       "venue": "Allianz Arena",
@@ -38072,7 +38072,7 @@
         }
       },
       "probabilityIndex": 85.3,
-      "rationale": "Bayern Munich (Elo 93, xG 2.44) vs 1. FC Union Berlin (Elo 74, xG 1.36) in Bundesliga. Dixon-Coles model favors 1 · Bayern Munich (85.3% calibrated probability).",
+      "rationale": "FC Bayern München (Elo 93, xG 2.44) vs 1. FC Union Berlin (Elo 74, xG 1.36) in Bundesliga. Dixon-Coles model favors 1 · Bayern Munich (85.3% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -38102,7 +38102,7 @@
         "rank": 18,
         "ppg": 0.5,
         "statsSource": "official-standings",
-        "short": "JVS",
+        "short": "JS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3975.png"
       },
       "away": {
@@ -38481,7 +38481,7 @@
         "rank": 20,
         "ppg": 0.6,
         "statsSource": "official-standings",
-        "short": "COR",
+        "short": "CÓR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/8447.png"
       },
       "venue": "Carlos Belmonte",
@@ -38810,7 +38810,7 @@
       "kickoffTime": "18:45",
       "kickoff": "2026-09-18T18:45Z",
       "home": {
-        "name": "Monza",
+        "name": "AC Monza",
         "rating": 73,
         "form": [
           "W",
@@ -38828,7 +38828,7 @@
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/4007.png"
       },
       "away": {
-        "name": "Sassuolo",
+        "name": "US Sassuolo Calcio",
         "rating": 77,
         "form": [
           "W",
@@ -38840,7 +38840,7 @@
         "xgFor": 1.85,
         "xgAgainst": 0.95,
         "statsSource": "authoritative-club-registry",
-        "short": "SAS",
+        "short": "USC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3997.png"
       },
       "venue": "U-Power Stadium",
@@ -39153,7 +39153,7 @@
         }
       },
       "probabilityIndex": 80.9,
-      "rationale": "Monza (Elo 73, xG 1.47) vs Sassuolo (Elo 77, xG 1.85) in Serie A. Dixon-Coles model favors Over 2.5 (80.9% calibrated probability).",
+      "rationale": "AC Monza (Elo 73, xG 1.47) vs US Sassuolo Calcio (Elo 77, xG 1.85) in Serie A. Dixon-Coles model favors Over 2.5 (80.9% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -39181,11 +39181,11 @@
         "xgFor": 1.88,
         "xgAgainst": 0.91,
         "statsSource": "authoritative-club-registry",
-        "short": "MON",
+        "short": "AM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/174.png"
       },
       "away": {
-        "name": "Lens",
+        "name": "RC Lens",
         "rating": 77,
         "form": [
           "W",
@@ -39197,7 +39197,7 @@
         "xgFor": 1.69,
         "xgAgainst": 1.4,
         "statsSource": "authoritative-club-registry",
-        "short": "RCL",
+        "short": "RL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/175.png"
       },
       "venue": "Stade Louis II",
@@ -39510,7 +39510,7 @@
         }
       },
       "probabilityIndex": 77.2,
-      "rationale": "AS Monaco (Elo 85, xG 1.88) vs Lens (Elo 77, xG 1.69) in Ligue 1. Dixon-Coles model favors Over 2.5 (77.2% calibrated probability).",
+      "rationale": "AS Monaco (Elo 85, xG 1.88) vs RC Lens (Elo 77, xG 1.69) in Ligue 1. Dixon-Coles model favors Over 2.5 (77.2% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -39538,7 +39538,7 @@
         "xgFor": 1.67,
         "xgAgainst": 1.01,
         "statsSource": "authoritative-club-registry",
-        "short": "GENT",
+        "short": "KG",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3611.png"
       },
       "away": {
@@ -39556,7 +39556,7 @@
         "rank": 6,
         "ppg": 1.83,
         "statsSource": "official-standings",
-        "short": "STL",
+        "short": "SL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/559.png"
       },
       "venue": "Ghelamco Arena",
@@ -39885,7 +39885,7 @@
       "kickoffTime": "19:00",
       "kickoff": "2026-09-18T19:00Z",
       "home": {
-        "name": "Brentford",
+        "name": "Brentford FC",
         "rating": 86,
         "form": [
           "W",
@@ -39903,7 +39903,7 @@
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/337.png"
       },
       "away": {
-        "name": "Chelsea",
+        "name": "Chelsea FC",
         "rating": 85,
         "form": [
           "W",
@@ -40228,7 +40228,7 @@
         }
       },
       "probabilityIndex": 78.8,
-      "rationale": "Brentford (Elo 86, xG 1.7) vs Chelsea (Elo 85, xG 2.1) in Premier League. Dixon-Coles model favors Over 2.5 (78.8% calibrated probability).",
+      "rationale": "Brentford FC (Elo 86, xG 1.7) vs Chelsea FC (Elo 85, xG 2.1) in Premier League. Dixon-Coles model favors Over 2.5 (78.8% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -40258,7 +40258,7 @@
         "rank": 5,
         "ppg": 1.7,
         "statsSource": "official-standings",
-        "short": "CST",
+        "short": "ST",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7466.png"
       },
       "away": {
@@ -40619,7 +40619,7 @@
         "rank": 7,
         "ppg": 1.78,
         "statsSource": "official-standings",
-        "short": "AAT",
+        "short": "AA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5267.png"
       },
       "away": {
@@ -40637,7 +40637,7 @@
         "rank": 13,
         "ppg": 1,
         "statsSource": "official-standings",
-        "short": "CMU",
+        "short": "CU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/18153.png"
       },
       "venue": "Estadio Municipal Ambrosio Maco Arroyo",
@@ -40980,7 +40980,7 @@
         "rank": 15,
         "ppg": 0.78,
         "statsSource": "official-standings",
-        "short": "CTR",
+        "short": "CC(",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/11989.png"
       },
       "away": {
@@ -41341,7 +41341,7 @@
         "rank": 4,
         "ppg": 1.8,
         "statsSource": "official-standings",
-        "short": "NAC",
+        "short": "NA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/5584.png"
       },
       "away": {
@@ -41359,7 +41359,7 @@
         "rank": 2,
         "ppg": 2.1,
         "statsSource": "official-standings",
-        "short": "MAY",
+        "short": "2DM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/6097.png"
       },
       "venue": "Estadio Arsenio Erico",
@@ -41720,7 +41720,7 @@
         "rank": 10,
         "ppg": 1.2,
         "statsSource": "official-standings",
-        "short": "RBNY",
+        "short": "RBN",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/190.png"
       },
       "venue": "Yankee Stadium",
@@ -42061,7 +42061,7 @@
         "xgFor": 1.48,
         "xgAgainst": 1.17,
         "statsSource": "authoritative-club-registry",
-        "short": "RAC",
+        "short": "RC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/15.png"
       },
       "away": {
@@ -42079,7 +42079,7 @@
         "rank": 2,
         "ppg": 1.78,
         "statsSource": "official-standings",
-        "short": "SARM",
+        "short": "S(",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/10158.png"
       },
       "venue": "Presidente Perón (Cilindro de Avellaneda)",
@@ -42420,7 +42420,7 @@
         "xgFor": 1.59,
         "xgAgainst": 0.91,
         "statsSource": "authoritative-club-registry",
-        "short": "ALM",
+        "short": "AL",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2680.png"
       },
       "away": {
@@ -42797,7 +42797,7 @@
         "rank": 4,
         "ppg": 1.78,
         "statsSource": "official-standings",
-        "short": "GUA",
+        "short": "CG",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/17516.png"
       },
       "venue": "Estadio Cementos Progreso",
@@ -43126,7 +43126,7 @@
       "kickoffTime": "15:00",
       "kickoff": "2026-09-19T15:00:00Z",
       "home": {
-        "name": "Dynamo Kyiv",
+        "name": "FC Dynamo Kyiv",
         "rating": 82,
         "form": [
           "W",
@@ -43138,10 +43138,11 @@
         "xgFor": 2.19,
         "xgAgainst": 0.72,
         "statsSource": "authoritative-club-registry",
-        "short": "DK"
+        "short": "DK",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/435.png"
       },
       "away": {
-        "name": "Shakhtar Donetsk",
+        "name": "FC Shakhtar Donetsk",
         "rating": 83,
         "form": [
           "W",
@@ -43153,7 +43154,8 @@
         "xgFor": 2.28,
         "xgAgainst": 0.86,
         "statsSource": "authoritative-club-registry",
-        "short": "SD"
+        "short": "SD",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/438.png"
       },
       "venue": "",
       "isBig": true,
@@ -43465,7 +43467,7 @@
         }
       },
       "probabilityIndex": 82.7,
-      "rationale": "Dynamo Kyiv (Elo 82, xG 2.19) vs Shakhtar Donetsk (Elo 83, xG 2.28) in Ukrainian Premier League. Dixon-Coles model favors Over 2.5 (82.7% calibrated probability).",
+      "rationale": "FC Dynamo Kyiv (Elo 82, xG 2.19) vs FC Shakhtar Donetsk (Elo 83, xG 2.28) in Ukrainian Premier League. Dixon-Coles model favors Over 2.5 (82.7% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -43481,7 +43483,7 @@
       "kickoffTime": "16:30",
       "kickoff": "2026-09-19T16:30:00Z",
       "home": {
-        "name": "Lech Poznań",
+        "name": "KKS Lech Poznań",
         "rating": 80,
         "form": [
           "W",
@@ -43495,10 +43497,11 @@
         "rank": 1,
         "ppg": 2.28,
         "statsSource": "official-standings",
-        "short": "LP"
+        "short": "KLP",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/627.png"
       },
       "away": {
-        "name": "Legia Warsaw",
+        "name": "Legia Warszawa",
         "rating": 78,
         "form": [
           "W",
@@ -43510,7 +43513,8 @@
         "xgFor": 1.84,
         "xgAgainst": 1.11,
         "statsSource": "authoritative-club-registry",
-        "short": "LW"
+        "short": "LW",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/628.png"
       },
       "venue": "",
       "isBig": true,
@@ -43822,7 +43826,7 @@
         }
       },
       "probabilityIndex": 76.3,
-      "rationale": "Lech Poznań (Elo 80, xG 1.85) vs Legia Warsaw (Elo 78, xG 1.84) in Ekstraklasa. Dixon-Coles model favors Over 2.5 (76.3% calibrated probability).",
+      "rationale": "KKS Lech Poznań (Elo 80, xG 1.85) vs Legia Warszawa (Elo 78, xG 1.84) in Ekstraklasa. Dixon-Coles model favors Over 2.5 (76.3% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -43838,7 +43842,7 @@
       "kickoffTime": "17:00",
       "kickoff": "2026-09-19T17:00:00Z",
       "home": {
-        "name": "Raja Casablanca",
+        "name": "Raja Club Athletic",
         "rating": 79,
         "form": [
           "W",
@@ -43850,10 +43854,11 @@
         "xgFor": 1.53,
         "xgAgainst": 0.78,
         "statsSource": "authoritative-club-registry",
-        "short": "RC"
+        "short": "RCA",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2315803D%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23FFFFFF%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23F59E0B%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23F59E0B%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ERCA%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Wydad AC",
+        "name": "Wydad Athletic Club",
         "rating": 78,
         "form": [
           "W",
@@ -43867,7 +43872,8 @@
         "rank": 5,
         "ppg": 1.64,
         "statsSource": "official-standings",
-        "short": "WA"
+        "short": "WAC",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23DC2626%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23FFFFFF%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23F59E0B%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23F59E0B%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EWAC%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": true,
@@ -44179,7 +44185,7 @@
         }
       },
       "probabilityIndex": 84.6,
-      "rationale": "Raja Casablanca (Elo 79, xG 1.53) vs Wydad AC (Elo 78, xG 1.26) in Botola Pro. Dixon-Coles model favors 1X · Home or Draw (84.6% calibrated probability).",
+      "rationale": "Raja Club Athletic (Elo 79, xG 1.53) vs Wydad Athletic Club (Elo 78, xG 1.26) in Botola Pro. Dixon-Coles model favors 1X · Home or Draw (84.6% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -44195,7 +44201,7 @@
       "kickoffTime": "18:00",
       "kickoff": "2026-09-19T18:00:00Z",
       "home": {
-        "name": "Al Ahly",
+        "name": "Al Ahly SC",
         "rating": 85,
         "form": [
           "W",
@@ -44207,10 +44213,11 @@
         "xgFor": 2.23,
         "xgAgainst": 0.66,
         "statsSource": "authoritative-club-registry",
-        "short": "AA"
+        "short": "AA",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23DC2626%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23FFFFFF%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23F59E0B%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23F59E0B%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EAA%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Zamalek",
+        "name": "Zamalek SC",
         "rating": 80,
         "form": [
           "W",
@@ -44222,7 +44229,8 @@
         "xgFor": 1.82,
         "xgAgainst": 0.94,
         "statsSource": "authoritative-club-registry",
-        "short": "Z"
+        "short": "ZAM",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FFFFFF%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23DC2626%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23000000%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23000000%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EZAM%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": true,
@@ -44534,7 +44542,7 @@
         }
       },
       "probabilityIndex": 82.7,
-      "rationale": "Al Ahly (Elo 85, xG 2.23) vs Zamalek (Elo 80, xG 1.82) in Egyptian Premier League. Dixon-Coles model favors Over 2.5 (82.7% calibrated probability).",
+      "rationale": "Al Ahly SC (Elo 85, xG 2.23) vs Zamalek SC (Elo 80, xG 1.82) in Egyptian Premier League. Dixon-Coles model favors Over 2.5 (82.7% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -44550,7 +44558,7 @@
       "kickoffTime": "12:30",
       "kickoff": "2026-09-20T12:30:00Z",
       "home": {
-        "name": "Oleksandriya",
+        "name": "FC Oleksandriya",
         "rating": 77,
         "form": [
           "W",
@@ -44562,10 +44570,11 @@
         "xgFor": 1.61,
         "xgAgainst": 0.83,
         "statsSource": "authoritative-club-registry",
-        "short": "O"
+        "short": "OLE",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EOLE%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Polissya Zhytomyr",
+        "name": "FC Polissya Zhytomyr",
         "rating": 76,
         "form": [
           "W",
@@ -44577,7 +44586,8 @@
         "xgFor": 1.66,
         "xgAgainst": 0.94,
         "statsSource": "authoritative-club-registry",
-        "short": "PZ"
+        "short": "PZ",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EPZ%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": true,
@@ -44889,7 +44899,7 @@
         }
       },
       "probabilityIndex": 76.8,
-      "rationale": "Oleksandriya (Elo 77, xG 1.61) vs Polissya Zhytomyr (Elo 76, xG 1.66) in Ukrainian Premier League. Dixon-Coles model favors 1X · Home or Draw (76.8% calibrated probability).",
+      "rationale": "FC Oleksandriya (Elo 77, xG 1.61) vs FC Polissya Zhytomyr (Elo 76, xG 1.66) in Ukrainian Premier League. Dixon-Coles model favors 1X · Home or Draw (76.8% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -44919,7 +44929,8 @@
         "rank": 3,
         "ppg": 2.06,
         "statsSource": "official-standings",
-        "short": "JB"
+        "short": "JB",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EJB%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "Raków Częstochowa",
@@ -44936,7 +44947,8 @@
         "rank": 2,
         "ppg": 2.11,
         "statsSource": "official-standings",
-        "short": "RC"
+        "short": "RC",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ERC%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": true,
@@ -45264,7 +45276,7 @@
       "kickoffTime": "15:00",
       "kickoff": "2026-09-20T15:00:00Z",
       "home": {
-        "name": "Kryvbas Kryvyi Rih",
+        "name": "FC Kryvbas Kryvyi Rih",
         "rating": 77,
         "form": [
           "W",
@@ -45278,10 +45290,11 @@
         "rank": 5,
         "ppg": 1.71,
         "statsSource": "official-standings",
-        "short": "KKR"
+        "short": "KKR",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EKKR%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Karpaty Lviv",
+        "name": "FC Karpaty Lviv",
         "rating": 76,
         "form": [
           "L",
@@ -45295,7 +45308,8 @@
         "rank": 6,
         "ppg": 1.41,
         "statsSource": "official-standings",
-        "short": "KL"
+        "short": "KL",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EKL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": false,
@@ -45607,7 +45621,7 @@
         }
       },
       "probabilityIndex": 78.3,
-      "rationale": "Kryvbas Kryvyi Rih (Elo 77, xG 1.28) vs Karpaty Lviv (Elo 76, xG 1.33) in Ukrainian Premier League. Dixon-Coles model favors 1X · Home or Draw (78.3% calibrated probability).",
+      "rationale": "FC Kryvbas Kryvyi Rih (Elo 77, xG 1.28) vs FC Karpaty Lviv (Elo 76, xG 1.33) in Ukrainian Premier League. Dixon-Coles model favors 1X · Home or Draw (78.3% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -45623,7 +45637,7 @@
       "kickoffTime": "15:00",
       "kickoff": "2026-09-20T15:00:00Z",
       "home": {
-        "name": "RS Berkane",
+        "name": "Renaissance Sportive de Berkane",
         "rating": 80,
         "form": [
           "W",
@@ -45635,7 +45649,8 @@
         "xgFor": 1.65,
         "xgAgainst": 0.63,
         "statsSource": "authoritative-club-registry",
-        "short": "RB"
+        "short": "RSD",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ERSD%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
         "name": "AS FAR Rabat",
@@ -45650,7 +45665,8 @@
         "xgFor": 1.76,
         "xgAgainst": 0.76,
         "statsSource": "authoritative-club-registry",
-        "short": "AFR"
+        "short": "AFR",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EAFR%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": true,
@@ -45962,7 +45978,7 @@
         }
       },
       "probabilityIndex": 77.6,
-      "rationale": "RS Berkane (Elo 80, xG 1.65) vs AS FAR Rabat (Elo 79, xG 1.76) in Botola Pro. Dixon-Coles model favors 1X · Home or Draw (77.6% calibrated probability).",
+      "rationale": "Renaissance Sportive de Berkane (Elo 80, xG 1.65) vs AS FAR Rabat (Elo 79, xG 1.76) in Botola Pro. Dixon-Coles model favors 1X · Home or Draw (77.6% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -45990,10 +46006,11 @@
         "xgFor": 2.01,
         "xgAgainst": 0.82,
         "statsSource": "authoritative-club-registry",
-        "short": "PF"
+        "short": "PYR",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EPYR%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Al Masry",
+        "name": "Al Masry SC",
         "rating": 80,
         "form": [
           "W",
@@ -46007,7 +46024,8 @@
         "rank": 4,
         "ppg": 1.9,
         "statsSource": "official-standings",
-        "short": "AM"
+        "short": "AM",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EAM%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": true,
@@ -46319,7 +46337,7 @@
         }
       },
       "probabilityIndex": 88.5,
-      "rationale": "Pyramids FC (Elo 82, xG 2.01) vs Al Masry (Elo 80, xG 1.44) in Egyptian Premier League. Dixon-Coles model favors 1X · Home or Draw (88.5% calibrated probability).",
+      "rationale": "Pyramids FC (Elo 82, xG 2.01) vs Al Masry SC (Elo 80, xG 1.44) in Egyptian Premier League. Dixon-Coles model favors 1X · Home or Draw (88.5% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -46349,10 +46367,11 @@
         "rank": 6,
         "ppg": 1.72,
         "statsSource": "official-standings",
-        "short": "PS"
+        "short": "PS",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EPS%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Cracovia",
+        "name": "Cracovia Kraków",
         "rating": 77,
         "form": [
           "D",
@@ -46366,7 +46385,8 @@
         "rank": 5,
         "ppg": 1.72,
         "statsSource": "official-standings",
-        "short": "C"
+        "short": "CK",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ECK%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": false,
@@ -46678,7 +46698,7 @@
         }
       },
       "probabilityIndex": 76.7,
-      "rationale": "Pogoń Szczecin (Elo 77, xG 1.66) vs Cracovia (Elo 77, xG 1.8) in Ekstraklasa. Dixon-Coles model favors Over 2.5 (76.7% calibrated probability).",
+      "rationale": "Pogoń Szczecin (Elo 77, xG 1.66) vs Cracovia Kraków (Elo 77, xG 1.8) in Ekstraklasa. Dixon-Coles model favors Over 2.5 (76.7% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -46694,7 +46714,7 @@
       "kickoffTime": "18:00",
       "kickoff": "2026-09-20T18:00:00Z",
       "home": {
-        "name": "Maghreb Fès",
+        "name": "Maghreb Association Sportive de Fès",
         "rating": 79,
         "form": [
           "W",
@@ -46708,10 +46728,11 @@
         "rank": 3,
         "ppg": 1.79,
         "statsSource": "official-standings",
-        "short": "MF"
+        "short": "MAS",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EMAS%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "FUS Rabat",
+        "name": "Fath Union Sport de Rabat",
         "rating": 76,
         "form": [
           "D",
@@ -46725,7 +46746,8 @@
         "rank": 7,
         "ppg": 1.43,
         "statsSource": "official-standings",
-        "short": "FR"
+        "short": "FUS",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3EFUS%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": false,
@@ -47037,7 +47059,7 @@
         }
       },
       "probabilityIndex": 83.6,
-      "rationale": "Maghreb Fès (Elo 79, xG 1.26) vs FUS Rabat (Elo 76, xG 1.07) in Botola Pro. Dixon-Coles model favors 1X · Home or Draw (83.6% calibrated probability).",
+      "rationale": "Maghreb Association Sportive de Fès (Elo 79, xG 1.26) vs Fath Union Sport de Rabat (Elo 76, xG 1.07) in Botola Pro. Dixon-Coles model favors 1X · Home or Draw (83.6% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -47053,7 +47075,7 @@
       "kickoffTime": "18:00",
       "kickoff": "2026-09-20T18:00:00Z",
       "home": {
-        "name": "Ceramica Cleopatra",
+        "name": "Ceramica Cleopatra FC",
         "rating": 79,
         "form": [
           "W",
@@ -47067,10 +47089,11 @@
         "rank": 5,
         "ppg": 1.8,
         "statsSource": "official-standings",
-        "short": "CC"
+        "short": "CC",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ECC%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "away": {
-        "name": "Smouha",
+        "name": "Smouha SC",
         "rating": 78,
         "form": [
           "D",
@@ -47084,7 +47107,8 @@
         "rank": 6,
         "ppg": 1.6,
         "statsSource": "official-standings",
-        "short": "S"
+        "short": "SMO",
+        "logo": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231E293B%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cfilter%20id%3D%22sh%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%3E%0A%20%20%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%221%22%20stdDeviation%3D%221%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ffilter%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3C!--%20Heraldic%20Shield%20Body%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%204%20C48%204%2056%2012%2056%2024%20C56%2042%2032%2058%2032%2058%20C32%2058%208%2042%208%2024%20C8%2012%2016%204%2032%204%20Z%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23CBD5E1%22%20stroke-width%3D%222.5%22%20filter%3D%22url(%23sh)%22%2F%3E%0A%20%20%20%20%3C!--%20Diagonal%20Sash%20or%20Chevron%20Accent%20--%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2020%20L52%2040%20L48%2046%20L8%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.3%22%2F%3E%0A%20%20%20%20%3C!--%20Gold%20%2F%20White%20Crown%20or%20Star%20Top%20--%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%23F59E0B%22%20stroke%3D%22%23B45309%22%20stroke-width%3D%220.8%22%2F%3E%0A%20%20%20%20%3C!--%20Club%20Monogram%20--%3E%0A%20%20%20%20%3Ctext%20x%3D%2232%22%20y%3D%2238%22%20font-family%3D%22'Space%20Grotesk'%2C%20'Arial%20Black'%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22900%22%20fill%3D%22%23FFFFFF%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%220.5%22%3ESMO%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E"
       },
       "venue": "",
       "isBig": false,
@@ -47396,7 +47420,7 @@
         }
       },
       "probabilityIndex": 82.4,
-      "rationale": "Ceramica Cleopatra (Elo 79, xG 1.53) vs Smouha (Elo 78, xG 1.27) in Egyptian Premier League. Dixon-Coles model favors 1X · Home or Draw (82.4% calibrated probability).",
+      "rationale": "Ceramica Cleopatra FC (Elo 79, xG 1.53) vs Smouha SC (Elo 78, xG 1.27) in Egyptian Premier League. Dixon-Coles model favors 1X · Home or Draw (82.4% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL SCHEDULE & DIXON-COLES ENGINE"
     },
@@ -47424,7 +47448,7 @@
         "xgFor": 1.1,
         "xgAgainst": 1.5,
         "statsSource": "authoritative-club-registry",
-        "short": "CSKA",
+        "short": "CS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/10834.png"
       },
       "away": {
@@ -47440,7 +47464,7 @@
         "xgFor": 1.88,
         "xgAgainst": 0.91,
         "statsSource": "authoritative-club-registry",
-        "short": "MON",
+        "short": "AM",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/174.png"
       },
       "venue": "Vasil Levski National Stadium",
@@ -47781,11 +47805,11 @@
         "xgFor": 1.15,
         "xgAgainst": 1.45,
         "statsSource": "authoritative-club-registry",
-        "short": "UCRA",
+        "short": "CC",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/8089.png"
       },
       "away": {
-        "name": "Getafe",
+        "name": "Getafe CF",
         "rating": 77,
         "form": [
           "W",
@@ -48110,7 +48134,7 @@
         }
       },
       "probabilityIndex": 70,
-      "rationale": "CSU Craiova (Elo 71, xG 1.15) vs Getafe (Elo 77, xG 1.15) in UEFA Conference League. Dixon-Coles model favors 12 · Either to Win (70% calibrated probability).",
+      "rationale": "CSU Craiova (Elo 71, xG 1.15) vs Getafe CF (Elo 77, xG 1.15) in UEFA Conference League. Dixon-Coles model favors 12 · Either to Win (70% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -48852,7 +48876,7 @@
         "xgFor": 1.6,
         "xgAgainst": 1.2,
         "statsSource": "authoritative-club-registry",
-        "short": "HAJ",
+        "short": "HS",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/489.png"
       },
       "away": {
@@ -48868,7 +48892,7 @@
         "xgFor": 2.18,
         "xgAgainst": 1.28,
         "statsSource": "authoritative-club-registry",
-        "short": "AJA",
+        "short": "AA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/139.png"
       },
       "venue": "Stadion Poljud",
@@ -49209,7 +49233,7 @@
         "xgFor": 1.67,
         "xgAgainst": 1.01,
         "statsSource": "authoritative-club-registry",
-        "short": "GENT",
+        "short": "KG",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3611.png"
       },
       "away": {
@@ -49566,7 +49590,7 @@
         "xgFor": 1.05,
         "xgAgainst": 1.45,
         "statsSource": "authoritative-club-registry",
-        "short": "KUPS",
+        "short": "KK",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/8169.png"
       },
       "away": {
@@ -49582,7 +49606,7 @@
         "xgFor": 1.69,
         "xgAgainst": 1.2,
         "statsSource": "authoritative-club-registry",
-        "short": "TRAB",
+        "short": "TRA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/997.png"
       },
       "venue": "Tammelan Stadion",
@@ -49925,7 +49949,7 @@
         "rank": 12,
         "ppg": 1.05,
         "statsSource": "official-standings-allsvenskan",
-        "short": "MJA",
+        "short": "MA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/20301.png"
       },
       "away": {
@@ -49941,7 +49965,7 @@
         "xgFor": 0.75,
         "xgAgainst": 1.85,
         "statsSource": "authoritative-club-registry",
-        "short": "IDE",
+        "short": "ID",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/20703.png"
       },
       "venue": "Olympia",
@@ -50282,7 +50306,7 @@
         "xgFor": 2.18,
         "xgAgainst": 0.72,
         "statsSource": "authoritative-club-registry",
-        "short": "PAO",
+        "short": "PAN",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/443.png"
       },
       "away": {
@@ -50655,7 +50679,7 @@
         "xgFor": 1,
         "xgAgainst": 1.55,
         "statsSource": "authoritative-club-registry",
-        "short": "KAI",
+        "short": "KA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2528.png"
       },
       "venue": "Skonto Stadions",
@@ -50984,7 +51008,7 @@
       "kickoffTime": "19:00",
       "kickoff": "2026-10-15T19:00Z",
       "home": {
-        "name": "Atalanta",
+        "name": "Atalanta BC",
         "rating": 85,
         "form": [
           "W",
@@ -50996,7 +51020,7 @@
         "xgFor": 1.88,
         "xgAgainst": 1.13,
         "statsSource": "authoritative-club-registry",
-        "short": "ATA",
+        "short": "AB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/105.png"
       },
       "away": {
@@ -51325,7 +51349,7 @@
         }
       },
       "probabilityIndex": 87.3,
-      "rationale": "Atalanta (Elo 85, xG 1.88) vs Pafos (Elo 75, xG 1.39) in UEFA Conference League. Dixon-Coles model favors 1X · Home or Draw (87.3% calibrated probability).",
+      "rationale": "Atalanta BC (Elo 85, xG 1.88) vs Pafos (Elo 75, xG 1.39) in UEFA Conference League. Dixon-Coles model favors 1X · Home or Draw (87.3% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE"
     },
@@ -51355,7 +51379,7 @@
         "rank": 5,
         "ppg": 1.75,
         "statsSource": "official-standings-epl",
-        "short": "BHA",
+        "short": "B&H",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/331.png"
       },
       "away": {
@@ -51371,7 +51395,7 @@
         "xgFor": 1.39,
         "xgAgainst": 1.39,
         "statsSource": "telemetry-modeled",
-        "short": "ZAL",
+        "short": "KZ",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/20028.png"
       },
       "venue": "American Express Stadium",
@@ -51714,7 +51738,7 @@
         "rank": 1,
         "ppg": 2.63,
         "statsSource": "official-standings-superliga",
-        "short": "KBH",
+        "short": "FK",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/909.png"
       },
       "away": {
@@ -51730,7 +51754,7 @@
         "xgFor": 1.6,
         "xgAgainst": 1.17,
         "statsSource": "authoritative-club-registry",
-        "short": "SCB",
+        "short": "BRA",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2994.png"
       },
       "venue": "Parken Stadium",
@@ -52089,7 +52113,7 @@
         "xgFor": 1.39,
         "xgAgainst": 1.39,
         "statsSource": "telemetry-modeled",
-        "short": "THUN",
+        "short": "THU",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3024.png"
       },
       "venue": "De Grolsch Veste",
@@ -52450,7 +52474,7 @@
         "rank": 3,
         "ppg": 2.13,
         "statsSource": "official-standings-superliga",
-        "short": "FCN",
+        "short": "NOR",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3101.png"
       },
       "venue": "Tynecastle Park",
@@ -52793,7 +52817,7 @@
         "rank": 1,
         "ppg": 3,
         "statsSource": "official-standings-bundesliga",
-        "short": "SCF",
+        "short": "FRE",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/126.png"
       },
       "away": {
@@ -52809,7 +52833,7 @@
         "xgFor": 1.39,
         "xgAgainst": 1.39,
         "statsSource": "telemetry-modeled",
-        "short": "JABL",
+        "short": "JAB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/7922.png"
       },
       "venue": "Europa-Park Stadion",
@@ -53152,7 +53176,7 @@
         "rank": 10,
         "ppg": 1.33,
         "statsSource": "official-standings-jupiler",
-        "short": "STVV",
+        "short": "SIN",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/936.png"
       },
       "away": {
@@ -53168,7 +53192,7 @@
         "xgFor": 1.39,
         "xgAgainst": 1.39,
         "statsSource": "telemetry-modeled",
-        "short": "IBE",
+        "short": "I1",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/20025.png"
       },
       "venue": "Daio Wasabi Stayen Stadium",
@@ -53511,7 +53535,7 @@
         "rank": 8,
         "ppg": 1.3,
         "statsSource": "official-standings-eliteserien",
-        "short": "SKBR",
+        "short": "SB",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/620.png"
       },
       "away": {

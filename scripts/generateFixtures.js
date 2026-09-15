@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolveTeamIdentity } from '../src/teamDatabase.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -667,7 +668,18 @@ export const TEAMS_BY_LEAGUE = {
  */
 export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = STANDINGS_CACHE) {
   const lg = LEAGUE_MAP[leagueId] || { tierBase: 76, minElo: 70, maxElo: 85, avgGoals: 2.65 };
+  const rawLogo = compObj?.team?.logo || compObj?.logo || compObj?.team?.logos?.[0]?.href || null;
+  const idInfo = resolveTeamIdentity(teamName, leagueId, rawLogo);
   const norm = normalizeTeamName(teamName);
+
+  function finalize(obj) {
+    return {
+      ...obj,
+      name: idInfo.name || teamName,
+      short: idInfo.short || teamName.slice(0, 3).toUpperCase(),
+      logo: idInfo.logo || rawLogo || null
+    };
+  }
 
   // 1. Check Authoritative Global Club Registry (Essential for UEFA UCL, UEL, UECL & Cups)
   const regEntry = GLOBAL_CLUB_REGISTRY[norm];
@@ -689,22 +701,20 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
       }
     }
 
-    return {
-      name: teamName,
+    return finalize({
       rating: finalRating,
       form: finalForm,
       xgFor: finalXgFor,
       xgAgainst: finalXgAgainst,
       statsSource: 'authoritative-club-registry'
-    };
+    });
   }
 
   // 2. Check League Standings Cache for this specific league (when gamesPlayed >= 2)
   if (standingsMap && standingsMap[leagueId] && standingsMap[leagueId][norm]) {
     const s = standingsMap[leagueId][norm];
     if (s.gamesPlayed >= 2) {
-      return {
-        name: teamName,
+      return finalize({
         rating: s.rating,
         form: s.form,
         xgFor: s.xgFor,
@@ -712,7 +722,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
         rank: s.rank,
         ppg: s.ppg,
         statsSource: 'official-standings'
-      };
+      });
     }
   }
 
@@ -721,8 +731,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
     for (const [lid, teams] of Object.entries(standingsMap)) {
       if (teams && teams[norm] && teams[norm].gamesPlayed >= 2) {
         const s = teams[norm];
-        return {
-          name: teamName,
+        return finalize({
           rating: s.rating,
           form: s.form,
           xgFor: s.xgFor,
@@ -730,7 +739,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
           rank: s.rank,
           ppg: s.ppg,
           statsSource: `official-standings-${lid}`
-        };
+        });
       }
     }
   }
@@ -739,14 +748,13 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
   const catTeams = TEAMS_BY_LEAGUE[leagueId] || [];
   const cat = catTeams.find(t => normalizeTeamName(t.name) === norm);
   if (cat) {
-    return {
-      name: teamName,
+    return finalize({
       rating: cat.rating,
       form: cat.form,
       xgFor: cat.xgFor,
       xgAgainst: cat.xgAgainst,
       statsSource: 'curated-baseline'
-    };
+    });
   }
 
   // 4. Extract from ESPN Competitor record & form
@@ -789,14 +797,13 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
   const hashDelta = (hash % 7) - 3; // -3 to +3
   derivedRating = Math.min(lg.maxElo, Math.max(lg.minElo, derivedRating + hashDelta));
 
-  return {
-    name: teamName,
+  return finalize({
     rating: derivedRating,
     form: derivedForm,
     xgFor: derivedXgFor,
     xgAgainst: derivedXgAgainst,
     statsSource: 'telemetry-modeled'
-  };
+  });
 }
 
 /**
@@ -1254,13 +1261,13 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       const home = getTeamObj(lg.id, rawHomeName, homeComp, standingsMap);
       const away = getTeamObj(lg.id, rawAwayName, awayComp, standingsMap);
 
-      const homeInitial = homeComp.team?.abbreviation || rawHomeName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-      const awayInitial = awayComp.team?.abbreviation || rawAwayName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+      const homeInitial = homeComp.team?.abbreviation || home.short || rawHomeName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+      const awayInitial = awayComp.team?.abbreviation || away.short || rawAwayName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
 
       home.short = homeInitial;
-      home.logo = homeComp.team?.logo || null;
+      home.logo = homeComp.team?.logo || home.logo || null;
       away.short = awayInitial;
-      away.logo = awayComp.team?.logo || null;
+      away.logo = awayComp.team?.logo || away.logo || null;
 
       const kickoffIso = e.date || comp.date;
       const kickoffDate = new Date(kickoffIso);
@@ -1358,8 +1365,8 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       fixtures.forEach((item, idx) => {
         const home = getTeamObj(lg.id, item.h, null, standingsMap);
         const away = getTeamObj(lg.id, item.a, null, standingsMap);
-        home.short = home.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-        away.short = away.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+        home.short = home.short || home.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+        away.short = away.short || away.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
 
         const kickoffDate = new Date(base.getFullYear(), base.getMonth(), base.getDate() + item.day, item.hh, item.mm, 0);
         const y = kickoffDate.getFullYear();

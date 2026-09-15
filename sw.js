@@ -9,7 +9,7 @@
    - CDN assets .......... stale-while-revalidate (Tailwind, Alpine, Google Fonts)
    ============================================================ */
 
-const VERSION = 'hyenax-v4';
+const VERSION = 'hyenax-v5';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 const APP_SHELL = [
@@ -17,7 +17,12 @@ const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
   './icons/icon.svg',
-  './icons/icon-maskable.svg'
+  './icons/icon-maskable.svg',
+  './icons/apple-touch-icon.png',
+  './icons/pwa-192x192.png',
+  './icons/pwa-512x512.png',
+  './icons/pwa-maskable-512x512.png',
+  './js/beastClient.js'
 ];
 
 self.addEventListener('install', (event) => {

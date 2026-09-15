@@ -1,8 +1,8 @@
 {
   "name": "HyenaX - The Ndlela Millionaires GoldPack",
   "short_name": "HyenaX",
-  "description": "AI-consensus football predictions, Dixon-Coles bivariate probability models and odds intelligence across 40 global leagues.",
-  "id": "/",
+  "description": "AI-consensus football predictions, Dixon-Coles bivariate probability models and odds intelligence across 54 global leagues and competitions.",
+  "id": "./",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -14,21 +14,27 @@
   "categories": ["sports", "utilities", "entertainment"],
   "icons": [
     {
-      "src": "icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "icons/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-maskable.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "icons/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
   ],
@@ -38,7 +44,7 @@
       "short_name": "Big Matches",
       "description": "Jump straight to the high-profile fixtures",
       "url": "./index.html?view=big",
-      "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+      "icons": [{ "src": "icons/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }
