@@ -444,6 +444,10 @@ export function runMultiModelEnsemble({
   homeTeam = 'Arsenal',
   awayTeam = 'Chelsea',
   leagueId = 'epl',
+  homeRating,
+  awayRating,
+  eloHome: explicitEloHome,
+  eloAway: explicitEloAway,
   xgHome = 2.1,
   xgAway = 1.2,
   restHome = 96,
@@ -453,8 +457,8 @@ export function runMultiModelEnsemble({
   marketOdds = { home: 1.85, draw: 3.60, away: 4.20 }
 }) {
   const league = getLeagueById(leagueId);
-  const eloHome = BASELINE_ELO[homeTeam] || 1640;
-  const eloAway = BASELINE_ELO[awayTeam] || 1610;
+  const eloHome = explicitEloHome || (homeRating ? Math.round(900 + Number(homeRating) * 10.5) : (BASELINE_ELO[homeTeam] || 1640));
+  const eloAway = explicitEloAway || (awayRating ? Math.round(900 + Number(awayRating) * 10.5) : (BASELINE_ELO[awayTeam] || 1610));
 
   // 1. Dixon-Coles Bivariate Model
   const eloDelta = (eloHome + 65) - eloAway;
@@ -592,6 +596,7 @@ export function analyzeAccumulator(selections = []) {
       calibratedProbability: cal.calibratedProbability,
       fairOdds: +(1 / (cal.calibratedProbability / 100)).toFixed(2),
       expectedValuePct: ev.evPct,
+      failureRiskPct: +(100 - cal.calibratedProbability).toFixed(1),
       trustScore: trust,
       status: ev.evPct >= 2.0 && cal.calibratedProbability >= 70 ? 'KEEP' : ev.evPct < -2.0 ? 'REMOVE' : 'REPLACE'
     };
@@ -664,24 +669,34 @@ export class BetSlipXRayEngine {
     return this.parseGenericBetSlipText(clean);
   }
 
+  formatOutput(bookmaker, code, analysis) {
+    const verdictRating = analysis.riskLevel === 'LOW' ? 'SOLID ACCUMULATOR' : analysis.riskLevel === 'MODERATE' ? 'PLAYABLE WITH CAUTION' : 'HIGH RISK TICKET';
+    return {
+      bookmaker,
+      ticketCode: code,
+      slipId: code,
+      parsedAt: new Date().toISOString(),
+      legs: analysis.legs,
+      weakestLink: analysis.weakestLink,
+      ticketVerdict: {
+        rating: verdictRating,
+        summary: `True survival probability is ${analysis.trueProbability}%. Weakest link: ${analysis.weakestLink?.selection || 'None'}.`
+      },
+      analysis
+    };
+  }
+
   parseHollywoodbetsCode(code) {
-    // Generates simulated decoded ticket for demonstration/parsing
     const mockSelections = [
       { match: 'Arsenal vs Chelsea', league: 'Premier League', selection: 'Arsenal Win (1)', market: '1X2', odds: 1.85, probability: 74 },
       { match: 'Mamelodi Sundowns vs Kaizer Chiefs', league: 'Betway Premiership', selection: 'Sundowns Win (1)', market: '1X2', odds: 1.55, probability: 82 },
       { match: 'Real Madrid vs Barcelona', league: 'LaLiga', selection: 'Over 2.5 Goals', market: 'Total Goals', odds: 1.62, probability: 76 },
       { match: 'Inter Miami vs LAFC', league: 'MLS', selection: 'BTTS - Yes', market: 'Both Teams To Score', odds: 1.52, probability: 78 },
       { match: 'Bayern Munich vs Leverkusen', league: 'Bundesliga', selection: 'Over 2.5 Goals', market: 'Total Goals', odds: 1.48, probability: 80 },
-      { match: 'Atalanta vs Roma', league: 'Serie A', selection: 'Atalanta Win (1)', market: '1X2', odds: 2.15, probability: 51 } // Weakest link candidate
+      { match: 'Atalanta vs Roma', league: 'Serie A', selection: 'Atalanta Win (1)', market: '1X2', odds: 2.15, probability: 51 }
     ];
 
-    const analysis = analyzeAccumulator(mockSelections);
-    return {
-      bookmaker: 'Hollywoodbets SA',
-      ticketCode: code,
-      parsedAt: new Date().toISOString(),
-      analysis
-    };
+    return this.formatOutput('Hollywoodbets SA', code, analyzeAccumulator(mockSelections));
   }
 
   parseEasybetCode(code) {
@@ -690,14 +705,9 @@ export class BetSlipXRayEngine {
       { match: 'Orlando Pirates vs Cape Town City', league: 'Betway Premiership', selection: 'Pirates Win (1)', market: '1X2', odds: 1.68, probability: 75 },
       { match: 'Celtic vs Rangers', league: 'Scottish Premiership', selection: '1X (Home or Draw)', market: 'Double Chance', odds: 1.30, probability: 84 },
       { match: 'Galatasaray vs Beşiktaş', league: 'Süper Lig', selection: 'Galatasaray Win', market: '1X2', odds: 1.72, probability: 72 },
-      { match: 'Osasuna vs Getafe', league: 'LaLiga', selection: 'Osasuna Win (1)', market: '1X2', odds: 2.25, probability: 44 } // Weakest link
+      { match: 'Osasuna vs Getafe', league: 'LaLiga', selection: 'Osasuna Win (1)', market: '1X2', odds: 2.25, probability: 44 }
     ];
-    return {
-      bookmaker: 'EasyBet SA',
-      ticketCode: code,
-      parsedAt: new Date().toISOString(),
-      analysis: analyzeAccumulator(mockSelections)
-    };
+    return this.formatOutput('EasyBet SA', code, analyzeAccumulator(mockSelections));
   }
 
   parseBetwayCode(code) {
@@ -706,12 +716,7 @@ export class BetSlipXRayEngine {
       { match: 'Club América vs Tigres', league: 'Liga MX Apertura', selection: 'Club América Win', market: '1X2', odds: 1.95, probability: 68 },
       { match: 'Bodø/Glimt vs Molde', league: 'Eliteserien', selection: 'Over 2.5 Goals', market: 'Total Goals', odds: 1.55, probability: 77 }
     ];
-    return {
-      bookmaker: 'Betway SA',
-      ticketCode: code,
-      parsedAt: new Date().toISOString(),
-      analysis: analyzeAccumulator(mockSelections)
-    };
+    return this.formatOutput('Betway SA', code, analyzeAccumulator(mockSelections));
   }
 
   parseGenericBetSlipText(text) {

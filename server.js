@@ -4,7 +4,15 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { ScraperPipelineOrchestrator } from './scrapers/pipelineOrchestrator.js';
 import { LEAGUE_REGISTRY, getAllLeagues, getLeagueById } from './src/leagueRegistry.js';
-import { saveFixtures, generateAllFixtures } from './scripts/generateFixtures.js';
+import {
+  saveFixtures,
+  generateAllFixtures,
+  updateFixtureAndRecalculate,
+  updateTeamAndPropagate,
+  applyMatchResultAndAdaptRatings,
+  normalizeTeamName,
+  GLOBAL_CLUB_REGISTRY
+} from './scripts/generateFixtures.js';
 import {
   BASELINE_ELO,
   poissonPm,
@@ -220,9 +228,156 @@ app.get('/api/prediction/history/:matchId', (req, res) => {
 
 app.post('/api/prediction/recalculate/:matchId', (req, res) => {
   const { matchId } = req.params;
-  const { reason, deltaHome, triggerType } = req.body || {};
-  const updated = orchestrator.recalculatePrediction(matchId, reason, { deltaHome, triggerType });
-  res.json({ matchId, success: true, newVersion: updated });
+  const { reason, deltaHome, triggerType, homeRating, awayRating, xgHome, xgAway, homeForm, awayForm } = req.body || {};
+  let updatedFixture = null;
+
+  try {
+    updatedFixture = updateFixtureAndRecalculate(matchId, {
+      deltaHome,
+      reason,
+      homeRating,
+      awayRating,
+      xgHome,
+      xgAway,
+      homeForm,
+      awayForm
+    });
+  } catch (err) {
+    console.warn(`[Recalculate API] Match ${matchId} fixture update note: ${err.message}`);
+  }
+
+  const updatedVersion = orchestrator.recalculatePrediction(matchId, reason, {
+    deltaHome: deltaHome || (updatedFixture ? (updatedFixture.topPick.probability - 75) : 0),
+    triggerType
+  });
+
+  res.json({
+    matchId,
+    success: true,
+    newVersion: updatedVersion,
+    fixture: updatedFixture
+  });
+});
+
+// Update a fixture's parameters (ratings, form, xG, status) and recompute predictions
+app.post('/api/fixtures/update', (req, res) => {
+  const { matchId, homeRating, awayRating, xgHome, xgAway, homeForm, awayForm, matchStatus, reason } = req.body || {};
+  if (!matchId) {
+    return res.status(400).json({ error: 'matchId is required' });
+  }
+
+  try {
+    const updatedFixture = updateFixtureAndRecalculate(matchId, {
+      homeRating,
+      awayRating,
+      xgHome,
+      xgAway,
+      homeForm,
+      awayForm,
+      matchStatus,
+      reason
+    });
+
+    const version = orchestrator.recalculatePrediction(matchId, reason || 'Manual rating adjustment', {
+      triggerType: 'MANUAL_FIXTURE_UPDATE'
+    });
+
+    res.json({
+      success: true,
+      message: `Fixture ${matchId} updated and predictions recalculated successfully.`,
+      fixture: updatedFixture,
+      version
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Fixture update failed', details: err.message });
+  }
+});
+
+// Ingest match result, compute Elo shifts, update forms, and adapt all future fixtures
+app.post('/api/fixtures/result', (req, res) => {
+  const { matchId, homeScore, awayScore } = req.body || {};
+  if (!matchId || homeScore === undefined || awayScore === undefined) {
+    return res.status(400).json({ error: 'matchId, homeScore, and awayScore are required' });
+  }
+
+  try {
+    const result = applyMatchResultAndAdaptRatings(matchId, homeScore, awayScore);
+    res.json({
+      success: true,
+      message: `Match result applied. Ratings adapted and future fixtures recalculated.`,
+      ...result
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to apply match result', details: err.message });
+  }
+});
+
+// Update a team's global rating, form, or xG, automatically adapting all upcoming matches
+app.post('/api/teams/update', (req, res) => {
+  const { teamName, rating, form, xgFor, xgAgainst } = req.body || {};
+  if (!teamName) {
+    return res.status(400).json({ error: 'teamName is required' });
+  }
+
+  try {
+    const result = updateTeamAndPropagate(teamName, { rating, form, xgFor, xgAgainst });
+    if (rating !== undefined) {
+      BASELINE_ELO[teamName] = Math.round(900 + Number(rating) * 10.5);
+    }
+    res.json({
+      success: true,
+      message: `Team "${teamName}" updated. ${result.affectedMatchesCount} fixtures dynamically recalculated.`,
+      ...result
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Team rating update failed', details: err.message });
+  }
+});
+
+app.post('/api/teams/rating', (req, res) => {
+  const { teamName, rating } = req.body || {};
+  if (!teamName || rating === undefined) {
+    return res.status(400).json({ error: 'teamName and rating are required' });
+  }
+
+  try {
+    const result = updateTeamAndPropagate(teamName, { rating });
+    BASELINE_ELO[teamName] = Math.round(900 + Number(rating) * 10.5);
+    res.json({
+      success: true,
+      message: `Team "${teamName}" rating updated to ${rating}. ${result.affectedMatchesCount} upcoming fixtures recalculated.`,
+      ...result
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Team rating update failed', details: err.message });
+  }
+});
+
+// Retrieve team intelligence and upcoming schedule
+app.get('/api/teams/:teamName', (req, res) => {
+  const { teamName } = req.params;
+  const norm = normalizeTeamName(teamName);
+  const info = GLOBAL_CLUB_REGISTRY[norm] || null;
+
+  const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
+  let upcomingMatches = [];
+  if (fs.existsSync(fixturesPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(fixturesPath, 'utf8'));
+      upcomingMatches = (data.matches || []).filter(m =>
+        normalizeTeamName(m.home.name) === norm || normalizeTeamName(m.away.name) === norm
+      );
+    } catch (e) {}
+  }
+
+  res.json({
+    team: teamName,
+    normalized: norm,
+    profile: info,
+    eloBaseline: BASELINE_ELO[teamName] || (info ? Math.round(900 + info.rating * 10.5) : 1600),
+    upcomingMatchesCount: upcomingMatches.length,
+    upcomingMatches: upcomingMatches.slice(0, 10)
+  });
 });
 
 app.get('/api/market/movements', (req, res) => {
@@ -349,7 +504,9 @@ app.get('/api/beast/predict', (req, res) => {
     travelHome = 0,
     travelAway = 120,
     xgHome = 2.15,
-    xgAway = 1.10
+    xgAway = 1.10,
+    homeRating,
+    awayRating
   } = req.query;
 
   const scraped = orchestrator.enrichMatchWithScrapedTelemetry(home, away);
@@ -357,6 +514,8 @@ app.get('/api/beast/predict', (req, res) => {
     homeTeam: home,
     awayTeam: away,
     leagueId: league,
+    homeRating: homeRating ? Number(homeRating) : undefined,
+    awayRating: awayRating ? Number(awayRating) : undefined,
     xgHome: Number(xgHome),
     xgAway: Number(xgAway),
     restHome: Number(restHome),

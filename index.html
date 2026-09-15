@@ -72,7 +72,10 @@ const LEAGUE_PROPERTIES = {
   eliteserien: { name: 'Eliteserien', rho: -0.110, avgGoals: 2.90, homeAdv: 1.20 },
   allsvenskan: { name: 'Allsvenskan', rho: -0.115, avgGoals: 2.75, homeAdv: 1.21 },
   superliga: { name: 'Danish Superliga', rho: -0.120, avgGoals: 2.80, homeAdv: 1.19 },
-  championship: { name: 'EFL Championship', rho: -0.130, avgGoals: 2.65, homeAdv: 1.20 }
+  championship: { name: 'EFL Championship', rho: -0.130, avgGoals: 2.65, homeAdv: 1.20 },
+  ucl: { name: 'UEFA Champions League', rho: -0.110, avgGoals: 2.98, homeAdv: 1.15 },
+  uel: { name: 'UEFA Europa League', rho: -0.115, avgGoals: 2.85, homeAdv: 1.16 },
+  uecl: { name: 'UEFA Conference League', rho: -0.120, avgGoals: 2.78, homeAdv: 1.18 }
 };
 
 const BASELINE_ELO = {
@@ -626,6 +629,9 @@ const LEAGUES = [
   { id:'allsvenskan', name:'Allsvenskan',   country:'Sweden',        flag:'🇸🇪', rho: -0.115 },
   { id:'superliga', name:'Danish Superliga', country:'Denmark',     flag:'🇩🇰', rho: -0.120 },
   { id:'championship', name:'EFL Championship', country:'England',  flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', rho: -0.130 },
+  { id:'ucl',  name:'UEFA Champions League', country:'Europe',      flag:'⭐', rho: -0.110 },
+  { id:'uel',  name:'UEFA Europa League',    country:'Europe',      flag:'🏆', rho: -0.115 },
+  { id:'uecl', name:'UEFA Conference League', country:'Europe',     flag:'🌍', rho: -0.120 },
 ];
 
 const SEED_MATCHES = [
