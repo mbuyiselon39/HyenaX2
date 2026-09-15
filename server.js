@@ -183,13 +183,13 @@ app.get('/api/scrapers/status', (req, res) => {
 
 app.post('/api/scrapers/sync', async (req, res) => {
   try {
-    const fixtures = saveFixtures();
+    const fixtures = await saveFixtures();
     const result = await orchestrator.syncAllScrapers();
     res.json({
       ...result,
-      fixturesGenerated: fixtures.matches.length,
-      leaguesCount: fixtures.meta.league_count,
-      dataSource: fixtures.meta.dataSource,
+      fixturesGenerated: (fixtures?.matches || []).length,
+      leaguesCount: fixtures?.meta?.league_count || 0,
+      dataSource: fixtures?.meta?.dataSource || 'LIVE_ENGINE',
       syncedAt: new Date().toISOString()
     });
   } catch (err) {
