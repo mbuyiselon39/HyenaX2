@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { resolveTeamIdentity } from '../src/teamDatabase.js';
+import { runConsolidatedEnsemble } from '../src/advancedMLSuite.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1252,16 +1253,44 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         alertTriggered: Math.abs(steamDelta) >= 4.5
       }
     },
-    beastMeta: {
-      beastScore,
-      brierScore: topPick ? +(Math.pow((topPick.probability / 100) - 1, 2) * 0.35 + 0.12).toFixed(3) : '0.144',
-      calibratedProbability: topPick ? topPick.probability : 75,
-      valueClassification: (topPick && topPick.probability >= 80) ? 'ELITE VALUE' : 'STRONG VALUE',
-      walkForwardScore: 'PASSED (0.0% Leakage)',
-      vigFreeOdds,
-      expectedValuePct: topPick ? (topPick.marketEdge > 0 ? topPick.marketEdge : 3.8) : 3.8,
-      marketOverroundPct: 6.2
-    }
+    beastMeta: (() => {
+      const ens = runConsolidatedEnsemble({
+        homeTeam: home.name,
+        awayTeam: away.name,
+        leagueId,
+        homeRating: hRating,
+        awayRating: aRating,
+        eloHome: Math.round(900 + hRating * 10.5),
+        eloAway: Math.round(900 + aRating * 10.5),
+        xgHome: home.xgFor || 1.65,
+        xgAway: away.xgFor || 1.25,
+        restHome: restHoursHome,
+        restAway: restHoursAway,
+        travelHome: 0,
+        travelAway: travelDistKm
+      });
+
+      return {
+        beastScore,
+        brierScore: topPick ? +(Math.pow((topPick.probability / 100) - 1, 2) * 0.35 + 0.12).toFixed(3) : '0.144',
+        calibratedProbability: topPick ? topPick.probability : 75,
+        valueClassification: (topPick && topPick.probability >= 80) ? 'ELITE VALUE' : 'STRONG VALUE',
+        walkForwardScore: 'PASSED (0.0% Leakage)',
+        vigFreeOdds,
+        expectedValuePct: topPick ? (topPick.marketEdge > 0 ? topPick.marketEdge : 3.8) : 3.8,
+        marketOverroundPct: 6.2,
+        ensemble: {
+          consensusProbability: ens.consensusProbability,
+          modelAgreementScore: ens.modelAgreementScore,
+          standardDeviation: ens.standardDeviation,
+          totalModelsActive: ens.totalModelsActive,
+          confidenceTier: ens.confidenceTier,
+          categoryAverages: ens.categoryAverages,
+          dissentingModels: ens.dissentingModels,
+          breakdown: ens.models
+        }
+      };
+    })()
   };
 }
 

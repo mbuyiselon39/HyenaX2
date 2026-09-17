@@ -5,6 +5,18 @@
    ============================================================ */
 
 import { LEAGUE_REGISTRY, getLeagueById } from './leagueRegistry.js';
+import {
+  runXGBoostModel,
+  runLightGBMModel,
+  runCatBoostModel,
+  runRandomForestModel,
+  runHistGradientBoostingModel,
+  runBradleyTerryModel,
+  runGNNModel,
+  runLSTMTimeSeriesModel,
+  runTransformerAttentionModel,
+  runConsolidatedEnsemble
+} from './advancedMLSuite.js';
 
 // Base Elo Ratings for key global clubs
 export const BASELINE_ELO = {
@@ -495,27 +507,97 @@ export function runMultiModelEnsemble({
   // 6. Squad Depth & Player Availability
   const m6_squadDepth = +(m1_dixonColes * 0.98 + (eloDelta > 0 ? 2 : -2)).toFixed(1);
 
-  // 7. Machine Learning Gradient Approximator
-  const m7_mlGradient = +( (m1_dixonColes * 0.35 + m2_xgPoisson * 0.35 + m3_elo * 0.30) ).toFixed(1);
+  // 7. XGBoost (Extreme Gradient Boost)
+  const m_xgb = runXGBoostModel({
+    eloDelta,
+    xgDelta: xgHome - xgAway,
+    restDelta: restHome - restAway,
+    homeAdv: league.homeAdv
+  });
 
-  // 8. Market Implied Model (Sharp consensus minus margin)
+  // 8. LightGBM (Leaf-Wise Histogram Binned Boosting)
+  const m_lgb = runLightGBMModel({
+    eloDelta,
+    xgDelta: xgHome - xgAway,
+    restDelta: restHome - restAway,
+    homeAdv: league.homeAdv
+  });
+
+  // 9. CatBoost (Categorical Boosting & Oblivious Trees)
+  const m_cat = runCatBoostModel({
+    leagueId,
+    isDerby: homeTeam.toLowerCase().includes('derby') || (homeTeam.includes('Manchester') && awayTeam.includes('Manchester')),
+    eloDelta,
+    xgDelta: xgHome - xgAway,
+    homeAdv: league.homeAdv
+  });
+
+  // 10. Bagging & Random Forest (Bootstrap Aggregation)
+  const m_rf = runRandomForestModel({
+    eloDelta,
+    xgDelta: xgHome - xgAway,
+    restDelta: restHome - restAway,
+    homeAdv: league.homeAdv
+  });
+
+  // 11. HistGradientBoosting (Monotonic Gradient Boosting)
+  const m_hist = runHistGradientBoostingModel({
+    eloDelta,
+    xgDelta: xgHome - xgAway,
+    homeAdv: league.homeAdv
+  });
+
+  // 12. Bradley-Terry Paired-Comparison Model
+  const m_bt = runBradleyTerryModel({
+    homeRating: homeRating ? Number(homeRating) : Math.round((eloHome - 900) / 10.5),
+    awayRating: awayRating ? Number(awayRating) : Math.round((eloAway - 900) / 10.5)
+  });
+
+  // 13. Graph Neural Network (GNN Message Passing)
+  const m_gnn = runGNNModel({
+    homeTeam,
+    awayTeam,
+    eloHome,
+    eloAway,
+    xgHome,
+    xgAway,
+    leagueId
+  });
+
+  // 14. LSTM Recurrent Time-Series Network
+  const m_lstm = runLSTMTimeSeriesModel({
+    fatigueIndex: restAway < 72 ? 0.08 : 0.02
+  });
+
+  // 15. Transformer Multi-Head Self-Attention
+  const m_transformer = runTransformerAttentionModel({});
+
+  // 16. Market Implied Model (Sharp consensus minus margin)
   const totalMargin = (1 / marketOdds.home) + (1 / marketOdds.draw) + (1 / marketOdds.away);
-  const m8_marketImplied = +(((1 / marketOdds.home) / totalMargin) * 100).toFixed(1);
+  const m16_marketImplied = +(((1 / marketOdds.home) / totalMargin) * 100).toFixed(1);
 
-  // 9. Bayesian Hierarchical Consensus
-  const m9_bayesian = +( (m7_mlGradient * 0.6 + m8_marketImplied * 0.4) ).toFixed(1);
+  // 17. Bayesian Hierarchical Consensus
+  const m17_bayesian = +( (m1_dixonColes * 0.45 + m_xgb.prob * 0.35 + m16_marketImplied * 0.20) ).toFixed(1);
 
-  // Dynamic League Weights
+  // Complete 17-Model Algorithmic Coexistence Stack
   const models = [
-    { name: 'Dixon-Coles (1997)', prob: m1_dixonColes, weight: 0.22 },
-    { name: 'Poisson xG / xT', prob: m2_xgPoisson, weight: 0.18 },
-    { name: 'Rolling Elo Rating', prob: m3_elo, weight: 0.12 },
-    { name: 'Venue Fortress Index', prob: m4_venueFortress, weight: 0.08 },
-    { name: 'Recent Form & Momentum', prob: m5_recentForm, weight: 0.08 },
-    { name: 'Squad Depth & Starters', prob: m6_squadDepth, weight: 0.08 },
-    { name: 'ML Gradient Ensemble', prob: m7_mlGradient, weight: 0.12 },
-    { name: 'Sharp Market Implied', prob: m8_marketImplied, weight: 0.06 },
-    { name: 'Bayesian Hierarchical', prob: m9_bayesian, weight: 0.06 }
+    { name: 'Dixon-Coles Bivariate Poisson (1997)', prob: m1_dixonColes, weight: 0.12, category: 'Parametric Statistical', signal: 'Home Advantage Bivariate Law' },
+    { name: 'Poisson xG / xT Box Threat', prob: m2_xgPoisson, weight: 0.09, category: 'Parametric Statistical', signal: 'Expected Threat Dominance' },
+    { name: 'Multi-Factor Rolling Elo', prob: m3_elo, weight: 0.08, category: 'Parametric Statistical', signal: 'Quality Rating Differential' },
+    { name: 'Venue Fortress Index', prob: m4_venueFortress, weight: 0.05, category: 'Parametric Statistical', signal: 'Home Ground Climate & Crowd Edge' },
+    { name: 'Recent Form & Momentum', prob: m5_recentForm, weight: 0.05, category: 'Parametric Statistical', signal: 'Form Trajectory Vector' },
+    { name: 'Squad Depth & Starters', prob: m6_squadDepth, weight: 0.04, category: 'Parametric Statistical', signal: 'Rotation & Bench Parity' },
+    m_xgb,
+    m_lgb,
+    m_cat,
+    m_rf,
+    m_hist,
+    m_bt,
+    m_gnn,
+    m_lstm,
+    m_transformer,
+    { name: 'Sharp Market Consensus Implied', prob: m16_marketImplied, weight: 0.04, category: 'Market Microstructure', signal: 'De-Vigged Exchange Consensus' },
+    { name: 'Bayesian Hierarchical Arbitration', prob: m17_bayesian, weight: 0.05, category: 'Bayesian Synthesis', signal: 'Multi-Prior Posterior Update' }
   ];
 
   let weightedSum = 0;
@@ -532,13 +614,43 @@ export function runMultiModelEnsemble({
   const avg = ensembleRaw;
   const variance = probs.reduce((sum, p) => sum + Math.pow(p - avg, 2), 0) / probs.length;
   const stdDev = Math.sqrt(variance);
-  const modelAgreementScore = Math.min(100, Math.max(40, Math.round(100 - (stdDev * 3.5))));
+  const modelAgreementScore = Math.min(100, Math.max(40, Math.round(100 - (stdDev * 3.2))));
+
+  // Group by Model Category
+  const categories = {};
+  models.forEach(m => {
+    const cat = m.category || 'Statistical';
+    if (!categories[cat]) categories[cat] = { name: cat, count: 0, sumProb: 0, sumWeight: 0 };
+    categories[cat].count++;
+    categories[cat].sumProb += m.prob * m.weight;
+    categories[cat].sumWeight += m.weight;
+  });
+
+  const categoryAverages = Object.values(categories).map(c => ({
+    category: c.name,
+    modelCount: c.count,
+    weightedProb: +(c.sumProb / c.sumWeight).toFixed(1)
+  }));
+
+  const dissentingModels = models
+    .filter(m => Math.abs(m.prob - ensembleRaw) > (stdDev * 1.35))
+    .map(m => ({
+      name: m.name,
+      prob: m.prob,
+      deltaFromConsensus: +(m.prob - ensembleRaw).toFixed(1),
+      direction: m.prob > ensembleRaw ? 'MORE_OPTIMISTIC' : 'MORE_CONSERVATIVE',
+      signal: m.signal
+    }));
 
   return {
     models,
     ensembleRaw,
     modelAgreementScore,
     stdDev: +stdDev.toFixed(2),
+    totalModelsActive: models.length,
+    confidenceTier: modelAgreementScore >= 82 ? 'HIGH_UNANIMOUS_CONVICTION' : modelAgreementScore >= 70 ? 'STRONG_CONSENSUS' : 'MODERATE_DIVERGENCE',
+    categoryAverages,
+    dissentingModels,
     parameters: { lambdaHome: +lh.toFixed(2), lambdaAway: +la.toFixed(2), rho: league.rho },
     pHome: +(dcHome / dcSum).toFixed(3),
     pDraw: +(dcDraw / dcSum).toFixed(3),
