@@ -34,6 +34,10 @@ import {
   calculateCLVBenchmarking,
   runDynamicStressTesting,
   stripBookmakerVig,
+  calculateShinOverroundRemoval,
+  evaluateValueBetSystemProtectionRule,
+  applyBayesianDynamicUpdate,
+  evaluateOutlierAndFeatureDegradationFilters,
   calculateExpandedMarkets,
   getCalibrationScorecard
 } from './src/beastEngine.js';
@@ -1035,6 +1039,168 @@ const handleEnsembleSimulation = (req, res) => {
 
 app.post('/api/models/ensemble/simulate', handleEnsembleSimulation);
 app.get('/api/models/ensemble/simulate', handleEnsembleSimulation);
+
+/* ============================================================
+   QUANTITATIVE RISK & PERFORMANCE ARCHITECTURE API ROUTES
+   1. Market Efficiency Arbitrage & Shin's De-Vigging (/api/risk/shin-devig)
+   2. System Protection Rule Evaluation (/api/risk/system-protection)
+   3. Bayesian Dynamic Updating & Anti-Recency Shield (/api/risk/bayesian-update)
+   4. Fractional Kelly Risk Allocation Engine (/api/risk/kelly-allocation)
+   5. Automated Outlier & Feature Degradation Filters (/api/risk/outlier-filters)
+   6. Full Quantitative Audit Summary (/api/risk/architecture-summary)
+   ============================================================ */
+
+// 1. Shin's De-Vigging & Power Method Margin Stripping
+const handleShinDevig = (req, res) => {
+  const oddsInput = req.body?.odds || req.query?.odds || [1.85, 3.40, 4.20];
+  let parsedOdds = oddsInput;
+  if (typeof oddsInput === 'string') {
+    parsedOdds = oddsInput.split(',').map(Number).filter(n => !isNaN(n) && n > 1.0);
+  }
+  const result = calculateShinOverroundRemoval(parsedOdds);
+
+  const modelProb = Number(req.body?.modelProb || req.query?.modelProb);
+  let systemProtection = null;
+  if (!isNaN(modelProb) && modelProb > 0) {
+    const oddsRef = result.rawOdds[0] || 1.85;
+    systemProtection = evaluateValueBetSystemProtectionRule(modelProb, result.primaryFairProbabilityPct, oddsRef);
+  }
+
+  res.json({
+    status: 'success',
+    timestamp: new Date().toISOString(),
+    shinAnalysis: result,
+    systemProtection
+  });
+};
+app.get('/api/risk/shin-devig', handleShinDevig);
+app.post('/api/risk/shin-devig', handleShinDevig);
+
+// 2. Bayesian Dynamic Updating & Anti-Recency Shield
+const handleBayesianUpdate = (req, res) => {
+  const b = req.method === 'POST' ? req.body : req.query;
+  const result = applyBayesianDynamicUpdate({
+    priorElo: Number(b.priorElo) || 1550,
+    priorLambda: Number(b.priorLambda) || 1.65,
+    priorMu: Number(b.priorMu) || 1.15,
+    sustainedNpxG: Number(b.sustainedNpxG) || 1.60,
+    matchdayTelemetry: {
+      weatherIndex: Number(b.weatherIndex) || 0,
+      altitudeMeters: Number(b.altitudeMeters) || 300,
+      travelDistanceKm: Number(b.travelDistanceKm) || 120,
+      restHours: Number(b.restHours) || 96,
+      tacticalShift: b.tacticalShift || 'BALANCED',
+      earlyDisciplinaryRisk: b.earlyDisciplinaryRisk === true || b.earlyDisciplinaryRisk === 'true'
+    },
+    recentAnomalyDefeat: b.recentAnomalyDefeat === true || b.recentAnomalyDefeat === 'true'
+  });
+
+  res.json({
+    status: 'success',
+    timestamp: new Date().toISOString(),
+    bayesianUpdating: result
+  });
+};
+app.get('/api/risk/bayesian-update', handleBayesianUpdate);
+app.post('/api/risk/bayesian-update', handleBayesianUpdate);
+
+// 3. Fractional Kelly Risk Allocation Engine
+const handleKellyAllocation = (req, res) => {
+  const b = req.method === 'POST' ? req.body : req.query;
+  const bankroll = Number(b.bankroll) || 5000;
+  const kellyType = b.kellyType || 'quarter';
+  const prob = Number(b.probability || b.calibratedProbability) || 72;
+  const odds = Number(b.odds) || 1.85;
+  const consecutiveLosses = Number(b.consecutiveLosses) || 0;
+
+  const result = calculateBankrollManagement({
+    bankroll,
+    fractionalKellyType: kellyType,
+    consecutiveLosses,
+    opportunities: [{
+      match: b.match || 'Target Opportunity',
+      selection: b.selection || 'Pick 1',
+      calibratedProbability: prob,
+      odds
+    }]
+  });
+
+  res.json({
+    status: 'success',
+    timestamp: new Date().toISOString(),
+    kellyEngine: result
+  });
+};
+app.get('/api/risk/kelly-allocation', handleKellyAllocation);
+app.post('/api/risk/kelly-allocation', handleKellyAllocation);
+
+// 4. Automated Outlier & Feature Degradation Filters
+const handleOutlierFilters = (req, res) => {
+  const b = req.method === 'POST' ? req.body : req.query;
+  const result = evaluateOutlierAndFeatureDegradationFilters({
+    match: b.match || 'Match Audit',
+    homeName: b.homeName || 'Home Club',
+    awayName: b.awayName || 'Away Club',
+    missingPlayersXgPct: Number(b.missingPlayersXgPct) || 0,
+    marketSteamDeltaPct: Number(b.marketSteamDeltaPct) || 0,
+    closingLineDirection: b.closingLineDirection || 'NEUTRAL',
+    baseConfidenceScore: Number(b.baseConfidenceScore) || 82
+  });
+
+  res.json({
+    status: 'success',
+    timestamp: new Date().toISOString(),
+    filterEvaluation: result
+  });
+};
+app.get('/api/risk/outlier-filters', handleOutlierFilters);
+app.post('/api/risk/outlier-filters', handleOutlierFilters);
+
+// 5. Architecture Summary
+app.get('/api/risk/architecture-summary', (req, res) => {
+  res.json({
+    status: 'active',
+    version: 'HyenaX 2.4.0',
+    layers: [
+      {
+        id: 'layer_1_margin_stripping',
+        name: 'Market Efficiency Arbitrage & Margin Stripping',
+        method: "Shin's (1991, 1993) Method & Power Method",
+        systemProtectionRule: 'P_HyenaX > P_Fair (Independently calibrated model probability must strictly exceed de-vigged market consensus to trigger delta EV)',
+        status: 'OPERATIONAL'
+      },
+      {
+        id: 'layer_2_bayesian_shield',
+        name: 'Bayesian Dynamic Updating (Anti-Recency Shield)',
+        priorWeight: '84% Long-Term Historical Truth Anchor',
+        evidenceWeight: '16% Match-Day Dynamic Telemetry (Altitude, Weather, Fatigue, Red Cards)',
+        recencyBiasMitigation: '84% shock absorption against anomalous single-game defeats',
+        status: 'OPERATIONAL'
+      },
+      {
+        id: 'layer_3_roster_integrity',
+        name: 'Roster Integrity Gatekeeper',
+        threshold: '> 30% xG/xA Absent',
+        action: 'Halves or suppresses prediction confidence score; flags SUSPENDED status',
+        status: 'OPERATIONAL'
+      },
+      {
+        id: 'layer_4_market_steam',
+        name: 'Market Steam Radar',
+        threshold: '> 10.5% Implied Probability Closing Line Shift',
+        action: 'Automated Safety Freeze against sharp insider movements',
+        status: 'OPERATIONAL'
+      },
+      {
+        id: 'layer_5_fractional_kelly',
+        name: 'Fractional Kelly Risk Allocation Engine',
+        fractions: 'Quarter-Kelly (chi = 0.25) & Half-Kelly (chi = 0.50)',
+        defensiveMeasures: '50% defensive stake reduction on 3+ consecutive losses; 5% maximum single-wager ceiling',
+        status: 'OPERATIONAL'
+      }
+    ]
+  });
+});
 app.get('/api/fixtures', async (req, res) => {
   const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
   const force = req.query.force === '1' || req.query.refresh === '1' || req.query.force === 'true';

@@ -3,6 +3,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { resolveTeamIdentity } from '../src/teamDatabase.js';
 import { runConsolidatedEnsemble } from '../src/advancedMLSuite.js';
+import {
+  calculateShinOverroundRemoval,
+  evaluateValueBetSystemProtectionRule,
+  applyBayesianDynamicUpdate,
+  calculateBankrollManagement,
+  evaluateOutlierAndFeatureDegradationFilters
+} from '../src/beastEngine.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -65,7 +72,7 @@ export const LEAGUES = [
   { id: 'argliga', espn: 'arg.1', name: 'Argentine Liga Profesional', country: 'Argentina', flag: '🇦🇷', rho: -0.175, avgGoals: 2.15, homeAdv: 1.30, tierBase: 77, minElo: 69, maxElo: 85 },
   { id: 'bolivia', espn: 'bol.1', name: 'Bolivian Liga Profesional', country: 'Bolivia', flag: '🇧🇴', rho: -0.110, avgGoals: 3.02, homeAdv: 1.48, tierBase: 72, minElo: 65, maxElo: 81 },
   { id: 'chile', espn: 'chi.1', name: 'Chilean Primera División', country: 'Chile', flag: '🇨🇱', rho: -0.135, avgGoals: 2.68, homeAdv: 1.25, tierBase: 74, minElo: 68, maxElo: 82 },
-  { id: 'colombia', espn: 'col.1', name: 'Colombian Primera A', country: 'Colombia', flag: '🇨🇴', rho: -0.165, avgGoals: 2.26, homeAdv: 1.34, tierBase: 74, minElo: 68, maxElo: 82 },
+  { id: 'colombia', espn: 'col.1', name: 'Colombia Primera A, Apertura', country: 'Colombia', flag: '🇨🇴', rho: -0.165, avgGoals: 2.26, homeAdv: 1.34, tierBase: 74, minElo: 68, maxElo: 82 },
   { id: 'libertadores', espn: 'conmebol.libertadores', name: 'CONMEBOL Libertadores', country: 'South America', flag: '🏆', rho: -0.140, avgGoals: 2.65, homeAdv: 1.35, tierBase: 80, minElo: 72, maxElo: 88 },
   { id: 'sudamericana', espn: 'conmebol.sudamericana', name: 'CONMEBOL Sudamericana', country: 'South America', flag: '🥈', rho: -0.145, avgGoals: 2.58, homeAdv: 1.33, tierBase: 76, minElo: 69, maxElo: 84 },
   { id: 'uruguay', espn: 'uru.1', name: 'Liga AUF Uruguaya', country: 'Uruguay', flag: '🇺🇾', rho: -0.155, avgGoals: 2.38, homeAdv: 1.25, tierBase: 74, minElo: 67, maxElo: 82 },
@@ -73,7 +80,39 @@ export const LEAGUES = [
   { id: 'paraguay', espn: 'par.1', name: 'Paraguayan Primera División', country: 'Paraguay', flag: '🇵🇾', rho: -0.145, avgGoals: 2.54, homeAdv: 1.27, tierBase: 74, minElo: 67, maxElo: 82 },
   { id: 'peru', espn: 'per.1', name: 'Peruvian Liga 1', country: 'Peru', flag: '🇵🇪', rho: -0.125, avgGoals: 2.76, homeAdv: 1.42, tierBase: 73, minElo: 66, maxElo: 82 },
   { id: 'venezuela', espn: 'ven.1', name: 'Venezuelan Primera División', country: 'Venezuela', flag: '🇻🇪', rho: -0.160, avgGoals: 2.30, homeAdv: 1.30, tierBase: 72, minElo: 65, maxElo: 80 },
-  { id: 'guatemala', espn: 'gua.1', name: 'Guatemalan Liga Nacional', country: 'Guatemala', flag: '🇬🇹', rho: -0.160, avgGoals: 2.34, homeAdv: 1.35, tierBase: 71, minElo: 65, maxElo: 79 }
+  { id: 'guatemala', espn: 'gua.1', name: 'Guatemalan Liga Nacional', country: 'Guatemala', flag: '🇬🇹', rho: -0.160, avgGoals: 2.34, homeAdv: 1.35, tierBase: 71, minElo: 65, maxElo: 79 },
+  { id: 'uefa_nations', espn: 'uefa.nations', name: 'UEFA Nations League', country: 'Europe', flag: '🇪🇺', rho: -0.125, avgGoals: 2.65, homeAdv: 1.16, tierBase: 81, minElo: 72, maxElo: 89 },
+  { id: 'afcon', espn: 'caf.nations', name: 'African Cup of Nations', country: 'Africa', flag: '🌍', rho: -0.170, avgGoals: 2.18, homeAdv: 1.10, tierBase: 78, minElo: 68, maxElo: 86 },
+  { id: 'kategoria_superiore', espn: null, name: 'Kategoria Superiore', country: 'Albania', flag: '🇦🇱', rho: -0.160, avgGoals: 2.30, homeAdv: 1.30, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'armenia', espn: null, name: 'Armenian Premier League', country: 'Armenia', flag: '🇦🇲', rho: -0.135, avgGoals: 2.65, homeAdv: 1.25, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'austria_erste', espn: 'aut.2', name: 'Austrian Erste Liga', country: 'Austria', flag: '🇦🇹', rho: -0.100, avgGoals: 2.95, homeAdv: 1.22, tierBase: 72, minElo: 65, maxElo: 79 },
+  { id: 'azerbaijan', espn: null, name: 'Azerbaijan Premier League', country: 'Azerbaijan', flag: '🇦🇿', rho: -0.155, avgGoals: 2.38, homeAdv: 1.28, tierBase: 72, minElo: 65, maxElo: 80 },
+  { id: 'bosnia', espn: null, name: 'Bosnia and Herzegovina Premijer Liga', country: 'Bosnia & Herzegovina', flag: '🇧🇦', rho: -0.150, avgGoals: 2.45, homeAdv: 1.32, tierBase: 72, minElo: 65, maxElo: 80 },
+  { id: 'bulgaria', espn: null, name: 'Bulgarian First Professional League', country: 'Bulgaria', flag: '🇧🇬', rho: -0.145, avgGoals: 2.48, homeAdv: 1.28, tierBase: 73, minElo: 66, maxElo: 81 },
+  { id: 'canpl', espn: null, name: 'Canadian Premier League', country: 'Canada', flag: '🇨🇦', rho: -0.120, avgGoals: 2.70, homeAdv: 1.26, tierBase: 72, minElo: 65, maxElo: 79 },
+  { id: 'croatia', espn: null, name: 'Croatian First Football League', country: 'Croatia', flag: '🇭🇷', rho: -0.130, avgGoals: 2.65, homeAdv: 1.24, tierBase: 75, minElo: 68, maxElo: 83 },
+  { id: 'cyprus', espn: 'cyp.1', name: 'Cyprus First Division', country: 'Cyprus', flag: '🇨🇾', rho: -0.125, avgGoals: 2.72, homeAdv: 1.26, tierBase: 73, minElo: 66, maxElo: 81 },
+  { id: 'czech', espn: 'cze.1', name: 'Czech Republic First League', country: 'Czech Republic', flag: '🇨🇿', rho: -0.115, avgGoals: 2.82, homeAdv: 1.22, tierBase: 76, minElo: 69, maxElo: 84 },
+  { id: 'estonia', espn: null, name: 'Estonian Premium Liiga', country: 'Estonia', flag: '🇪🇪', rho: -0.105, avgGoals: 2.92, homeAdv: 1.23, tierBase: 70, minElo: 63, maxElo: 77 },
+  { id: 'faroe', espn: null, name: 'Faroe Islands Premier League', country: 'Faroe Islands', flag: '🇫🇴', rho: -0.095, avgGoals: 3.10, homeAdv: 1.24, tierBase: 69, minElo: 62, maxElo: 76 },
+  { id: 'finland', espn: 'fin.1', name: 'Finnish Veikkausliiga', country: 'Finland', flag: '🇫🇮', rho: -0.120, avgGoals: 2.74, homeAdv: 1.21, tierBase: 72, minElo: 65, maxElo: 79 },
+  { id: 'georgia', espn: null, name: 'Georgian Erovnuli Liga', country: 'Georgia', flag: '🇬🇪', rho: -0.140, avgGoals: 2.52, homeAdv: 1.28, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'honduras', espn: 'hon.1', name: 'Honduras Liga Nacional Apertura', country: 'Honduras', flag: '🇭🇳', rho: -0.155, avgGoals: 2.42, homeAdv: 1.34, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'hungary', espn: null, name: 'Hungarian NB I', country: 'Hungary', flag: '🇭🇺', rho: -0.115, avgGoals: 2.85, homeAdv: 1.22, tierBase: 74, minElo: 67, maxElo: 82 },
+  { id: 'iceland', espn: null, name: 'Icelandic First Division', country: 'Iceland', flag: '🇮🇸', rho: -0.090, avgGoals: 3.15, homeAdv: 1.23, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'iraq', espn: null, name: 'Iraq Stars League', country: 'Iraq', flag: '🇮🇶', rho: -0.170, avgGoals: 2.22, homeAdv: 1.32, tierBase: 72, minElo: 65, maxElo: 79 },
+  { id: 'ireland', espn: 'irl.1', name: 'Irish Premier Division', country: 'Republic of Ireland', flag: '🇮🇪', rho: -0.135, avgGoals: 2.58, homeAdv: 1.22, tierBase: 72, minElo: 65, maxElo: 79 },
+  { id: 'israel', espn: 'isr.1', name: 'Israeli Premier League', country: 'Israel', flag: '🇮🇱', rho: -0.130, avgGoals: 2.62, homeAdv: 1.24, tierBase: 74, minElo: 67, maxElo: 82 },
+  { id: 'kazakhstan', espn: null, name: 'Kazakhstan Premier League', country: 'Kazakhstan', flag: '🇰🇿', rho: -0.150, avgGoals: 2.40, homeAdv: 1.30, tierBase: 72, minElo: 65, maxElo: 80 },
+  { id: 'kosovo', espn: null, name: 'Kosovo Superliga', country: 'Kosovo', flag: '🇽🇰', rho: -0.145, avgGoals: 2.48, homeAdv: 1.29, tierBase: 70, minElo: 63, maxElo: 77 },
+  { id: 'lithuania', espn: null, name: 'Lithuanian A Lyga', country: 'Lithuania', flag: '🇱🇹', rho: -0.125, avgGoals: 2.68, homeAdv: 1.22, tierBase: 70, minElo: 63, maxElo: 77 },
+  { id: 'malta', espn: 'mlt.1', name: 'Maltese Premier League', country: 'Malta', flag: '🇲🇹', rho: -0.140, avgGoals: 2.55, homeAdv: 1.20, tierBase: 69, minElo: 62, maxElo: 76 },
+  { id: 'montenegro', espn: null, name: 'Montenegro First League', country: 'Montenegro', flag: '🇲🇪', rho: -0.155, avgGoals: 2.35, homeAdv: 1.30, tierBase: 70, minElo: 63, maxElo: 77 },
+  { id: 'nireland', espn: 'nir.1', name: 'Northern Ireland Premiership', country: 'Northern Ireland', flag: '🇬🇧', rho: -0.115, avgGoals: 2.85, homeAdv: 1.24, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'serbia', espn: null, name: 'Serbia Superliga', country: 'Serbia', flag: '🇷🇸', rho: -0.130, avgGoals: 2.68, homeAdv: 1.26, tierBase: 74, minElo: 67, maxElo: 83 },
+  { id: 'slovakia', espn: null, name: 'Slovakia Superliga', country: 'Slovakia', flag: '🇸🇰', rho: -0.120, avgGoals: 2.76, homeAdv: 1.23, tierBase: 73, minElo: 66, maxElo: 81 },
+  { id: 'slovenia', espn: 'slv.1', name: 'Slovenia prvaliga', country: 'Slovenia', flag: '🇸🇮', rho: -0.125, avgGoals: 2.70, homeAdv: 1.24, tierBase: 73, minElo: 66, maxElo: 80 },
+  { id: 'cymru', espn: 'wal.1', name: 'Cymru Premier', country: 'Wales', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', rho: -0.105, avgGoals: 2.98, homeAdv: 1.24, tierBase: 70, minElo: 63, maxElo: 77 }
 ];
 
 export const LEAGUE_MAP = Object.fromEntries(LEAGUES.map(l => [l.id, l]));
@@ -406,7 +445,203 @@ export const GLOBAL_CLUB_REGISTRY = {
   'deportivo tachira': { name: 'Deportivo Táchira', rating: 74, domestic: 'venezuela', form: ['W','W','D','W','W'], xgFor: 1.60, xgAgainst: 0.70 },
   'caracas': { name: 'Caracas FC', rating: 73, domestic: 'venezuela', form: ['D','W','L','W','D'], xgFor: 1.45, xgAgainst: 1.10 },
   'municipal': { name: 'CSD Municipal', rating: 73, domestic: 'guatemala', form: ['W','W','D','W','W'], xgFor: 1.70, xgAgainst: 0.75 },
-  'comunicaciones': { name: 'Comunicaciones FC', rating: 73, domestic: 'guatemala', form: ['W','D','W','L','D'], xgFor: 1.65, xgAgainst: 0.85 }
+  'comunicaciones': { name: 'Comunicaciones FC', rating: 73, domestic: 'guatemala', form: ['W','D','W','L','D'], xgFor: 1.65, xgAgainst: 0.85 },
+
+  // --- UEFA Nations League (International) ---
+  'france': { name: 'France', rating: 88, domestic: 'uefa_nations', form: ['W','W','D','W','W'], xgFor: 2.30, xgAgainst: 0.80 },
+  'italy': { name: 'Italy', rating: 85, domestic: 'uefa_nations', form: ['W','D','W','W','L'], xgFor: 1.95, xgAgainst: 0.95 },
+  'spain': { name: 'Spain', rating: 88, domestic: 'uefa_nations', form: ['W','W','W','W','D'], xgFor: 2.35, xgAgainst: 0.75 },
+  'germany': { name: 'Germany', rating: 86, domestic: 'uefa_nations', form: ['W','W','D','W','W'], xgFor: 2.20, xgAgainst: 0.90 },
+  'netherlands': { name: 'Netherlands', rating: 84, domestic: 'uefa_nations', form: ['W','D','W','L','W'], xgFor: 2.05, xgAgainst: 1.10 },
+  'england': { name: 'England', rating: 86, domestic: 'uefa_nations', form: ['W','W','W','D','W'], xgFor: 2.15, xgAgainst: 0.80 },
+
+  // --- African Cup of Nations ---
+  'morocco': { name: 'Morocco', rating: 84, domestic: 'afcon', form: ['W','W','W','W','D'], xgFor: 2.10, xgAgainst: 0.65 },
+  'nigeria': { name: 'Nigeria', rating: 82, domestic: 'afcon', form: ['W','D','W','W','L'], xgFor: 1.90, xgAgainst: 0.85 },
+  'senegal': { name: 'Senegal', rating: 83, domestic: 'afcon', form: ['W','W','D','W','W'], xgFor: 2.00, xgAgainst: 0.70 },
+  'egypt_national': { name: 'Egypt', rating: 81, domestic: 'afcon', form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 0.80 },
+  'ivory coast': { name: 'Ivory Coast', rating: 82, domestic: 'afcon', form: ['W','W','W','D','W'], xgFor: 1.85, xgAgainst: 0.80 },
+  'algeria': { name: 'Algeria', rating: 81, domestic: 'afcon', form: ['W','D','W','W','D'], xgFor: 1.80, xgAgainst: 0.80 },
+
+  // --- Kategoria Superiore ---
+  'kf partizani': { name: 'KF Partizani', rating: 73, domestic: 'kategoria_superiore', form: ['W','W','D','W','L'], xgFor: 1.65, xgAgainst: 0.85 },
+  'kf tirana': { name: 'KF Tirana', rating: 72, domestic: 'kategoria_superiore', form: ['W','D','W','L','D'], xgFor: 1.55, xgAgainst: 0.95 },
+  'egnatia': { name: 'Egnatia', rating: 73, domestic: 'kategoria_superiore', form: ['W','W','W','D','W'], xgFor: 1.70, xgAgainst: 0.80 },
+  'vllaznia': { name: 'Vllaznia', rating: 72, domestic: 'kategoria_superiore', form: ['D','W','L','W','W'], xgFor: 1.50, xgAgainst: 0.90 },
+
+  // --- Armenian Premier League ---
+  'pyunik yerevan': { name: 'Pyunik Yerevan', rating: 73, domestic: 'armenia', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 0.85 },
+  'noah': { name: 'FC Noah', rating: 73, domestic: 'armenia', form: ['W','W','D','W','W'], xgFor: 1.90, xgAgainst: 0.80 },
+  'urartu': { name: 'FC Urartu', rating: 72, domestic: 'armenia', form: ['W','D','W','L','W'], xgFor: 1.70, xgAgainst: 0.95 },
+  'ararat-armenia': { name: 'Ararat-Armenia', rating: 73, domestic: 'armenia', form: ['W','W','L','W','D'], xgFor: 1.85, xgAgainst: 0.90 },
+
+  // --- Austrian Erste Liga ---
+  'sv ried': { name: 'SV Ried', rating: 74, domestic: 'austria_erste', form: ['W','W','W','D','L'], xgFor: 2.10, xgAgainst: 0.95 },
+  'admira wacker': { name: 'Admira Wacker', rating: 73, domestic: 'austria_erste', form: ['W','D','W','W','D'], xgFor: 1.85, xgAgainst: 1.00 },
+  'floridsdorfer ac': { name: 'Floridsdorfer AC', rating: 71, domestic: 'austria_erste', form: ['D','W','L','D','W'], xgFor: 1.50, xgAgainst: 1.20 },
+  'st. polten': { name: 'SKN St. Pölten', rating: 72, domestic: 'austria_erste', form: ['W','L','W','D','L'], xgFor: 1.65, xgAgainst: 1.25 },
+
+  // --- Azerbaijan Premier League ---
+  'qarabag fk': { name: 'Qarabağ FK', rating: 78, domestic: 'azerbaijan', form: ['W','W','W','W','W'], xgFor: 2.45, xgAgainst: 0.65 },
+  'neftchi baku': { name: 'Neftçi Baku', rating: 73, domestic: 'azerbaijan', form: ['W','D','W','L','D'], xgFor: 1.60, xgAgainst: 0.90 },
+  'sabah fk': { name: 'Sabah FK', rating: 73, domestic: 'azerbaijan', form: ['W','W','D','W','L'], xgFor: 1.75, xgAgainst: 0.95 },
+  'zira fk': { name: 'Zira FK', rating: 73, domestic: 'azerbaijan', form: ['W','D','W','W','D'], xgFor: 1.50, xgAgainst: 0.70 },
+
+  // --- Bosnia and Herzegovina Premijer Liga ---
+  'fk sarajevo': { name: 'FK Sarajevo', rating: 74, domestic: 'bosnia', form: ['W','W','D','W','D'], xgFor: 1.85, xgAgainst: 0.85 },
+  'fk zeljeznicar': { name: 'FK Željezničar', rating: 73, domestic: 'bosnia', form: ['W','D','W','L','W'], xgFor: 1.65, xgAgainst: 0.95 },
+  'zrinjski mostar': { name: 'HŠK Zrinjski Mostar', rating: 75, domestic: 'bosnia', form: ['W','W','W','D','W'], xgFor: 2.05, xgAgainst: 0.70 },
+  'borac banja luka': { name: 'FK Borac Banja Luka', rating: 74, domestic: 'bosnia', form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 0.80 },
+
+  // --- Bulgarian First Professional League ---
+  'ludogorets razgrad': { name: 'PFC Ludogorets Razgrad', rating: 77, domestic: 'bulgaria', form: ['W','W','W','W','D'], xgFor: 2.30, xgAgainst: 0.65 },
+  'cska sofia': { name: 'PFC CSKA Sofia', rating: 74, domestic: 'bulgaria', form: ['W','D','W','L','W'], xgFor: 1.70, xgAgainst: 0.90 },
+  'levski sofia': { name: 'PFC Levski Sofia', rating: 74, domestic: 'bulgaria', form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 0.85 },
+  'cherno more': { name: 'PFC Cherno More Varna', rating: 73, domestic: 'bulgaria', form: ['D','W','W','D','D'], xgFor: 1.55, xgAgainst: 0.75 },
+
+  // --- Canadian Premier League ---
+  'forge fc': { name: 'Forge FC', rating: 74, domestic: 'canpl', form: ['W','W','D','W','W'], xgFor: 1.85, xgAgainst: 0.95 },
+  'cavalry fc': { name: 'Cavalry FC', rating: 73, domestic: 'canpl', form: ['W','D','W','L','W'], xgFor: 1.70, xgAgainst: 1.00 },
+  'atletico ottawa': { name: 'Atlético Ottawa', rating: 73, domestic: 'canpl', form: ['W','W','L','W','D'], xgFor: 1.75, xgAgainst: 1.05 },
+  'pacific fc': { name: 'Pacific FC', rating: 71, domestic: 'canpl', form: ['L','D','W','L','W'], xgFor: 1.40, xgAgainst: 1.20 },
+
+  // --- Croatian First Football League ---
+  'dinamo zagreb': { name: 'GNK Dinamo Zagreb', rating: 78, domestic: 'croatia', form: ['W','W','D','W','W'], xgFor: 2.35, xgAgainst: 0.80 },
+  'hajduk split': { name: 'HNK Hajduk Split', rating: 76, domestic: 'croatia', form: ['W','W','W','D','L'], xgFor: 1.95, xgAgainst: 0.85 },
+  'rijeka': { name: 'HNK Rijeka', rating: 75, domestic: 'croatia', form: ['W','D','W','W','D'], xgFor: 1.80, xgAgainst: 0.75 },
+  'osijek': { name: 'NK Osijek', rating: 73, domestic: 'croatia', form: ['D','L','W','W','D'], xgFor: 1.60, xgAgainst: 1.15 },
+
+  // --- Cyprus First Division ---
+  'apoel nicosia': { name: 'APOEL Nicosia', rating: 75, domestic: 'cyprus', form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 0.85 },
+  'omonia nicosia': { name: 'AC Omonia Nicosia', rating: 74, domestic: 'cyprus', form: ['W','D','W','L','W'], xgFor: 1.80, xgAgainst: 0.95 },
+  'pafos fc': { name: 'Pafos FC', rating: 75, domestic: 'cyprus', form: ['W','W','W','D','W'], xgFor: 2.10, xgAgainst: 0.75 },
+  'aris limassol': { name: 'Aris Limassol', rating: 74, domestic: 'cyprus', form: ['W','L','W','W','D'], xgFor: 1.95, xgAgainst: 1.00 },
+
+  // --- Czech Republic First League ---
+  'slavia prague': { name: 'SK Slavia Prague', rating: 79, domestic: 'czech', form: ['W','W','W','W','D'], xgFor: 2.40, xgAgainst: 0.60 },
+  'sparta prague': { name: 'AC Sparta Prague', rating: 78, domestic: 'czech', form: ['W','W','D','L','W'], xgFor: 2.25, xgAgainst: 0.85 },
+  'viktoria plzen': { name: 'FC Viktoria Plzeň', rating: 77, domestic: 'czech', form: ['W','D','W','W','D'], xgFor: 2.05, xgAgainst: 0.80 },
+  'banik ostrava': { name: 'FC Baník Ostrava', rating: 74, domestic: 'czech', form: ['W','L','W','D','W'], xgFor: 1.70, xgAgainst: 1.05 },
+
+  // --- Estonian Premium Liiga ---
+  'flora tallinn': { name: 'FC Flora Tallinn', rating: 72, domestic: 'estonia', form: ['W','W','D','W','W'], xgFor: 2.10, xgAgainst: 0.85 },
+  'levadia tallinn': { name: 'FCI Levadia Tallinn', rating: 73, domestic: 'estonia', form: ['W','W','W','D','W'], xgFor: 2.25, xgAgainst: 0.70 },
+  'nomme kalju': { name: 'Nõmme Kalju FC', rating: 71, domestic: 'estonia', form: ['W','D','L','W','D'], xgFor: 1.75, xgAgainst: 1.05 },
+  'paide linnameeskond': { name: 'Paide Linnameeskond', rating: 71, domestic: 'estonia', form: ['D','W','W','L','W'], xgFor: 1.80, xgAgainst: 1.10 },
+
+  // --- Faroe Islands Premier League ---
+  'ki klaksvik': { name: 'KÍ Klaksvík', rating: 72, domestic: 'faroe', form: ['W','W','W','D','W'], xgFor: 2.45, xgAgainst: 0.75 },
+  'vikingur gota': { name: 'Víkingur Gøta', rating: 71, domestic: 'faroe', form: ['W','W','W','W','L'], xgFor: 2.30, xgAgainst: 0.85 },
+  'hb torshavn': { name: 'HB Tórshavn', rating: 71, domestic: 'faroe', form: ['W','D','W','L','W'], xgFor: 2.15, xgAgainst: 1.00 },
+  'b36 torshavn': { name: 'B36 Tórshavn', rating: 70, domestic: 'faroe', form: ['D','W','L','W','D'], xgFor: 1.80, xgAgainst: 1.15 },
+
+  // --- Finnish Veikkausliiga ---
+  'hjk helsinki': { name: 'HJK Helsinki', rating: 74, domestic: 'finland', form: ['W','W','D','W','L'], xgFor: 2.05, xgAgainst: 0.90 },
+  'kups kuopio': { name: 'KuPS Kuopio', rating: 74, domestic: 'finland', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 0.75 },
+  'ilves': { name: 'Ilves Tampere', rating: 73, domestic: 'finland', form: ['W','D','W','W','D'], xgFor: 1.90, xgAgainst: 1.05 },
+  'sjk seinajoki': { name: 'SJK Seinäjoki', rating: 72, domestic: 'finland', form: ['L','W','D','W','L'], xgFor: 1.70, xgAgainst: 1.20 },
+
+  // --- Georgian Erovnuli Liga ---
+  'dinamo tbilisi': { name: 'FC Dinamo Tbilisi', rating: 73, domestic: 'georgia', form: ['W','D','W','L','W'], xgFor: 1.75, xgAgainst: 0.95 },
+  'torpedo kutaisi': { name: 'FC Torpedo Kutaisi', rating: 73, domestic: 'georgia', form: ['W','W','D','W','D'], xgFor: 1.85, xgAgainst: 0.90 },
+  'dila gori': { name: 'FC Dila Gori', rating: 73, domestic: 'georgia', form: ['W','W','W','D','L'], xgFor: 1.80, xgAgainst: 0.80 },
+  'dinamo batumi': { name: 'FC Dinamo Batumi', rating: 72, domestic: 'georgia', form: ['D','L','W','W','D'], xgFor: 1.65, xgAgainst: 1.05 },
+
+  // --- Honduras Liga Nacional Apertura ---
+  'cd olimpia': { name: 'CD Olimpia', rating: 74, domestic: 'honduras', form: ['W','W','W','D','W'], xgFor: 2.15, xgAgainst: 0.75 },
+  'motagua': { name: 'FC Motagua', rating: 73, domestic: 'honduras', form: ['W','D','W','L','W'], xgFor: 1.80, xgAgainst: 0.95 },
+  'real espana': { name: 'Real España', rating: 73, domestic: 'honduras', form: ['W','W','D','W','L'], xgFor: 1.75, xgAgainst: 0.90 },
+  'marathon': { name: 'CD Marathón', rating: 72, domestic: 'honduras', form: ['D','W','L','W','D'], xgFor: 1.60, xgAgainst: 1.05 },
+
+  // --- Hungarian NB I ---
+  'ferencvaros': { name: 'Ferencvárosi TC', rating: 77, domestic: 'hungary', form: ['W','W','W','D','W'], xgFor: 2.30, xgAgainst: 0.75 },
+  'ujpest fc': { name: 'Újpest FC', rating: 73, domestic: 'hungary', form: ['D','W','L','W','D'], xgFor: 1.65, xgAgainst: 1.15 },
+  'paksi fc': { name: 'Paksi FC', rating: 74, domestic: 'hungary', form: ['W','W','D','L','W'], xgFor: 2.10, xgAgainst: 1.10 },
+  'puskas akademia': { name: 'Puskás Akadémia FC', rating: 74, domestic: 'hungary', form: ['W','D','W','W','D'], xgFor: 1.90, xgAgainst: 0.90 },
+
+  // --- Icelandic First Division ---
+  'vikingur reykjavik': { name: 'Víkingur Reykjavík', rating: 73, domestic: 'iceland', form: ['W','W','W','D','W'], xgFor: 2.50, xgAgainst: 0.95 },
+  'breidablik': { name: 'Breiðablik', rating: 73, domestic: 'iceland', form: ['W','W','D','W','L'], xgFor: 2.40, xgAgainst: 1.00 },
+  'valur reykjavik': { name: 'Valur Reykjavík', rating: 72, domestic: 'iceland', form: ['W','D','W','L','W'], xgFor: 2.20, xgAgainst: 1.15 },
+  'stjarnan': { name: 'Stjarnan FC', rating: 71, domestic: 'iceland', form: ['D','L','W','W','D'], xgFor: 1.90, xgAgainst: 1.30 },
+
+  // --- Iraq Stars League ---
+  'al-shorta': { name: 'Al-Shorta SC', rating: 74, domestic: 'iraq', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 0.65 },
+  'al-quwa al-jawiya': { name: 'Al-Quwa Al-Jawiya', rating: 74, domestic: 'iraq', form: ['W','D','W','W','D'], xgFor: 1.85, xgAgainst: 0.70 },
+  'al-zawraa': { name: 'Al-Zawraa SC', rating: 73, domestic: 'iraq', form: ['W','W','D','L','W'], xgFor: 1.70, xgAgainst: 0.80 },
+  'al-talaba': { name: 'Al-Talaba SC', rating: 72, domestic: 'iraq', form: ['D','W','L','W','D'], xgFor: 1.45, xgAgainst: 0.90 },
+
+  // --- Irish Premier Division ---
+  'shamrock rovers': { name: 'Shamrock Rovers FC', rating: 74, domestic: 'ireland', form: ['W','W','D','W','W'], xgFor: 1.95, xgAgainst: 0.80 },
+  'derry city': { name: 'Derry City FC', rating: 73, domestic: 'ireland', form: ['W','D','W','L','W'], xgFor: 1.75, xgAgainst: 0.85 },
+  'st patricks': { name: 'St Patrick\'s Athletic', rating: 73, domestic: 'ireland', form: ['W','W','W','D','L'], xgFor: 1.80, xgAgainst: 0.95 },
+  'shelbourne': { name: 'Shelbourne FC', rating: 73, domestic: 'ireland', form: ['W','D','W','W','D'], xgFor: 1.65, xgAgainst: 0.70 },
+
+  // --- Israeli Premier League ---
+  'maccabi tel aviv': { name: 'Maccabi Tel Aviv', rating: 76, domestic: 'israel', form: ['W','W','D','W','W'], xgFor: 2.25, xgAgainst: 0.75 },
+  'maccabi haifa': { name: 'Maccabi Haifa', rating: 75, domestic: 'israel', form: ['W','W','W','L','D'], xgFor: 2.15, xgAgainst: 0.85 },
+  'hapoel beer sheva': { name: 'Hapoel Be\'er Sheva', rating: 75, domestic: 'israel', form: ['W','D','W','W','W'], xgFor: 2.05, xgAgainst: 0.70 },
+  'beitar jerusalem': { name: 'Beitar Jerusalem', rating: 73, domestic: 'israel', form: ['W','L','W','D','W'], xgFor: 1.75, xgAgainst: 1.10 },
+
+  // --- Kazakhstan Premier League ---
+  'fc kairat': { name: 'FC Kairat Almaty', rating: 74, domestic: 'kazakhstan', form: ['W','W','W','D','W'], xgFor: 2.00, xgAgainst: 0.80 },
+  'fc astana': { name: 'FC Astana', rating: 74, domestic: 'kazakhstan', form: ['W','D','W','W','L'], xgFor: 1.90, xgAgainst: 0.85 },
+  'tobol kostanay': { name: 'FC Tobol Kostanay', rating: 73, domestic: 'kazakhstan', form: ['W','L','W','D','W'], xgFor: 1.70, xgAgainst: 0.95 },
+  'ordabasy': { name: 'FC Ordabasy Shymkent', rating: 73, domestic: 'kazakhstan', form: ['D','W','W','L','D'], xgFor: 1.75, xgAgainst: 0.90 },
+
+  // --- Kosovo Superliga ---
+  'fc ballkani': { name: 'FC Ballkani', rating: 73, domestic: 'kosovo', form: ['W','W','D','W','W'], xgFor: 1.95, xgAgainst: 0.80 },
+  'fc drita': { name: 'FC Drita', rating: 73, domestic: 'kosovo', form: ['W','W','W','D','L'], xgFor: 1.85, xgAgainst: 0.75 },
+  'fc prishtina': { name: 'FC Prishtina', rating: 71, domestic: 'kosovo', form: ['D','W','L','W','D'], xgFor: 1.50, xgAgainst: 1.00 },
+  'kf llapi': { name: 'KF Llapi', rating: 71, domestic: 'kosovo', form: ['W','L','W','D','L'], xgFor: 1.55, xgAgainst: 1.10 },
+
+  // --- Lithuanian A Lyga ---
+  'fk zalgiris': { name: 'FK Žalgiris Vilnius', rating: 73, domestic: 'lithuania', form: ['W','W','W','D','W'], xgFor: 2.20, xgAgainst: 0.80 },
+  'hegelmann': { name: 'FC Hegelmann', rating: 72, domestic: 'lithuania', form: ['W','D','W','W','L'], xgFor: 1.90, xgAgainst: 0.95 },
+  'fk panevezys': { name: 'FK Panevėžys', rating: 71, domestic: 'lithuania', form: ['D','L','W','D','W'], xgFor: 1.45, xgAgainst: 1.10 },
+  'kauno zalgiris': { name: 'FK Kauno Žalgiris', rating: 71, domestic: 'lithuania', form: ['W','L','D','W','D'], xgFor: 1.60, xgAgainst: 1.15 },
+
+  // --- Maltese Premier League ---
+  'hamrun spartans': { name: 'Ħamrun Spartans', rating: 72, domestic: 'malta', form: ['W','W','W','D','W'], xgFor: 2.10, xgAgainst: 0.75 },
+  'floriana fc': { name: 'Floriana FC', rating: 71, domestic: 'malta', form: ['W','D','W','W','L'], xgFor: 1.85, xgAgainst: 0.85 },
+  'sliema wanderers': { name: 'Sliema Wanderers', rating: 71, domestic: 'malta', form: ['W','W','D','L','W'], xgFor: 1.70, xgAgainst: 0.90 },
+  'birkirkara fc': { name: 'Birkirkara FC', rating: 70, domestic: 'malta', form: ['D','L','W','W','D'], xgFor: 1.50, xgAgainst: 1.10 },
+
+  // --- Montenegro First League ---
+  'buducnost podgorica': { name: 'FK Budućnost Podgorica', rating: 72, domestic: 'montenegro', form: ['W','W','D','W','W'], xgFor: 1.90, xgAgainst: 0.80 },
+  'sutjeska niksic': { name: 'FK Sutjeska Nikšić', rating: 71, domestic: 'montenegro', form: ['W','D','W','L','D'], xgFor: 1.65, xgAgainst: 0.95 },
+  'decic tuzi': { name: 'FK Dečić Tuzi', rating: 72, domestic: 'montenegro', form: ['W','W','W','D','L'], xgFor: 1.80, xgAgainst: 0.85 },
+  'mornar bar': { name: 'FK Mornar Bar', rating: 70, domestic: 'montenegro', form: ['D','L','W','D','W'], xgFor: 1.45, xgAgainst: 1.15 },
+
+  // --- Northern Ireland Premiership ---
+  'linfield': { name: 'Linfield FC', rating: 73, domestic: 'nireland', form: ['W','W','W','D','W'], xgFor: 2.20, xgAgainst: 0.85 },
+  'glentoran': { name: 'Glentoran FC', rating: 72, domestic: 'nireland', form: ['W','D','W','L','W'], xgFor: 1.80, xgAgainst: 1.05 },
+  'larne fc': { name: 'Larne FC', rating: 73, domestic: 'nireland', form: ['W','W','D','W','L'], xgFor: 2.05, xgAgainst: 0.80 },
+  'cliftonville': { name: 'Cliftonville FC', rating: 72, domestic: 'nireland', form: ['W','L','W','D','D'], xgFor: 1.85, xgAgainst: 1.15 },
+
+  // --- Serbia Superliga ---
+  'red star belgrade': { name: 'Red Star Belgrade', rating: 79, domestic: 'serbia', form: ['W','W','W','W','W'], xgFor: 2.65, xgAgainst: 0.55 },
+  'partizan belgrade': { name: 'FK Partizan Belgrade', rating: 76, domestic: 'serbia', form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 0.85 },
+  'fk tsc': { name: 'FK TSC Bačka Topola', rating: 74, domestic: 'serbia', form: ['W','D','W','L','W'], xgFor: 1.80, xgAgainst: 0.95 },
+  'cukaricki': { name: 'FK Čukarički', rating: 74, domestic: 'serbia', form: ['D','W','L','W','W'], xgFor: 1.70, xgAgainst: 1.05 },
+
+  // --- Slovakia Superliga ---
+  'slovan bratislava': { name: 'ŠK Slovan Bratislava', rating: 77, domestic: 'slovakia', form: ['W','W','W','D','W'], xgFor: 2.35, xgAgainst: 0.80 },
+  'spartak trnava': { name: 'FC Spartak Trnava', rating: 74, domestic: 'slovakia', form: ['W','D','W','L','W'], xgFor: 1.75, xgAgainst: 0.90 },
+  'msk zilina': { name: 'MŠK Žilina', rating: 74, domestic: 'slovakia', form: ['W','W','D','W','L'], xgFor: 2.05, xgAgainst: 1.10 },
+  'dac 1904': { name: 'DAC 1904 Dunajská Streda', rating: 74, domestic: 'slovakia', form: ['D','W','W','D','D'], xgFor: 1.80, xgAgainst: 0.95 },
+
+  // --- Slovenia prvaliga ---
+  'olimpija ljubljana': { name: 'NK Olimpija Ljubljana', rating: 75, domestic: 'slovenia', form: ['W','W','W','D','W'], xgFor: 2.10, xgAgainst: 0.70 },
+  'nk maribor': { name: 'NK Maribor', rating: 74, domestic: 'slovenia', form: ['W','D','W','W','L'], xgFor: 1.95, xgAgainst: 0.95 },
+  'nk celje': { name: 'NK Celje', rating: 75, domestic: 'slovenia', form: ['W','W','D','L','W'], xgFor: 2.20, xgAgainst: 1.00 },
+  'fc koper': { name: 'FC Koper', rating: 73, domestic: 'slovenia', form: ['D','W','L','W','D'], xgFor: 1.65, xgAgainst: 1.05 },
+
+  // --- Cymru Premier ---
+  'the new saints': { name: 'The New Saints FC', rating: 73, domestic: 'cymru', form: ['W','W','W','W','W'], xgFor: 2.65, xgAgainst: 0.75 },
+  'connahs quay': { name: 'Connah\'s Quay Nomads', rating: 71, domestic: 'cymru', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
+  'penybont': { name: 'Penybont FC', rating: 71, domestic: 'cymru', form: ['W','W','D','W','D'], xgFor: 1.75, xgAgainst: 0.95 },
+  'bala town': { name: 'Bala Town FC', rating: 70, domestic: 'cymru', form: ['D','L','W','D','W'], xgFor: 1.55, xgAgainst: 1.20 }
 };
 
 export const OFFICIAL_LEAGUE_TABLES = {
@@ -1270,15 +1505,128 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         travelAway: travelDistKm
       });
 
+      const topOddsVal = topPick && topPick.odds 
+        ? (typeof topPick.odds === 'number' ? topPick.odds : (topPick.odds.betway || topPick.odds.hollywoodbets || 1.85))
+        : 1.85;
+
+      // 1. Shin's Overround Removal & Margin Stripping
+      const shinData = calculateShinOverroundRemoval([
+        topOddsVal,
+        +(topOddsVal * 1.85).toFixed(2),
+        +(topOddsVal * 2.10).toFixed(2)
+      ]);
+
+      const deviggedFairProb = shinData.primaryFairProbabilityPct;
+
+      // 2. System Protection Rule Evaluation
+      const systemProtection = evaluateValueBetSystemProtectionRule(
+        topPick ? topPick.probability : 75,
+        deviggedFairProb,
+        topOddsVal
+      );
+
+      // 3. Bayesian Dynamic Updating (Anti-Recency Shield)
+      const bayesianShield = applyBayesianDynamicUpdate({
+        priorElo: Math.round(900 + hRating * 10.5),
+        priorLambda: home.xgFor || 1.65,
+        priorMu: away.xgFor || 1.25,
+        sustainedNpxG: +(home.xgFor ? home.xgFor * 0.92 : 1.50).toFixed(2),
+        matchdayTelemetry: {
+          weatherIndex: rainPct > 50 ? 2 : (rainPct > 20 ? 1 : 0),
+          altitudeMeters: home.altitudeM || 350,
+          travelDistanceKm: travelDistKm,
+          restHours: restHoursAway,
+          tacticalShift: isMidweekCongested ? 'LOW_BLOCK' : 'BALANCED'
+        },
+        recentAnomalyDefeat: hRating >= 80 && rng() < 0.15
+      });
+
+      // 4. Fractional Kelly Allocation Engine (chi in {0.25, 0.50})
+      const kellyRisk = calculateBankrollManagement({
+        bankroll: 5000,
+        fractionalKellyType: 'quarter',
+        consecutiveLosses: 0,
+        opportunities: [{
+          match: `${home.name} vs ${away.name}`,
+          selection: topPick ? topPick.selection : 'Home Win',
+          calibratedProbability: topPick ? topPick.probability : 75,
+          odds: topOddsVal
+        }]
+      });
+
+      const kellyHalfRisk = calculateBankrollManagement({
+        bankroll: 5000,
+        fractionalKellyType: 'half',
+        consecutiveLosses: 0,
+        opportunities: [{
+          match: `${home.name} vs ${away.name}`,
+          selection: topPick ? topPick.selection : 'Home Win',
+          calibratedProbability: topPick ? topPick.probability : 75,
+          odds: topOddsVal
+        }]
+      });
+
+      // 5. Automated Outlier & Feature Degradation Filters
+      const missingXgMock = rng() > 0.88 ? +(32.5 + rng() * 6).toFixed(1) : +(rng() * 18).toFixed(1);
+      const outlierFilters = evaluateOutlierAndFeatureDegradationFilters({
+        match: `${home.name} vs ${away.name}`,
+        homeName: home.name,
+        awayName: away.name,
+        missingPlayersXgPct: missingXgMock,
+        marketSteamDeltaPct: steamDelta,
+        closingLineDirection: steamDelta < -3.5 ? 'STEAM_WITH' : steamDelta > 3.5 ? 'DRIFT_AGAINST' : 'NEUTRAL',
+        baseConfidenceScore: Math.round(beastScore)
+      });
+
       return {
-        beastScore,
+        beastScore: outlierFilters.adjustedConfidenceScore,
+        rawBeastScore: beastScore,
         brierScore: topPick ? +(Math.pow((topPick.probability / 100) - 1, 2) * 0.35 + 0.12).toFixed(3) : '0.144',
         calibratedProbability: topPick ? topPick.probability : 75,
-        valueClassification: (topPick && topPick.probability >= 80) ? 'ELITE VALUE' : 'STRONG VALUE',
+        valueClassification: systemProtection.isQualifiedValueBet ? 'ELITE VALUE' : 'STRONG VALUE',
         walkForwardScore: 'PASSED (0.0% Leakage)',
-        vigFreeOdds,
-        expectedValuePct: topPick ? (topPick.marketEdge > 0 ? topPick.marketEdge : 3.8) : 3.8,
-        marketOverroundPct: 6.2,
+        vigFreeOdds: shinData.primaryFairOdds,
+        expectedValuePct: systemProtection.rawEvPct,
+        deltaEvPct: systemProtection.deltaEvPct,
+        marketOverroundPct: shinData.overroundPct,
+        shinMethod: {
+          overroundSum: shinData.overroundSum,
+          overroundPct: shinData.overroundPct,
+          informedTradingZ: shinData.informedTradingParameterZ,
+          powerMethodK: shinData.powerMethodExponentK,
+          fairOdds: shinData.primaryFairOdds,
+          fairProbPct: deviggedFairProb
+        },
+        systemProtection: {
+          isQualifiedValueBet: systemProtection.isQualifiedValueBet,
+          passesStrictProtection: systemProtection.passesStrictProtection,
+          deltaEvPct: systemProtection.deltaEvPct,
+          status: systemProtection.status,
+          rationale: systemProtection.rationale
+        },
+        bayesianDynamicUpdate: {
+          priorElo: bayesianShield.priorElo,
+          posteriorElo: bayesianShield.posteriorElo,
+          eloAdjustmentDelta: bayesianShield.eloAdjustmentDelta,
+          antiRecencyShieldActive: bayesianShield.antiRecencyShieldActive,
+          recencyDampeningApplied: bayesianShield.recencyDampeningApplied,
+          recencyDampeningPct: bayesianShield.recencyDampeningPct,
+          shieldVerdict: bayesianShield.shieldVerdict
+        },
+        kellyRiskAllocation: {
+          quarterKelly: kellyRisk.recommendations[0] || null,
+          halfKelly: kellyHalfRisk.recommendations[0] || null,
+          bankrollZAR: 5000
+        },
+        outlierFilters: {
+          status: outlierFilters.activeStatus,
+          badgeText: outlierFilters.badgeText,
+          badgeColor: outlierFilters.badgeColor,
+          isSuspended: outlierFilters.isSuspended,
+          isFrozen: outlierFilters.isFrozen,
+          rosterIntegrity: outlierFilters.rosterIntegrity,
+          marketSteamRadar: outlierFilters.marketSteamRadar
+        },
         ensemble: {
           consensusProbability: ens.consensusProbability,
           modelAgreementScore: ens.modelAgreementScore,
@@ -1492,6 +1840,136 @@ export const OFFICIAL_ROUND_FIXTURES = {
   guatemala: [
     { h: 'CSD Municipal', a: 'Comunicaciones FC', day: 5, hh: 19, mm: 0, big: true },
     { h: 'Antigua GFC', a: 'Xelajú', day: 4, hh: 22, mm: 0, big: false }
+  ],
+  uefa_nations: [
+    { h: 'France', a: 'Italy', day: 4, hh: 19, mm: 45, big: true },
+    { h: 'Germany', a: 'Netherlands', day: 5, hh: 19, mm: 45, big: true },
+    { h: 'Spain', a: 'England', day: 6, hh: 19, mm: 45, big: true }
+  ],
+  afcon: [
+    { h: 'Morocco', a: 'Nigeria', day: 4, hh: 20, mm: 0, big: true },
+    { h: 'Senegal', a: 'Egypt', day: 5, hh: 20, mm: 0, big: true },
+    { h: 'Ivory Coast', a: 'Algeria', day: 6, hh: 17, mm: 0, big: true }
+  ],
+  kategoria_superiore: [
+    { h: 'KF Partizani', a: 'KF Tirana', day: 4, hh: 17, mm: 0, big: true },
+    { h: 'Egnatia', a: 'Vllaznia', day: 5, hh: 14, mm: 0, big: false }
+  ],
+  armenia: [
+    { h: 'Pyunik Yerevan', a: 'FC Noah', day: 4, hh: 15, mm: 0, big: true },
+    { h: 'FC Urartu', a: 'Ararat-Armenia', day: 5, hh: 16, mm: 30, big: false }
+  ],
+  austria_erste: [
+    { h: 'SV Ried', a: 'Admira Wacker', day: 4, hh: 18, mm: 10, big: true },
+    { h: 'Floridsdorfer AC', a: 'SKN St. Pölten', day: 5, hh: 14, mm: 30, big: false }
+  ],
+  azerbaijan: [
+    { h: 'Qarabağ FK', a: 'Neftçi Baku', day: 5, hh: 18, mm: 0, big: true },
+    { h: 'Sabah FK', a: 'Zira FK', day: 4, hh: 17, mm: 30, big: false }
+  ],
+  bosnia: [
+    { h: 'FK Sarajevo', a: 'FK Željezničar', day: 5, hh: 19, mm: 45, big: true },
+    { h: 'HŠK Zrinjski Mostar', a: 'FK Borac Banja Luka', day: 4, hh: 17, mm: 0, big: true }
+  ],
+  bulgaria: [
+    { h: 'PFC Ludogorets Razgrad', a: 'PFC CSKA Sofia', day: 5, hh: 18, mm: 30, big: true },
+    { h: 'PFC Levski Sofia', a: 'PFC Cherno More Varna', day: 4, hh: 16, mm: 45, big: false }
+  ],
+  canpl: [
+    { h: 'Forge FC', a: 'Cavalry FC', day: 5, hh: 20, mm: 0, big: true },
+    { h: 'Atlético Ottawa', a: 'Pacific FC', day: 4, hh: 19, mm: 0, big: false }
+  ],
+  croatia: [
+    { h: 'GNK Dinamo Zagreb', a: 'HNK Hajduk Split', day: 5, hh: 17, mm: 30, big: true },
+    { h: 'HNK Rijeka', a: 'NK Osijek', day: 4, hh: 19, mm: 0, big: false }
+  ],
+  cyprus: [
+    { h: 'APOEL Nicosia', a: 'AC Omonia Nicosia', day: 5, hh: 18, mm: 0, big: true },
+    { h: 'Pafos FC', a: 'Aris Limassol', day: 4, hh: 19, mm: 0, big: true }
+  ],
+  czech: [
+    { h: 'SK Slavia Prague', a: 'AC Sparta Prague', day: 5, hh: 18, mm: 30, big: true },
+    { h: 'FC Viktoria Plzeň', a: 'FC Baník Ostrava', day: 4, hh: 15, mm: 0, big: false }
+  ],
+  estonia: [
+    { h: 'FC Flora Tallinn', a: 'FCI Levadia Tallinn', day: 5, hh: 14, mm: 30, big: true },
+    { h: 'Nõmme Kalju FC', a: 'Paide Linnameeskond', day: 4, hh: 17, mm: 0, big: false }
+  ],
+  faroe: [
+    { h: 'KÍ Klaksvík', a: 'Víkingur Gøta', day: 4, hh: 16, mm: 0, big: true },
+    { h: 'HB Tórshavn', a: 'B36 Tórshavn', day: 5, hh: 15, mm: 0, big: true }
+  ],
+  finland: [
+    { h: 'HJK Helsinki', a: 'KuPS Kuopio', day: 4, hh: 16, mm: 0, big: true },
+    { h: 'Ilves Tampere', a: 'SJK Seinäjoki', day: 5, hh: 17, mm: 30, big: false }
+  ],
+  georgia: [
+    { h: 'FC Dinamo Tbilisi', a: 'FC Torpedo Kutaisi', day: 4, hh: 18, mm: 0, big: true },
+    { h: 'FC Dila Gori', a: 'FC Dinamo Batumi', day: 5, hh: 19, mm: 0, big: false }
+  ],
+  honduras: [
+    { h: 'CD Olimpia', a: 'FC Motagua', day: 5, hh: 22, mm: 0, big: true },
+    { h: 'Real España', a: 'CD Marathón', day: 4, hh: 21, mm: 0, big: false }
+  ],
+  hungary: [
+    { h: 'Ferencvárosi TC', a: 'Újpest FC', day: 5, hh: 18, mm: 45, big: true },
+    { h: 'Paksi FC', a: 'Puskás Akadémia FC', day: 4, hh: 16, mm: 0, big: false }
+  ],
+  iceland: [
+    { h: 'Víkingur Reykjavík', a: 'Breiðablik', day: 4, hh: 19, mm: 15, big: true },
+    { h: 'Valur Reykjavík', a: 'Stjarnan FC', day: 5, hh: 18, mm: 0, big: false }
+  ],
+  iraq: [
+    { h: 'Al-Shorta SC', a: 'Al-Quwa Al-Jawiya', day: 4, hh: 18, mm: 30, big: true },
+    { h: 'Al-Zawraa SC', a: 'Al-Talaba SC', day: 5, hh: 19, mm: 0, big: true }
+  ],
+  ireland: [
+    { h: 'Shamrock Rovers FC', a: 'Derry City FC', day: 4, hh: 19, mm: 45, big: true },
+    { h: 'St Patrick\'s Athletic', a: 'Shelbourne FC', day: 5, hh: 19, mm: 45, big: false }
+  ],
+  israel: [
+    { h: 'Maccabi Tel Aviv', a: 'Maccabi Haifa', day: 5, hh: 19, mm: 30, big: true },
+    { h: 'Hapoel Be\'er Sheva', a: 'Beitar Jerusalem', day: 4, hh: 19, mm: 0, big: true }
+  ],
+  kazakhstan: [
+    { h: 'FC Kairat Almaty', a: 'FC Astana', day: 4, hh: 15, mm: 0, big: true },
+    { h: 'FC Tobol Kostanay', a: 'FC Ordabasy Shymkent', day: 5, hh: 16, mm: 30, big: false }
+  ],
+  kosovo: [
+    { h: 'FC Ballkani', a: 'FC Drita', day: 5, hh: 14, mm: 0, big: true },
+    { h: 'FC Prishtina', a: 'KF Llapi', day: 4, hh: 14, mm: 0, big: false }
+  ],
+  lithuania: [
+    { h: 'FK Žalgiris Vilnius', a: 'FC Hegelmann', day: 4, hh: 17, mm: 0, big: true },
+    { h: 'FK Panevėžys', a: 'FK Kauno Žalgiris', day: 5, hh: 16, mm: 0, big: false }
+  ],
+  malta: [
+    { h: 'Ħamrun Spartans', a: 'Floriana FC', day: 5, hh: 16, mm: 0, big: true },
+    { h: 'Sliema Wanderers', a: 'Birkirkara FC', day: 4, hh: 18, mm: 15, big: false }
+  ],
+  montenegro: [
+    { h: 'FK Budućnost Podgorica', a: 'FK Sutjeska Nikšić', day: 4, hh: 16, mm: 0, big: true },
+    { h: 'FK Dečić Tuzi', a: 'FK Mornar Bar', day: 5, hh: 17, mm: 30, big: false }
+  ],
+  nireland: [
+    { h: 'Linfield FC', a: 'Glentoran FC', day: 4, hh: 15, mm: 0, big: true },
+    { h: 'Larne FC', a: 'Cliftonville FC', day: 5, hh: 15, mm: 0, big: true }
+  ],
+  serbia: [
+    { h: 'Red Star Belgrade', a: 'FK Partizan Belgrade', day: 5, hh: 18, mm: 0, big: true },
+    { h: 'FK TSC Bačka Topola', a: 'FK Čukarički', day: 4, hh: 16, mm: 30, big: false }
+  ],
+  slovakia: [
+    { h: 'ŠK Slovan Bratislava', a: 'FC Spartak Trnava', day: 5, hh: 17, mm: 30, big: true },
+    { h: 'MŠK Žilina', a: 'DAC 1904 Dunajská Streda', day: 4, hh: 15, mm: 30, big: false }
+  ],
+  slovenia: [
+    { h: 'NK Olimpija Ljubljana', a: 'NK Maribor', day: 5, hh: 19, mm: 15, big: true },
+    { h: 'NK Celje', a: 'FC Koper', day: 4, hh: 17, mm: 30, big: false }
+  ],
+  cymru: [
+    { h: 'The New Saints FC', a: 'Connah\'s Quay Nomads', day: 4, hh: 19, mm: 45, big: true },
+    { h: 'Penybont FC', a: 'Bala Town FC', day: 5, hh: 14, mm: 30, big: false }
   ]
 };
 
