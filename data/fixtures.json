@@ -1,7 +1,7 @@
 {
   "meta": {
     "dataSource": "OFFICIAL LIVE FEED & DIXON-COLES ENGINE",
-    "generated_at": "2026-09-18T10:08:56.654Z",
+    "generated_at": "2026-09-18T16:04:20.519Z",
     "source": "Official Live Sports Feed & Dixon-Coles Live Engine",
     "schema_version": "3.0",
     "league_count": 86,
@@ -65216,17 +65216,17 @@
           "L",
           "W"
         ],
-        "xgFor": 1.62,
-        "xgAgainst": 1.65,
+        "xgFor": 1.69,
+        "xgAgainst": 1.62,
         "rank": 10,
-        "ppg": 1.12,
+        "ppg": 1.19,
         "statsSource": "official-standings",
         "name": "Zhejiang Professional FC",
         "short": "ZHE",
         "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/18203.png"
       },
       "away": {
-        "rating": 70,
+        "rating": 69,
         "form": [
           "W",
           "D",
@@ -65234,10 +65234,10 @@
           "L",
           "W"
         ],
-        "xgFor": 1.51,
-        "xgAgainst": 1.65,
+        "xgFor": 1.5,
+        "xgAgainst": 1.73,
         "rank": 15,
-        "ppg": 0.84,
+        "ppg": 0.81,
         "statsSource": "official-standings",
         "name": "Wuhan Three Towns",
         "short": "WTT",
@@ -65253,7 +65253,7 @@
           "H",
           "H",
           "H",
-          "H",
+          "A",
           "H"
         ],
         "last8Meetings": [
@@ -65261,14 +65261,14 @@
             "meetingIndex": 8,
             "date": "24 Oct 2023",
             "season": "22/23",
-            "homeGoals": 0,
-            "awayGoals": 4,
-            "totalGoals": 4,
-            "outcome": "A",
-            "scoreline": "0 - 4",
+            "homeGoals": 1,
+            "awayGoals": 0,
+            "totalGoals": 1,
+            "outcome": "H",
+            "scoreline": "1 - 0",
             "venue": "Away",
             "btts": false,
-            "over25": true,
+            "over25": false,
             "order": 1,
             "label": "M1"
           },
@@ -65277,10 +65277,10 @@
             "date": "05 Mar 2023",
             "season": "22/23",
             "homeGoals": 2,
-            "awayGoals": 1,
-            "totalGoals": 3,
-            "outcome": "H",
-            "scoreline": "2 - 1",
+            "awayGoals": 4,
+            "totalGoals": 6,
+            "outcome": "A",
+            "scoreline": "2 - 4",
             "venue": "Home",
             "btts": true,
             "over25": true,
@@ -65291,11 +65291,11 @@
             "meetingIndex": 6,
             "date": "11 Mar 2024",
             "season": "23/24",
-            "homeGoals": 2,
-            "awayGoals": 3,
-            "totalGoals": 5,
-            "outcome": "A",
-            "scoreline": "2 - 3",
+            "homeGoals": 4,
+            "awayGoals": 2,
+            "totalGoals": 6,
+            "outcome": "H",
+            "scoreline": "4 - 2",
             "venue": "Away",
             "btts": true,
             "over25": true,
@@ -65306,11 +65306,11 @@
             "meetingIndex": 5,
             "date": "05 Jan 2024",
             "season": "23/24",
-            "homeGoals": 4,
-            "awayGoals": 2,
-            "totalGoals": 6,
+            "homeGoals": 2,
+            "awayGoals": 1,
+            "totalGoals": 3,
             "outcome": "H",
-            "scoreline": "4 - 2",
+            "scoreline": "2 - 1",
             "venue": "Home",
             "btts": true,
             "over25": true,
@@ -65321,14 +65321,14 @@
             "meetingIndex": 4,
             "date": "02 Apr 2025",
             "season": "24/25",
-            "homeGoals": 2,
-            "awayGoals": 0,
-            "totalGoals": 2,
-            "outcome": "H",
-            "scoreline": "2 - 0",
+            "homeGoals": 3,
+            "awayGoals": 4,
+            "totalGoals": 7,
+            "outcome": "A",
+            "scoreline": "3 - 4",
             "venue": "Away",
-            "btts": false,
-            "over25": false,
+            "btts": true,
+            "over25": true,
             "order": 5,
             "label": "M5"
           },
@@ -65422,45 +65422,19 @@
             "meetingIndex": 4,
             "date": "02 Apr 2025",
             "season": "24/25",
-            "homeGoals": 2,
-            "awayGoals": 0,
-            "totalGoals": 2,
-            "outcome": "H",
-            "scoreline": "2 - 0",
+            "homeGoals": 3,
+            "awayGoals": 4,
+            "totalGoals": 7,
+            "outcome": "A",
+            "scoreline": "3 - 4",
             "venue": "Away",
-            "btts": false,
-            "over25": false
+            "btts": true,
+            "over25": true
           },
           {
             "meetingIndex": 5,
             "date": "05 Jan 2024",
             "season": "23/24",
-            "homeGoals": 4,
-            "awayGoals": 2,
-            "totalGoals": 6,
-            "outcome": "H",
-            "scoreline": "4 - 2",
-            "venue": "Home",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 6,
-            "date": "11 Mar 2024",
-            "season": "23/24",
-            "homeGoals": 2,
-            "awayGoals": 3,
-            "totalGoals": 5,
-            "outcome": "A",
-            "scoreline": "2 - 3",
-            "venue": "Away",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 7,
-            "date": "05 Mar 2023",
-            "season": "22/23",
             "homeGoals": 2,
             "awayGoals": 1,
             "totalGoals": 3,
@@ -65471,38 +65445,64 @@
             "over25": true
           },
           {
+            "meetingIndex": 6,
+            "date": "11 Mar 2024",
+            "season": "23/24",
+            "homeGoals": 4,
+            "awayGoals": 2,
+            "totalGoals": 6,
+            "outcome": "H",
+            "scoreline": "4 - 2",
+            "venue": "Away",
+            "btts": true,
+            "over25": true
+          },
+          {
+            "meetingIndex": 7,
+            "date": "05 Mar 2023",
+            "season": "22/23",
+            "homeGoals": 2,
+            "awayGoals": 4,
+            "totalGoals": 6,
+            "outcome": "A",
+            "scoreline": "2 - 4",
+            "venue": "Home",
+            "btts": true,
+            "over25": true
+          },
+          {
             "meetingIndex": 8,
             "date": "24 Oct 2023",
             "season": "22/23",
-            "homeGoals": 0,
-            "awayGoals": 4,
-            "totalGoals": 4,
-            "outcome": "A",
-            "scoreline": "0 - 4",
+            "homeGoals": 1,
+            "awayGoals": 0,
+            "totalGoals": 1,
+            "outcome": "H",
+            "scoreline": "1 - 0",
             "venue": "Away",
             "btts": false,
-            "over25": true
+            "over25": false
           }
         ],
-        "totalGoals": 27,
-        "homeGoalsTotal": 16,
-        "awayGoalsTotal": 11,
-        "avgGoals": 3.38,
+        "totalGoals": 30,
+        "homeGoalsTotal": 18,
+        "awayGoalsTotal": 12,
+        "avgGoals": 3.75,
         "over25Count": 5,
         "over25Pct": 62.5,
-        "bttsCount": 4,
-        "bttsPct": 50,
+        "bttsCount": 5,
+        "bttsPct": 62.5,
         "distribution": [
           {
             "range": "0-1 Goals",
-            "count": 0,
-            "pct": 0,
+            "count": 1,
+            "pct": 13,
             "color": "#94A3B8"
           },
           {
             "range": "2-3 Goals",
-            "count": 5,
-            "pct": 63,
+            "count": 4,
+            "pct": 50,
             "color": "#F59E0B"
           },
           {
@@ -65519,57 +65519,57 @@
           "rank": 1,
           "market": "Goals Over/Under",
           "selection": "Over 1.5",
-          "probability": 85,
+          "probability": 85.8,
           "odds": {
-            "hollywoodbets": 1.2,
-            "betway": 1.23,
-            "easybet": 1.21
+            "hollywoodbets": 1.19,
+            "betway": 1.22,
+            "easybet": 1.2
           },
           "marketEdge": 4.6,
           "isValueBet": true,
-          "convictionScore": 97.9
+          "convictionScore": 98.7
         },
         {
           "rank": 2,
           "market": "Double Chance",
           "selection": "12 · Either to Win",
-          "probability": 74.9,
+          "probability": 75.5,
           "odds": {
-            "hollywoodbets": 1.24,
-            "betway": 1.26,
-            "easybet": 1.24
+            "hollywoodbets": 1.36,
+            "betway": 1.39,
+            "easybet": 1.37
           },
-          "marketEdge": -5.6,
-          "isValueBet": false,
-          "convictionScore": 77.9
+          "marketEdge": 5,
+          "isValueBet": true,
+          "convictionScore": 86
         },
         {
           "rank": 3,
-          "market": "Corners Over/Under",
-          "selection": "Over 8.5 Corners",
-          "probability": 78.4,
+          "market": "Double Chance",
+          "selection": "1X · Home or Draw",
+          "probability": 69.9,
           "odds": {
-            "hollywoodbets": 1.18,
-            "betway": 1.21,
-            "easybet": 1.19
+            "hollywoodbets": 1.32,
+            "betway": 1.35,
+            "easybet": 1.33
           },
-          "marketEdge": -5.2,
+          "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 70.4
+          "convictionScore": 72.9
         },
         {
           "rank": 4,
-          "market": "Double Chance",
-          "selection": "1X · Home or Draw",
-          "probability": 67,
+          "market": "Corners Over/Under",
+          "selection": "Over 8.5 Corners",
+          "probability": 80.1,
           "odds": {
-            "hollywoodbets": 1.38,
-            "betway": 1.41,
-            "easybet": 1.39
+            "hollywoodbets": 1.16,
+            "betway": 1.18,
+            "easybet": 1.16
           },
-          "marketEdge": -5.5,
+          "marketEdge": -5.4,
           "isValueBet": false,
-          "convictionScore": 70
+          "convictionScore": 72.1
         },
         {
           "rank": 5,
@@ -65587,104 +65587,118 @@
         },
         {
           "rank": 6,
-          "market": "Double Chance",
-          "selection": "X2 · Away or Draw",
-          "probability": 58,
+          "market": "Corners Over/Under",
+          "selection": "Over 9.5 Corners",
+          "probability": 70.1,
           "odds": {
-            "hollywoodbets": 1.6,
-            "betway": 1.63,
-            "easybet": 1.6
+            "hollywoodbets": 1.32,
+            "betway": 1.35,
+            "easybet": 1.33
           },
-          "marketEdge": -5.5,
+          "marketEdge": -5.3,
           "isValueBet": false,
-          "convictionScore": 61
+          "convictionScore": 62.1
         },
         {
           "rank": 7,
+          "market": "Draw No Bet",
+          "selection": "DNB · Zhejiang Professional FC",
+          "probability": 60.2,
+          "odds": {
+            "hollywoodbets": 1.54,
+            "betway": 1.57,
+            "easybet": 1.55
+          },
+          "marketEdge": -5.5,
+          "isValueBet": false,
+          "convictionScore": 61.7
+        },
+        {
+          "rank": 8,
+          "market": "Both Teams to Score",
+          "selection": "BTTS · Yes",
+          "probability": 66.5,
+          "odds": {
+            "hollywoodbets": 1.39,
+            "betway": 1.42,
+            "easybet": 1.4
+          },
+          "marketEdge": -5.6,
+          "isValueBet": false,
+          "convictionScore": 60.5
+        },
+        {
+          "rank": 9,
           "market": "Bookings & Cards",
           "selection": "Under 4.5 Total Cards",
-          "probability": 64.4,
+          "probability": 64,
           "odds": {
-            "hollywoodbets": 1.44,
-            "betway": 1.47,
+            "hollywoodbets": 1.45,
+            "betway": 1.48,
             "easybet": 1.45
           },
           "marketEdge": -5.3,
           "isValueBet": false,
-          "convictionScore": 60.4
-        },
-        {
-          "rank": 8,
-          "market": "Goals Over/Under",
-          "selection": "Under 3.5",
-          "probability": 58.3,
-          "odds": {
-            "hollywoodbets": 1.59,
-            "betway": 1.62,
-            "easybet": 1.6
-          },
-          "marketEdge": -5.6,
-          "isValueBet": false,
-          "convictionScore": 60.3
-        },
-        {
-          "rank": 9,
-          "market": "Both Teams to Score",
-          "selection": "BTTS · Yes",
-          "probability": 65.9,
-          "odds": {
-            "hollywoodbets": 1.4,
-            "betway": 1.43,
-            "easybet": 1.41
-          },
-          "marketEdge": -5.7,
-          "isValueBet": false,
-          "convictionScore": 59.9
+          "convictionScore": 60
         },
         {
           "rank": 10,
-          "market": "Corners Over/Under",
-          "selection": "Over 9.5 Corners",
-          "probability": 67.9,
+          "market": "Goals Over/Under",
+          "selection": "Over 2.5",
+          "probability": 65.1,
           "odds": {
-            "hollywoodbets": 1.36,
-            "betway": 1.39,
-            "easybet": 1.37
+            "hollywoodbets": 1.42,
+            "betway": 1.45,
+            "easybet": 1.43
           },
           "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 59.9
+          "convictionScore": 59.1
         },
         {
           "rank": 11,
           "market": "Goals Over/Under",
-          "selection": "Over 2.5",
-          "probability": 63.8,
+          "selection": "Under 3.5",
+          "probability": 56.9,
           "odds": {
-            "hollywoodbets": 1.45,
-            "betway": 1.48,
-            "easybet": 1.46
+            "hollywoodbets": 1.63,
+            "betway": 1.66,
+            "easybet": 1.64
           },
-          "marketEdge": -5.5,
+          "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 57.8
+          "convictionScore": 58.9
         },
         {
           "rank": 12,
-          "market": "Draw No Bet",
-          "selection": "DNB · Zhejiang Professional FC",
-          "probability": 56,
+          "market": "Double Chance",
+          "selection": "X2 · Away or Draw",
+          "probability": 54.6,
           "odds": {
-            "hollywoodbets": 1.65,
-            "betway": 1.69,
-            "easybet": 1.66
+            "hollywoodbets": 1.7,
+            "betway": 1.73,
+            "easybet": 1.71
           },
-          "marketEdge": -5.3,
+          "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 57.5
+          "convictionScore": 57.6
         },
         {
           "rank": 13,
+          "market": "Win Either Half",
+          "selection": "1EH · Zhejiang Professional FC to Win Either Half",
+          "probability": 50.3,
+          "odds": {
+            "hollywoodbets": 1.84,
+            "betway": 1.88,
+            "easybet": 1.85
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 52.8
+        },
+        {
+          "rank": 14,
           "market": "Goal in Both Halves",
           "selection": "Goal Scored in Both Halves",
           "probability": 48,
@@ -65698,207 +65712,193 @@
           "convictionScore": 50
         },
         {
-          "rank": 14,
-          "market": "Win Either Half",
-          "selection": "1EH · Zhejiang Professional FC to Win Either Half",
-          "probability": 47.1,
-          "odds": {
-            "hollywoodbets": 1.97,
-            "betway": 2.01,
-            "easybet": 1.98
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 49.6
-        },
-        {
           "rank": 15,
-          "market": "Draw No Bet",
-          "selection": "DNB · Wuhan Three Towns",
-          "probability": 44,
+          "market": "Bookings & Cards",
+          "selection": "Over 3.5 Total Cards",
+          "probability": 50,
           "odds": {
-            "hollywoodbets": 2.11,
-            "betway": 2.15,
-            "easybet": 2.12
+            "hollywoodbets": 1.85,
+            "betway": 1.89,
+            "easybet": 1.86
           },
           "marketEdge": -5.5,
           "isValueBet": false,
-          "convictionScore": 45.5
+          "convictionScore": 46
         },
         {
           "rank": 16,
-          "market": "Bookings & Cards",
-          "selection": "Over 3.5 Total Cards",
-          "probability": 49.5,
+          "market": "Match Winner",
+          "selection": "1 · Zhejiang Professional FC",
+          "probability": 45.4,
           "odds": {
-            "hollywoodbets": 1.87,
-            "betway": 1.91,
-            "easybet": 1.88
+            "hollywoodbets": 2.04,
+            "betway": 2.08,
+            "easybet": 2.05
           },
           "marketEdge": -5.5,
           "isValueBet": false,
-          "convictionScore": 45.5
+          "convictionScore": 42.4
         },
         {
           "rank": 17,
-          "market": "Win Either Half",
-          "selection": "2EH · Wuhan Three Towns to Win Either Half",
-          "probability": 38.2,
+          "market": "Draw No Bet",
+          "selection": "DNB · Wuhan Three Towns",
+          "probability": 39.8,
           "odds": {
-            "hollywoodbets": 2.42,
-            "betway": 2.47,
-            "easybet": 2.44
+            "hollywoodbets": 2.32,
+            "betway": 2.37,
+            "easybet": 2.34
           },
           "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 40.7
+          "convictionScore": 41.3
         },
         {
           "rank": 18,
-          "market": "Match Winner",
-          "selection": "1 · Zhejiang Professional FC",
-          "probability": 42,
+          "market": "Win Either Half",
+          "selection": "2EH · Wuhan Three Towns to Win Either Half",
+          "probability": 35.3,
           "odds": {
-            "hollywoodbets": 1.83,
-            "betway": 1.87,
-            "easybet": 1.85
+            "hollywoodbets": 2.62,
+            "betway": 2.68,
+            "easybet": 2.64
           },
-          "marketEdge": -5.5,
+          "marketEdge": -5.4,
           "isValueBet": false,
-          "convictionScore": 39
+          "convictionScore": 37.8
         },
         {
           "rank": 19,
-          "market": "Corners Over/Under",
-          "selection": "Under 10.5 Corners",
-          "probability": 43.8,
+          "market": "Goals Over/Under",
+          "selection": "Over 3.5",
+          "probability": 43.1,
           "odds": {
-            "hollywoodbets": 2.11,
-            "betway": 2.16,
-            "easybet": 2.12
+            "hollywoodbets": 2.15,
+            "betway": 2.19,
+            "easybet": 2.16
           },
-          "marketEdge": -5.3,
+          "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 35.8
+          "convictionScore": 35.1
         },
         {
           "rank": 20,
-          "market": "Goals Over/Under",
-          "selection": "Over 3.5",
-          "probability": 41.7,
+          "market": "Corners Over/Under",
+          "selection": "Under 10.5 Corners",
+          "probability": 41.3,
           "odds": {
-            "hollywoodbets": 2.22,
-            "betway": 2.26,
-            "easybet": 2.23
+            "hollywoodbets": 2.24,
+            "betway": 2.29,
+            "easybet": 2.25
           },
-          "marketEdge": -5.7,
+          "marketEdge": -5.4,
           "isValueBet": false,
-          "convictionScore": 33.7
+          "convictionScore": 33.3
         },
         {
           "rank": 21,
           "market": "Goals Over/Under",
           "selection": "Under 2.5",
-          "probability": 36.2,
+          "probability": 34.9,
           "odds": {
-            "hollywoodbets": 2.56,
-            "betway": 2.61,
-            "easybet": 2.57
-          },
-          "marketEdge": -5.6,
-          "isValueBet": false,
-          "convictionScore": 30.2
-        },
-        {
-          "rank": 22,
-          "market": "Match Winner",
-          "selection": "2 · Wuhan Three Towns",
-          "probability": 32.9,
-          "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 2.65,
+            "betway": 2.71,
+            "easybet": 2.67
           },
           "marketEdge": -5.4,
           "isValueBet": false,
-          "convictionScore": 29.9
+          "convictionScore": 28.9
+        },
+        {
+          "rank": 22,
+          "market": "Both Teams to Score",
+          "selection": "BTTS · No",
+          "probability": 33.5,
+          "odds": {
+            "hollywoodbets": 2.76,
+            "betway": 2.82,
+            "easybet": 2.77
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 27.5
         },
         {
           "rank": 23,
-          "market": "Both Teams to Score",
-          "selection": "BTTS · No",
-          "probability": 34.1,
+          "market": "Match Winner",
+          "selection": "2 · Wuhan Three Towns",
+          "probability": 30.1,
           "odds": {
-            "hollywoodbets": 2.72,
-            "betway": 2.77,
-            "easybet": 2.73
+            "hollywoodbets": 3.08,
+            "betway": 3.14,
+            "easybet": 3.09
           },
           "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 28.1
+          "convictionScore": 27.1
         },
         {
           "rank": 24,
           "market": "Corners Over/Under",
           "selection": "Under 9.5 Corners",
-          "probability": 32.1,
+          "probability": 29.9,
           "odds": {
-            "hollywoodbets": 2.88,
-            "betway": 2.94,
-            "easybet": 2.9
+            "hollywoodbets": 3.1,
+            "betway": 3.16,
+            "easybet": 3.12
           },
           "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 24.1
+          "convictionScore": 21.9
         },
         {
           "rank": 25,
           "market": "Match Winner",
           "selection": "X · Draw",
-          "probability": 25,
+          "probability": 24.5,
           "odds": {
-            "hollywoodbets": 4.12,
-            "betway": 4.2,
-            "easybet": 4.16
+            "hollywoodbets": 3.78,
+            "betway": 3.86,
+            "easybet": 3.8
           },
-          "marketEdge": -5.6,
+          "marketEdge": -5.5,
           "isValueBet": false,
-          "convictionScore": 17
+          "convictionScore": 16.5
         },
         {
           "rank": 26,
           "market": "Goals Over/Under",
           "selection": "Under 1.5",
-          "probability": 15,
+          "probability": 14.2,
           "odds": {
-            "hollywoodbets": 6.19,
-            "betway": 6.32,
-            "easybet": 6.22
+            "hollywoodbets": 6.51,
+            "betway": 6.64,
+            "easybet": 6.54
           },
-          "marketEdge": -5.5,
+          "marketEdge": -5.6,
           "isValueBet": false,
-          "convictionScore": 7
+          "convictionScore": 6.2
         }
       ],
       "topPick": {
         "market": "Goals Over/Under",
         "selection": "Over 1.5",
-        "probability": 85,
+        "probability": 85.8,
         "marketEdge": 4.6,
         "isValueBet": true,
         "odds": {
-          "hollywoodbets": 1.2,
-          "betway": 1.23,
-          "easybet": 1.21
+          "hollywoodbets": 1.19,
+          "betway": 1.22,
+          "easybet": 1.2
         }
       },
-      "probabilityIndex": 85,
-      "rationale": "Zhejiang Professional FC (Elo 73, xG 1.62) vs Wuhan Three Towns (Elo 70, xG 1.51) in Chinese Super League. Dixon-Coles model favors Over 1.5 (85% calibrated probability).",
+      "probabilityIndex": 85.8,
+      "rationale": "Zhejiang Professional FC (Elo 73, xG 1.69) vs Wuhan Three Towns (Elo 69, xG 1.5) in Chinese Super League. Dixon-Coles model favors Over 1.5 (85.8% calibrated probability).",
       "matchStatus": "TIMED",
       "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE",
       "tacticalFeeds": {
         "expectedThreat": {
-          "home": 1.51,
+          "home": 1.53,
           "away": 1.41,
           "unit": "xT / 90",
           "dangerZones": [
@@ -65909,7 +65909,7 @@
         },
         "ppdaPressing": {
           "home": 14.2,
-          "away": 17,
+          "away": 17.1,
           "interpretation": "Mid-Block Tactical Screen",
           "source": "FBref / StatsBomb Event Stream"
         },
@@ -65942,9 +65942,9 @@
       },
       "marketPsychology": {
         "betfairExchange": {
-          "backOdds": 1.22,
-          "layOdds": 1.26,
-          "spreadPct": 3.28,
+          "backOdds": 1.21,
+          "layOdds": 1.25,
+          "spreadPct": 3.31,
           "matchedVolume": "1592k",
           "liquidityRating": "DEEP EXCHANGE LIQUIDITY"
         },
@@ -65955,30 +65955,30 @@
         }
       },
       "beastMeta": {
-        "beastScore": 93,
-        "rawBeastScore": 92.9,
-        "brierScore": 0.128,
-        "calibratedProbability": 85,
+        "beastScore": 94,
+        "rawBeastScore": 93.6,
+        "brierScore": 0.127,
+        "calibratedProbability": 85.8,
         "valueClassification": "ELITE VALUE",
         "walkForwardScore": "PASSED (0.0% Leakage)",
-        "vigFreeOdds": 1.77,
-        "expectedValuePct": 4.55,
-        "deltaEvPct": 34.93,
-        "marketOverroundPct": 63.92,
+        "vigFreeOdds": 1.76,
+        "expectedValuePct": 4.68,
+        "deltaEvPct": 35.38,
+        "marketOverroundPct": 65.28,
         "shinMethod": {
-          "overroundSum": 1.6392,
-          "overroundPct": 63.92,
-          "informedTradingZ": 0.3366,
-          "powerMethodK": 2.0082,
-          "fairOdds": 1.77,
-          "fairProbPct": 56.6
+          "overroundSum": 1.6528,
+          "overroundPct": 65.28,
+          "informedTradingZ": 0.3442,
+          "powerMethodK": 2.0471,
+          "fairOdds": 1.76,
+          "fairProbPct": 56.8
         },
         "systemProtection": {
           "isQualifiedValueBet": true,
           "passesStrictProtection": true,
-          "deltaEvPct": 34.93,
+          "deltaEvPct": 35.38,
           "status": "QUALIFIED_VALUE_BET",
-          "rationale": "System Protection Verified: Calibrated HyenaX probability (85.0%) strictly exceeds de-vigged market consensus (56.6%) with +34.93% net edge."
+          "rationale": "System Protection Verified: Calibrated HyenaX probability (85.8%) strictly exceeds de-vigged market consensus (56.8%) with +35.38% net edge."
         },
         "bayesianDynamicUpdate": {
           "priorElo": 1667,
@@ -65993,34 +65993,34 @@
           "quarterKelly": {
             "match": "Zhejiang Professional FC vs Wuhan Three Towns",
             "selection": "Over 1.5",
-            "calibratedProbability": 85,
-            "odds": 1.23,
-            "fullKellyPct": 19.78,
+            "calibratedProbability": 85.8,
+            "odds": 1.22,
+            "fullKellyPct": 21.25,
             "chiMultiplier": 0.25,
             "fractionalScaleName": "Quarter-Kelly (chi = 0.25)",
-            "fractionalKellyPct": 4.95,
-            "quarterKellyPct": 4.95,
-            "recommendedStakeZAR": 247.28,
-            "recommendedStake": 247.28,
-            "geometricGrowthRate": 0.002,
-            "estimatedRuinProbPct": 1.053,
-            "wasCappedAtCeiling": false,
+            "fractionalKellyPct": 5,
+            "quarterKellyPct": 5,
+            "recommendedStakeZAR": 250,
+            "recommendedStake": 250,
+            "geometricGrowthRate": 0.0021,
+            "estimatedRuinProbPct": 0.928,
+            "wasCappedAtCeiling": true,
             "isPositiveExpectation": true
           },
           "halfKelly": {
             "match": "Zhejiang Professional FC vs Wuhan Three Towns",
             "selection": "Over 1.5",
-            "calibratedProbability": 85,
-            "odds": 1.23,
-            "fullKellyPct": 19.78,
+            "calibratedProbability": 85.8,
+            "odds": 1.22,
+            "fullKellyPct": 21.25,
             "chiMultiplier": 0.5,
             "fractionalScaleName": "Half-Kelly (chi = 0.50)",
             "fractionalKellyPct": 5,
             "quarterKellyPct": 5,
             "recommendedStakeZAR": 250,
             "recommendedStake": 250,
-            "geometricGrowthRate": 0.002,
-            "estimatedRuinProbPct": 1.053,
+            "geometricGrowthRate": 0.0021,
+            "estimatedRuinProbPct": 0.928,
             "wasCappedAtCeiling": true,
             "isPositiveExpectation": true
           },
@@ -66047,36 +66047,36 @@
           }
         },
         "ensemble": {
-          "consensusProbability": 67.5,
-          "modelAgreementScore": 68,
-          "standardDeviation": 10.1,
+          "consensusProbability": 69,
+          "modelAgreementScore": 67,
+          "standardDeviation": 10.4,
           "totalModelsActive": 17,
           "confidenceTier": "MODERATE_DIVERGENCE",
           "categoryAverages": [
             {
               "category": "Parametric Statistical",
               "modelCount": 6,
-              "weightedProb": 67.6
+              "weightedProb": 70.3
             },
             {
               "category": "Gradient Boosted Decision Trees",
               "modelCount": 4,
-              "weightedProb": 61.9
+              "weightedProb": 62.8
             },
             {
               "category": "Bootstrap Aggregated Ensembles",
               "modelCount": 1,
-              "weightedProb": 71.2
+              "weightedProb": 72.5
             },
             {
               "category": "Paired-Comparison Statistical Models",
               "modelCount": 1,
-              "weightedProb": 63
+              "weightedProb": 65
             },
             {
               "category": "Deep Graph Representation Learning",
               "modelCount": 1,
-              "weightedProb": 67.3
+              "weightedProb": 69.4
             },
             {
               "category": "Sequential Deep Learning",
@@ -66091,28 +66091,28 @@
             {
               "category": "Bayesian Synthesis",
               "modelCount": 1,
-              "weightedProb": 63.4
+              "weightedProb": 65.3
             }
           ],
           "dissentingModels": [
             {
               "name": "CatBoost (Oblivious Trees & Target Statistics)",
               "prob": 49.7,
-              "deltaFromConsensus": -17.8,
+              "deltaFromConsensus": -19.3,
               "direction": "MORE_CONSERVATIVE",
               "signal": "Tactical Style Clash Advantage"
             },
             {
               "name": "Transformer Self-Attention",
               "prob": 90.8,
-              "deltaFromConsensus": 23.3,
+              "deltaFromConsensus": 21.8,
               "direction": "MORE_OPTIMISTIC",
               "signal": "Attention Peak on Token t-2 (30.5% Weight)"
             },
             {
               "name": "Sharp Market Consensus Implied",
               "prob": 51.2,
-              "deltaFromConsensus": -16.3,
+              "deltaFromConsensus": -17.8,
               "direction": "MORE_CONSERVATIVE",
               "signal": "Pinnacle / Betfair De-Vigged Fair Odds"
             }
@@ -66120,42 +66120,42 @@
           "breakdown": [
             {
               "name": "Dixon-Coles Bivariate Poisson (1997)",
-              "prob": 75.5,
+              "prob": 79.3,
               "weight": 0.12,
               "category": "Parametric Statistical",
               "signal": "Home Poisson Parameter Supremacy"
             },
             {
               "name": "Poisson xG / xT Box Threat",
-              "prob": 53.4,
+              "prob": 55.9,
               "weight": 0.09,
               "category": "Parametric Statistical",
               "signal": "High Dangerous Attack Share"
             },
             {
               "name": "Multi-Factor Rolling Elo",
-              "prob": 63.6,
+              "prob": 64.9,
               "weight": 0.08,
               "category": "Parametric Statistical",
               "signal": "Quality Differential Anchor"
             },
             {
               "name": "Venue Fortress Index",
-              "prob": 76.8,
+              "prob": 80.6,
               "weight": 0.05,
               "category": "Parametric Statistical",
               "signal": "Home Ground Climate Edge"
             },
             {
               "name": "Recent Form & Momentum",
-              "prob": 64.4,
+              "prob": 65.7,
               "weight": 0.05,
               "category": "Parametric Statistical",
               "signal": "Last 5 Match Momentum Vector"
             },
             {
               "name": "Squad Depth & Starters",
-              "prob": 76,
+              "prob": 79.7,
               "weight": 0.04,
               "category": "Parametric Statistical",
               "signal": "Availability & Depth Parity"
@@ -66177,7 +66177,7 @@
             },
             {
               "name": "LightGBM (Leaf-Wise Histogram)",
-              "prob": 60,
+              "prob": 62.3,
               "weight": 0.12,
               "category": "Gradient Boosted Decision Trees",
               "architecture": "Leaf-Wise Best-First Growth with 256-Bin Feature Quantization & GOSS",
@@ -66186,7 +66186,7 @@
                 "maxLeaves": 31,
                 "histogramBins": 32,
                 "gossSamplingRate": "0.2 large / 0.1 small",
-                "leafPurityScore": "54.7%"
+                "leafPurityScore": "57.3%"
               }
             },
             {
@@ -66205,7 +66205,7 @@
             },
             {
               "name": "Bagging & Random Forest",
-              "prob": 71.2,
+              "prob": 72.5,
               "weight": 0.1,
               "category": "Bootstrap Aggregated Ensembles",
               "architecture": "25 Decorrelated Decision Trees with Subspace Feature Sampling",
@@ -66219,7 +66219,7 @@
             },
             {
               "name": "HistGradientBoosting (Monotonic)",
-              "prob": 65.1,
+              "prob": 66.7,
               "weight": 0.1,
               "category": "Gradient Boosted Decision Trees",
               "architecture": "Histogram Binned Boosting with Strict Monotonicity Constraints",
@@ -66236,21 +66236,21 @@
             },
             {
               "name": "Bradley-Terry Model",
-              "prob": 63,
+              "prob": 65,
               "weight": 0.09,
               "category": "Paired-Comparison Statistical Models",
               "architecture": "Logit Latent Ability Parameterization with Home Advantage Bias (MM Algorithm)",
-              "signal": "Latent Ability Margin: Δλ = 0.26",
+              "signal": "Latent Ability Margin: Δλ = 0.34",
               "diagnostics": {
                 "latentAbilityHome": 0.255,
-                "latentAbilityAway": 0,
+                "latentAbilityAway": -0.085,
                 "homeGroundParameterTheta": 0.24,
                 "maximumLikelihoodConvergence": "Converged in 4 Iterations"
               }
             },
             {
               "name": "Graph Neural Network (GNN)",
-              "prob": 67.3,
+              "prob": 69.4,
               "weight": 0.12,
               "category": "Deep Graph Representation Learning",
               "architecture": "2-Layer Graph Convolutional Network (GCN) with Normalized Laplacian Message Passing",
@@ -66259,7 +66259,7 @@
                 "graphTopology": "Directed Multi-Relational Fixture Graph",
                 "messagePassingLayers": 2,
                 "nodeEmbeddingDimension": 4,
-                "transitiveScore": 0.342
+                "transitiveScore": 0.439
               }
             },
             {
@@ -66299,7 +66299,7 @@
             },
             {
               "name": "Bayesian Hierarchical Arbitration",
-              "prob": 63.4,
+              "prob": 65.3,
               "weight": 0.05,
               "category": "Bayesian Synthesis",
               "signal": "Prior-to-Posterior Calibration"
@@ -66829,9 +66829,9 @@
           "selection": "2 · 1. FC Magdeburg",
           "probability": 52.6,
           "odds": {
-            "hollywoodbets": 2.16,
-            "betway": 2.2,
-            "easybet": 2.18
+            "hollywoodbets": 2.5,
+            "betway": 2.55,
+            "easybet": 2.52
           },
           "marketEdge": -5.3,
           "isValueBet": false,
@@ -66941,9 +66941,9 @@
           "selection": "1 · SpVgg Greuther Fürth",
           "probability": 25.1,
           "odds": {
-            "hollywoodbets": 2.84,
-            "betway": 2.9,
-            "easybet": 2.87
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -66955,9 +66955,9 @@
           "selection": "X · Draw",
           "probability": 22.2,
           "odds": {
-            "hollywoodbets": 3.67,
-            "betway": 3.75,
-            "easybet": 3.71
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -67857,9 +67857,9 @@
           "selection": "1 · VfL Wolfsburg",
           "probability": 59.7,
           "odds": {
-            "hollywoodbets": 1.46,
-            "betway": 1.49,
-            "easybet": 1.48
+            "hollywoodbets": 1.48,
+            "betway": 1.51,
+            "easybet": 1.49
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -68053,9 +68053,9 @@
           "selection": "X · Draw",
           "probability": 22.9,
           "odds": {
-            "hollywoodbets": 4.7,
-            "betway": 4.8,
-            "easybet": 4.75
+            "hollywoodbets": 4.61,
+            "betway": 4.7,
+            "easybet": 4.65
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -69144,9 +69144,9 @@
           "selection": "X · Draw",
           "probability": 26.2,
           "odds": {
-            "hollywoodbets": 3.14,
-            "betway": 3.2,
-            "easybet": 3.17
+            "hollywoodbets": 3.04,
+            "betway": 3.1,
+            "easybet": 3.07
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -69186,9 +69186,9 @@
           "selection": "2 · Konyaspor",
           "probability": 16.8,
           "odds": {
-            "hollywoodbets": 2.89,
-            "betway": 2.95,
-            "easybet": 2.92
+            "hollywoodbets": 2.99,
+            "betway": 3.05,
+            "easybet": 3.02
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -70249,9 +70249,9 @@
           "selection": "2 · Silkeborg IF",
           "probability": 31.8,
           "odds": {
-            "hollywoodbets": 3.63,
-            "betway": 3.7,
-            "easybet": 3.66
+            "hollywoodbets": 3.67,
+            "betway": 3.75,
+            "easybet": 3.71
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -70263,9 +70263,9 @@
           "selection": "X · Draw",
           "probability": 28.7,
           "odds": {
-            "hollywoodbets": 3.92,
-            "betway": 4,
-            "easybet": 3.96
+            "hollywoodbets": 3.82,
+            "betway": 3.9,
+            "easybet": 3.86
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -71305,9 +71305,9 @@
           "selection": "1 · Sarpsborg FK",
           "probability": 41.9,
           "odds": {
-            "hollywoodbets": 1.56,
-            "betway": 1.59,
-            "easybet": 1.57
+            "hollywoodbets": 1.51,
+            "betway": 1.54,
+            "easybet": 1.52
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -71361,9 +71361,9 @@
           "selection": "2 · KFUM Oslo",
           "probability": 29.9,
           "odds": {
-            "hollywoodbets": 5.14,
-            "betway": 5.25,
-            "easybet": 5.2
+            "hollywoodbets": 5.63,
+            "betway": 5.75,
+            "easybet": 5.69
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -71389,9 +71389,9 @@
           "selection": "X · Draw",
           "probability": 28.2,
           "odds": {
-            "hollywoodbets": 4.12,
-            "betway": 4.2,
-            "easybet": 4.16
+            "hollywoodbets": 4.21,
+            "betway": 4.3,
+            "easybet": 4.26
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -73438,9 +73438,9 @@
           "selection": "1 · FC Groningen",
           "probability": 61.6,
           "odds": {
-            "hollywoodbets": 1.5,
-            "betway": 1.53,
-            "easybet": 1.51
+            "hollywoodbets": 1.47,
+            "betway": 1.5,
+            "easybet": 1.48
           },
           "marketEdge": -5.8,
           "isValueBet": false,
@@ -73592,9 +73592,9 @@
           "selection": "2 · PEC Zwolle",
           "probability": 19,
           "odds": {
-            "hollywoodbets": 5.39,
-            "betway": 5.5,
-            "easybet": 5.45
+            "hollywoodbets": 5.63,
+            "betway": 5.75,
+            "easybet": 5.69
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -73606,9 +73606,9 @@
           "selection": "X · Draw",
           "probability": 19.3,
           "odds": {
-            "hollywoodbets": 4.41,
-            "betway": 4.5,
-            "easybet": 4.46
+            "hollywoodbets": 4.51,
+            "betway": 4.6,
+            "easybet": 4.55
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -74627,9 +74627,9 @@
           "selection": "1 · Annecy",
           "probability": 43.5,
           "odds": {
-            "hollywoodbets": 2.16,
-            "betway": 2.2,
-            "easybet": 2.18
+            "hollywoodbets": 2.11,
+            "betway": 2.15,
+            "easybet": 2.13
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -74697,9 +74697,9 @@
           "selection": "2 · Dijon FCO",
           "probability": 27.1,
           "odds": {
-            "hollywoodbets": 3.14,
-            "betway": 3.2,
-            "easybet": 3.17
+            "hollywoodbets": 3.23,
+            "betway": 3.3,
+            "easybet": 3.27
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -75753,9 +75753,9 @@
           "selection": "2 · Clermont Foot",
           "probability": 35.5,
           "odds": {
-            "hollywoodbets": 3.04,
-            "betway": 3.1,
-            "easybet": 3.07
+            "hollywoodbets": 2.99,
+            "betway": 3.05,
+            "easybet": 3.02
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -75781,9 +75781,9 @@
           "selection": "1 · Grenoble",
           "probability": 31.2,
           "odds": {
-            "hollywoodbets": 2.4,
-            "betway": 2.45,
-            "easybet": 2.43
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -76879,9 +76879,9 @@
           "selection": "2 · Dunkerque",
           "probability": 41.3,
           "odds": {
-            "hollywoodbets": 2.99,
-            "betway": 3.05,
-            "easybet": 3.02
+            "hollywoodbets": 2.84,
+            "betway": 2.9,
+            "easybet": 2.87
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -76921,9 +76921,9 @@
           "selection": "1 · Pau",
           "probability": 28,
           "odds": {
-            "hollywoodbets": 2.25,
-            "betway": 2.3,
-            "easybet": 2.28
+            "hollywoodbets": 2.3,
+            "betway": 2.35,
+            "easybet": 2.33
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -77998,9 +77998,9 @@
           "selection": "2 · AS Nancy Lorraine",
           "probability": 38.3,
           "odds": {
-            "hollywoodbets": 2.89,
-            "betway": 2.95,
-            "easybet": 2.92
+            "hollywoodbets": 2.84,
+            "betway": 2.9,
+            "easybet": 2.87
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -78012,9 +78012,9 @@
           "selection": "1 · Rodez Aveyron",
           "probability": 30.3,
           "odds": {
-            "hollywoodbets": 2.3,
-            "betway": 2.35,
-            "easybet": 2.33
+            "hollywoodbets": 2.35,
+            "betway": 2.4,
+            "easybet": 2.38
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -78040,9 +78040,9 @@
           "selection": "X · Draw",
           "probability": 31.4,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.28,
+            "betway": 3.35,
+            "easybet": 3.32
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -79082,9 +79082,9 @@
           "selection": "1 · Stade de Reims",
           "probability": 40,
           "odds": {
-            "hollywoodbets": 2.01,
-            "betway": 2.05,
-            "easybet": 2.03
+            "hollywoodbets": 2.21,
+            "betway": 2.25,
+            "easybet": 2.23
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -79124,9 +79124,9 @@
           "selection": "2 · Montpellier",
           "probability": 28.3,
           "odds": {
-            "hollywoodbets": 3.48,
-            "betway": 3.55,
-            "easybet": 3.51
+            "hollywoodbets": 3.23,
+            "betway": 3.3,
+            "easybet": 3.27
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -79138,9 +79138,9 @@
           "selection": "X · Draw",
           "probability": 31.6,
           "odds": {
-            "hollywoodbets": 3.33,
-            "betway": 3.4,
-            "easybet": 3.37
+            "hollywoodbets": 3.19,
+            "betway": 3.25,
+            "easybet": 3.22
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -80138,9 +80138,9 @@
           "selection": "2 · Sochaux",
           "probability": 49.3,
           "odds": {
-            "hollywoodbets": 3.19,
-            "betway": 3.25,
-            "easybet": 3.22
+            "hollywoodbets": 3.04,
+            "betway": 3.1,
+            "easybet": 3.07
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -80264,9 +80264,9 @@
           "selection": "1 · Stade Laval",
           "probability": 20.2,
           "odds": {
-            "hollywoodbets": 2.25,
-            "betway": 2.3,
-            "easybet": 2.28
+            "hollywoodbets": 2.35,
+            "betway": 2.4,
+            "easybet": 2.38
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -81101,9 +81101,9 @@
           "selection": "1 · FC Bayern München",
           "probability": 82.6,
           "odds": {
-            "hollywoodbets": 1.01,
-            "betway": 1.03,
-            "easybet": 1.02
+            "hollywoodbets": 1,
+            "betway": 1.02,
+            "easybet": 1.01
           },
           "marketEdge": 2.4,
           "isValueBet": true,
@@ -81353,9 +81353,9 @@
           "selection": "X · Draw",
           "probability": 11.3,
           "odds": {
-            "hollywoodbets": 13.72,
-            "betway": 14,
-            "easybet": 13.86
+            "hollywoodbets": 14.7,
+            "betway": 15,
+            "easybet": 14.85
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -81367,9 +81367,9 @@
           "selection": "2 · 1. FC Union Berlin",
           "probability": 5.5,
           "odds": {
-            "hollywoodbets": 25.48,
-            "betway": 26,
-            "easybet": 25.74
+            "hollywoodbets": 28.42,
+            "betway": 29,
+            "easybet": 28.71
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -83549,9 +83549,9 @@
           "selection": "1 · Albacete",
           "probability": 33.9,
           "odds": {
-            "hollywoodbets": 2.35,
-            "betway": 2.4,
-            "easybet": 2.38
+            "hollywoodbets": 2.4,
+            "betway": 2.45,
+            "easybet": 2.43
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -83577,9 +83577,9 @@
           "selection": "X · Draw",
           "probability": 28.8,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -84428,9 +84428,9 @@
           "selection": "2 · US Sassuolo Calcio",
           "probability": 64.2,
           "odds": {
-            "hollywoodbets": 2.4,
-            "betway": 2.45,
-            "easybet": 2.43
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -84666,9 +84666,9 @@
           "selection": "X · Draw",
           "probability": 20.6,
           "odds": {
-            "hollywoodbets": 3.19,
-            "betway": 3.25,
-            "easybet": 3.22
+            "hollywoodbets": 3.14,
+            "betway": 3.2,
+            "easybet": 3.17
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -85599,9 +85599,9 @@
           "selection": "1 · AS Monaco",
           "probability": 53.8,
           "odds": {
-            "hollywoodbets": 1.96,
-            "betway": 2,
-            "easybet": 1.98
+            "hollywoodbets": 1.91,
+            "betway": 1.95,
+            "easybet": 1.93
           },
           "marketEdge": -5.3,
           "isValueBet": false,
@@ -85767,9 +85767,9 @@
           "selection": "2 · RC Lens",
           "probability": 20.8,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.72,
+            "betway": 3.8,
+            "easybet": 3.76
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -86898,9 +86898,9 @@
           "selection": "X · Draw",
           "probability": 26,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -87917,9 +87917,9 @@
           "selection": "1 · Brentford FC",
           "probability": 40.8,
           "odds": {
-            "hollywoodbets": 2.65,
-            "betway": 2.7,
-            "easybet": 2.67
+            "hollywoodbets": 2.6,
+            "betway": 2.65,
+            "easybet": 2.62
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -87959,9 +87959,9 @@
           "selection": "2 · Chelsea FC",
           "probability": 33.2,
           "odds": {
-            "hollywoodbets": 2.4,
-            "betway": 2.45,
-            "easybet": 2.43
+            "hollywoodbets": 2.5,
+            "betway": 2.55,
+            "easybet": 2.52
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -88001,9 +88001,9 @@
           "selection": "X · Draw",
           "probability": 26,
           "odds": {
-            "hollywoodbets": 3.72,
-            "betway": 3.8,
-            "easybet": 3.76
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -88882,9 +88882,9 @@
           "selection": "1 · RCD Espanyol de Barcelona",
           "probability": 63.7,
           "odds": {
-            "hollywoodbets": 1.79,
-            "betway": 1.83,
-            "easybet": 1.81
+            "hollywoodbets": 1.76,
+            "betway": 1.8,
+            "easybet": 1.78
           },
           "marketEdge": -5.8,
           "isValueBet": false,
@@ -89092,9 +89092,9 @@
           "selection": "X · Draw",
           "probability": 21.3,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -89106,9 +89106,9 @@
           "selection": "2 · Elche CF",
           "probability": 15,
           "odds": {
-            "hollywoodbets": 4.31,
-            "betway": 4.4,
-            "easybet": 4.36
+            "hollywoodbets": 4.41,
+            "betway": 4.5,
+            "easybet": 4.46
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -90197,9 +90197,9 @@
           "selection": "2 · Watford FC",
           "probability": 32.7,
           "odds": {
-            "hollywoodbets": 4.41,
-            "betway": 4.5,
-            "easybet": 4.46
+            "hollywoodbets": 4.51,
+            "betway": 4.6,
+            "easybet": 4.55
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -91225,9 +91225,9 @@
           "selection": "1 · Sportivo Trinidense",
           "probability": 43.3,
           "odds": {
-            "hollywoodbets": 2.06,
-            "betway": 2.1,
-            "easybet": 2.08
+            "hollywoodbets": 2.11,
+            "betway": 2.15,
+            "easybet": 2.13
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -91295,9 +91295,9 @@
           "selection": "X · Draw",
           "probability": 30.9,
           "odds": {
-            "hollywoodbets": 3.04,
-            "betway": 3.1,
-            "easybet": 3.07
+            "hollywoodbets": 3.09,
+            "betway": 3.15,
+            "easybet": 3.12
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -91309,9 +91309,9 @@
           "selection": "2 · Guaraní",
           "probability": 25.8,
           "odds": {
-            "hollywoodbets": 3.28,
-            "betway": 3.35,
-            "easybet": 3.32
+            "hollywoodbets": 3.33,
+            "betway": 3.4,
+            "easybet": 3.37
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -92428,9 +92428,9 @@
           "selection": "X · Draw",
           "probability": 23.7,
           "odds": {
-            "hollywoodbets": 3.77,
-            "betway": 3.85,
-            "easybet": 3.81
+            "hollywoodbets": 3.72,
+            "betway": 3.8,
+            "easybet": 3.76
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -93428,9 +93428,9 @@
           "selection": "2 · Defensa y Justicia",
           "probability": 46.9,
           "odds": {
-            "hollywoodbets": 2.65,
-            "betway": 2.7,
-            "easybet": 2.67
+            "hollywoodbets": 2.79,
+            "betway": 2.85,
+            "easybet": 2.82
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -93540,9 +93540,9 @@
           "selection": "1 · Central Córdoba (Santiago del Estero)",
           "probability": 20.9,
           "odds": {
-            "hollywoodbets": 2.69,
-            "betway": 2.75,
-            "easybet": 2.72
+            "hollywoodbets": 2.6,
+            "betway": 2.65,
+            "easybet": 2.62
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -94547,9 +94547,9 @@
           "selection": "1 · Águilas Doradas",
           "probability": 44.3,
           "odds": {
-            "hollywoodbets": 1.35,
-            "betway": 1.38,
-            "easybet": 1.37
+            "hollywoodbets": 1.37,
+            "betway": 1.4,
+            "easybet": 1.39
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -94631,9 +94631,9 @@
           "selection": "X · Draw",
           "probability": 30.5,
           "odds": {
-            "hollywoodbets": 4.41,
-            "betway": 4.5,
-            "easybet": 4.46
+            "hollywoodbets": 4.31,
+            "betway": 4.4,
+            "easybet": 4.36
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -95708,9 +95708,9 @@
           "selection": "2 · UPNFM",
           "probability": 38.9,
           "odds": {
-            "hollywoodbets": 2.84,
-            "betway": 2.9,
-            "easybet": 2.87
+            "hollywoodbets": 2.89,
+            "betway": 2.95,
+            "easybet": 2.92
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -95750,9 +95750,9 @@
           "selection": "X · Draw",
           "probability": 30,
           "odds": {
-            "hollywoodbets": 3.09,
-            "betway": 3.15,
-            "easybet": 3.12
+            "hollywoodbets": 3.14,
+            "betway": 3.2,
+            "easybet": 3.17
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -96778,9 +96778,9 @@
           "selection": "1 · Nacional Asunción",
           "probability": 37.8,
           "odds": {
-            "hollywoodbets": 1.71,
-            "betway": 1.74,
-            "easybet": 1.72
+            "hollywoodbets": 1.64,
+            "betway": 1.67,
+            "easybet": 1.65
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -96834,9 +96834,9 @@
           "selection": "X · Draw",
           "probability": 33.7,
           "odds": {
-            "hollywoodbets": 3.19,
-            "betway": 3.25,
-            "easybet": 3.22
+            "hollywoodbets": 3.38,
+            "betway": 3.45,
+            "easybet": 3.42
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -96848,9 +96848,9 @@
           "selection": "2 · 2 de Mayo",
           "probability": 28.5,
           "odds": {
-            "hollywoodbets": 4.61,
-            "betway": 4.7,
-            "easybet": 4.65
+            "hollywoodbets": 4.8,
+            "betway": 4.9,
+            "easybet": 4.85
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -97862,9 +97862,9 @@
           "selection": "1 · Independiente Petrolero",
           "probability": 48.1,
           "odds": {
-            "hollywoodbets": 1.62,
-            "betway": 1.65,
-            "easybet": 1.63
+            "hollywoodbets": 1.66,
+            "betway": 1.69,
+            "easybet": 1.67
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -97960,9 +97960,9 @@
           "selection": "2 · San Antonio Bulo Bulo",
           "probability": 26.2,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 3.92,
+            "betway": 4,
+            "easybet": 3.96
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -101259,9 +101259,9 @@
           "selection": "2 · Sarmiento (Junín)",
           "probability": 40,
           "odds": {
-            "hollywoodbets": 4.9,
-            "betway": 5,
-            "easybet": 4.95
+            "hollywoodbets": 4.51,
+            "betway": 4.6,
+            "easybet": 4.55
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -101287,9 +101287,9 @@
           "selection": "1 · Racing Club",
           "probability": 31.3,
           "odds": {
-            "hollywoodbets": 1.68,
-            "betway": 1.71,
-            "easybet": 1.69
+            "hollywoodbets": 1.76,
+            "betway": 1.8,
+            "easybet": 1.78
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -101315,9 +101315,9 @@
           "selection": "X · Draw",
           "probability": 28.7,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -102285,9 +102285,9 @@
           "selection": "2 · Macará",
           "probability": 46.1,
           "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.65,
-            "easybet": 3.61
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -102383,9 +102383,9 @@
           "selection": "X · Draw",
           "probability": 32.1,
           "odds": {
-            "hollywoodbets": 3.14,
-            "betway": 3.2,
-            "easybet": 3.17
+            "hollywoodbets": 3.23,
+            "betway": 3.3,
+            "easybet": 3.27
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -103390,9 +103390,9 @@
           "selection": "1 · Puebla",
           "probability": 46.7,
           "odds": {
-            "hollywoodbets": 2.21,
-            "betway": 2.25,
-            "easybet": 2.23
+            "hollywoodbets": 2.25,
+            "betway": 2.3,
+            "easybet": 2.28
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -103488,9 +103488,9 @@
           "selection": "2 · Atlante",
           "probability": 24.3,
           "odds": {
-            "hollywoodbets": 2.99,
-            "betway": 3.05,
-            "easybet": 3.02
+            "hollywoodbets": 2.89,
+            "betway": 2.95,
+            "easybet": 2.92
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -103502,9 +103502,9 @@
           "selection": "X · Draw",
           "probability": 29,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.38,
+            "betway": 3.45,
+            "easybet": 3.42
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -104340,8 +104340,8 @@
           "probability": 67.9,
           "odds": {
             "hollywoodbets": 1.23,
-            "betway": 1.25,
-            "easybet": 1.24
+            "betway": 1.26,
+            "easybet": 1.25
           },
           "marketEdge": 2.6,
           "isValueBet": true,
@@ -104605,9 +104605,9 @@
           "selection": "X · Draw",
           "probability": 21,
           "odds": {
-            "hollywoodbets": 5.14,
-            "betway": 5.25,
-            "easybet": 5.2
+            "hollywoodbets": 5.39,
+            "betway": 5.5,
+            "easybet": 5.45
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -104633,9 +104633,9 @@
           "selection": "2 · ADT",
           "probability": 11,
           "odds": {
-            "hollywoodbets": 8.33,
-            "betway": 8.5,
-            "easybet": 8.41
+            "hollywoodbets": 8.82,
+            "betway": 9,
+            "easybet": 8.91
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -105640,9 +105640,9 @@
           "selection": "2 · CD Estrella Roja",
           "probability": 42.2,
           "odds": {
-            "hollywoodbets": 2.19,
-            "betway": 2.24,
-            "easybet": 2.2
+            "hollywoodbets": 2.5,
+            "betway": 2.55,
+            "easybet": 2.52
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -105696,9 +105696,9 @@
           "selection": "1 · CD Choloma",
           "probability": 28.9,
           "odds": {
-            "hollywoodbets": 3.21,
-            "betway": 3.27,
-            "easybet": 3.22
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -105724,8 +105724,8 @@
           "selection": "X · Draw",
           "probability": 28.9,
           "odds": {
-            "hollywoodbets": 3.2,
-            "betway": 3.27,
+            "hollywoodbets": 3.19,
+            "betway": 3.25,
             "easybet": 3.22
           },
           "marketEdge": -5.5,
@@ -106771,9 +106771,9 @@
           "selection": "2 · CD Guastatoya",
           "probability": 36.8,
           "odds": {
-            "hollywoodbets": 4.9,
-            "betway": 5,
-            "easybet": 4.95
+            "hollywoodbets": 5.14,
+            "betway": 5.25,
+            "easybet": 5.2
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -106785,9 +106785,9 @@
           "selection": "1 · Comunicaciones",
           "probability": 32.4,
           "odds": {
-            "hollywoodbets": 1.66,
-            "betway": 1.69,
-            "easybet": 1.67
+            "hollywoodbets": 1.62,
+            "betway": 1.65,
+            "easybet": 1.63
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -106813,9 +106813,9 @@
           "selection": "X · Draw",
           "probability": 30.8,
           "odds": {
-            "hollywoodbets": 3.09,
-            "betway": 3.15,
-            "easybet": 3.12
+            "hollywoodbets": 3.19,
+            "betway": 3.25,
+            "easybet": 3.22
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -110033,9 +110033,9 @@
           "selection": "1 · Kawasaki Frontale",
           "probability": 42.8,
           "odds": {
-            "hollywoodbets": 2.6,
-            "betway": 2.65,
-            "easybet": 2.62
+            "hollywoodbets": 2.55,
+            "betway": 2.6,
+            "easybet": 2.57
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -110075,9 +110075,9 @@
           "selection": "2 · Kashima Antlers",
           "probability": 32.2,
           "odds": {
-            "hollywoodbets": 2.4,
-            "betway": 2.45,
-            "easybet": 2.43
+            "hollywoodbets": 2.45,
+            "betway": 2.5,
+            "easybet": 2.48
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -110131,9 +110131,9 @@
           "selection": "X · Draw",
           "probability": 25,
           "odds": {
-            "hollywoodbets": 3.63,
-            "betway": 3.7,
-            "easybet": 3.66
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -114376,9 +114376,9 @@
           "selection": "1 · Fagiano Okayama",
           "probability": 54.5,
           "odds": {
-            "hollywoodbets": 1.87,
-            "betway": 1.91,
-            "easybet": 1.89
+            "hollywoodbets": 1.83,
+            "betway": 1.87,
+            "easybet": 1.85
           },
           "marketEdge": -5.8,
           "isValueBet": false,
@@ -114558,9 +114558,9 @@
           "selection": "2 · Kyoto Sanga",
           "probability": 20.4,
           "odds": {
-            "hollywoodbets": 3.87,
-            "betway": 3.95,
-            "easybet": 3.91
+            "hollywoodbets": 3.92,
+            "betway": 4,
+            "easybet": 3.96
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -114572,9 +114572,9 @@
           "selection": "X · Draw",
           "probability": 25.1,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -115474,9 +115474,9 @@
           "selection": "1 · FC Tokyo",
           "probability": 60.7,
           "odds": {
-            "hollywoodbets": 1.73,
-            "betway": 1.77,
-            "easybet": 1.75
+            "hollywoodbets": 1.68,
+            "betway": 1.71,
+            "easybet": 1.69
           },
           "marketEdge": -5.3,
           "isValueBet": false,
@@ -115670,9 +115670,9 @@
           "selection": "X · Draw",
           "probability": 23.2,
           "odds": {
-            "hollywoodbets": 3.92,
-            "betway": 4,
-            "easybet": 3.96
+            "hollywoodbets": 4.02,
+            "betway": 4.1,
+            "easybet": 4.06
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -115684,9 +115684,9 @@
           "selection": "2 · Nagoya Grampus",
           "probability": 16.1,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 4.12,
+            "betway": 4.2,
+            "easybet": 4.16
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -116759,9 +116759,9 @@
           "selection": "2 · Mito Hollyhock",
           "probability": 33.1,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -116787,9 +116787,9 @@
           "selection": "X · Draw",
           "probability": 27.4,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -117899,9 +117899,9 @@
           "selection": "X · Draw",
           "probability": 27.4,
           "odds": {
-            "hollywoodbets": 3.67,
-            "betway": 3.75,
-            "easybet": 3.71
+            "hollywoodbets": 3.72,
+            "betway": 3.8,
+            "easybet": 3.76
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -118878,9 +118878,9 @@
           "selection": "1 · Burton Albion",
           "probability": 45.2,
           "odds": {
-            "hollywoodbets": 2.5,
-            "betway": 2.55,
-            "easybet": 2.52
+            "hollywoodbets": 2.3,
+            "betway": 2.35,
+            "easybet": 2.33
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -118976,9 +118976,9 @@
           "selection": "2 · Mansfield Town",
           "probability": 29.3,
           "odds": {
-            "hollywoodbets": 2.6,
-            "betway": 2.65,
-            "easybet": 2.62
+            "hollywoodbets": 2.84,
+            "betway": 2.9,
+            "easybet": 2.87
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -119004,9 +119004,9 @@
           "selection": "X · Draw",
           "probability": 25.5,
           "odds": {
-            "hollywoodbets": 3.28,
-            "betway": 3.35,
-            "easybet": 3.32
+            "hollywoodbets": 3.33,
+            "betway": 3.4,
+            "easybet": 3.37
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -120088,9 +120088,9 @@
           "selection": "X · Draw",
           "probability": 27.7,
           "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.65,
-            "easybet": 3.61
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -120116,9 +120116,9 @@
           "selection": "1 · Rochdale",
           "probability": 21.4,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -121065,9 +121065,9 @@
           "selection": "1 · Walsall",
           "probability": 52.4,
           "odds": {
-            "hollywoodbets": 2.45,
-            "betway": 2.5,
-            "easybet": 2.48
+            "hollywoodbets": 2.4,
+            "betway": 2.45,
+            "easybet": 2.43
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -121191,9 +121191,9 @@
           "selection": "X · Draw",
           "probability": 28.8,
           "odds": {
-            "hollywoodbets": 3.14,
-            "betway": 3.2,
-            "easybet": 3.17
+            "hollywoodbets": 3.23,
+            "betway": 3.3,
+            "easybet": 3.27
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -121219,9 +121219,9 @@
           "selection": "2 · Port Vale",
           "probability": 18.8,
           "odds": {
-            "hollywoodbets": 2.79,
-            "betway": 2.85,
-            "easybet": 2.82
+            "hollywoodbets": 2.84,
+            "betway": 2.9,
+            "easybet": 2.87
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -123345,9 +123345,9 @@
           "selection": "1 · IF Brommapojkarna",
           "probability": 38.3,
           "odds": {
-            "hollywoodbets": 2.84,
-            "betway": 2.9,
-            "easybet": 2.87
+            "hollywoodbets": 2.89,
+            "betway": 2.95,
+            "easybet": 2.92
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -123429,9 +123429,9 @@
           "selection": "X · Draw",
           "probability": 25.7,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -124415,9 +124415,9 @@
           "selection": "2 · Malmö FF",
           "probability": 43.5,
           "odds": {
-            "hollywoodbets": 2.06,
-            "betway": 2.1,
-            "easybet": 2.08
+            "hollywoodbets": 2.11,
+            "betway": 2.15,
+            "easybet": 2.13
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -124499,9 +124499,9 @@
           "selection": "1 · Västerås SK",
           "probability": 31.1,
           "odds": {
-            "hollywoodbets": 3.04,
-            "betway": 3.1,
-            "easybet": 3.07
+            "hollywoodbets": 3.09,
+            "betway": 3.15,
+            "easybet": 3.12
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -124527,9 +124527,9 @@
           "selection": "X · Draw",
           "probability": 25.4,
           "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.65,
-            "easybet": 3.61
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -125576,9 +125576,9 @@
           "selection": "1 · Dundee",
           "probability": 38.8,
           "odds": {
-            "hollywoodbets": 2.94,
-            "betway": 3,
-            "easybet": 2.97
+            "hollywoodbets": 2.99,
+            "betway": 3.05,
+            "easybet": 3.02
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -125604,9 +125604,9 @@
           "selection": "2 · Motherwell",
           "probability": 31.5,
           "odds": {
-            "hollywoodbets": 2.21,
-            "betway": 2.25,
-            "easybet": 2.23
+            "hollywoodbets": 2.25,
+            "betway": 2.3,
+            "easybet": 2.28
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -125618,9 +125618,9 @@
           "selection": "X · Draw",
           "probability": 29.7,
           "odds": {
-            "hollywoodbets": 3.33,
-            "betway": 3.4,
-            "easybet": 3.37
+            "hollywoodbets": 3.38,
+            "betway": 3.45,
+            "easybet": 3.42
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -126681,9 +126681,9 @@
           "selection": "2 · Aberdeen",
           "probability": 39.6,
           "odds": {
-            "hollywoodbets": 4.21,
-            "betway": 4.3,
-            "easybet": 4.26
+            "hollywoodbets": 4.31,
+            "betway": 4.4,
+            "easybet": 4.36
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -126709,9 +126709,9 @@
           "selection": "1 · Hibernian",
           "probability": 30.7,
           "odds": {
-            "hollywoodbets": 1.68,
-            "betway": 1.71,
-            "easybet": 1.69
+            "hollywoodbets": 1.71,
+            "betway": 1.74,
+            "easybet": 1.72
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -126723,9 +126723,9 @@
           "selection": "X · Draw",
           "probability": 29.7,
           "odds": {
-            "hollywoodbets": 3.82,
-            "betway": 3.9,
-            "easybet": 3.86
+            "hollywoodbets": 3.87,
+            "betway": 3.95,
+            "easybet": 3.91
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -127765,9 +127765,9 @@
           "selection": "1 · St Johnstone",
           "probability": 42.2,
           "odds": {
-            "hollywoodbets": 1.96,
-            "betway": 2,
-            "easybet": 1.98
+            "hollywoodbets": 2.01,
+            "betway": 2.05,
+            "easybet": 2.03
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -127807,9 +127807,9 @@
           "selection": "2 · Falkirk",
           "probability": 28.3,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -127821,9 +127821,9 @@
           "selection": "X · Draw",
           "probability": 29.6,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -128926,9 +128926,9 @@
           "selection": "X · Draw",
           "probability": 26.2,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -128954,9 +128954,9 @@
           "selection": "2 · Dundee United",
           "probability": 18.3,
           "odds": {
-            "hollywoodbets": 2.69,
-            "betway": 2.75,
-            "easybet": 2.72
+            "hollywoodbets": 2.74,
+            "betway": 2.8,
+            "easybet": 2.77
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -129996,9 +129996,9 @@
           "selection": "1 · Blackpool",
           "probability": 34.2,
           "odds": {
-            "hollywoodbets": 2.55,
-            "betway": 2.6,
-            "easybet": 2.57
+            "hollywoodbets": 2.6,
+            "betway": 2.65,
+            "easybet": 2.62
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -130052,9 +130052,9 @@
           "selection": "X · Draw",
           "probability": 26.4,
           "odds": {
-            "hollywoodbets": 3.67,
-            "betway": 3.75,
-            "easybet": 3.71
+            "hollywoodbets": 3.72,
+            "betway": 3.8,
+            "easybet": 3.76
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -130868,9 +130868,9 @@
           "selection": "2 · Huddersfield Town",
           "probability": 67.1,
           "odds": {
-            "hollywoodbets": 1.54,
-            "betway": 1.57,
-            "easybet": 1.55
+            "hollywoodbets": 1.56,
+            "betway": 1.59,
+            "easybet": 1.57
           },
           "marketEdge": 2.7,
           "isValueBet": true,
@@ -131134,9 +131134,9 @@
           "selection": "X · Draw",
           "probability": 20.2,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 4.12,
+            "betway": 4.2,
+            "easybet": 4.16
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -132155,9 +132155,9 @@
           "selection": "2 · Stevenage",
           "probability": 42.4,
           "odds": {
-            "hollywoodbets": 2.94,
-            "betway": 3,
-            "easybet": 2.97
+            "hollywoodbets": 2.99,
+            "betway": 3.05,
+            "easybet": 3.02
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -132253,9 +132253,9 @@
           "selection": "X · Draw",
           "probability": 26,
           "odds": {
-            "hollywoodbets": 3.23,
-            "betway": 3.3,
-            "easybet": 3.27
+            "hollywoodbets": 3.28,
+            "betway": 3.35,
+            "easybet": 3.32
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -133239,9 +133239,9 @@
           "selection": "2 · Bradford City",
           "probability": 45.9,
           "odds": {
-            "hollywoodbets": 3.19,
-            "betway": 3.25,
-            "easybet": 3.22
+            "hollywoodbets": 3.23,
+            "betway": 3.3,
+            "easybet": 3.27
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -133351,9 +133351,9 @@
           "selection": "X · Draw",
           "probability": 27.9,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -134344,9 +134344,9 @@
           "selection": "1 · Oxford United",
           "probability": 45,
           "odds": {
-            "hollywoodbets": 2.06,
-            "betway": 2.1,
-            "easybet": 2.08
+            "hollywoodbets": 2.11,
+            "betway": 2.15,
+            "easybet": 2.13
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -134470,9 +134470,9 @@
           "selection": "X · Draw",
           "probability": 25,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -135363,9 +135363,9 @@
           "selection": "2 · Doncaster Rovers",
           "probability": 54,
           "odds": {
-            "hollywoodbets": 2.69,
-            "betway": 2.75,
-            "easybet": 2.72
+            "hollywoodbets": 2.65,
+            "betway": 2.7,
+            "easybet": 2.67
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -135559,9 +135559,9 @@
           "selection": "X · Draw",
           "probability": 26.4,
           "odds": {
-            "hollywoodbets": 3.48,
-            "betway": 3.55,
-            "easybet": 3.51
+            "hollywoodbets": 3.53,
+            "betway": 3.6,
+            "easybet": 3.56
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -135573,9 +135573,9 @@
           "selection": "1 · Peterborough United",
           "probability": 19.6,
           "odds": {
-            "hollywoodbets": 2.3,
-            "betway": 2.35,
-            "easybet": 2.33
+            "hollywoodbets": 2.4,
+            "betway": 2.45,
+            "easybet": 2.43
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -136620,9 +136620,9 @@
           "selection": "2 · Notts County",
           "probability": 35.5,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 4.12,
+            "betway": 4.2,
+            "easybet": 4.16
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -136676,9 +136676,9 @@
           "selection": "X · Draw",
           "probability": 25.8,
           "odds": {
-            "hollywoodbets": 3.63,
-            "betway": 3.7,
-            "easybet": 3.66
+            "hollywoodbets": 3.67,
+            "betway": 3.75,
+            "easybet": 3.71
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -137655,9 +137655,9 @@
           "selection": "1 · Sheffield Wednesday",
           "probability": 45.6,
           "odds": {
-            "hollywoodbets": 2.69,
-            "betway": 2.75,
-            "easybet": 2.72
+            "hollywoodbets": 2.74,
+            "betway": 2.8,
+            "easybet": 2.77
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -137781,9 +137781,9 @@
           "selection": "X · Draw",
           "probability": 24.2,
           "odds": {
-            "hollywoodbets": 3.72,
-            "betway": 3.8,
-            "easybet": 3.76
+            "hollywoodbets": 3.77,
+            "betway": 3.85,
+            "easybet": 3.81
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -138760,9 +138760,9 @@
           "selection": "2 · Wycombe Wanderers",
           "probability": 45.4,
           "odds": {
-            "hollywoodbets": 2.55,
-            "betway": 2.6,
-            "easybet": 2.57
+            "hollywoodbets": 2.65,
+            "betway": 2.7,
+            "easybet": 2.67
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -138886,9 +138886,9 @@
           "selection": "X · Draw",
           "probability": 25.8,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -139907,9 +139907,9 @@
           "selection": "2 · Newport County",
           "probability": 41.9,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -139921,9 +139921,9 @@
           "selection": "1 · Accrington Stanley",
           "probability": 34,
           "odds": {
-            "hollywoodbets": 1.96,
-            "betway": 2,
-            "easybet": 1.98
+            "hollywoodbets": 2.01,
+            "betway": 2.05,
+            "easybet": 2.03
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -139977,9 +139977,9 @@
           "selection": "X · Draw",
           "probability": 24.1,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -141047,9 +141047,9 @@
           "selection": "1 · Barnet",
           "probability": 37.6,
           "odds": {
-            "hollywoodbets": 1.66,
-            "betway": 1.69,
-            "easybet": 1.67
+            "hollywoodbets": 1.64,
+            "betway": 1.67,
+            "easybet": 1.65
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -141061,9 +141061,9 @@
           "selection": "2 · Fleetwood Town",
           "probability": 33.4,
           "odds": {
-            "hollywoodbets": 4.31,
-            "betway": 4.4,
-            "easybet": 4.36
+            "hollywoodbets": 4.51,
+            "betway": 4.6,
+            "easybet": 4.55
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -141075,9 +141075,9 @@
           "selection": "X · Draw",
           "probability": 28.9,
           "odds": {
-            "hollywoodbets": 3.92,
-            "betway": 4,
-            "easybet": 3.96
+            "hollywoodbets": 4.02,
+            "betway": 4.1,
+            "easybet": 4.06
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -142061,9 +142061,9 @@
           "selection": "2 · York City",
           "probability": 49.5,
           "odds": {
-            "hollywoodbets": 2.74,
-            "betway": 2.8,
-            "easybet": 2.77
+            "hollywoodbets": 2.79,
+            "betway": 2.85,
+            "easybet": 2.82
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -142201,9 +142201,9 @@
           "selection": "X · Draw",
           "probability": 25.6,
           "odds": {
-            "hollywoodbets": 3.43,
-            "betway": 3.5,
-            "easybet": 3.46
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -143166,9 +143166,9 @@
           "selection": "2 · Cheltenham Town",
           "probability": 49.3,
           "odds": {
-            "hollywoodbets": 3.67,
-            "betway": 3.75,
-            "easybet": 3.71
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.3,
           "isValueBet": false,
@@ -143292,9 +143292,9 @@
           "selection": "1 · Colchester United",
           "probability": 25.8,
           "odds": {
-            "hollywoodbets": 1.87,
-            "betway": 1.91,
-            "easybet": 1.89
+            "hollywoodbets": 1.91,
+            "betway": 1.95,
+            "easybet": 1.93
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -143306,9 +143306,9 @@
           "selection": "X · Draw",
           "probability": 24.9,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -144271,9 +144271,9 @@
           "selection": "1 · Crewe Alexandra",
           "probability": 52.7,
           "odds": {
-            "hollywoodbets": 1.91,
-            "betway": 1.95,
-            "easybet": 1.93
+            "hollywoodbets": 1.96,
+            "betway": 2,
+            "easybet": 1.98
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -144397,9 +144397,9 @@
           "selection": "2 · Shrewsbury Town",
           "probability": 17.6,
           "odds": {
-            "hollywoodbets": 3.58,
-            "betway": 3.65,
-            "easybet": 3.61
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -145411,9 +145411,9 @@
           "selection": "2 · Tranmere Rovers",
           "probability": 42.4,
           "odds": {
-            "hollywoodbets": 2.94,
-            "betway": 3,
-            "easybet": 2.97
+            "hollywoodbets": 2.99,
+            "betway": 3.05,
+            "easybet": 3.02
           },
           "marketEdge": -5.3,
           "isValueBet": false,
@@ -145495,9 +145495,9 @@
           "selection": "X · Draw",
           "probability": 31.6,
           "odds": {
-            "hollywoodbets": 3.33,
-            "betway": 3.4,
-            "easybet": 3.37
+            "hollywoodbets": 3.38,
+            "betway": 3.45,
+            "easybet": 3.42
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -146565,9 +146565,9 @@
           "selection": "2 · Bristol Rovers",
           "probability": 42,
           "odds": {
-            "hollywoodbets": 1.91,
-            "betway": 1.95,
-            "easybet": 1.93
+            "hollywoodbets": 2.01,
+            "betway": 2.05,
+            "easybet": 2.03
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -146607,9 +146607,9 @@
           "selection": "1 · Gillingham",
           "probability": 30.1,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -146635,9 +146635,9 @@
           "selection": "X · Draw",
           "probability": 27.9,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -147726,9 +147726,9 @@
           "selection": "X · Draw",
           "probability": 25,
           "odds": {
-            "hollywoodbets": 4.61,
-            "betway": 4.7,
-            "easybet": 4.65
+            "hollywoodbets": 4.7,
+            "betway": 4.8,
+            "easybet": 4.75
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -148789,9 +148789,9 @@
           "selection": "2 · Rotherham United",
           "probability": 35.1,
           "odds": {
-            "hollywoodbets": 2.79,
-            "betway": 2.85,
-            "easybet": 2.82
+            "hollywoodbets": 2.84,
+            "betway": 2.9,
+            "easybet": 2.87
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -149922,9 +149922,9 @@
           "selection": "1 · Salford City",
           "probability": 33.8,
           "odds": {
-            "hollywoodbets": 1.51,
-            "betway": 1.54,
-            "easybet": 1.52
+            "hollywoodbets": 1.53,
+            "betway": 1.56,
+            "easybet": 1.54
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -149950,9 +149950,9 @@
           "selection": "X · Draw",
           "probability": 27.9,
           "odds": {
-            "hollywoodbets": 4.31,
-            "betway": 4.4,
-            "easybet": 4.36
+            "hollywoodbets": 4.41,
+            "betway": 4.5,
+            "easybet": 4.46
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -150992,9 +150992,9 @@
           "selection": "2 · FC Famalicao",
           "probability": 37.2,
           "odds": {
-            "hollywoodbets": 2.01,
-            "betway": 2.05,
-            "easybet": 2.03
+            "hollywoodbets": 2.06,
+            "betway": 2.1,
+            "easybet": 2.08
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -151006,9 +151006,9 @@
           "selection": "1 · C.D. Nacional",
           "probability": 32.1,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -151034,9 +151034,9 @@
           "selection": "X · Draw",
           "probability": 30.7,
           "odds": {
-            "hollywoodbets": 3.19,
-            "betway": 3.25,
-            "easybet": 3.22
+            "hollywoodbets": 3.23,
+            "betway": 3.3,
+            "easybet": 3.27
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -152062,9 +152062,9 @@
           "selection": "1 · Gil Vicente",
           "probability": 41.4,
           "odds": {
-            "hollywoodbets": 1.91,
-            "betway": 1.95,
-            "easybet": 1.93
+            "hollywoodbets": 1.87,
+            "betway": 1.91,
+            "easybet": 1.89
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -152118,9 +152118,9 @@
           "selection": "2 · Maritimo",
           "probability": 26.9,
           "odds": {
-            "hollywoodbets": 3.82,
-            "betway": 3.9,
-            "easybet": 3.86
+            "hollywoodbets": 4.02,
+            "betway": 4.1,
+            "easybet": 4.06
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -153153,9 +153153,9 @@
           "selection": "1 · Boston River",
           "probability": 42.5,
           "odds": {
-            "hollywoodbets": 1.91,
-            "betway": 1.95,
-            "easybet": 1.93
+            "hollywoodbets": 1.87,
+            "betway": 1.91,
+            "easybet": 1.89
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -153223,9 +153223,9 @@
           "selection": "X · Draw",
           "probability": 31.5,
           "odds": {
-            "hollywoodbets": 3.28,
-            "betway": 3.35,
-            "easybet": 3.32
+            "hollywoodbets": 3.19,
+            "betway": 3.25,
+            "easybet": 3.22
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -153237,9 +153237,9 @@
           "selection": "2 · Progreso",
           "probability": 26.1,
           "odds": {
-            "hollywoodbets": 3.48,
-            "betway": 3.55,
-            "easybet": 3.51
+            "hollywoodbets": 3.63,
+            "betway": 3.7,
+            "easybet": 3.66
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -155188,9 +155188,9 @@
           "selection": "2 · IK Sirius",
           "probability": 69.9,
           "odds": {
-            "hollywoodbets": 1.5,
-            "betway": 1.53,
-            "easybet": 1.51
+            "hollywoodbets": 1.48,
+            "betway": 1.51,
+            "easybet": 1.49
           },
           "marketEdge": 2.8,
           "isValueBet": true,
@@ -155454,9 +155454,9 @@
           "selection": "X · Draw",
           "probability": 17.8,
           "odds": {
-            "hollywoodbets": 4.51,
-            "betway": 4.6,
-            "easybet": 4.55
+            "hollywoodbets": 4.61,
+            "betway": 4.7,
+            "easybet": 4.65
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -155468,9 +155468,9 @@
           "selection": "1 · Örgryte IS",
           "probability": 12.1,
           "odds": {
-            "hollywoodbets": 5.14,
-            "betway": 5.25,
-            "easybet": 5.2
+            "hollywoodbets": 5.39,
+            "betway": 5.5,
+            "easybet": 5.45
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -156531,9 +156531,9 @@
           "selection": "2 · Kifisia",
           "probability": 30.4,
           "odds": {
-            "hollywoodbets": 3.53,
-            "betway": 3.6,
-            "easybet": 3.56
+            "hollywoodbets": 3.58,
+            "betway": 3.65,
+            "easybet": 3.61
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -156573,9 +156573,9 @@
           "selection": "X · Draw",
           "probability": 33.1,
           "odds": {
-            "hollywoodbets": 3.28,
-            "betway": 3.35,
-            "easybet": 3.32
+            "hollywoodbets": 3.38,
+            "betway": 3.45,
+            "easybet": 3.42
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -160876,9 +160876,9 @@
           "selection": "1 · Alverca",
           "probability": 49.7,
           "odds": {
-            "hollywoodbets": 1.87,
-            "betway": 1.91,
-            "easybet": 1.89
+            "hollywoodbets": 1.91,
+            "betway": 1.95,
+            "easybet": 1.93
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -161002,9 +161002,9 @@
           "selection": "2 · Rio Ave",
           "probability": 24.2,
           "odds": {
-            "hollywoodbets": 3.87,
-            "betway": 3.95,
-            "easybet": 3.91
+            "hollywoodbets": 3.77,
+            "betway": 3.85,
+            "easybet": 3.81
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -161016,9 +161016,9 @@
           "selection": "X · Draw",
           "probability": 26.1,
           "odds": {
-            "hollywoodbets": 3.38,
-            "betway": 3.45,
-            "easybet": 3.42
+            "hollywoodbets": 3.33,
+            "betway": 3.4,
+            "easybet": 3.37
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -163107,9 +163107,9 @@
           "selection": "2 · Peñarol",
           "probability": 45.1,
           "odds": {
-            "hollywoodbets": 2.05,
-            "betway": 2.09,
-            "easybet": 2.06
+            "hollywoodbets": 1.45,
+            "betway": 1.48,
+            "easybet": 1.47
           },
           "marketEdge": -5.7,
           "isValueBet": false,
@@ -163191,9 +163191,9 @@
           "selection": "X · Draw",
           "probability": 30.7,
           "odds": {
-            "hollywoodbets": 3.02,
-            "betway": 3.08,
-            "easybet": 3.03
+            "hollywoodbets": 3.77,
+            "betway": 3.85,
+            "easybet": 3.81
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -163205,9 +163205,9 @@
           "selection": "1 · Cerro",
           "probability": 24.2,
           "odds": {
-            "hollywoodbets": 3.82,
-            "betway": 3.9,
-            "easybet": 3.84
+            "hollywoodbets": 5.88,
+            "betway": 6,
+            "easybet": 5.94
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -165266,9 +165266,9 @@
           "selection": "1 · Sporting CP",
           "probability": 49.8,
           "odds": {
-            "hollywoodbets": 1.19,
-            "betway": 1.21,
-            "easybet": 1.2
+            "hollywoodbets": 1.2,
+            "betway": 1.22,
+            "easybet": 1.21
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -174724,1104 +174724,6 @@
       }
     },
     {
-      "id": "venezuela-401903320",
-      "league": {
-        "id": "venezuela",
-        "name": "Venezuelan Primera División",
-        "country": "Venezuela",
-        "flag": "🇻🇪"
-      },
-      "matchDate": "2026-09-19",
-      "kickoffTime": "23:30",
-      "kickoff": "2026-09-19T23:30Z",
-      "home": {
-        "rating": 75,
-        "form": [
-          "W",
-          "D",
-          "W",
-          "L",
-          "W"
-        ],
-        "xgFor": 1.79,
-        "xgAgainst": 1.19,
-        "rank": 5,
-        "ppg": 1.6,
-        "statsSource": "official-standings",
-        "name": "Deportivo La Guaira",
-        "short": "LGA",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/17090.png"
-      },
-      "away": {
-        "rating": 78,
-        "form": [
-          "W",
-          "D",
-          "W",
-          "L",
-          "W"
-        ],
-        "xgFor": 1.87,
-        "xgAgainst": 1.19,
-        "rank": 2,
-        "ppg": 2,
-        "statsSource": "official-standings",
-        "name": "Deportivo Táchira",
-        "short": "TAC",
-        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/4818.png"
-      },
-      "venue": "Estadio Olímpico de la UCV",
-      "isBig": false,
-      "h2h": {
-        "homeWins": 3,
-        "draws": 1,
-        "awayWins": 4,
-        "lastFive": [
-          "A",
-          "A",
-          "H",
-          "A",
-          "A"
-        ],
-        "last8Meetings": [
-          {
-            "meetingIndex": 8,
-            "date": "27 Sep 2023",
-            "season": "22/23",
-            "homeGoals": 2,
-            "awayGoals": 0,
-            "totalGoals": 2,
-            "outcome": "H",
-            "scoreline": "2 - 0",
-            "venue": "Away",
-            "btts": false,
-            "over25": false,
-            "order": 1,
-            "label": "M1"
-          },
-          {
-            "meetingIndex": 7,
-            "date": "04 Aug 2023",
-            "season": "22/23",
-            "homeGoals": 2,
-            "awayGoals": 2,
-            "totalGoals": 4,
-            "outcome": "D",
-            "scoreline": "2 - 2",
-            "venue": "Home",
-            "btts": true,
-            "over25": true,
-            "order": 2,
-            "label": "M2"
-          },
-          {
-            "meetingIndex": 6,
-            "date": "11 Sep 2024",
-            "season": "23/24",
-            "homeGoals": 2,
-            "awayGoals": 1,
-            "totalGoals": 3,
-            "outcome": "H",
-            "scoreline": "2 - 1",
-            "venue": "Away",
-            "btts": true,
-            "over25": true,
-            "order": 3,
-            "label": "M3"
-          },
-          {
-            "meetingIndex": 5,
-            "date": "03 Oct 2024",
-            "season": "23/24",
-            "homeGoals": 1,
-            "awayGoals": 3,
-            "totalGoals": 4,
-            "outcome": "A",
-            "scoreline": "1 - 3",
-            "venue": "Home",
-            "btts": true,
-            "over25": true,
-            "order": 4,
-            "label": "M4"
-          },
-          {
-            "meetingIndex": 4,
-            "date": "18 Aug 2025",
-            "season": "24/25",
-            "homeGoals": 2,
-            "awayGoals": 4,
-            "totalGoals": 6,
-            "outcome": "A",
-            "scoreline": "2 - 4",
-            "venue": "Away",
-            "btts": true,
-            "over25": true,
-            "order": 5,
-            "label": "M5"
-          },
-          {
-            "meetingIndex": 3,
-            "date": "13 Aug 2025",
-            "season": "24/25",
-            "homeGoals": 4,
-            "awayGoals": 1,
-            "totalGoals": 5,
-            "outcome": "H",
-            "scoreline": "4 - 1",
-            "venue": "Home",
-            "btts": true,
-            "over25": true,
-            "order": 6,
-            "label": "M6"
-          },
-          {
-            "meetingIndex": 2,
-            "date": "22 Sep 2026",
-            "season": "25/26",
-            "homeGoals": 0,
-            "awayGoals": 6,
-            "totalGoals": 6,
-            "outcome": "A",
-            "scoreline": "0 - 6",
-            "venue": "Away",
-            "btts": false,
-            "over25": true,
-            "order": 7,
-            "label": "M7"
-          },
-          {
-            "meetingIndex": 1,
-            "date": "08 Nov 2026",
-            "season": "25/26",
-            "homeGoals": 1,
-            "awayGoals": 3,
-            "totalGoals": 4,
-            "outcome": "A",
-            "scoreline": "1 - 3",
-            "venue": "Home",
-            "btts": true,
-            "over25": true,
-            "order": 8,
-            "label": "M8"
-          }
-        ],
-        "rawRecent": [
-          {
-            "meetingIndex": 1,
-            "date": "08 Nov 2026",
-            "season": "25/26",
-            "homeGoals": 1,
-            "awayGoals": 3,
-            "totalGoals": 4,
-            "outcome": "A",
-            "scoreline": "1 - 3",
-            "venue": "Home",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 2,
-            "date": "22 Sep 2026",
-            "season": "25/26",
-            "homeGoals": 0,
-            "awayGoals": 6,
-            "totalGoals": 6,
-            "outcome": "A",
-            "scoreline": "0 - 6",
-            "venue": "Away",
-            "btts": false,
-            "over25": true
-          },
-          {
-            "meetingIndex": 3,
-            "date": "13 Aug 2025",
-            "season": "24/25",
-            "homeGoals": 4,
-            "awayGoals": 1,
-            "totalGoals": 5,
-            "outcome": "H",
-            "scoreline": "4 - 1",
-            "venue": "Home",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 4,
-            "date": "18 Aug 2025",
-            "season": "24/25",
-            "homeGoals": 2,
-            "awayGoals": 4,
-            "totalGoals": 6,
-            "outcome": "A",
-            "scoreline": "2 - 4",
-            "venue": "Away",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 5,
-            "date": "03 Oct 2024",
-            "season": "23/24",
-            "homeGoals": 1,
-            "awayGoals": 3,
-            "totalGoals": 4,
-            "outcome": "A",
-            "scoreline": "1 - 3",
-            "venue": "Home",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 6,
-            "date": "11 Sep 2024",
-            "season": "23/24",
-            "homeGoals": 2,
-            "awayGoals": 1,
-            "totalGoals": 3,
-            "outcome": "H",
-            "scoreline": "2 - 1",
-            "venue": "Away",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 7,
-            "date": "04 Aug 2023",
-            "season": "22/23",
-            "homeGoals": 2,
-            "awayGoals": 2,
-            "totalGoals": 4,
-            "outcome": "D",
-            "scoreline": "2 - 2",
-            "venue": "Home",
-            "btts": true,
-            "over25": true
-          },
-          {
-            "meetingIndex": 8,
-            "date": "27 Sep 2023",
-            "season": "22/23",
-            "homeGoals": 2,
-            "awayGoals": 0,
-            "totalGoals": 2,
-            "outcome": "H",
-            "scoreline": "2 - 0",
-            "venue": "Away",
-            "btts": false,
-            "over25": false
-          }
-        ],
-        "totalGoals": 34,
-        "homeGoalsTotal": 14,
-        "awayGoalsTotal": 20,
-        "avgGoals": 4.25,
-        "over25Count": 7,
-        "over25Pct": 87.5,
-        "bttsCount": 6,
-        "bttsPct": 75,
-        "distribution": [
-          {
-            "range": "0-1 Goals",
-            "count": 0,
-            "pct": 0,
-            "color": "#94A3B8"
-          },
-          {
-            "range": "2-3 Goals",
-            "count": 2,
-            "pct": 25,
-            "color": "#F59E0B"
-          },
-          {
-            "range": "4+ Goals",
-            "count": 6,
-            "pct": 75,
-            "color": "#10B981"
-          }
-        ],
-        "h2hSource": "empirical-calibrated"
-      },
-      "predictions": [
-        {
-          "rank": 1,
-          "market": "Goals Over/Under",
-          "selection": "Over 1.5",
-          "probability": 82.1,
-          "odds": {
-            "hollywoodbets": 1.24,
-            "betway": 1.27,
-            "easybet": 1.25
-          },
-          "marketEdge": 4.3,
-          "isValueBet": true,
-          "convictionScore": 94.5
-        },
-        {
-          "rank": 2,
-          "market": "Double Chance",
-          "selection": "12 · Either to Win",
-          "probability": 72.3,
-          "odds": {
-            "hollywoodbets": 1.28,
-            "betway": 1.31,
-            "easybet": 1.29
-          },
-          "marketEdge": -5.2,
-          "isValueBet": false,
-          "convictionScore": 75.3
-        },
-        {
-          "rank": 3,
-          "market": "Double Chance",
-          "selection": "X2 · Away or Draw",
-          "probability": 67.7,
-          "odds": {
-            "hollywoodbets": 1.37,
-            "betway": 1.4,
-            "easybet": 1.37
-          },
-          "marketEdge": -5.2,
-          "isValueBet": false,
-          "convictionScore": 70.7
-        },
-        {
-          "rank": 4,
-          "market": "Player Tackles",
-          "selection": "Over 2.5 Tackles (Key Defensive Anchor)",
-          "probability": 74,
-          "odds": {
-            "hollywoodbets": 1.25,
-            "betway": 1.28,
-            "easybet": 1.26
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 70
-        },
-        {
-          "rank": 5,
-          "market": "Goals Over/Under",
-          "selection": "Under 3.5",
-          "probability": 64.3,
-          "odds": {
-            "hollywoodbets": 1.44,
-            "betway": 1.47,
-            "easybet": 1.45
-          },
-          "marketEdge": -5.5,
-          "isValueBet": false,
-          "convictionScore": 66.3
-        },
-        {
-          "rank": 6,
-          "market": "Double Chance",
-          "selection": "1X · Home or Draw",
-          "probability": 59.9,
-          "odds": {
-            "hollywoodbets": 1.55,
-            "betway": 1.58,
-            "easybet": 1.55
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 62.9
-        },
-        {
-          "rank": 7,
-          "market": "Corners Over/Under",
-          "selection": "Over 8.5 Corners",
-          "probability": 69.7,
-          "odds": {
-            "hollywoodbets": 1.33,
-            "betway": 1.36,
-            "easybet": 1.34
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 61.7
-        },
-        {
-          "rank": 8,
-          "market": "Bookings & Cards",
-          "selection": "Under 4.5 Total Cards",
-          "probability": 64.4,
-          "odds": {
-            "hollywoodbets": 1.44,
-            "betway": 1.47,
-            "easybet": 1.45
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 60.4
-        },
-        {
-          "rank": 9,
-          "market": "Draw No Bet",
-          "selection": "DNB · Deportivo Táchira",
-          "probability": 55.4,
-          "odds": {
-            "hollywoodbets": 1.67,
-            "betway": 1.71,
-            "easybet": 1.68
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 56.9
-        },
-        {
-          "rank": 10,
-          "market": "Both Teams to Score",
-          "selection": "BTTS · Yes",
-          "probability": 62.3,
-          "odds": {
-            "hollywoodbets": 1.49,
-            "betway": 1.52,
-            "easybet": 1.49
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 56.3
-        },
-        {
-          "rank": 11,
-          "market": "Goals Over/Under",
-          "selection": "Over 2.5",
-          "probability": 58.1,
-          "odds": {
-            "hollywoodbets": 1.59,
-            "betway": 1.63,
-            "easybet": 1.6
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 52.1
-        },
-        {
-          "rank": 12,
-          "market": "Goal in Both Halves",
-          "selection": "Goal Scored in Both Halves",
-          "probability": 48,
-          "odds": {
-            "hollywoodbets": 1.93,
-            "betway": 1.97,
-            "easybet": 1.94
-          },
-          "marketEdge": -5.4,
-          "isValueBet": false,
-          "convictionScore": 50
-        },
-        {
-          "rank": 13,
-          "market": "Corners Over/Under",
-          "selection": "Over 9.5 Corners",
-          "probability": 57.5,
-          "odds": {
-            "hollywoodbets": 1.61,
-            "betway": 1.64,
-            "easybet": 1.62
-          },
-          "marketEdge": -5.7,
-          "isValueBet": false,
-          "convictionScore": 49.5
-        },
-        {
-          "rank": 14,
-          "market": "Win Either Half",
-          "selection": "2EH · Deportivo Táchira to Win Either Half",
-          "probability": 45.3,
-          "odds": {
-            "hollywoodbets": 2.04,
-            "betway": 2.09,
-            "easybet": 2.05
-          },
-          "marketEdge": -5.3,
-          "isValueBet": false,
-          "convictionScore": 47.8
-        },
-        {
-          "rank": 15,
-          "market": "Corners Over/Under",
-          "selection": "Under 10.5 Corners",
-          "probability": 55,
-          "odds": {
-            "hollywoodbets": 1.68,
-            "betway": 1.72,
-            "easybet": 1.69
-          },
-          "marketEdge": -5.5,
-          "isValueBet": false,
-          "convictionScore": 47
-        },
-        {
-          "rank": 16,
-          "market": "Draw No Bet",
-          "selection": "DNB · Deportivo La Guaira",
-          "probability": 44.6,
-          "odds": {
-            "hollywoodbets": 2.08,
-            "betway": 2.12,
-            "easybet": 2.09
-          },
-          "marketEdge": -5.4,
-          "isValueBet": false,
-          "convictionScore": 46.1
-        },
-        {
-          "rank": 17,
-          "market": "Bookings & Cards",
-          "selection": "Over 3.5 Total Cards",
-          "probability": 49.5,
-          "odds": {
-            "hollywoodbets": 1.87,
-            "betway": 1.91,
-            "easybet": 1.88
-          },
-          "marketEdge": -5.5,
-          "isValueBet": false,
-          "convictionScore": 45.5
-        },
-        {
-          "rank": 18,
-          "market": "Win Either Half",
-          "selection": "1EH · Deportivo La Guaira to Win Either Half",
-          "probability": 37.6,
-          "odds": {
-            "hollywoodbets": 2.46,
-            "betway": 2.51,
-            "easybet": 2.48
-          },
-          "marketEdge": -5.6,
-          "isValueBet": false,
-          "convictionScore": 40.1
-        },
-        {
-          "rank": 19,
-          "market": "Match Winner",
-          "selection": "2 · Deportivo Táchira",
-          "probability": 40.1,
-          "odds": {
-            "hollywoodbets": 2.31,
-            "betway": 2.36,
-            "easybet": 2.32
-          },
-          "marketEdge": -5.4,
-          "isValueBet": false,
-          "convictionScore": 37.1
-        },
-        {
-          "rank": 20,
-          "market": "Goals Over/Under",
-          "selection": "Under 2.5",
-          "probability": 41.9,
-          "odds": {
-            "hollywoodbets": 2.21,
-            "betway": 2.26,
-            "easybet": 2.22
-          },
-          "marketEdge": -5.4,
-          "isValueBet": false,
-          "convictionScore": 35.9
-        },
-        {
-          "rank": 21,
-          "market": "Corners Over/Under",
-          "selection": "Under 9.5 Corners",
-          "probability": 42.5,
-          "odds": {
-            "hollywoodbets": 2.18,
-            "betway": 2.22,
-            "easybet": 2.19
-          },
-          "marketEdge": -5.7,
-          "isValueBet": false,
-          "convictionScore": 34.5
-        },
-        {
-          "rank": 22,
-          "market": "Both Teams to Score",
-          "selection": "BTTS · No",
-          "probability": 37.7,
-          "odds": {
-            "hollywoodbets": 2.46,
-            "betway": 2.51,
-            "easybet": 2.47
-          },
-          "marketEdge": -5.4,
-          "isValueBet": false,
-          "convictionScore": 31.7
-        },
-        {
-          "rank": 23,
-          "market": "Match Winner",
-          "selection": "1 · Deportivo La Guaira",
-          "probability": 32.3,
-          "odds": {
-            "hollywoodbets": 2.87,
-            "betway": 2.93,
-            "easybet": 2.88
-          },
-          "marketEdge": -5.4,
-          "isValueBet": false,
-          "convictionScore": 29.3
-        },
-        {
-          "rank": 24,
-          "market": "Goals Over/Under",
-          "selection": "Over 3.5",
-          "probability": 35.7,
-          "odds": {
-            "hollywoodbets": 2.59,
-            "betway": 2.64,
-            "easybet": 2.61
-          },
-          "marketEdge": -5.7,
-          "isValueBet": false,
-          "convictionScore": 27.7
-        },
-        {
-          "rank": 25,
-          "market": "Match Winner",
-          "selection": "X · Draw",
-          "probability": 27.7,
-          "odds": {
-            "hollywoodbets": 3.35,
-            "betway": 3.42,
-            "easybet": 3.37
-          },
-          "marketEdge": -5.4,
-          "isValueBet": false,
-          "convictionScore": 19.7
-        },
-        {
-          "rank": 26,
-          "market": "Goals Over/Under",
-          "selection": "Under 1.5",
-          "probability": 17.9,
-          "odds": {
-            "hollywoodbets": 5.19,
-            "betway": 5.29,
-            "easybet": 5.21
-          },
-          "marketEdge": -5.6,
-          "isValueBet": false,
-          "convictionScore": 9.9
-        }
-      ],
-      "topPick": {
-        "market": "Goals Over/Under",
-        "selection": "Over 1.5",
-        "probability": 82.1,
-        "marketEdge": 4.3,
-        "isValueBet": true,
-        "odds": {
-          "hollywoodbets": 1.24,
-          "betway": 1.27,
-          "easybet": 1.25
-        }
-      },
-      "probabilityIndex": 82.1,
-      "rationale": "Deportivo La Guaira (Elo 75, xG 1.79) vs Deportivo Táchira (Elo 78, xG 1.87) in Venezuelan Primera División. Dixon-Coles model favors Over 1.5 (82.1% calibrated probability).",
-      "matchStatus": "TIMED",
-      "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE",
-      "tacticalFeeds": {
-        "expectedThreat": {
-          "home": 1.77,
-          "away": 1.37,
-          "unit": "xT / 90",
-          "dangerZones": [
-            "Central Zone 14",
-            "Half-Space Cutbacks"
-          ],
-          "source": "FBref & Tiki Taka Spatial Feed"
-        },
-        "ppdaPressing": {
-          "home": 14.9,
-          "away": 15.4,
-          "interpretation": "Mid-Block Tactical Screen",
-          "source": "FBref / StatsBomb Event Stream"
-        },
-        "regressionMetric": {
-          "homeGMinusXg": 0.08,
-          "awayGMinusXg": 0.28,
-          "signal": "Sustainable Shot Quality",
-          "source": "xG Stat npxG Database"
-        }
-      },
-      "situationalFactors": {
-        "travelFatigue": {
-          "travelDistanceKm": 972,
-          "restHoursAway": 90,
-          "restHoursHome": 96,
-          "isContinentalMidweek": false,
-          "fatiguePenaltyPct": -0.6
-        },
-        "motivationAndContext": {
-          "homeMotivationIndex": 88,
-          "awayMotivationIndex": 91,
-          "contextTag": "Standard League Fixture"
-        },
-        "weatherConditions": {
-          "temperatureC": 18,
-          "windKmh": 28,
-          "precipitationPct": 29,
-          "impactSummary": "Wind divergence may temper long passing accuracy"
-        }
-      },
-      "marketPsychology": {
-        "betfairExchange": {
-          "backOdds": 1.26,
-          "layOdds": 1.29,
-          "spreadPct": 2.38,
-          "matchedVolume": "1125k",
-          "liquidityRating": "DEEP EXCHANGE LIQUIDITY"
-        },
-        "steamMoveRadar": {
-          "shiftPct": -1.5,
-          "direction": "MARKET STABLE",
-          "alertTriggered": false
-        }
-      },
-      "beastMeta": {
-        "beastScore": 91,
-        "rawBeastScore": 91.3,
-        "brierScore": 0.131,
-        "calibratedProbability": 82.1,
-        "valueClassification": "ELITE VALUE",
-        "walkForwardScore": "PASSED (0.0% Leakage)",
-        "vigFreeOdds": 1.78,
-        "expectedValuePct": 4.27,
-        "deltaEvPct": 33.02,
-        "marketOverroundPct": 58.75,
-        "shinMethod": {
-          "overroundSum": 1.5875,
-          "overroundPct": 58.75,
-          "informedTradingZ": 0.3078,
-          "powerMethodK": 1.8727,
-          "fairOdds": 1.78,
-          "fairProbPct": 56.1
-        },
-        "systemProtection": {
-          "isQualifiedValueBet": true,
-          "passesStrictProtection": true,
-          "deltaEvPct": 33.02,
-          "status": "QUALIFIED_VALUE_BET",
-          "rationale": "System Protection Verified: Calibrated HyenaX probability (82.1%) strictly exceeds de-vigged market consensus (56.1%) with +33.02% net edge."
-        },
-        "bayesianDynamicUpdate": {
-          "priorElo": 1688,
-          "posteriorElo": 1688,
-          "eloAdjustmentDelta": 0,
-          "antiRecencyShieldActive": true,
-          "recencyDampeningApplied": false,
-          "recencyDampeningPct": 0,
-          "shieldVerdict": "HISTORICAL_PRIOR_PRESERVED_NO_RECENCY_BIAS"
-        },
-        "kellyRiskAllocation": {
-          "quarterKelly": {
-            "match": "Deportivo La Guaira vs Deportivo Táchira",
-            "selection": "Over 1.5",
-            "calibratedProbability": 82.1,
-            "odds": 1.27,
-            "fullKellyPct": 15.8,
-            "chiMultiplier": 0.25,
-            "fractionalScaleName": "Quarter-Kelly (chi = 0.25)",
-            "fractionalKellyPct": 3.95,
-            "quarterKellyPct": 3.95,
-            "recommendedStakeZAR": 197.55,
-            "recommendedStake": 197.55,
-            "geometricGrowthRate": 0.0015,
-            "estimatedRuinProbPct": 1.399,
-            "wasCappedAtCeiling": false,
-            "isPositiveExpectation": true
-          },
-          "halfKelly": {
-            "match": "Deportivo La Guaira vs Deportivo Táchira",
-            "selection": "Over 1.5",
-            "calibratedProbability": 82.1,
-            "odds": 1.27,
-            "fullKellyPct": 15.8,
-            "chiMultiplier": 0.5,
-            "fractionalScaleName": "Half-Kelly (chi = 0.50)",
-            "fractionalKellyPct": 5,
-            "quarterKellyPct": 5,
-            "recommendedStakeZAR": 250,
-            "recommendedStake": 250,
-            "geometricGrowthRate": 0.0018,
-            "estimatedRuinProbPct": 1.399,
-            "wasCappedAtCeiling": true,
-            "isPositiveExpectation": true
-          },
-          "bankrollZAR": 5000
-        },
-        "outlierFilters": {
-          "status": "PASSED_INTEGRITY_AUDIT",
-          "badgeText": "PROTECTED: ROSTER & MARKET INTEGRITY VERIFIED",
-          "badgeColor": "emerald",
-          "isSuspended": false,
-          "isFrozen": false,
-          "rosterIntegrity": {
-            "status": "OPTIMAL_FULL_ROSTER",
-            "missingPlayersXgPct": 10.9,
-            "thresholdExceeded": false,
-            "confidenceMultiplier": 1,
-            "missingPlayersList": []
-          },
-          "marketSteamRadar": {
-            "status": "CALM_MARKET_LIQUIDITY",
-            "marketSteamDeltaPct": -1.5,
-            "closingLineDirection": "NEUTRAL",
-            "thresholdExceeded": false
-          }
-        },
-        "ensemble": {
-          "consensusProbability": 60.1,
-          "modelAgreementScore": 65,
-          "standardDeviation": 10.92,
-          "totalModelsActive": 17,
-          "confidenceTier": "MODERATE_DIVERGENCE",
-          "categoryAverages": [
-            {
-              "category": "Parametric Statistical",
-              "modelCount": 6,
-              "weightedProb": 52.7
-            },
-            {
-              "category": "Gradient Boosted Decision Trees",
-              "modelCount": 4,
-              "weightedProb": 58.6
-            },
-            {
-              "category": "Bootstrap Aggregated Ensembles",
-              "modelCount": 1,
-              "weightedProb": 62.2
-            },
-            {
-              "category": "Paired-Comparison Statistical Models",
-              "modelCount": 1,
-              "weightedProb": 50.6
-            },
-            {
-              "category": "Deep Graph Representation Learning",
-              "modelCount": 1,
-              "weightedProb": 60.5
-            },
-            {
-              "category": "Sequential Deep Learning",
-              "modelCount": 2,
-              "weightedProb": 82.5
-            },
-            {
-              "category": "Market Microstructure",
-              "modelCount": 1,
-              "weightedProb": 51.2
-            },
-            {
-              "category": "Bayesian Synthesis",
-              "modelCount": 1,
-              "weightedProb": 53.3
-            }
-          ],
-          "dissentingModels": [
-            {
-              "name": "Transformer Self-Attention",
-              "prob": 90.8,
-              "deltaFromConsensus": 30.7,
-              "direction": "MORE_OPTIMISTIC",
-              "signal": "Attention Peak on Token t-2 (30.5% Weight)"
-            }
-          ],
-          "breakdown": [
-            {
-              "name": "Dixon-Coles Bivariate Poisson (1997)",
-              "prob": 55.4,
-              "weight": 0.12,
-              "category": "Parametric Statistical",
-              "signal": "Home Poisson Parameter Supremacy"
-            },
-            {
-              "name": "Poisson xG / xT Box Threat",
-              "prob": 47.5,
-              "weight": 0.09,
-              "category": "Parametric Statistical",
-              "signal": "High Dangerous Attack Share"
-            },
-            {
-              "name": "Multi-Factor Rolling Elo",
-              "prob": 54.9,
-              "weight": 0.08,
-              "category": "Parametric Statistical",
-              "signal": "Quality Differential Anchor"
-            },
-            {
-              "name": "Venue Fortress Index",
-              "prob": 56.3,
-              "weight": 0.05,
-              "category": "Parametric Statistical",
-              "signal": "Home Ground Climate Edge"
-            },
-            {
-              "name": "Recent Form & Momentum",
-              "prob": 49.2,
-              "weight": 0.05,
-              "category": "Parametric Statistical",
-              "signal": "Last 5 Match Momentum Vector"
-            },
-            {
-              "name": "Squad Depth & Starters",
-              "prob": 52.3,
-              "weight": 0.04,
-              "category": "Parametric Statistical",
-              "signal": "Availability & Depth Parity"
-            },
-            {
-              "name": "XGBoost (Extreme Gradient Boost)",
-              "prob": 71.4,
-              "weight": 0.13,
-              "category": "Gradient Boosted Decision Trees",
-              "architecture": "2nd-Order Taylor Expansion with L2 Regularization & Exact Greedy Splits",
-              "signal": "Negative Gradient Hedge",
-              "diagnostics": {
-                "treesEvaluated": 12,
-                "learningRate": 0.28,
-                "l2Regularization": 1.25,
-                "topFeatureSplit": "xG Net Differential (ΔxG) & Elo Delta",
-                "finalLogOdds": 0.913
-              }
-            },
-            {
-              "name": "LightGBM (Leaf-Wise Histogram)",
-              "prob": 53.8,
-              "weight": 0.12,
-              "category": "Gradient Boosted Decision Trees",
-              "architecture": "Leaf-Wise Best-First Growth with 256-Bin Feature Quantization & GOSS",
-              "signal": "Balanced Mid-Tier Histogram",
-              "diagnostics": {
-                "maxLeaves": 31,
-                "histogramBins": 32,
-                "gossSamplingRate": "0.2 large / 0.1 small",
-                "leafPurityScore": "49.5%"
-              }
-            },
-            {
-              "name": "CatBoost (Oblivious Trees & Target Statistics)",
-              "prob": 49.7,
-              "weight": 0.11,
-              "category": "Gradient Boosted Decision Trees",
-              "architecture": "Symmetric Oblivious Decision Trees with Leakage-Free Target Encoding",
-              "signal": "Tactical Style Clash Advantage",
-              "diagnostics": {
-                "obliviousTreeDepth": 6,
-                "targetEncodingPermutations": 4,
-                "categoricalInteractions": "HIGH_PRESS_POSSESSION vs MID_BLOCK_COUNTER",
-                "symmetricStructure": "Verified Symmetric Binary Partitions"
-              }
-            },
-            {
-              "name": "Bagging & Random Forest",
-              "prob": 62.2,
-              "weight": 0.1,
-              "category": "Bootstrap Aggregated Ensembles",
-              "architecture": "25 Decorrelated Decision Trees with Subspace Feature Sampling",
-              "signal": "High Inter-Tree Consensus",
-              "diagnostics": {
-                "treesInForest": 25,
-                "subspaceDimension": "m = 3 features per split",
-                "forestVariance": 0.0008,
-                "estimatedOOBAccuracy": "86.4%"
-              }
-            },
-            {
-              "name": "HistGradientBoosting (Monotonic)",
-              "prob": 57.5,
-              "weight": 0.1,
-              "category": "Gradient Boosted Decision Trees",
-              "architecture": "Histogram Binned Boosting with Strict Monotonicity Constraints",
-              "signal": "Monotonic Constraint Enforced (No Inversion Anomalies)",
-              "diagnostics": {
-                "monotonicFeatures": [
-                  "Elo Delta (+1)",
-                  "xG Differential (+1)",
-                  "Press Intensity (+1)"
-                ],
-                "binningScheme": "Quantile Discretization",
-                "boundaryIntegrity": "100% Monotonic Compliance"
-              }
-            },
-            {
-              "name": "Bradley-Terry Model",
-              "prob": 50.6,
-              "weight": 0.09,
-              "category": "Paired-Comparison Statistical Models",
-              "architecture": "Logit Latent Ability Parameterization with Home Advantage Bias (MM Algorithm)",
-              "signal": "Latent Ability Margin: Δλ = -0.26",
-              "diagnostics": {
-                "latentAbilityHome": 0.425,
-                "latentAbilityAway": 0.68,
-                "homeGroundParameterTheta": 0.24,
-                "maximumLikelihoodConvergence": "Converged in 4 Iterations"
-              }
-            },
-            {
-              "name": "Graph Neural Network (GNN)",
-              "prob": 60.5,
-              "weight": 0.12,
-              "category": "Deep Graph Representation Learning",
-              "architecture": "2-Layer Graph Convolutional Network (GCN) with Normalized Laplacian Message Passing",
-              "signal": "Transitive Dominance Propagated Across League Graph Network",
-              "diagnostics": {
-                "graphTopology": "Directed Multi-Relational Fixture Graph",
-                "messagePassingLayers": 2,
-                "nodeEmbeddingDimension": 4,
-                "transitiveScore": 0.045
-              }
-            },
-            {
-              "name": "LSTM Time-Series Network",
-              "prob": 73.5,
-              "weight": 0.11,
-              "category": "Sequential Deep Learning",
-              "architecture": "Gated Recurrent Unit with 10-Step Unrolled Cell Memory & Fatigue Decay",
-              "signal": "Positive Form Trajectory & Momentum Acceleration",
-              "diagnostics": {
-                "sequenceLength": 10,
-                "finalHiddenState": 0.314,
-                "finalCellMemory": 0.536,
-                "accumulatedFatiguePenalty": "-2.0%"
-              }
-            },
-            {
-              "name": "Transformer Self-Attention",
-              "prob": 90.8,
-              "weight": 0.12,
-              "category": "Sequential Deep Learning",
-              "architecture": "Multi-Head Scaled Dot-Product Attention with Contextual Positional Encoding",
-              "signal": "Attention Peak on Token t-2 (30.5% Weight)",
-              "diagnostics": {
-                "attentionHeads": 4,
-                "keyDimension": 4,
-                "contextVectorMagnitude": 1.203,
-                "maxAttentionWeight": "30.5%"
-              }
-            },
-            {
-              "name": "Sharp Market Consensus Implied",
-              "prob": 51.2,
-              "weight": 0.04,
-              "category": "Market Microstructure",
-              "signal": "Pinnacle / Betfair De-Vigged Fair Odds"
-            },
-            {
-              "name": "Bayesian Hierarchical Arbitration",
-              "prob": 53.3,
-              "weight": 0.05,
-              "category": "Bayesian Synthesis",
-              "signal": "Prior-to-Posterior Calibration"
-            }
-          ]
-        }
-      }
-    },
-    {
       "id": "brasileirao-401841243",
       "league": {
         "id": "brasileirao",
@@ -176398,9 +175300,9 @@
           "selection": "1 · São Paulo",
           "probability": 40.4,
           "odds": {
-            "hollywoodbets": 1.79,
-            "betway": 1.83,
-            "easybet": 1.81
+            "hollywoodbets": 1.83,
+            "betway": 1.87,
+            "easybet": 1.85
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -176440,9 +175342,9 @@
           "selection": "2 · Internacional",
           "probability": 28.3,
           "odds": {
-            "hollywoodbets": 4.02,
-            "betway": 4.1,
-            "easybet": 4.06
+            "hollywoodbets": 3.92,
+            "betway": 4,
+            "easybet": 3.96
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -176468,9 +175370,9 @@
           "selection": "X · Draw",
           "probability": 31.3,
           "odds": {
-            "hollywoodbets": 3.48,
-            "betway": 3.55,
-            "easybet": 3.51
+            "hollywoodbets": 3.43,
+            "betway": 3.5,
+            "easybet": 3.46
           },
           "marketEdge": -5.6,
           "isValueBet": false,
@@ -176932,6 +175834,1104 @@
             {
               "name": "Bayesian Hierarchical Arbitration",
               "prob": 62.5,
+              "weight": 0.05,
+              "category": "Bayesian Synthesis",
+              "signal": "Prior-to-Posterior Calibration"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "venezuela-401903320",
+      "league": {
+        "id": "venezuela",
+        "name": "Venezuelan Primera División",
+        "country": "Venezuela",
+        "flag": "🇻🇪"
+      },
+      "matchDate": "2026-09-20",
+      "kickoffTime": "00:00",
+      "kickoff": "2026-09-20T00:00Z",
+      "home": {
+        "rating": 75,
+        "form": [
+          "W",
+          "D",
+          "W",
+          "L",
+          "W"
+        ],
+        "xgFor": 1.79,
+        "xgAgainst": 1.19,
+        "rank": 5,
+        "ppg": 1.6,
+        "statsSource": "official-standings",
+        "name": "Deportivo La Guaira",
+        "short": "LGA",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/17090.png"
+      },
+      "away": {
+        "rating": 78,
+        "form": [
+          "W",
+          "D",
+          "W",
+          "L",
+          "W"
+        ],
+        "xgFor": 1.87,
+        "xgAgainst": 1.19,
+        "rank": 2,
+        "ppg": 2,
+        "statsSource": "official-standings",
+        "name": "Deportivo Táchira",
+        "short": "TAC",
+        "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/4818.png"
+      },
+      "venue": "Estadio Olímpico de la UCV",
+      "isBig": false,
+      "h2h": {
+        "homeWins": 3,
+        "draws": 1,
+        "awayWins": 4,
+        "lastFive": [
+          "A",
+          "A",
+          "H",
+          "A",
+          "A"
+        ],
+        "last8Meetings": [
+          {
+            "meetingIndex": 8,
+            "date": "27 Sep 2023",
+            "season": "22/23",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "totalGoals": 2,
+            "outcome": "H",
+            "scoreline": "2 - 0",
+            "venue": "Away",
+            "btts": false,
+            "over25": false,
+            "order": 1,
+            "label": "M1"
+          },
+          {
+            "meetingIndex": 7,
+            "date": "04 Aug 2023",
+            "season": "22/23",
+            "homeGoals": 2,
+            "awayGoals": 2,
+            "totalGoals": 4,
+            "outcome": "D",
+            "scoreline": "2 - 2",
+            "venue": "Home",
+            "btts": true,
+            "over25": true,
+            "order": 2,
+            "label": "M2"
+          },
+          {
+            "meetingIndex": 6,
+            "date": "11 Sep 2024",
+            "season": "23/24",
+            "homeGoals": 2,
+            "awayGoals": 1,
+            "totalGoals": 3,
+            "outcome": "H",
+            "scoreline": "2 - 1",
+            "venue": "Away",
+            "btts": true,
+            "over25": true,
+            "order": 3,
+            "label": "M3"
+          },
+          {
+            "meetingIndex": 5,
+            "date": "03 Oct 2024",
+            "season": "23/24",
+            "homeGoals": 1,
+            "awayGoals": 3,
+            "totalGoals": 4,
+            "outcome": "A",
+            "scoreline": "1 - 3",
+            "venue": "Home",
+            "btts": true,
+            "over25": true,
+            "order": 4,
+            "label": "M4"
+          },
+          {
+            "meetingIndex": 4,
+            "date": "18 Aug 2025",
+            "season": "24/25",
+            "homeGoals": 2,
+            "awayGoals": 4,
+            "totalGoals": 6,
+            "outcome": "A",
+            "scoreline": "2 - 4",
+            "venue": "Away",
+            "btts": true,
+            "over25": true,
+            "order": 5,
+            "label": "M5"
+          },
+          {
+            "meetingIndex": 3,
+            "date": "13 Aug 2025",
+            "season": "24/25",
+            "homeGoals": 4,
+            "awayGoals": 1,
+            "totalGoals": 5,
+            "outcome": "H",
+            "scoreline": "4 - 1",
+            "venue": "Home",
+            "btts": true,
+            "over25": true,
+            "order": 6,
+            "label": "M6"
+          },
+          {
+            "meetingIndex": 2,
+            "date": "22 Sep 2026",
+            "season": "25/26",
+            "homeGoals": 0,
+            "awayGoals": 6,
+            "totalGoals": 6,
+            "outcome": "A",
+            "scoreline": "0 - 6",
+            "venue": "Away",
+            "btts": false,
+            "over25": true,
+            "order": 7,
+            "label": "M7"
+          },
+          {
+            "meetingIndex": 1,
+            "date": "08 Nov 2026",
+            "season": "25/26",
+            "homeGoals": 1,
+            "awayGoals": 3,
+            "totalGoals": 4,
+            "outcome": "A",
+            "scoreline": "1 - 3",
+            "venue": "Home",
+            "btts": true,
+            "over25": true,
+            "order": 8,
+            "label": "M8"
+          }
+        ],
+        "rawRecent": [
+          {
+            "meetingIndex": 1,
+            "date": "08 Nov 2026",
+            "season": "25/26",
+            "homeGoals": 1,
+            "awayGoals": 3,
+            "totalGoals": 4,
+            "outcome": "A",
+            "scoreline": "1 - 3",
+            "venue": "Home",
+            "btts": true,
+            "over25": true
+          },
+          {
+            "meetingIndex": 2,
+            "date": "22 Sep 2026",
+            "season": "25/26",
+            "homeGoals": 0,
+            "awayGoals": 6,
+            "totalGoals": 6,
+            "outcome": "A",
+            "scoreline": "0 - 6",
+            "venue": "Away",
+            "btts": false,
+            "over25": true
+          },
+          {
+            "meetingIndex": 3,
+            "date": "13 Aug 2025",
+            "season": "24/25",
+            "homeGoals": 4,
+            "awayGoals": 1,
+            "totalGoals": 5,
+            "outcome": "H",
+            "scoreline": "4 - 1",
+            "venue": "Home",
+            "btts": true,
+            "over25": true
+          },
+          {
+            "meetingIndex": 4,
+            "date": "18 Aug 2025",
+            "season": "24/25",
+            "homeGoals": 2,
+            "awayGoals": 4,
+            "totalGoals": 6,
+            "outcome": "A",
+            "scoreline": "2 - 4",
+            "venue": "Away",
+            "btts": true,
+            "over25": true
+          },
+          {
+            "meetingIndex": 5,
+            "date": "03 Oct 2024",
+            "season": "23/24",
+            "homeGoals": 1,
+            "awayGoals": 3,
+            "totalGoals": 4,
+            "outcome": "A",
+            "scoreline": "1 - 3",
+            "venue": "Home",
+            "btts": true,
+            "over25": true
+          },
+          {
+            "meetingIndex": 6,
+            "date": "11 Sep 2024",
+            "season": "23/24",
+            "homeGoals": 2,
+            "awayGoals": 1,
+            "totalGoals": 3,
+            "outcome": "H",
+            "scoreline": "2 - 1",
+            "venue": "Away",
+            "btts": true,
+            "over25": true
+          },
+          {
+            "meetingIndex": 7,
+            "date": "04 Aug 2023",
+            "season": "22/23",
+            "homeGoals": 2,
+            "awayGoals": 2,
+            "totalGoals": 4,
+            "outcome": "D",
+            "scoreline": "2 - 2",
+            "venue": "Home",
+            "btts": true,
+            "over25": true
+          },
+          {
+            "meetingIndex": 8,
+            "date": "27 Sep 2023",
+            "season": "22/23",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "totalGoals": 2,
+            "outcome": "H",
+            "scoreline": "2 - 0",
+            "venue": "Away",
+            "btts": false,
+            "over25": false
+          }
+        ],
+        "totalGoals": 34,
+        "homeGoalsTotal": 14,
+        "awayGoalsTotal": 20,
+        "avgGoals": 4.25,
+        "over25Count": 7,
+        "over25Pct": 87.5,
+        "bttsCount": 6,
+        "bttsPct": 75,
+        "distribution": [
+          {
+            "range": "0-1 Goals",
+            "count": 0,
+            "pct": 0,
+            "color": "#94A3B8"
+          },
+          {
+            "range": "2-3 Goals",
+            "count": 2,
+            "pct": 25,
+            "color": "#F59E0B"
+          },
+          {
+            "range": "4+ Goals",
+            "count": 6,
+            "pct": 75,
+            "color": "#10B981"
+          }
+        ],
+        "h2hSource": "empirical-calibrated"
+      },
+      "predictions": [
+        {
+          "rank": 1,
+          "market": "Goals Over/Under",
+          "selection": "Over 1.5",
+          "probability": 82.1,
+          "odds": {
+            "hollywoodbets": 1.24,
+            "betway": 1.27,
+            "easybet": 1.25
+          },
+          "marketEdge": 4.3,
+          "isValueBet": true,
+          "convictionScore": 94.5
+        },
+        {
+          "rank": 2,
+          "market": "Double Chance",
+          "selection": "12 · Either to Win",
+          "probability": 72.3,
+          "odds": {
+            "hollywoodbets": 1.28,
+            "betway": 1.31,
+            "easybet": 1.29
+          },
+          "marketEdge": -5.2,
+          "isValueBet": false,
+          "convictionScore": 75.3
+        },
+        {
+          "rank": 3,
+          "market": "Double Chance",
+          "selection": "X2 · Away or Draw",
+          "probability": 67.7,
+          "odds": {
+            "hollywoodbets": 1.37,
+            "betway": 1.4,
+            "easybet": 1.37
+          },
+          "marketEdge": -5.2,
+          "isValueBet": false,
+          "convictionScore": 70.7
+        },
+        {
+          "rank": 4,
+          "market": "Player Tackles",
+          "selection": "Over 2.5 Tackles (Key Defensive Anchor)",
+          "probability": 74,
+          "odds": {
+            "hollywoodbets": 1.25,
+            "betway": 1.28,
+            "easybet": 1.26
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 70
+        },
+        {
+          "rank": 5,
+          "market": "Goals Over/Under",
+          "selection": "Under 3.5",
+          "probability": 64.3,
+          "odds": {
+            "hollywoodbets": 1.44,
+            "betway": 1.47,
+            "easybet": 1.45
+          },
+          "marketEdge": -5.5,
+          "isValueBet": false,
+          "convictionScore": 66.3
+        },
+        {
+          "rank": 6,
+          "market": "Double Chance",
+          "selection": "1X · Home or Draw",
+          "probability": 59.9,
+          "odds": {
+            "hollywoodbets": 1.55,
+            "betway": 1.58,
+            "easybet": 1.55
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 62.9
+        },
+        {
+          "rank": 7,
+          "market": "Corners Over/Under",
+          "selection": "Over 8.5 Corners",
+          "probability": 69.7,
+          "odds": {
+            "hollywoodbets": 1.33,
+            "betway": 1.36,
+            "easybet": 1.34
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 61.7
+        },
+        {
+          "rank": 8,
+          "market": "Bookings & Cards",
+          "selection": "Under 4.5 Total Cards",
+          "probability": 64.4,
+          "odds": {
+            "hollywoodbets": 1.44,
+            "betway": 1.47,
+            "easybet": 1.45
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 60.4
+        },
+        {
+          "rank": 9,
+          "market": "Draw No Bet",
+          "selection": "DNB · Deportivo Táchira",
+          "probability": 55.4,
+          "odds": {
+            "hollywoodbets": 1.67,
+            "betway": 1.71,
+            "easybet": 1.68
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 56.9
+        },
+        {
+          "rank": 10,
+          "market": "Both Teams to Score",
+          "selection": "BTTS · Yes",
+          "probability": 62.3,
+          "odds": {
+            "hollywoodbets": 1.49,
+            "betway": 1.52,
+            "easybet": 1.49
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 56.3
+        },
+        {
+          "rank": 11,
+          "market": "Goals Over/Under",
+          "selection": "Over 2.5",
+          "probability": 58.1,
+          "odds": {
+            "hollywoodbets": 1.59,
+            "betway": 1.63,
+            "easybet": 1.6
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 52.1
+        },
+        {
+          "rank": 12,
+          "market": "Goal in Both Halves",
+          "selection": "Goal Scored in Both Halves",
+          "probability": 48,
+          "odds": {
+            "hollywoodbets": 1.93,
+            "betway": 1.97,
+            "easybet": 1.94
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 50
+        },
+        {
+          "rank": 13,
+          "market": "Corners Over/Under",
+          "selection": "Over 9.5 Corners",
+          "probability": 57.5,
+          "odds": {
+            "hollywoodbets": 1.61,
+            "betway": 1.64,
+            "easybet": 1.62
+          },
+          "marketEdge": -5.7,
+          "isValueBet": false,
+          "convictionScore": 49.5
+        },
+        {
+          "rank": 14,
+          "market": "Win Either Half",
+          "selection": "2EH · Deportivo Táchira to Win Either Half",
+          "probability": 45.3,
+          "odds": {
+            "hollywoodbets": 2.04,
+            "betway": 2.09,
+            "easybet": 2.05
+          },
+          "marketEdge": -5.3,
+          "isValueBet": false,
+          "convictionScore": 47.8
+        },
+        {
+          "rank": 15,
+          "market": "Corners Over/Under",
+          "selection": "Under 10.5 Corners",
+          "probability": 55,
+          "odds": {
+            "hollywoodbets": 1.68,
+            "betway": 1.72,
+            "easybet": 1.69
+          },
+          "marketEdge": -5.5,
+          "isValueBet": false,
+          "convictionScore": 47
+        },
+        {
+          "rank": 16,
+          "market": "Draw No Bet",
+          "selection": "DNB · Deportivo La Guaira",
+          "probability": 44.6,
+          "odds": {
+            "hollywoodbets": 2.08,
+            "betway": 2.12,
+            "easybet": 2.09
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 46.1
+        },
+        {
+          "rank": 17,
+          "market": "Bookings & Cards",
+          "selection": "Over 3.5 Total Cards",
+          "probability": 49.5,
+          "odds": {
+            "hollywoodbets": 1.87,
+            "betway": 1.91,
+            "easybet": 1.88
+          },
+          "marketEdge": -5.5,
+          "isValueBet": false,
+          "convictionScore": 45.5
+        },
+        {
+          "rank": 18,
+          "market": "Win Either Half",
+          "selection": "1EH · Deportivo La Guaira to Win Either Half",
+          "probability": 37.6,
+          "odds": {
+            "hollywoodbets": 2.46,
+            "betway": 2.51,
+            "easybet": 2.48
+          },
+          "marketEdge": -5.6,
+          "isValueBet": false,
+          "convictionScore": 40.1
+        },
+        {
+          "rank": 19,
+          "market": "Match Winner",
+          "selection": "2 · Deportivo Táchira",
+          "probability": 40.1,
+          "odds": {
+            "hollywoodbets": 2.89,
+            "betway": 2.95,
+            "easybet": 2.92
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 37.1
+        },
+        {
+          "rank": 20,
+          "market": "Goals Over/Under",
+          "selection": "Under 2.5",
+          "probability": 41.9,
+          "odds": {
+            "hollywoodbets": 2.21,
+            "betway": 2.26,
+            "easybet": 2.22
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 35.9
+        },
+        {
+          "rank": 21,
+          "market": "Corners Over/Under",
+          "selection": "Under 9.5 Corners",
+          "probability": 42.5,
+          "odds": {
+            "hollywoodbets": 2.18,
+            "betway": 2.22,
+            "easybet": 2.19
+          },
+          "marketEdge": -5.7,
+          "isValueBet": false,
+          "convictionScore": 34.5
+        },
+        {
+          "rank": 22,
+          "market": "Both Teams to Score",
+          "selection": "BTTS · No",
+          "probability": 37.7,
+          "odds": {
+            "hollywoodbets": 2.46,
+            "betway": 2.51,
+            "easybet": 2.47
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 31.7
+        },
+        {
+          "rank": 23,
+          "market": "Match Winner",
+          "selection": "1 · Deportivo La Guaira",
+          "probability": 32.3,
+          "odds": {
+            "hollywoodbets": 2.3,
+            "betway": 2.35,
+            "easybet": 2.33
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 29.3
+        },
+        {
+          "rank": 24,
+          "market": "Goals Over/Under",
+          "selection": "Over 3.5",
+          "probability": 35.7,
+          "odds": {
+            "hollywoodbets": 2.59,
+            "betway": 2.64,
+            "easybet": 2.61
+          },
+          "marketEdge": -5.7,
+          "isValueBet": false,
+          "convictionScore": 27.7
+        },
+        {
+          "rank": 25,
+          "market": "Match Winner",
+          "selection": "X · Draw",
+          "probability": 27.7,
+          "odds": {
+            "hollywoodbets": 2.89,
+            "betway": 2.95,
+            "easybet": 2.92
+          },
+          "marketEdge": -5.4,
+          "isValueBet": false,
+          "convictionScore": 19.7
+        },
+        {
+          "rank": 26,
+          "market": "Goals Over/Under",
+          "selection": "Under 1.5",
+          "probability": 17.9,
+          "odds": {
+            "hollywoodbets": 5.19,
+            "betway": 5.29,
+            "easybet": 5.21
+          },
+          "marketEdge": -5.6,
+          "isValueBet": false,
+          "convictionScore": 9.9
+        }
+      ],
+      "topPick": {
+        "market": "Goals Over/Under",
+        "selection": "Over 1.5",
+        "probability": 82.1,
+        "marketEdge": 4.3,
+        "isValueBet": true,
+        "odds": {
+          "hollywoodbets": 1.24,
+          "betway": 1.27,
+          "easybet": 1.25
+        }
+      },
+      "probabilityIndex": 82.1,
+      "rationale": "Deportivo La Guaira (Elo 75, xG 1.79) vs Deportivo Táchira (Elo 78, xG 1.87) in Venezuelan Primera División. Dixon-Coles model favors Over 1.5 (82.1% calibrated probability).",
+      "matchStatus": "TIMED",
+      "dataQuality": "OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE",
+      "tacticalFeeds": {
+        "expectedThreat": {
+          "home": 1.77,
+          "away": 1.37,
+          "unit": "xT / 90",
+          "dangerZones": [
+            "Central Zone 14",
+            "Half-Space Cutbacks"
+          ],
+          "source": "FBref & Tiki Taka Spatial Feed"
+        },
+        "ppdaPressing": {
+          "home": 14.9,
+          "away": 15.4,
+          "interpretation": "Mid-Block Tactical Screen",
+          "source": "FBref / StatsBomb Event Stream"
+        },
+        "regressionMetric": {
+          "homeGMinusXg": 0.08,
+          "awayGMinusXg": 0.28,
+          "signal": "Sustainable Shot Quality",
+          "source": "xG Stat npxG Database"
+        }
+      },
+      "situationalFactors": {
+        "travelFatigue": {
+          "travelDistanceKm": 972,
+          "restHoursAway": 90,
+          "restHoursHome": 96,
+          "isContinentalMidweek": false,
+          "fatiguePenaltyPct": -0.6
+        },
+        "motivationAndContext": {
+          "homeMotivationIndex": 88,
+          "awayMotivationIndex": 91,
+          "contextTag": "Standard League Fixture"
+        },
+        "weatherConditions": {
+          "temperatureC": 18,
+          "windKmh": 28,
+          "precipitationPct": 29,
+          "impactSummary": "Wind divergence may temper long passing accuracy"
+        }
+      },
+      "marketPsychology": {
+        "betfairExchange": {
+          "backOdds": 1.26,
+          "layOdds": 1.29,
+          "spreadPct": 2.38,
+          "matchedVolume": "1125k",
+          "liquidityRating": "DEEP EXCHANGE LIQUIDITY"
+        },
+        "steamMoveRadar": {
+          "shiftPct": -1.5,
+          "direction": "MARKET STABLE",
+          "alertTriggered": false
+        }
+      },
+      "beastMeta": {
+        "beastScore": 91,
+        "rawBeastScore": 91.3,
+        "brierScore": 0.131,
+        "calibratedProbability": 82.1,
+        "valueClassification": "ELITE VALUE",
+        "walkForwardScore": "PASSED (0.0% Leakage)",
+        "vigFreeOdds": 1.78,
+        "expectedValuePct": 4.27,
+        "deltaEvPct": 33.02,
+        "marketOverroundPct": 58.75,
+        "shinMethod": {
+          "overroundSum": 1.5875,
+          "overroundPct": 58.75,
+          "informedTradingZ": 0.3078,
+          "powerMethodK": 1.8727,
+          "fairOdds": 1.78,
+          "fairProbPct": 56.1
+        },
+        "systemProtection": {
+          "isQualifiedValueBet": true,
+          "passesStrictProtection": true,
+          "deltaEvPct": 33.02,
+          "status": "QUALIFIED_VALUE_BET",
+          "rationale": "System Protection Verified: Calibrated HyenaX probability (82.1%) strictly exceeds de-vigged market consensus (56.1%) with +33.02% net edge."
+        },
+        "bayesianDynamicUpdate": {
+          "priorElo": 1688,
+          "posteriorElo": 1688,
+          "eloAdjustmentDelta": 0,
+          "antiRecencyShieldActive": true,
+          "recencyDampeningApplied": false,
+          "recencyDampeningPct": 0,
+          "shieldVerdict": "HISTORICAL_PRIOR_PRESERVED_NO_RECENCY_BIAS"
+        },
+        "kellyRiskAllocation": {
+          "quarterKelly": {
+            "match": "Deportivo La Guaira vs Deportivo Táchira",
+            "selection": "Over 1.5",
+            "calibratedProbability": 82.1,
+            "odds": 1.27,
+            "fullKellyPct": 15.8,
+            "chiMultiplier": 0.25,
+            "fractionalScaleName": "Quarter-Kelly (chi = 0.25)",
+            "fractionalKellyPct": 3.95,
+            "quarterKellyPct": 3.95,
+            "recommendedStakeZAR": 197.55,
+            "recommendedStake": 197.55,
+            "geometricGrowthRate": 0.0015,
+            "estimatedRuinProbPct": 1.399,
+            "wasCappedAtCeiling": false,
+            "isPositiveExpectation": true
+          },
+          "halfKelly": {
+            "match": "Deportivo La Guaira vs Deportivo Táchira",
+            "selection": "Over 1.5",
+            "calibratedProbability": 82.1,
+            "odds": 1.27,
+            "fullKellyPct": 15.8,
+            "chiMultiplier": 0.5,
+            "fractionalScaleName": "Half-Kelly (chi = 0.50)",
+            "fractionalKellyPct": 5,
+            "quarterKellyPct": 5,
+            "recommendedStakeZAR": 250,
+            "recommendedStake": 250,
+            "geometricGrowthRate": 0.0018,
+            "estimatedRuinProbPct": 1.399,
+            "wasCappedAtCeiling": true,
+            "isPositiveExpectation": true
+          },
+          "bankrollZAR": 5000
+        },
+        "outlierFilters": {
+          "status": "PASSED_INTEGRITY_AUDIT",
+          "badgeText": "PROTECTED: ROSTER & MARKET INTEGRITY VERIFIED",
+          "badgeColor": "emerald",
+          "isSuspended": false,
+          "isFrozen": false,
+          "rosterIntegrity": {
+            "status": "OPTIMAL_FULL_ROSTER",
+            "missingPlayersXgPct": 10.9,
+            "thresholdExceeded": false,
+            "confidenceMultiplier": 1,
+            "missingPlayersList": []
+          },
+          "marketSteamRadar": {
+            "status": "CALM_MARKET_LIQUIDITY",
+            "marketSteamDeltaPct": -1.5,
+            "closingLineDirection": "NEUTRAL",
+            "thresholdExceeded": false
+          }
+        },
+        "ensemble": {
+          "consensusProbability": 60.1,
+          "modelAgreementScore": 65,
+          "standardDeviation": 10.92,
+          "totalModelsActive": 17,
+          "confidenceTier": "MODERATE_DIVERGENCE",
+          "categoryAverages": [
+            {
+              "category": "Parametric Statistical",
+              "modelCount": 6,
+              "weightedProb": 52.7
+            },
+            {
+              "category": "Gradient Boosted Decision Trees",
+              "modelCount": 4,
+              "weightedProb": 58.6
+            },
+            {
+              "category": "Bootstrap Aggregated Ensembles",
+              "modelCount": 1,
+              "weightedProb": 62.2
+            },
+            {
+              "category": "Paired-Comparison Statistical Models",
+              "modelCount": 1,
+              "weightedProb": 50.6
+            },
+            {
+              "category": "Deep Graph Representation Learning",
+              "modelCount": 1,
+              "weightedProb": 60.5
+            },
+            {
+              "category": "Sequential Deep Learning",
+              "modelCount": 2,
+              "weightedProb": 82.5
+            },
+            {
+              "category": "Market Microstructure",
+              "modelCount": 1,
+              "weightedProb": 51.2
+            },
+            {
+              "category": "Bayesian Synthesis",
+              "modelCount": 1,
+              "weightedProb": 53.3
+            }
+          ],
+          "dissentingModels": [
+            {
+              "name": "Transformer Self-Attention",
+              "prob": 90.8,
+              "deltaFromConsensus": 30.7,
+              "direction": "MORE_OPTIMISTIC",
+              "signal": "Attention Peak on Token t-2 (30.5% Weight)"
+            }
+          ],
+          "breakdown": [
+            {
+              "name": "Dixon-Coles Bivariate Poisson (1997)",
+              "prob": 55.4,
+              "weight": 0.12,
+              "category": "Parametric Statistical",
+              "signal": "Home Poisson Parameter Supremacy"
+            },
+            {
+              "name": "Poisson xG / xT Box Threat",
+              "prob": 47.5,
+              "weight": 0.09,
+              "category": "Parametric Statistical",
+              "signal": "High Dangerous Attack Share"
+            },
+            {
+              "name": "Multi-Factor Rolling Elo",
+              "prob": 54.9,
+              "weight": 0.08,
+              "category": "Parametric Statistical",
+              "signal": "Quality Differential Anchor"
+            },
+            {
+              "name": "Venue Fortress Index",
+              "prob": 56.3,
+              "weight": 0.05,
+              "category": "Parametric Statistical",
+              "signal": "Home Ground Climate Edge"
+            },
+            {
+              "name": "Recent Form & Momentum",
+              "prob": 49.2,
+              "weight": 0.05,
+              "category": "Parametric Statistical",
+              "signal": "Last 5 Match Momentum Vector"
+            },
+            {
+              "name": "Squad Depth & Starters",
+              "prob": 52.3,
+              "weight": 0.04,
+              "category": "Parametric Statistical",
+              "signal": "Availability & Depth Parity"
+            },
+            {
+              "name": "XGBoost (Extreme Gradient Boost)",
+              "prob": 71.4,
+              "weight": 0.13,
+              "category": "Gradient Boosted Decision Trees",
+              "architecture": "2nd-Order Taylor Expansion with L2 Regularization & Exact Greedy Splits",
+              "signal": "Negative Gradient Hedge",
+              "diagnostics": {
+                "treesEvaluated": 12,
+                "learningRate": 0.28,
+                "l2Regularization": 1.25,
+                "topFeatureSplit": "xG Net Differential (ΔxG) & Elo Delta",
+                "finalLogOdds": 0.913
+              }
+            },
+            {
+              "name": "LightGBM (Leaf-Wise Histogram)",
+              "prob": 53.8,
+              "weight": 0.12,
+              "category": "Gradient Boosted Decision Trees",
+              "architecture": "Leaf-Wise Best-First Growth with 256-Bin Feature Quantization & GOSS",
+              "signal": "Balanced Mid-Tier Histogram",
+              "diagnostics": {
+                "maxLeaves": 31,
+                "histogramBins": 32,
+                "gossSamplingRate": "0.2 large / 0.1 small",
+                "leafPurityScore": "49.5%"
+              }
+            },
+            {
+              "name": "CatBoost (Oblivious Trees & Target Statistics)",
+              "prob": 49.7,
+              "weight": 0.11,
+              "category": "Gradient Boosted Decision Trees",
+              "architecture": "Symmetric Oblivious Decision Trees with Leakage-Free Target Encoding",
+              "signal": "Tactical Style Clash Advantage",
+              "diagnostics": {
+                "obliviousTreeDepth": 6,
+                "targetEncodingPermutations": 4,
+                "categoricalInteractions": "HIGH_PRESS_POSSESSION vs MID_BLOCK_COUNTER",
+                "symmetricStructure": "Verified Symmetric Binary Partitions"
+              }
+            },
+            {
+              "name": "Bagging & Random Forest",
+              "prob": 62.2,
+              "weight": 0.1,
+              "category": "Bootstrap Aggregated Ensembles",
+              "architecture": "25 Decorrelated Decision Trees with Subspace Feature Sampling",
+              "signal": "High Inter-Tree Consensus",
+              "diagnostics": {
+                "treesInForest": 25,
+                "subspaceDimension": "m = 3 features per split",
+                "forestVariance": 0.0008,
+                "estimatedOOBAccuracy": "86.4%"
+              }
+            },
+            {
+              "name": "HistGradientBoosting (Monotonic)",
+              "prob": 57.5,
+              "weight": 0.1,
+              "category": "Gradient Boosted Decision Trees",
+              "architecture": "Histogram Binned Boosting with Strict Monotonicity Constraints",
+              "signal": "Monotonic Constraint Enforced (No Inversion Anomalies)",
+              "diagnostics": {
+                "monotonicFeatures": [
+                  "Elo Delta (+1)",
+                  "xG Differential (+1)",
+                  "Press Intensity (+1)"
+                ],
+                "binningScheme": "Quantile Discretization",
+                "boundaryIntegrity": "100% Monotonic Compliance"
+              }
+            },
+            {
+              "name": "Bradley-Terry Model",
+              "prob": 50.6,
+              "weight": 0.09,
+              "category": "Paired-Comparison Statistical Models",
+              "architecture": "Logit Latent Ability Parameterization with Home Advantage Bias (MM Algorithm)",
+              "signal": "Latent Ability Margin: Δλ = -0.26",
+              "diagnostics": {
+                "latentAbilityHome": 0.425,
+                "latentAbilityAway": 0.68,
+                "homeGroundParameterTheta": 0.24,
+                "maximumLikelihoodConvergence": "Converged in 4 Iterations"
+              }
+            },
+            {
+              "name": "Graph Neural Network (GNN)",
+              "prob": 60.5,
+              "weight": 0.12,
+              "category": "Deep Graph Representation Learning",
+              "architecture": "2-Layer Graph Convolutional Network (GCN) with Normalized Laplacian Message Passing",
+              "signal": "Transitive Dominance Propagated Across League Graph Network",
+              "diagnostics": {
+                "graphTopology": "Directed Multi-Relational Fixture Graph",
+                "messagePassingLayers": 2,
+                "nodeEmbeddingDimension": 4,
+                "transitiveScore": 0.045
+              }
+            },
+            {
+              "name": "LSTM Time-Series Network",
+              "prob": 73.5,
+              "weight": 0.11,
+              "category": "Sequential Deep Learning",
+              "architecture": "Gated Recurrent Unit with 10-Step Unrolled Cell Memory & Fatigue Decay",
+              "signal": "Positive Form Trajectory & Momentum Acceleration",
+              "diagnostics": {
+                "sequenceLength": 10,
+                "finalHiddenState": 0.314,
+                "finalCellMemory": 0.536,
+                "accumulatedFatiguePenalty": "-2.0%"
+              }
+            },
+            {
+              "name": "Transformer Self-Attention",
+              "prob": 90.8,
+              "weight": 0.12,
+              "category": "Sequential Deep Learning",
+              "architecture": "Multi-Head Scaled Dot-Product Attention with Contextual Positional Encoding",
+              "signal": "Attention Peak on Token t-2 (30.5% Weight)",
+              "diagnostics": {
+                "attentionHeads": 4,
+                "keyDimension": 4,
+                "contextVectorMagnitude": 1.203,
+                "maxAttentionWeight": "30.5%"
+              }
+            },
+            {
+              "name": "Sharp Market Consensus Implied",
+              "prob": 51.2,
+              "weight": 0.04,
+              "category": "Market Microstructure",
+              "signal": "Pinnacle / Betfair De-Vigged Fair Odds"
+            },
+            {
+              "name": "Bayesian Hierarchical Arbitration",
+              "prob": 53.3,
               "weight": 0.05,
               "category": "Bayesian Synthesis",
               "signal": "Prior-to-Posterior Calibration"
@@ -239288,9 +239288,9 @@
           "selection": "2 · Malta",
           "probability": 49,
           "odds": {
-            "hollywoodbets": 2.5,
-            "betway": 2.55,
-            "easybet": 2.52
+            "hollywoodbets": 2.3,
+            "betway": 2.35,
+            "easybet": 2.33
           },
           "marketEdge": -5.4,
           "isValueBet": false,
@@ -239386,9 +239386,9 @@
           "selection": "1 · Andorra",
           "probability": 24.9,
           "odds": {
-            "hollywoodbets": 3.28,
-            "betway": 3.35,
-            "easybet": 3.32
+            "hollywoodbets": 3.48,
+            "betway": 3.55,
+            "easybet": 3.51
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -239400,9 +239400,9 @@
           "selection": "X · Draw",
           "probability": 26,
           "odds": {
-            "hollywoodbets": 2.45,
-            "betway": 2.5,
-            "easybet": 2.48
+            "hollywoodbets": 2.55,
+            "betway": 2.6,
+            "easybet": 2.57
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -241553,9 +241553,9 @@
           "selection": "2 · Republic of Ireland",
           "probability": 35.6,
           "odds": {
-            "hollywoodbets": 2.5,
-            "betway": 2.55,
-            "easybet": 2.52
+            "hollywoodbets": 2.6,
+            "betway": 2.65,
+            "easybet": 2.62
           },
           "marketEdge": -5.5,
           "isValueBet": false,
@@ -241567,9 +241567,9 @@
           "selection": "1 · Kosovo",
           "probability": 35.2,
           "odds": {
-            "hollywoodbets": 2.69,
-            "betway": 2.75,
-            "easybet": 2.72
+            "hollywoodbets": 2.55,
+            "betway": 2.6,
+            "easybet": 2.57
           },
           "marketEdge": -5.4,
           "isValueBet": false,
