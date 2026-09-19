@@ -19,10 +19,10 @@ function fact(n) { let f = 1; for (let i = 2; i <= n; i++) f *= i; return f; }
 function poissonPm(l, k) { return (Math.exp(-l) * Math.pow(l, k)) / fact(k); }
 
 function dixonColesTau(x, y, lambdaHome, lambdaAway, rho) {
-  if (x === 0 && y === 0) return 1 - (lambdaHome * lambdaAway * rho);
-  if (x === 0 && y === 1) return 1 + (lambdaHome * rho);
-  if (x === 1 && y === 0) return 1 + (lambdaAway * rho);
-  if (x === 1 && y === 1) return 1 - rho;
+  if (x === 0 && y === 0) return Math.max(0, 1 - (lambdaHome * lambdaAway * rho));
+  if (x === 0 && y === 1) return Math.max(0, 1 + (lambdaHome * rho));
+  if (x === 1 && y === 0) return Math.max(0, 1 + (lambdaAway * rho));
+  if (x === 1 && y === 1) return Math.max(0, 1 - rho);
   return 1.0;
 }
 
@@ -1090,7 +1090,16 @@ export function generatePredictions(home, away, leagueId) {
   const lambdaHome = Math.max(0.50, Math.min(3.20, +rawLh.toFixed(3)));
   const lambdaAway = Math.max(0.40, Math.min(2.80, +rawLa.toFixed(3)));
 
-  // Bivariate Dixon-Coles Matrix
+  // Bivariate Dixon-Coles Matrix with strict probability normalization
+  let totalGridProb = 0;
+  for (let x = 0; x <= 8; x++) {
+    for (let y = 0; y <= 8; y++) {
+      const tau = dixonColesTau(x, y, lambdaHome, lambdaAway, lg.rho);
+      totalGridProb += poissonPm(lambdaHome, x) * poissonPm(lambdaAway, y) * tau;
+    }
+  }
+  const normFactor = totalGridProb > 0 ? (1 / totalGridProb) : 1;
+
   let pHome = 0, pDraw = 0, pAway = 0;
   let pOver15 = 0, pOver25 = 0, pOver35 = 0;
   let pBtts = 0;
@@ -1099,7 +1108,7 @@ export function generatePredictions(home, away, leagueId) {
   for (let x = 0; x <= 8; x++) {
     for (let y = 0; y <= 8; y++) {
       const tau = dixonColesTau(x, y, lambdaHome, lambdaAway, lg.rho);
-      const prob = poissonPm(lambdaHome, x) * poissonPm(lambdaAway, y) * tau;
+      const prob = poissonPm(lambdaHome, x) * poissonPm(lambdaAway, y) * tau * normFactor;
       if (x > y) pHome += prob;
       else if (x === y) pDraw += prob;
       else pAway += prob;
@@ -1114,15 +1123,23 @@ export function generatePredictions(home, away, leagueId) {
     }
   }
 
-  const p1X = pHome + pDraw;
-  const pX2 = pDraw + pAway;
-  const p12 = pHome + pAway;
+  // Axiomatic boundary clamping & complementary consistency
+  const sum1X2 = pHome + pDraw + pAway;
+  if (sum1X2 > 0) {
+    pHome /= sum1X2;
+    pDraw /= sum1X2;
+    pAway /= sum1X2;
+  }
+
+  const p1X = Math.min(0.96, pHome + pDraw);
+  const pX2 = Math.min(0.96, pDraw + pAway);
+  const p12 = Math.min(0.96, pHome + pAway);
   const pDnbHome = pHome / (pHome + pAway || 1);
   const pDnbAway = pAway / (pHome + pAway || 1);
-  const pUnder25 = 1 - pOver25;
-  const pUnder15 = 1 - pOver15;
-  const pUnder35 = 1 - pOver35;
-  const pBttsNo = 1 - pBtts;
+  const pUnder25 = Math.max(0.04, 1 - pOver25);
+  const pUnder15 = Math.max(0.04, 1 - pOver15);
+  const pUnder35 = Math.max(0.04, 1 - pOver35);
+  const pBttsNo = Math.max(0.04, 1 - pBtts);
 
   const totalLambda = lambdaHome + lambdaAway;
   const cornersLambda = Math.max(7.5, Math.min(13.0, totalLambda * 3.4));
@@ -1513,7 +1530,10 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         restHome: restHoursHome,
         restAway: restHoursAway,
         travelHome: 0,
-        travelAway: travelDistKm
+        travelAway: travelDistKm,
+        targetProbability: topPick ? topPick.probability : null,
+        targetSelection: topPick ? topPick.selection : null,
+        targetMarket: topPick ? topPick.market : null
       });
 
       const topOddsVal = topPick && topPick.odds 

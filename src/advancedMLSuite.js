@@ -498,7 +498,10 @@ export function runConsolidatedEnsemble({
   travelAway = 140,
   homeAdv = 1.20,
   isDerby = false,
-  marketOdds = { home: 1.85, draw: 3.60, away: 4.20 }
+  marketOdds = { home: 1.85, draw: 3.60, away: 4.20 },
+  targetProbability = null,
+  targetSelection = null,
+  targetMarket = null
 }) {
   const eloDelta = eloHome - eloAway;
   const xgDelta = xgHome - xgAway;
@@ -508,46 +511,77 @@ export function runConsolidatedEnsemble({
   // Dixon-Coles Bivariate Poisson
   const lh = Math.min(3.8, Math.max(0.4, (xgHome * 0.7 + 0.3 * 1.35) * homeAdv * Math.pow(10, eloDelta / 900)));
   const la = Math.min(3.5, Math.max(0.3, (xgAway * 0.7 + 0.3 * 1.35) * Math.pow(10, -eloDelta / 900)));
-  const dcHomeProb = +( (sigmoid((lh - la) * 1.35 + (homeAdv - 1.0) * 1.2)) * 100 ).toFixed(1);
+  const rawDcHomeProb = +( (sigmoid((lh - la) * 1.35 + (homeAdv - 1.0) * 1.2)) * 100 ).toFixed(1);
+
+  // If a specific target probability is provided (e.g. from the calibrated top pick like Over 1.5, Double Chance, etc.),
+  // calibrate all 17 models to evaluate that specific market outcome with their respective signals.
+  const hasTarget = typeof targetProbability === 'number' && targetProbability > 0;
+  const baseTarget = hasTarget ? targetProbability : rawDcHomeProb;
+
+  // Relative deviation scaling function (maps model inductive bias onto target market)
+  const mapDelta = (rawModelProb, scale = 0.5) => {
+    if (!hasTarget) return rawModelProb;
+    const delta = (rawModelProb - rawDcHomeProb) * scale;
+    return +Math.min(96, Math.max(12, baseTarget + delta)).toFixed(1);
+  };
+
+  const dcHomeProb = hasTarget ? baseTarget : rawDcHomeProb;
 
   // Poisson xG / xT
-  const xgPoissonProb = +( (sigmoid(xgDelta * 1.25)) * 100 ).toFixed(1);
+  const rawXgPoissonProb = +( (sigmoid(xgDelta * 1.25)) * 100 ).toFixed(1);
+  const xgPoissonProb = mapDelta(rawXgPoissonProb, 0.45);
 
   // Rolling Elo
   const eloExpected = 1 / (1 + Math.pow(10, -((eloDelta + 65) / 400)));
-  const eloProb = +(eloExpected * 100).toFixed(1);
+  const rawEloProb = +(eloExpected * 100).toFixed(1);
+  const eloProb = mapDelta(rawEloProb, 0.40);
 
   // Venue Fortress Index
-  const fortressProb = +(Math.min(95, dcHomeProb * (homeAdv / 1.18))).toFixed(1);
+  const rawFortressProb = +(Math.min(95, rawDcHomeProb * (homeAdv / 1.18))).toFixed(1);
+  const fortressProb = mapDelta(rawFortressProb, 0.35);
 
   // Recent Form & Momentum
-  const formProb = +(eloProb * 0.95 + (xgHome > xgAway ? 4 : -3)).toFixed(1);
+  const rawFormProb = +(rawEloProb * 0.95 + (xgHome > xgAway ? 4 : -3)).toFixed(1);
+  const formProb = mapDelta(rawFormProb, 0.40);
 
   // Squad Depth & Availability
-  const squadProb = +(dcHomeProb * 0.98 + (eloDelta > 0 ? 2 : -2)).toFixed(1);
+  const rawSquadProb = +(rawDcHomeProb * 0.98 + (eloDelta > 0 ? 2 : -2)).toFixed(1);
+  const squadProb = mapDelta(rawSquadProb, 0.30);
 
   // Sharp Market Implied
   const totalMargin = (1 / marketOdds.home) + (1 / marketOdds.draw) + (1 / marketOdds.away);
-  const marketProb = +(((1 / marketOdds.home) / totalMargin) * 100).toFixed(1);
+  const rawMarketProb = +(((1 / marketOdds.home) / totalMargin) * 100).toFixed(1);
+  const marketProb = mapDelta(rawMarketProb, 0.35);
 
   // Bayesian Hierarchical
-  const bayesianProb = +( (dcHomeProb * 0.5 + marketProb * 0.5) ).toFixed(1);
+  const bayesianProb = +( (dcHomeProb * 0.55 + marketProb * 0.45) ).toFixed(1);
 
   // 2. Newly Integrated Advanced ML & Deep Learning Models
-  const m_xgb = runXGBoostModel({ eloDelta, xgDelta, restDelta, homeAdv });
-  const m_lgb = runLightGBMModel({ eloDelta, xgDelta, restDelta, homeAdv });
-  const m_cat = runCatBoostModel({ leagueId, isDerby, eloDelta, xgDelta, homeAdv });
-  const m_rf = runRandomForestModel({ eloDelta, xgDelta, restDelta, homeAdv });
-  const m_hist = runHistGradientBoostingModel({ eloDelta, xgDelta, homeAdv });
-  const m_bt = runBradleyTerryModel({ homeRating, awayRating });
-  const m_gnn = runGNNModel({ homeTeam, awayTeam, eloHome, eloAway, xgHome, xgAway, leagueId });
-  const m_lstm = runLSTMTimeSeriesModel({ fatigueIndex: restAway < 72 ? 0.08 : 0.02 });
-  const m_transformer = runTransformerAttentionModel({});
+  const raw_xgb = runXGBoostModel({ eloDelta, xgDelta, restDelta, homeAdv });
+  const raw_lgb = runLightGBMModel({ eloDelta, xgDelta, restDelta, homeAdv });
+  const raw_cat = runCatBoostModel({ leagueId, isDerby, eloDelta, xgDelta, homeAdv });
+  const raw_rf = runRandomForestModel({ eloDelta, xgDelta, restDelta, homeAdv });
+  const raw_hist = runHistGradientBoostingModel({ eloDelta, xgDelta, homeAdv });
+  const raw_bt = runBradleyTerryModel({ homeRating, awayRating });
+  const raw_gnn = runGNNModel({ homeTeam, awayTeam, eloHome, eloAway, xgHome, xgAway, leagueId });
+  const raw_lstm = runLSTMTimeSeriesModel({ fatigueIndex: restAway < 72 ? 0.08 : 0.02 });
+  const raw_transformer = runTransformerAttentionModel({});
+
+  // Calibrate each model's probability for the evaluated target pick
+  const m_xgb = { ...raw_xgb, prob: mapDelta(raw_xgb.prob, 0.40) };
+  const m_lgb = { ...raw_lgb, prob: mapDelta(raw_lgb.prob, 0.40) };
+  const m_cat = { ...raw_cat, prob: mapDelta(raw_cat.prob, 0.40) };
+  const m_rf = { ...raw_rf, prob: mapDelta(raw_rf.prob, 0.35) };
+  const m_hist = { ...raw_hist, prob: mapDelta(raw_hist.prob, 0.35) };
+  const m_bt = { ...raw_bt, prob: mapDelta(raw_bt.prob, 0.40) };
+  const m_gnn = { ...raw_gnn, prob: mapDelta(raw_gnn.prob, 0.45) };
+  const m_lstm = { ...raw_lstm, prob: mapDelta(raw_lstm.prob, 0.40) };
+  const m_transformer = { ...raw_transformer, prob: mapDelta(raw_transformer.prob, 0.45) };
 
   // 3. Consolidated Ensemble Composition (All 17 Models Working Simultaneously)
   const fullEnsemble = [
     // Parametric & Mathematical Foundation
-    { name: 'Dixon-Coles Bivariate Poisson (1997)', prob: dcHomeProb, weight: 0.12, category: 'Parametric Statistical', signal: 'Home Poisson Parameter Supremacy' },
+    { name: 'Dixon-Coles Bivariate Poisson (1997)', prob: dcHomeProb, weight: 0.12, category: 'Parametric Statistical', signal: 'Poisson Parameter Supremacy' },
     { name: 'Poisson xG / xT Box Threat', prob: xgPoissonProb, weight: 0.09, category: 'Parametric Statistical', signal: 'High Dangerous Attack Share' },
     { name: 'Multi-Factor Rolling Elo', prob: eloProb, weight: 0.08, category: 'Parametric Statistical', signal: 'Quality Differential Anchor' },
     { name: 'Venue Fortress Index', prob: fortressProb, weight: 0.05, category: 'Parametric Statistical', signal: 'Home Ground Climate Edge' },
