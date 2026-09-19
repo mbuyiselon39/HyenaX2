@@ -113,7 +113,28 @@ export const LEAGUES = [
   { id: 'serbia', espn: null, name: 'Serbia Superliga', country: 'Serbia', flag: '🇷🇸', rho: -0.130, avgGoals: 2.68, homeAdv: 1.26, tierBase: 74, minElo: 67, maxElo: 83 },
   { id: 'slovakia', espn: null, name: 'Slovakia Superliga', country: 'Slovakia', flag: '🇸🇰', rho: -0.120, avgGoals: 2.76, homeAdv: 1.23, tierBase: 73, minElo: 66, maxElo: 81 },
   { id: 'slovenia', espn: 'slv.1', name: 'Slovenia prvaliga', country: 'Slovenia', flag: '🇸🇮', rho: -0.125, avgGoals: 2.70, homeAdv: 1.24, tierBase: 73, minElo: 66, maxElo: 80 },
-  { id: 'cymru', espn: 'wal.1', name: 'Cymru Premier', country: 'Wales', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', rho: -0.105, avgGoals: 2.98, homeAdv: 1.24, tierBase: 70, minElo: 63, maxElo: 77 }
+  { id: 'cymru', espn: 'wal.1', name: 'Cymru Premier', country: 'Wales', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', rho: -0.105, avgGoals: 2.98, homeAdv: 1.24, tierBase: 70, minElo: 63, maxElo: 77 },
+  { id: 'zimbabwe', espn: null, name: 'Zimbabwe Premier Soccer League', country: 'Zimbabwe', flag: '🇿🇼', rho: -0.170, avgGoals: 2.15, homeAdv: 1.28, tierBase: 71, minElo: 64, maxElo: 79 },
+  { id: 'uzbekistan', espn: null, name: 'Uzbekistan PFL', country: 'Uzbekistan', flag: '🇺🇿', rho: -0.140, avgGoals: 2.45, homeAdv: 1.26, tierBase: 73, minElo: 66, maxElo: 81 },
+  { id: 'usl_championship', espn: 'usa.usl.1', name: 'USL Championship', country: 'USA', flag: '🇺🇸', rho: -0.110, avgGoals: 2.85, homeAdv: 1.25, tierBase: 73, minElo: 66, maxElo: 80 },
+  { id: 'tunisia', espn: null, name: 'Tunisian Ligue Professionnelle 1', country: 'Tunisia', flag: '🇹🇳', rho: -0.180, avgGoals: 2.10, homeAdv: 1.35, tierBase: 74, minElo: 67, maxElo: 82 },
+  { id: 'thai_league', espn: 'tha.1', name: 'Thai League 1', country: 'Thailand', flag: '🇹🇭', rho: -0.105, avgGoals: 2.92, homeAdv: 1.24, tierBase: 72, minElo: 65, maxElo: 80 },
+  { id: 'sweden_superettan', espn: 'swe.2', name: 'Sweden Superettan', country: 'Sweden', flag: '🇸🇪', rho: -0.115, avgGoals: 2.82, homeAdv: 1.20, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'romania', espn: 'rou.1', name: 'Romania Liga I', country: 'Romania', flag: '🇷🇴', rho: -0.145, avgGoals: 2.48, homeAdv: 1.26, tierBase: 74, minElo: 67, maxElo: 82 },
+  { id: 'kleague1', espn: 'kor.1', name: 'Korea K League 1', country: 'South Korea', flag: '🇰🇷', rho: -0.125, avgGoals: 2.65, homeAdv: 1.20, tierBase: 75, minElo: 68, maxElo: 83 },
+  { id: 'puerto_rico', espn: null, name: 'Puerto Rico LPR Pro', country: 'Puerto Rico', flag: '🇵🇷', rho: -0.090, avgGoals: 3.20, homeAdv: 1.28, tierBase: 68, minElo: 60, maxElo: 75 },
+  { id: 'poland_1liga', espn: 'pol.2', name: 'Poland I Liga', country: 'Poland', flag: '🇵🇱', rho: -0.130, avgGoals: 2.68, homeAdv: 1.24, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'panama', espn: 'pan.1', name: 'Panama Liga Panameña de Fútbol Apertura', country: 'Panama', flag: '🇵🇦', rho: -0.155, avgGoals: 2.38, homeAdv: 1.30, tierBase: 70, minElo: 63, maxElo: 77 },
+  { id: 'norway_1div', espn: 'nor.2', name: 'Norway First Division', country: 'Norway', flag: '🇳🇴', rho: -0.095, avgGoals: 3.05, homeAdv: 1.22, tierBase: 71, minElo: 64, maxElo: 78 },
+  { id: 'north_macedonia', espn: null, name: 'North Macedonia First Football League', country: 'North Macedonia', flag: '🇲🇰', rho: -0.150, avgGoals: 2.40, homeAdv: 1.30, tierBase: 70, minElo: 63, maxElo: 77 },
+  { id: 'iceland_1deild', espn: null, name: 'Iceland 1. Deild', country: 'Iceland', flag: '🇮🇸', rho: -0.085, avgGoals: 3.25, homeAdv: 1.22, tierBase: 69, minElo: 62, maxElo: 76 },
+  { id: 'iceland_urvalsdeild', espn: 'isl.1', name: 'Iceland Úrvalsdeild', country: 'Iceland', flag: '🇮🇸', rho: -0.090, avgGoals: 3.18, homeAdv: 1.22, tierBase: 72, minElo: 65, maxElo: 80 },
+  { id: 'finland_ykkosliiga', espn: null, name: 'Finland Ykkösliiga', country: 'Finland', flag: '🇫🇮', rho: -0.115, avgGoals: 2.88, homeAdv: 1.22, tierBase: 69, minElo: 62, maxElo: 76 },
+  { id: 'finland_ykkonen', espn: null, name: 'Finland Ykkönen', country: 'Finland', flag: '🇫🇮', rho: -0.110, avgGoals: 2.95, homeAdv: 1.23, tierBase: 68, minElo: 61, maxElo: 75 },
+  { id: 'brasileiro_serieb', espn: 'bra.2', name: 'Brasileiro Série B', country: 'Brazil', flag: '🇧🇷', rho: -0.170, avgGoals: 2.24, homeAdv: 1.30, tierBase: 74, minElo: 67, maxElo: 81 },
+  { id: 'algeria', espn: 'alg.1', name: 'Algeria Ligue 1', country: 'Algeria', flag: '🇩🇿', rho: -0.180, avgGoals: 2.12, homeAdv: 1.36, tierBase: 74, minElo: 67, maxElo: 82 },
+  { id: 'netherlands_eerste', espn: 'ned.2', name: 'Netherlands Eerste Divisie', country: 'Netherlands', flag: '🇳🇱', rho: -0.085, avgGoals: 3.15, homeAdv: 1.20, tierBase: 73, minElo: 66, maxElo: 80 },
+  { id: 'germany_3liga', espn: 'ger.3', name: 'Germany 3. Liga', country: 'Germany', flag: '🇩🇪', rho: -0.100, avgGoals: 2.95, homeAdv: 1.22, tierBase: 72, minElo: 65, maxElo: 79 }
 ];
 
 export const LEAGUE_MAP = Object.fromEntries(LEAGUES.map(l => [l.id, l]));
@@ -731,6 +752,226 @@ export const OFFICIAL_LEAGUE_TABLES = {
     { name: 'Haras El Hodoud', p: 10, pts: 8, gf: 6, ga: 17, form: ['L','L','W','L','L'] },
     { name: 'Pharco FC', p: 10, pts: 7, gf: 6, ga: 18, form: ['L','L','D','L','L'] },
     { name: 'Al Mokawloon', p: 10, pts: 6, gf: 5, ga: 19, form: ['L','L','L','D','L'] }
+  ],
+  zimbabwe: [
+    { name: 'Simba Bhora', p: 28, pts: 60, gf: 38, ga: 18, form: ['W','W','W','D','W'] },
+    { name: 'FC Platinum', p: 28, pts: 51, gf: 36, ga: 22, form: ['W','D','W','L','W'] },
+    { name: 'Manica Diamonds', p: 28, pts: 47, gf: 24, ga: 16, form: ['D','W','D','W','D'] },
+    { name: 'Ngezi Platinum Stars', p: 28, pts: 46, gf: 33, ga: 22, form: ['W','W','L','D','W'] },
+    { name: 'Highlanders FC', p: 28, pts: 41, gf: 32, ga: 26, form: ['L','W','D','W','L'] },
+    { name: 'Dynamos FC', p: 28, pts: 41, gf: 26, ga: 19, form: ['D','W','W','D','D'] },
+    { name: 'Chicken Inn', p: 28, pts: 39, gf: 22, ga: 20, form: ['W','D','L','W','D'] },
+    { name: 'CAPS United', p: 28, pts: 38, gf: 31, ga: 30, form: ['W','L','W','W','L'] }
+  ],
+  uzbekistan: [
+    { name: 'Nasaf Qarshi', p: 22, pts: 49, gf: 32, ga: 12, form: ['W','W','W','D','W'] },
+    { name: 'AGMK Almalyk', p: 22, pts: 39, gf: 34, ga: 26, form: ['W','L','W','W','D'] },
+    { name: 'Sogdiana Jizzakh', p: 22, pts: 37, gf: 35, ga: 25, form: ['W','W','D','L','W'] },
+    { name: 'Navbahor Namangan', p: 22, pts: 36, gf: 30, ga: 24, form: ['D','W','W','L','D'] },
+    { name: 'Pakhtakor Tashkent', p: 22, pts: 35, gf: 36, ga: 30, form: ['L','W','D','W','W'] },
+    { name: 'Neftchi Fergana', p: 22, pts: 33, gf: 25, ga: 21, form: ['D','D','W','D','W'] },
+    { name: 'Bunyodkor', p: 22, pts: 24, gf: 22, ga: 34, form: ['W','L','D','L','W'] },
+    { name: 'Olympic Tashkent', p: 22, pts: 21, gf: 18, ga: 31, form: ['L','D','L','W','L'] }
+  ],
+  usl_championship: [
+    { name: 'Louisville City FC', p: 30, pts: 69, gf: 74, ga: 35, form: ['W','W','W','W','D'] },
+    { name: 'Charleston Battery', p: 30, pts: 60, gf: 61, ga: 31, form: ['W','D','W','L','W'] },
+    { name: 'Tampa Bay Rowdies', p: 30, pts: 50, gf: 51, ga: 41, form: ['L','W','W','D','L'] },
+    { name: 'New Mexico United', p: 30, pts: 55, gf: 44, ga: 40, form: ['W','W','L','D','W'] },
+    { name: 'Sacramento Republic', p: 30, pts: 49, gf: 43, ga: 29, form: ['D','W','L','W','D'] },
+    { name: 'Detroit City FC', p: 30, pts: 48, gf: 38, ga: 32, form: ['D','W','D','W','L'] },
+    { name: 'Colorado Springs Switchbacks', p: 30, pts: 46, gf: 45, ga: 39, form: ['W','D','W','W','D'] },
+    { name: 'Phoenix Rising', p: 30, pts: 42, gf: 31, ga: 34, form: ['D','L','W','D','W'] }
+  ],
+  tunisia: [
+    { name: 'Espérance de Tunis', p: 12, pts: 30, gf: 22, ga: 5, form: ['W','W','W','D','W'] },
+    { name: 'Club Africain', p: 12, pts: 27, gf: 18, ga: 6, form: ['W','W','D','W','W'] },
+    { name: 'Étoile du Sahel', p: 12, pts: 23, gf: 16, ga: 9, form: ['D','W','W','L','W'] },
+    { name: 'US Monastir', p: 12, pts: 23, gf: 15, ga: 7, form: ['W','D','W','D','D'] },
+    { name: 'Stade Tunisien', p: 12, pts: 22, gf: 13, ga: 8, form: ['W','D','D','W','W'] },
+    { name: 'CS Sfaxien', p: 12, pts: 20, gf: 14, ga: 10, form: ['D','L','W','W','D'] },
+    { name: 'CA Bizertin', p: 12, pts: 14, gf: 10, ga: 13, form: ['L','D','L','W','D'] },
+    { name: 'ES Métlaoui', p: 12, pts: 12, gf: 8, ga: 14, form: ['L','W','L','L','D'] }
+  ],
+  thai_league: [
+    { name: 'Buriram United', p: 10, pts: 26, gf: 32, ga: 6, form: ['W','W','W','D','W'] },
+    { name: 'Bangkok United', p: 10, pts: 24, gf: 23, ga: 10, form: ['W','W','D','W','W'] },
+    { name: 'Port FC', p: 10, pts: 22, gf: 24, ga: 13, form: ['D','W','W','L','W'] },
+    { name: 'BG Pathum United', p: 10, pts: 18, gf: 17, ga: 12, form: ['W','D','L','W','D'] },
+    { name: 'Muangthong United', p: 10, pts: 17, gf: 15, ga: 12, form: ['D','W','W','L','D'] },
+    { name: 'Ratchaburi', p: 10, pts: 15, gf: 16, ga: 15, form: ['W','L','D','W','L'] },
+    { name: 'Chiangrai United', p: 10, pts: 11, gf: 10, ga: 19, form: ['L','L','W','D','L'] },
+    { name: 'Chonburi FC', p: 10, pts: 9, gf: 9, ga: 20, form: ['L','D','L','L','W'] }
+  ],
+  sweden_superettan: [
+    { name: 'Degerfors IF', p: 26, pts: 50, gf: 46, ga: 26, form: ['W','W','W','D','W'] },
+    { name: 'Östers IF', p: 26, pts: 48, gf: 48, ga: 27, form: ['W','D','W','W','L'] },
+    { name: 'Landskrona BoIS', p: 26, pts: 46, gf: 40, ga: 29, form: ['L','W','D','L','W'] },
+    { name: 'Helsingborgs IF', p: 26, pts: 44, gf: 37, ga: 27, form: ['W','W','L','D','W'] },
+    { name: 'Sandvikens IF', p: 26, pts: 41, gf: 41, ga: 35, form: ['D','L','W','W','D'] },
+    { name: 'IK Brage', p: 26, pts: 38, gf: 30, ga: 26, form: ['D','D','L','W','D'] },
+    { name: 'Trelleborgs FF', p: 26, pts: 36, gf: 31, ga: 34, form: ['L','W','D','L','W'] },
+    { name: 'Örebro SK', p: 26, pts: 32, gf: 31, ga: 38, form: ['D','L','W','L','D'] }
+  ],
+  romania: [
+    { name: 'Universitatea Cluj', p: 12, pts: 26, gf: 18, ga: 8, form: ['W','W','D','W','D'] },
+    { name: 'Universitatea Craiova', p: 12, pts: 21, gf: 20, ga: 11, form: ['D','W','L','W','D'] },
+    { name: 'Oțelul Galați', p: 12, pts: 20, gf: 12, ga: 6, form: ['D','D','W','D','W'] },
+    { name: 'CFR Cluj', p: 12, pts: 19, gf: 22, ga: 15, form: ['W','D','W','L','D'] },
+    { name: 'FCSB', p: 12, pts: 19, gf: 18, ga: 14, form: ['W','W','W','D','L'] },
+    { name: 'Dinamo București', p: 12, pts: 18, gf: 21, ga: 17, form: ['D','L','W','D','W'] },
+    { name: 'Rapid București', p: 12, pts: 16, gf: 14, ga: 13, form: ['W','D','L','W','D'] },
+    { name: 'Sepsi OSK', p: 12, pts: 14, gf: 16, ga: 17, form: ['L','W','L','L','W'] }
+  ],
+  kleague1: [
+    { name: 'Ulsan HD', p: 33, pts: 61, gf: 53, ga: 36, form: ['W','W','W','D','W'] },
+    { name: 'Gimcheon Sangmu', p: 33, pts: 56, gf: 50, ga: 38, form: ['W','L','W','W','D'] },
+    { name: 'Gangwon FC', p: 33, pts: 55, gf: 58, ga: 50, form: ['D','W','L','L','W'] },
+    { name: 'Pohang Steelers', p: 33, pts: 51, gf: 49, ga: 42, form: ['W','D','L','W','W'] },
+    { name: 'FC Seoul', p: 33, pts: 50, gf: 46, ga: 39, form: ['D','L','W','D','W'] },
+    { name: 'Suwon FC', p: 33, pts: 47, gf: 48, ga: 50, form: ['L','D','L','W','L'] },
+    { name: 'Jeju United', p: 33, pts: 41, gf: 32, ga: 48, form: ['W','W','L','L','W'] },
+    { name: 'Incheon United', p: 33, pts: 32, gf: 32, ga: 44, form: ['L','D','L','W','L'] }
+  ],
+  puerto_rico: [
+    { name: 'Academia Quintana', p: 14, pts: 36, gf: 44, ga: 14, form: ['W','W','W','W','D'] },
+    { name: 'Metropolitan FA', p: 14, pts: 33, gf: 40, ga: 16, form: ['W','W','D','W','W'] },
+    { name: 'Puerto Rico Surf', p: 14, pts: 27, gf: 32, ga: 20, form: ['W','D','W','L','W'] },
+    { name: 'Bayamón FC', p: 14, pts: 24, gf: 29, ga: 22, form: ['D','W','L','W','D'] },
+    { name: 'Guaynabo Gol SC', p: 14, pts: 20, gf: 25, ga: 24, form: ['L','W','W','D','L'] },
+    { name: 'Caguas Sporting FC', p: 14, pts: 15, gf: 20, ga: 31, form: ['D','L','W','L','D'] },
+    { name: 'Fraigcomar', p: 14, pts: 11, gf: 16, ga: 38, form: ['L','L','L','W','L'] },
+    { name: 'Mayagüez FC', p: 14, pts: 5, gf: 12, ga: 45, form: ['L','L','D','L','L'] }
+  ],
+  poland_1liga: [
+    { name: 'Bruk-Bet Termalica', p: 12, pts: 32, gf: 29, ga: 10, form: ['W','W','W','D','W'] },
+    { name: 'Wisła Płock', p: 12, pts: 27, gf: 22, ga: 13, form: ['W','D','W','W','D'] },
+    { name: 'Miedź Legnica', p: 12, pts: 26, gf: 24, ga: 14, form: ['W','W','W','L','W'] },
+    { name: 'Arka Gdynia', p: 12, pts: 24, gf: 25, ga: 12, form: ['W','W','W','W','L'] },
+    { name: 'Ruch Chorzów', p: 12, pts: 19, gf: 18, ga: 15, form: ['L','W','D','W','D'] },
+    { name: 'Wisła Kraków', p: 12, pts: 18, gf: 22, ga: 14, form: ['W','W','L','W','D'] },
+    { name: 'ŁKS Łódź', p: 12, pts: 18, gf: 20, ga: 16, form: ['D','L','W','W','L'] },
+    { name: 'Górnik Łęczna', p: 12, pts: 17, gf: 17, ga: 17, form: ['D','D','L','D','W'] }
+  ],
+  panama: [
+    { name: 'CD Plaza Amador', p: 12, pts: 25, gf: 18, ga: 9, form: ['W','W','D','W','W'] },
+    { name: 'CA Independiente', p: 12, pts: 23, gf: 19, ga: 11, form: ['W','D','W','L','W'] },
+    { name: 'Tauro FC', p: 12, pts: 20, gf: 16, ga: 10, form: ['D','W','W','D','L'] },
+    { name: 'Sporting San Miguelito', p: 12, pts: 19, gf: 14, ga: 9, form: ['W','D','L','W','D'] },
+    { name: 'San Francisco FC', p: 12, pts: 16, gf: 13, ga: 14, form: ['L','W','D','L','W'] },
+    { name: 'Alianza FC', p: 12, pts: 15, gf: 11, ga: 13, form: ['D','L','W','D','D'] },
+    { name: 'Herrera FC', p: 12, pts: 12, gf: 12, ga: 18, form: ['L','D','L','W','L'] },
+    { name: 'Deportivo Árabe Unido', p: 12, pts: 11, gf: 9, ga: 16, form: ['D','L','D','L','W'] }
+  ],
+  norway_1div: [
+    { name: 'Vålerenga', p: 26, pts: 62, gf: 71, ga: 33, form: ['W','W','W','W','D'] },
+    { name: 'Bryne FK', p: 26, pts: 51, gf: 44, ga: 28, form: ['W','W','D','W','L'] },
+    { name: 'Moss FK', p: 26, pts: 46, gf: 47, ga: 41, form: ['W','L','W','W','D'] },
+    { name: 'Lyn 1896', p: 26, pts: 43, gf: 54, ga: 37, form: ['D','W','D','L','W'] },
+    { name: 'Egersunds IK', p: 26, pts: 42, gf: 52, ga: 49, form: ['L','D','W','L','W'] },
+    { name: 'Kongsvinger IL', p: 26, pts: 41, gf: 48, ga: 44, form: ['W','D','D','L','D'] },
+    { name: 'Sogndal', p: 26, pts: 38, gf: 40, ga: 36, form: ['L','L','W','D','L'] },
+    { name: 'Raufoss IL', p: 26, pts: 37, gf: 31, ga: 32, form: ['D','W','L','W','D'] }
+  ],
+  north_macedonia: [
+    { name: 'Shkëndija', p: 9, pts: 21, gf: 18, ga: 6, form: ['W','W','W','D','W'] },
+    { name: 'Rabotnički', p: 9, pts: 19, gf: 14, ga: 5, form: ['W','D','W','W','D'] },
+    { name: 'Struga Trim-Lum', p: 9, pts: 18, gf: 13, ga: 8, form: ['W','L','W','W','D'] },
+    { name: 'Sileks', p: 9, pts: 16, gf: 13, ga: 7, form: ['D','W','W','L','W'] },
+    { name: 'KF Gostivari', p: 9, pts: 15, gf: 11, ga: 6, form: ['D','D','D','W','W'] },
+    { name: 'Pelister Bitola', p: 9, pts: 11, gf: 8, ga: 10, form: ['L','D','L','W','D'] },
+    { name: 'Tikveš Kavadarci', p: 9, pts: 8, gf: 6, ga: 11, form: ['D','L','D','L','D'] },
+    { name: 'Vardar Skopje', p: 9, pts: 7, gf: 7, ga: 16, form: ['L','L','W','L','L'] }
+  ],
+  iceland_1deild: [
+    { name: 'ÍBV Vestmannaeyjar', p: 22, pts: 49, gf: 51, ga: 24, form: ['W','W','W','D','W'] },
+    { name: 'Keflavík ÍF', p: 22, pts: 46, gf: 50, ga: 26, form: ['W','D','W','W','L'] },
+    { name: 'Fjölnir', p: 22, pts: 40, gf: 44, ga: 35, form: ['L','W','D','W','W'] },
+    { name: 'Afturelding', p: 22, pts: 39, gf: 43, ga: 36, form: ['W','W','L','D','W'] },
+    { name: 'Grindavík', p: 22, pts: 32, gf: 40, ga: 42, form: ['D','L','W','W','D'] },
+    { name: 'Þróttur Reykjavík', p: 22, pts: 29, gf: 37, ga: 43, form: ['W','L','L','D','W'] },
+    { name: 'Leiknir Reykjavík', p: 22, pts: 25, gf: 33, ga: 46, form: ['L','D','W','L','L'] },
+    { name: 'Njarðvík', p: 22, pts: 24, gf: 31, ga: 49, form: ['L','L','D','L','W'] }
+  ],
+  iceland_urvalsdeild: [
+    { name: 'Víkingur Reykjavík', p: 24, pts: 53, gf: 59, ga: 27, form: ['W','W','D','W','W'] },
+    { name: 'Breiðablik', p: 24, pts: 53, gf: 56, ga: 27, form: ['W','W','W','D','W'] },
+    { name: 'Valur Reykjavík', p: 24, pts: 41, gf: 57, ga: 42, form: ['D','L','W','W','L'] },
+    { name: 'Stjarnan', p: 24, pts: 37, gf: 45, ga: 42, form: ['W','W','L','D','W'] },
+    { name: 'FH Hafnarfjörður', p: 24, pts: 34, gf: 41, ga: 44, form: ['L','D','W','L','D'] },
+    { name: 'ÍA Akranes', p: 24, pts: 34, gf: 41, ga: 41, form: ['L','L','W','W','L'] },
+    { name: 'KR Reykjavík', p: 24, pts: 25, gf: 39, ga: 48, form: ['D','W','L','L','D'] },
+    { name: 'KA Akureyri', p: 24, pts: 24, gf: 33, ga: 49, form: ['W','L','L','W','L'] }
+  ],
+  finland_ykkosliiga: [
+    { name: 'KTP Kotka', p: 27, pts: 58, gf: 66, ga: 25, form: ['W','W','W','D','W'] },
+    { name: 'FF Jaro', p: 27, pts: 54, gf: 52, ga: 27, form: ['W','W','W','W','L'] },
+    { name: 'TPS Turku', p: 27, pts: 48, gf: 49, ga: 35, form: ['D','L','W','W','D'] },
+    { name: 'JIPPO Joensuu', p: 27, pts: 47, gf: 41, ga: 29, form: ['W','D','D','L','W'] },
+    { name: 'SJK Akatemia', p: 27, pts: 35, gf: 38, ga: 44, form: ['L','W','L','W','D'] },
+    { name: 'SalPa', p: 27, pts: 32, gf: 34, ga: 43, form: ['D','D','L','W','L'] },
+    { name: 'PK-35 Helsinki', p: 27, pts: 29, gf: 31, ga: 42, form: ['L','D','W','L','D'] },
+    { name: 'MP Mikkeli', p: 27, pts: 16, gf: 19, ga: 64, form: ['L','L','L','D','L'] }
+  ],
+  finland_ykkonen: [
+    { name: 'Klubi 04', p: 24, pts: 54, gf: 58, ga: 22, form: ['W','W','W','D','W'] },
+    { name: 'KPV Kokkola', p: 24, pts: 50, gf: 51, ga: 28, form: ['W','W','D','W','L'] },
+    { name: 'OLS Oulu', p: 24, pts: 45, gf: 46, ga: 31, form: ['W','D','W','L','W'] },
+    { name: 'Atlantis FC', p: 24, pts: 43, gf: 44, ga: 33, form: ['L','W','W','W','D'] },
+    { name: 'Jazz Pori', p: 24, pts: 37, gf: 45, ga: 43, form: ['D','L','W','W','L'] },
+    { name: 'RoPS Rovaniemi', p: 24, pts: 34, gf: 35, ga: 37, form: ['W','L','L','D','W'] },
+    { name: 'EPS Espoo', p: 24, pts: 28, gf: 32, ga: 41, form: ['L','W','D','L','D'] },
+    { name: 'PKKU Kerava', p: 24, pts: 22, gf: 31, ga: 52, form: ['L','L','D','L','L'] }
+  ],
+  brasileiro_serieb: [
+    { name: 'Santos FC', p: 30, pts: 56, gf: 45, ga: 23, form: ['W','W','W','D','W'] },
+    { name: 'Novorizontino', p: 30, pts: 54, gf: 36, ga: 24, form: ['W','W','D','L','W'] },
+    { name: 'Sport Recife', p: 30, pts: 53, gf: 40, ga: 27, form: ['W','D','W','W','W'] },
+    { name: 'Mirassol', p: 30, pts: 50, gf: 28, ga: 21, form: ['W','L','W','D','W'] },
+    { name: 'América Mineiro', p: 30, pts: 47, gf: 39, ga: 26, form: ['D','W','W','L','D'] },
+    { name: 'Vila Nova', p: 30, pts: 46, gf: 33, ga: 35, form: ['L','L','W','L','W'] },
+    { name: 'Ceará SC', p: 30, pts: 45, gf: 44, ga: 36, form: ['W','L','W','W','L'] },
+    { name: 'Coritiba', p: 30, pts: 44, gf: 30, ga: 28, form: ['D','W','L','W','W'] }
+  ],
+  austria_erste: [
+    { name: 'SV Ried', p: 10, pts: 23, gf: 22, ga: 7, form: ['W','W','W','L','W'] },
+    { name: 'Admira Wacker', p: 10, pts: 22, gf: 15, ga: 7, form: ['W','W','W','W','D'] },
+    { name: 'First Vienna', p: 10, pts: 19, gf: 20, ga: 14, form: ['W','L','W','W','D'] },
+    { name: 'SKU Amstetten', p: 10, pts: 18, gf: 18, ga: 12, form: ['D','W','W','D','L'] },
+    { name: 'Floridsdorfer AC', p: 10, pts: 15, gf: 12, ga: 10, form: ['D','D','L','W','W'] },
+    { name: 'SV Horn', p: 10, pts: 13, gf: 16, ga: 19, form: ['L','W','L','W','L'] },
+    { name: 'FC Liefering', p: 10, pts: 12, gf: 14, ga: 17, form: ['D','L','W','L','D'] },
+    { name: 'Kapfenberger SV', p: 10, pts: 12, gf: 13, ga: 18, form: ['L','D','L','L','W'] }
+  ],
+  algeria: [
+    { name: 'MC Alger', p: 8, pts: 20, gf: 16, ga: 4, form: ['W','W','W','D','W'] },
+    { name: 'CR Belouizdad', p: 8, pts: 17, gf: 13, ga: 5, form: ['W','D','W','W','D'] },
+    { name: 'CS Constantine', p: 8, pts: 16, gf: 12, ga: 6, form: ['W','W','D','L','W'] },
+    { name: 'USM Alger', p: 8, pts: 15, gf: 10, ga: 4, form: ['D','W','W','D','D'] },
+    { name: 'JS Kabylie', p: 8, pts: 14, gf: 11, ga: 7, form: ['W','L','W','D','W'] },
+    { name: 'ES Sétif', p: 8, pts: 12, gf: 9, ga: 8, form: ['D','W','L','W','L'] },
+    { name: 'Paradou AC', p: 8, pts: 10, gf: 10, ga: 11, form: ['L','D','W','L','D'] },
+    { name: 'JS Saoura', p: 8, pts: 8, gf: 7, ga: 12, form: ['L','L','D','W','L'] }
+  ],
+  netherlands_eerste: [
+    { name: 'Excelsior Rotterdam', p: 9, pts: 20, gf: 23, ga: 12, form: ['W','W','D','W','W'] },
+    { name: 'FC Den Bosch', p: 9, pts: 19, gf: 18, ga: 8, form: ['W','W','D','W','L'] },
+    { name: 'Helmond Sport', p: 9, pts: 18, gf: 16, ga: 9, form: ['D','W','W','W','D'] },
+    { name: 'De Graafschap', p: 9, pts: 17, gf: 21, ga: 16, form: ['W','L','W','W','D'] },
+    { name: 'FC Dordrecht', p: 9, pts: 16, gf: 14, ga: 10, form: ['W','D','W','D','D'] },
+    { name: 'Roda JC', p: 9, pts: 14, gf: 13, ga: 13, form: ['D','W','L','W','D'] },
+    { name: 'SC Cambuur', p: 9, pts: 13, gf: 11, ga: 10, form: ['W','L','W','L','W'] },
+    { name: 'FC Volendam', p: 9, pts: 13, gf: 16, ga: 16, form: ['L','W','D','W','W'] }
+  ],
+  germany_3liga: [
+    { name: 'Dynamo Dresden', p: 9, pts: 20, gf: 19, ga: 11, form: ['W','W','D','W','L'] },
+    { name: 'SV Sandhausen', p: 9, pts: 19, gf: 18, ga: 10, form: ['W','D','W','W','W'] },
+    { name: 'Energie Cottbus', p: 9, pts: 18, gf: 23, ga: 13, form: ['W','W','W','W','L'] },
+    { name: 'Arminia Bielefeld', p: 9, pts: 17, gf: 14, ga: 8, form: ['W','L','W','D','W'] },
+    { name: '1. FC Saarbrücken', p: 9, pts: 16, gf: 12, ga: 9, form: ['D','W','W','L','D'] },
+    { name: 'Erzgebirge Aue', p: 9, pts: 16, gf: 15, ga: 14, form: ['L','L','L','W','W'] },
+    { name: 'Hansa Rostock', p: 9, pts: 12, gf: 12, ga: 13, form: ['W','D','L','W','D'] },
+    { name: 'VfL Osnabrück', p: 9, pts: 8, gf: 11, ga: 18, form: ['L','D','L','L','W'] }
   ]
 };
 
@@ -2007,6 +2248,160 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Torpedo-BelAZ Zhodino', a: 'BATE Borisov', day: 5, hh: 15, mm: 0, big: true },
     { h: 'Dinamo Brest', a: 'FC Gomel', day: 5, hh: 18, mm: 30, big: false },
     { h: 'Slavia Mozyr', a: 'Isloch Minsk', day: 4, hh: 14, mm: 0, big: false }
+  ],
+  zimbabwe: [
+    { h: 'Simba Bhora', a: 'Highlanders FC', day: 0, hh: 15, mm: 0, big: true },
+    { h: 'Dynamos FC', a: 'FC Platinum', day: 0, hh: 15, mm: 0, big: true },
+    { h: 'Manica Diamonds', a: 'CAPS United', day: 1, hh: 15, mm: 0, big: false },
+    { h: 'Ngezi Platinum Stars', a: 'Chicken Inn', day: 2, hh: 15, mm: 0, big: false },
+    { h: 'FC Platinum', a: 'Simba Bhora', day: 4, hh: 15, mm: 0, big: true }
+  ],
+  uzbekistan: [
+    { h: 'Pakhtakor Tashkent', a: 'Navbahor Namangan', day: 0, hh: 14, mm: 30, big: true },
+    { h: 'Nasaf Qarshi', a: 'Neftchi Fergana', day: 0, hh: 14, mm: 30, big: true },
+    { h: 'AGMK Almalyk', a: 'Sogdiana Jizzakh', day: 1, hh: 15, mm: 0, big: false },
+    { h: 'Bunyodkor', a: 'Olympic Tashkent', day: 2, hh: 14, mm: 0, big: false },
+    { h: 'Navbahor Namangan', a: 'Nasaf Qarshi', day: 5, hh: 14, mm: 30, big: true }
+  ],
+  usl_championship: [
+    { h: 'Louisville City FC', a: 'Charleston Battery', day: 0, hh: 23, mm: 30, big: true },
+    { h: 'Tampa Bay Rowdies', a: 'Detroit City FC', day: 0, hh: 23, mm: 30, big: false },
+    { h: 'Sacramento Republic', a: 'Phoenix Rising', day: 1, hh: 2, mm: 0, big: true },
+    { h: 'New Mexico United', a: 'Colorado Springs Switchbacks', day: 2, hh: 1, mm: 0, big: false },
+    { h: 'Charleston Battery', a: 'Tampa Bay Rowdies', day: 4, hh: 23, mm: 0, big: true }
+  ],
+  tunisia: [
+    { h: 'Espérance de Tunis', a: 'Étoile du Sahel', day: 0, hh: 14, mm: 30, big: true },
+    { h: 'Club Africain', a: 'US Monastir', day: 0, hh: 14, mm: 30, big: true },
+    { h: 'CS Sfaxien', a: 'Stade Tunisien', day: 1, hh: 14, mm: 30, big: false },
+    { h: 'CA Bizertin', a: 'ES Métlaoui', day: 2, hh: 14, mm: 30, big: false },
+    { h: 'Étoile du Sahel', a: 'Club Africain', day: 4, hh: 14, mm: 30, big: true }
+  ],
+  thai_league: [
+    { h: 'Buriram United', a: 'Port FC', day: 0, hh: 12, mm: 0, big: true },
+    { h: 'Bangkok United', a: 'BG Pathum United', day: 0, hh: 13, mm: 0, big: true },
+    { h: 'Muangthong United', a: 'Ratchaburi', day: 1, hh: 12, mm: 30, big: false },
+    { h: 'Chiangrai United', a: 'Chonburi FC', day: 2, hh: 12, mm: 0, big: false },
+    { h: 'BG Pathum United', a: 'Buriram United', day: 5, hh: 12, mm: 30, big: true }
+  ],
+  sweden_superettan: [
+    { h: 'Degerfors IF', a: 'Landskrona BoIS', day: 0, hh: 13, mm: 0, big: true },
+    { h: 'Östers IF', a: 'Helsingborgs IF', day: 0, hh: 15, mm: 0, big: true },
+    { h: 'Sandvikens IF', a: 'IK Brage', day: 1, hh: 13, mm: 0, big: false },
+    { h: 'Trelleborgs FF', a: 'Örebro SK', day: 2, hh: 17, mm: 0, big: false },
+    { h: 'Helsingborgs IF', a: 'Degerfors IF', day: 4, hh: 14, mm: 0, big: true }
+  ],
+  romania: [
+    { h: 'FCSB', a: 'Dinamo București', day: 0, hh: 18, mm: 0, big: true },
+    { h: 'Universitatea Craiova', a: 'CFR Cluj', day: 0, hh: 15, mm: 30, big: true },
+    { h: 'Rapid București', a: 'Universitatea Cluj', day: 1, hh: 18, mm: 0, big: false },
+    { h: 'Oțelul Galați', a: 'Sepsi OSK', day: 2, hh: 15, mm: 30, big: false },
+    { h: 'CFR Cluj', a: 'FCSB', day: 4, hh: 19, mm: 0, big: true }
+  ],
+  kleague1: [
+    { h: 'Ulsan HD', a: 'Pohang Steelers', day: 0, hh: 7, mm: 30, big: true },
+    { h: 'FC Seoul', a: 'Gangwon FC', day: 0, hh: 10, mm: 0, big: true },
+    { h: 'Gimcheon Sangmu', a: 'Suwon FC', day: 1, hh: 7, mm: 30, big: false },
+    { h: 'Incheon United', a: 'Jeju United', day: 2, hh: 7, mm: 30, big: false },
+    { h: 'Pohang Steelers', a: 'FC Seoul', day: 5, hh: 7, mm: 0, big: true }
+  ],
+  puerto_rico: [
+    { h: 'Academia Quintana', a: 'Metropolitan FA', day: 0, hh: 23, mm: 0, big: true },
+    { h: 'Bayamón FC', a: 'Puerto Rico Surf', day: 0, hh: 21, mm: 0, big: false },
+    { h: 'Guaynabo Gol SC', a: 'Caguas Sporting FC', day: 1, hh: 22, mm: 0, big: false },
+    { h: 'Fraigcomar', a: 'Mayagüez FC', day: 2, hh: 20, mm: 0, big: false },
+    { h: 'Metropolitan FA', a: 'Bayamón FC', day: 4, hh: 22, mm: 0, big: true }
+  ],
+  poland_1liga: [
+    { h: 'Wisła Kraków', a: 'Arka Gdynia', day: 0, hh: 15, mm: 30, big: true },
+    { h: 'Bruk-Bet Termalica', a: 'Miedź Legnica', day: 0, hh: 18, mm: 0, big: true },
+    { h: 'Ruch Chorzów', a: 'Wisła Płock', day: 1, hh: 16, mm: 0, big: false },
+    { h: 'ŁKS Łódź', a: 'Górnik Łęczna', day: 2, hh: 17, mm: 0, big: false },
+    { h: 'Arka Gdynia', a: 'Bruk-Bet Termalica', day: 4, hh: 16, mm: 0, big: true }
+  ],
+  panama: [
+    { h: 'Tauro FC', a: 'CD Plaza Amador', day: 0, hh: 22, mm: 0, big: true },
+    { h: 'CA Independiente', a: 'San Francisco FC', day: 0, hh: 23, mm: 30, big: true },
+    { h: 'Sporting San Miguelito', a: 'Alianza FC', day: 1, hh: 22, mm: 0, big: false },
+    { h: 'Herrera FC', a: 'Deportivo Árabe Unido', day: 2, hh: 21, mm: 0, big: false },
+    { h: 'CD Plaza Amador', a: 'CA Independiente', day: 4, hh: 22, mm: 30, big: true }
+  ],
+  norway_1div: [
+    { h: 'Vålerenga', a: 'Bryne FK', day: 0, hh: 14, mm: 0, big: true },
+    { h: 'Moss FK', a: 'Lyn 1896', day: 0, hh: 16, mm: 0, big: false },
+    { h: 'Egersunds IK', a: 'Kongsvinger IL', day: 1, hh: 14, mm: 0, big: false },
+    { h: 'Sogndal', a: 'Raufoss IL', day: 2, hh: 17, mm: 0, big: false },
+    { h: 'Bryne FK', a: 'Moss FK', day: 5, hh: 15, mm: 0, big: true }
+  ],
+  north_macedonia: [
+    { h: 'Shkëndija', a: 'Struga Trim-Lum', day: 0, hh: 13, mm: 30, big: true },
+    { h: 'Rabotnički', a: 'Vardar Skopje', day: 0, hh: 13, mm: 30, big: true },
+    { h: 'Sileks', a: 'KF Gostivari', day: 1, hh: 13, mm: 30, big: false },
+    { h: 'Pelister Bitola', a: 'Tikveš Kavadarci', day: 2, hh: 13, mm: 30, big: false },
+    { h: 'Struga Trim-Lum', a: 'Rabotnički', day: 4, hh: 14, mm: 0, big: true }
+  ],
+  iceland_1deild: [
+    { h: 'ÍBV Vestmannaeyjar', a: 'Keflavík ÍF', day: 0, hh: 17, mm: 0, big: true },
+    { h: 'Fjölnir', a: 'Afturelding', day: 0, hh: 17, mm: 0, big: false },
+    { h: 'Grindavík', a: 'Þróttur Reykjavík', day: 1, hh: 16, mm: 30, big: false },
+    { h: 'Leiknir Reykjavík', a: 'Njarðvík', day: 2, hh: 17, mm: 0, big: false },
+    { h: 'Keflavík ÍF', a: 'Fjölnir', day: 5, hh: 16, mm: 0, big: true }
+  ],
+  iceland_urvalsdeild: [
+    { h: 'Víkingur Reykjavík', a: 'Breiðablik', day: 0, hh: 19, mm: 15, big: true },
+    { h: 'Valur Reykjavík', a: 'Stjarnan', day: 0, hh: 17, mm: 0, big: true },
+    { h: 'FH Hafnarfjörður', a: 'ÍA Akranes', day: 1, hh: 18, mm: 0, big: false },
+    { h: 'KR Reykjavík', a: 'KA Akureyri', day: 2, hh: 17, mm: 0, big: false },
+    { h: 'Breiðablik', a: 'Valur Reykjavík', day: 4, hh: 18, mm: 0, big: true }
+  ],
+  finland_ykkosliiga: [
+    { h: 'KTP Kotka', a: 'FF Jaro', day: 0, hh: 14, mm: 0, big: true },
+    { h: 'TPS Turku', a: 'JIPPO Joensuu', day: 0, hh: 16, mm: 0, big: false },
+    { h: 'SJK Akatemia', a: 'SalPa', day: 1, hh: 15, mm: 0, big: false },
+    { h: 'PK-35 Helsinki', a: 'MP Mikkeli', day: 2, hh: 14, mm: 0, big: false },
+    { h: 'FF Jaro', a: 'TPS Turku', day: 5, hh: 15, mm: 0, big: true }
+  ],
+  finland_ykkonen: [
+    { h: 'Klubi 04', a: 'KPV Kokkola', day: 0, hh: 13, mm: 0, big: true },
+    { h: 'OLS Oulu', a: 'Atlantis FC', day: 0, hh: 15, mm: 0, big: false },
+    { h: 'Jazz Pori', a: 'RoPS Rovaniemi', day: 1, hh: 14, mm: 0, big: false },
+    { h: 'EPS Espoo', a: 'PKKU Kerava', day: 2, hh: 16, mm: 0, big: false },
+    { h: 'KPV Kokkola', a: 'OLS Oulu', day: 4, hh: 14, mm: 0, big: true }
+  ],
+  brasileiro_serieb: [
+    { h: 'Santos FC', a: 'Sport Recife', day: 0, hh: 20, mm: 0, big: true },
+    { h: 'Novorizontino', a: 'Mirassol', day: 0, hh: 22, mm: 30, big: true },
+    { h: 'América Mineiro', a: 'Ceará SC', day: 1, hh: 21, mm: 0, big: false },
+    { h: 'Vila Nova', a: 'Coritiba', day: 2, hh: 23, mm: 0, big: false },
+    { h: 'Sport Recife', a: 'América Mineiro', day: 4, hh: 20, mm: 0, big: true }
+  ],
+  austria_erste: [
+    { h: 'SV Ried', a: 'Admira Wacker', day: 0, hh: 16, mm: 10, big: true },
+    { h: 'First Vienna', a: 'SKU Amstetten', day: 0, hh: 16, mm: 10, big: false },
+    { h: 'Floridsdorfer AC', a: 'FC Liefering', day: 1, hh: 16, mm: 10, big: false },
+    { h: 'SV Horn', a: 'Kapfenberger SV', day: 2, hh: 16, mm: 10, big: false },
+    { h: 'Admira Wacker', a: 'First Vienna', day: 5, hh: 16, mm: 10, big: true }
+  ],
+  algeria: [
+    { h: 'MC Alger', a: 'USM Alger', day: 0, hh: 17, mm: 0, big: true },
+    { h: 'CR Belouizdad', a: 'JS Kabylie', day: 0, hh: 17, mm: 0, big: true },
+    { h: 'CS Constantine', a: 'ES Sétif', day: 1, hh: 16, mm: 0, big: false },
+    { h: 'Paradou AC', a: 'JS Saoura', day: 2, hh: 15, mm: 0, big: false },
+    { h: 'USM Alger', a: 'CR Belouizdad', day: 4, hh: 17, mm: 30, big: true }
+  ],
+  netherlands_eerste: [
+    { h: 'Excelsior Rotterdam', a: 'FC Den Bosch', day: 0, hh: 18, mm: 0, big: true },
+    { h: 'De Graafschap', a: 'Helmond Sport', day: 0, hh: 18, mm: 0, big: false },
+    { h: 'FC Dordrecht', a: 'Roda JC', day: 1, hh: 18, mm: 0, big: false },
+    { h: 'SC Cambuur', a: 'FC Volendam', day: 2, hh: 18, mm: 0, big: false },
+    { h: 'FC Den Bosch', a: 'De Graafschap', day: 5, hh: 18, mm: 0, big: true }
+  ],
+  germany_3liga: [
+    { h: 'Dynamo Dresden', a: 'Arminia Bielefeld', day: 0, hh: 12, mm: 0, big: true },
+    { h: 'SV Sandhausen', a: 'Energie Cottbus', day: 0, hh: 14, mm: 30, big: true },
+    { h: '1. FC Saarbrücken', a: 'Erzgebirge Aue', day: 1, hh: 14, mm: 30, big: false },
+    { h: 'Hansa Rostock', a: 'VfL Osnabrück', day: 2, hh: 12, mm: 0, big: false },
+    { h: 'Energie Cottbus', a: 'Dynamo Dresden', day: 4, hh: 13, mm: 0, big: true }
   ]
 };
 

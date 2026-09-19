@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>HyenaX | The Ndlela Millionaires GoldPack - Predictive Football Intelligence</title>
-<meta name="description" content="HyenaX - The Ndlela Millionaires GoldPack: Dixon-Coles bivariate probability models, AI-consensus football predictions and odds intelligence across 86 global leagues and competitions." />
+<meta name="description" content="HyenaX - The Ndlela Millionaires GoldPack: Dixon-Coles bivariate probability models, AI-consensus football predictions and odds intelligence across 108 global leagues and competitions with Daily Top 20 Surest Wins." />
 
 <!-- PWA / installability -->
 <meta name="theme-color" content="#080A0F" />
@@ -824,7 +824,28 @@ const LEAGUES = [
   { id:'serbia', name:'Serbia Superliga', country:'Serbia', flag:'🇷🇸', rho: -0.130 },
   { id:'slovakia', name:'Slovakia Superliga', country:'Slovakia', flag:'🇸🇰', rho: -0.120 },
   { id:'slovenia', name:'Slovenia prvaliga', country:'Slovenia', flag:'🇸🇮', rho: -0.125 },
-  { id:'cymru', name:'Cymru Premier', country:'Wales', flag:'🏴󠁧󠁢󠁷󠁬󠁳󠁿', rho: -0.105 }
+  { id:'cymru', name:'Cymru Premier', country:'Wales', flag:'🏴󠁧󠁢󠁷󠁬󠁳󠁿', rho: -0.105 },
+  { id:'zimbabwe', name:'Zimbabwe Premier Soccer League', country:'Zimbabwe', flag:'🇿🇼', rho: -0.170 },
+  { id:'uzbekistan', name:'Uzbekistan PFL', country:'Uzbekistan', flag:'🇺🇿', rho: -0.140 },
+  { id:'usl_championship', name:'USL Championship', country:'USA', flag:'🇺🇸', rho: -0.110 },
+  { id:'tunisia', name:'Tunisian Ligue Professionnelle 1', country:'Tunisia', flag:'🇹🇳', rho: -0.180 },
+  { id:'thai_league', name:'Thai League 1', country:'Thailand', flag:'🇹🇭', rho: -0.105 },
+  { id:'sweden_superettan', name:'Sweden Superettan', country:'Sweden', flag:'🇸🇪', rho: -0.115 },
+  { id:'romania', name:'Romania Liga I', country:'Romania', flag:'🇷🇴', rho: -0.145 },
+  { id:'kleague1', name:'Korea K League 1', country:'South Korea', flag:'🇰🇷', rho: -0.125 },
+  { id:'puerto_rico', name:'Puerto Rico LPR Pro', country:'Puerto Rico', flag:'🇵🇷', rho: -0.090 },
+  { id:'poland_1liga', name:'Poland I Liga', country:'Poland', flag:'🇵🇱', rho: -0.130 },
+  { id:'panama', name:'Panama Liga Panameña de Fútbol Apertura', country:'Panama', flag:'🇵🇦', rho: -0.155 },
+  { id:'norway_1div', name:'Norway First Division', country:'Norway', flag:'🇳🇴', rho: -0.095 },
+  { id:'north_macedonia', name:'North Macedonia First Football League', country:'North Macedonia', flag:'🇲🇰', rho: -0.150 },
+  { id:'iceland_1deild', name:'Iceland 1. Deild', country:'Iceland', flag:'🇮🇸', rho: -0.085 },
+  { id:'iceland_urvalsdeild', name:'Iceland Úrvalsdeild', country:'Iceland', flag:'🇮🇸', rho: -0.090 },
+  { id:'finland_ykkosliiga', name:'Finland Ykkösliiga', country:'Finland', flag:'🇫🇮', rho: -0.115 },
+  { id:'finland_ykkonen', name:'Finland Ykkönen', country:'Finland', flag:'🇫🇮', rho: -0.110 },
+  { id:'brasileiro_serieb', name:'Brasileiro Série B', country:'Brazil', flag:'🇧🇷', rho: -0.170 },
+  { id:'algeria', name:'Algeria Ligue 1', country:'Algeria', flag:'🇩🇿', rho: -0.180 },
+  { id:'netherlands_eerste', name:'Netherlands Eerste Divisie', country:'Netherlands', flag:'🇳🇱', rho: -0.085 },
+  { id:'germany_3liga', name:'Germany 3. Liga', country:'Germany', flag:'🇩🇪', rho: -0.100 }
 ];
 
 const SEED_MATCHES = [
@@ -1365,15 +1386,28 @@ function app(){
         candidatePicks.sort((a, b) => b.odds - a.odds);
       }
 
-      return candidatePicks.slice(0, 15).map((p, idx) => ({
+      return candidatePicks.slice(0, 20).map((p, idx) => ({
         ...p,
         rank: idx + 1,
         rankLabel: idx === 0 ? '👑 #1 TOP BANKER' : idx === 1 ? '🥈 #2 GOLDEN LOCK' : idx === 2 ? '🥉 #3 PRIME LOCK' : `🏅 #${idx + 1} BANKER`
       }));
     },
 
-    get top15AccaOdds(){
+    get dailyTop20Picks(){
+      return this.dailyTop15Picks;
+    },
+
+    get top20AccaOdds(){
       const picks = this.dailyTop15Picks;
+      if (!picks.length) return '1.00';
+      const prod = picks.reduce((acc, p) => acc * (p.odds || 1.15), 1);
+      return prod > 9999 ? prod.toFixed(0) : prod.toFixed(2);
+    },
+    get top15AccaOdds(){
+      return this.top20AccaOdds;
+    },
+    get top10AccaOdds(){
+      const picks = this.dailyTop15Picks.slice(0, 10);
       if (!picks.length) return '1.00';
       const prod = picks.reduce((acc, p) => acc * (p.odds || 1.15), 1);
       return prod > 9999 ? prod.toFixed(0) : prod.toFixed(2);
@@ -1390,20 +1424,26 @@ function app(){
       const prod = picks.reduce((acc, p) => acc * (p.odds || 1.15), 1);
       return prod.toFixed(2);
     },
-    get top15AvgProbability(){
+    get top20AvgProbability(){
       const picks = this.dailyTop15Picks;
       if (!picks.length) return 0;
       const sum = picks.reduce((acc, p) => acc + (p.probability || 0), 0);
       return +(sum / picks.length).toFixed(1);
     },
-    get top15AvgAgreement(){
+    get top15AvgProbability(){
+      return this.top20AvgProbability;
+    },
+    get top20AvgAgreement(){
       const picks = this.dailyTop15Picks;
       if (!picks.length) return 0;
       const sum = picks.reduce((acc, p) => acc + (p.modelAgreement || 0), 0);
       return Math.round(sum / picks.length);
     },
+    get top15AvgAgreement(){
+      return this.top20AvgAgreement;
+    },
 
-    addAllTop15ToAcca(){
+    addAllTop20ToAcca(){
       const picks = this.dailyTop15Picks;
       if (!picks.length) {
         this.showToast('⚠️ No Picks Found', 'No predictions available for the selected date.', 'warning');
@@ -1433,8 +1473,12 @@ function app(){
       });
       this.recomputeAccumulator();
       this.haptic(25);
-      this.showToast('🎯 Top 15 Imported!', `Successfully added ${added} banker selections to your Accumulator.`, 'success');
+      this.showToast('🎯 Top 20 Imported!', `Successfully added ${added} banker selections to your Accumulator.`, 'success');
       this.activeView = 'accumulator';
+    },
+
+    addAllTop15ToAcca(){
+      this.addAllTop20ToAcca();
     },
 
     addTop5BankersToAcca(){
@@ -1468,30 +1512,34 @@ function app(){
       this.activeView = 'accumulator';
     },
 
-    copyTop15ToClipboard(){
+    copyTop20ToClipboard(){
       const picks = this.dailyTop15Picks;
       if (!picks.length) return;
       const dateLabel = this.days.find(d => d.key === this.effectiveTop15Date)?.fullLabel || this.effectiveTop15Date;
-      let text = `👑 HYENAX DAILY TOP 15 BANKERS (${dateLabel})\n`;
-      text += `Mathematically safest picks selected from all fixtures for today:\n\n`;
+      let text = `👑 HYENAX DAILY TOP 20 SUREST WINS & BANKERS (${dateLabel})\n`;
+      text += `Mathematically safest 20 picks selected from all fixtures for today:\n\n`;
       picks.forEach((p, i) => {
         text += `${i + 1}. [${p.probability}% Win Prob] ${p.home.name} vs ${p.away.name}\n`;
         text += `   🏆 ${p.league.name} (${p.kickoffTime || 'Kickoff'})\n`;
         text += `   👉 Pick: ${p.selection} (${p.market}) @ ${p.odds}\n`;
         text += `   🛡️ Agreement: ${p.modelAgreement}% | Edge: +${p.evPct}%\n\n`;
       });
-      text += `⚡ Total Acca Odds: ${this.top15AccaOdds}x\n`;
+      text += `⚡ Total 20-Fold Acca Odds: ${this.top20AccaOdds}x\n`;
       text += `Generated by HyenaX - The Ndlela Millionaires GoldPack Intelligence Engine`;
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
-          this.showToast('📋 Copied to Clipboard', `Top 15 Banker predictions copied! Ready to paste.`, 'success');
+          this.showToast('📋 Copied to Clipboard', `Top 20 Banker predictions copied! Ready to paste.`, 'success');
         }).catch(() => {
           this.fallbackCopy(text);
         });
       } else {
         this.fallbackCopy(text);
       }
+    },
+
+    copyTop15ToClipboard(){
+      this.copyTop20ToClipboard();
     },
     fallbackCopy(text) {
       const ta = document.createElement('textarea');
@@ -2949,8 +2997,8 @@ function app(){
         <button @click="activeView = 'daily-top15'; haptic()"
                 :class="activeView === 'daily-top15' ? 'bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.35)]' : 'text-slate-400 hover:text-slate-200 border-transparent'"
                 class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5">
-          <span>⭐</span> Daily Top 15
-          <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-400 text-black font-extrabold font-num">15</span>
+          <span>⭐</span> Daily Top 20
+          <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-400 text-black font-extrabold font-num">20</span>
         </button>
         <button @click="activeView = 'beastboard'"
                 :class="activeView === 'beastboard' ? 'bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.3)]' : 'text-slate-400 hover:text-slate-200 border-transparent'"
@@ -3224,7 +3272,7 @@ function app(){
         </div>
       </div>
 
-      <!-- Daily Top 15 Quick Access Banner -->
+      <!-- Daily Top 20 Quick Access Banner -->
       <div class="mb-6 p-4 rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-[#121826] to-[#0E131F] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl shadow-black/40 relative overflow-hidden">
         <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
         <div class="flex items-center gap-3.5 relative z-10">
@@ -3233,8 +3281,8 @@ function app(){
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="font-display font-extrabold text-sm sm:text-base text-white tracking-tight">Today's 15 Best Banker Predictions</span>
-              <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-black uppercase font-num tracking-wide">Surest Win Filter</span>
+              <span class="font-display font-extrabold text-sm sm:text-base text-white tracking-tight">Today's 20 Surest Wins & Banker Predictions</span>
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-black uppercase font-num tracking-wide">Top 20 Surest Filter</span>
             </div>
             <p class="text-xs text-slate-300 mt-0.5">
               Filtered exclusively from all matches on <span class="text-amber-300 font-bold" x-text="days.find(d => d.key === selectedDate)?.label || 'Today'">Today</span> by maximum probability & 17-model consensus.
@@ -3243,7 +3291,7 @@ function app(){
         </div>
         <button @click="top15Date = (selectedDate !== 'all' ? selectedDate : (days[1]?.key || '')); activeView = 'daily-top15'; haptic(15)"
                 class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-display font-extrabold text-xs tracking-wider shadow-lg shadow-amber-500/20 active:scale-95 transition-all shrink-0 flex items-center gap-2 relative z-10 cursor-pointer">
-          <span>Explore Top 15 Bankers</span>
+          <span>Explore Top 20 Bankers</span>
           <span>→</span>
         </button>
       </div>
@@ -4763,9 +4811,9 @@ function app(){
     </aside>
   </main>
 
-  <!-- ===================== VIEW: DAILY TOP 15 BANKER PREDICTIONS ===================== -->
+  <!-- ===================== VIEW: DAILY TOP 20 BANKER PREDICTIONS ===================== -->
   <section id="daily-top15-section" x-show="activeView === 'daily-top15'" class="mx-auto max-w-[1400px] px-4 py-8 space-y-8 relative z-10">
-    <!-- Top 15 Section Header -->
+    <!-- Top 20 Section Header -->
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-[#222E46]">
       <div>
         <div class="flex items-center gap-3 flex-wrap">
@@ -4773,30 +4821,30 @@ function app(){
             👑
           </div>
           <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Daily Top 15 Banker Predictions
+            Daily Top 20 Surest Wins
           </h2>
           <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-400 to-yellow-500 text-black uppercase font-num shadow-sm">
-            MAX PROBABILITY LOCKS
+            TOP 20 SUREST LOCKS
           </span>
         </div>
         <p class="text-xs text-slate-400 mt-1.5 max-w-3xl leading-relaxed">
-          The 15 most mathematically probable predictions isolated from every fixture scheduled for the selected date. Curated using bivariate Dixon-Coles density distributions, 17-model consensus agreement, and defensive risk minimization.
+          The 20 most mathematically probable predictions isolated from every fixture scheduled for the selected date. Curated using bivariate Dixon-Coles density distributions, 17-model consensus agreement, and defensive risk minimization.
         </p>
       </div>
 
       <!-- Quick Action Buttons -->
       <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-        <button @click="copyTop15ToClipboard()"
+        <button @click="copyTop20ToClipboard()"
                 class="px-3.5 py-2 rounded-xl bg-[#0E131F] hover:bg-[#162033] border border-[#222E46] hover:border-slate-500 text-slate-200 font-display text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
-          <span>📋</span> Copy Top 15 Slip
+          <span>📋</span> Copy Top 20 Slip
         </button>
         <button @click="addTop5BankersToAcca()"
                 class="px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-display text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
           <span>🛡️</span> Add Top 5 Bankers
         </button>
-        <button @click="addAllTop15ToAcca()"
+        <button @click="addAllTop20ToAcca()"
                 class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-display text-xs font-extrabold shadow-md shadow-amber-500/20 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
-          <span>⚡</span> Add All 15 to Acca
+          <span>⚡</span> Add All 20 to Acca
         </button>
       </div>
     </div>
@@ -4808,7 +4856,7 @@ function app(){
           <span>📅</span> Select Fixture Date:
         </span>
         <span class="text-[11px] text-amber-400 font-num">
-          Showing 15 surest picks for: <span class="font-bold underline" x-text="days.find(d => d.key === effectiveTop15Date)?.fullLabel || effectiveTop15Date"></span>
+          Showing 20 surest picks for: <span class="font-bold underline" x-text="days.find(d => d.key === effectiveTop15Date)?.fullLabel || effectiveTop15Date"></span>
         </span>
       </div>
       <div class="flex gap-2.5 pb-2 overflow-x-auto no-scrollbar snap-x">
@@ -4839,20 +4887,20 @@ function app(){
           <span x-text="fixtures.filter(m => (m.matchDate || dateKey(m.kickoff)) === effectiveTop15Date).length">0</span>
           <span class="text-xs text-slate-400 font-normal">games</span>
         </div>
-        <div class="text-[10px] text-amber-400 font-semibold mt-0.5">Top 15 Isolated</div>
+        <div class="text-[10px] text-amber-400 font-semibold mt-0.5">Top 20 Isolated</div>
       </div>
 
       <!-- Avg Probability -->
       <div class="p-3 rounded-xl bg-[#121826] border border-[#1E293B]">
         <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Avg Win Probability</div>
-        <div class="font-num text-lg font-extrabold text-emerald-400 mt-1" x-text="top15AvgProbability + '%'">0%</div>
+        <div class="font-num text-lg font-extrabold text-emerald-400 mt-1" x-text="top20AvgProbability + '%'">0%</div>
         <div class="text-[10px] text-emerald-300/80 font-semibold mt-0.5">Banker Calibrated</div>
       </div>
 
       <!-- 17-Model Consensus -->
       <div class="p-3 rounded-xl bg-[#121826] border border-[#1E293B]">
         <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400">17-Model Consensus</div>
-        <div class="font-num text-lg font-extrabold text-cyan-400 mt-1" x-text="top15AvgAgreement + '%'">0%</div>
+        <div class="font-num text-lg font-extrabold text-cyan-400 mt-1" x-text="top20AvgAgreement + '%'">0%</div>
         <div class="text-[10px] text-cyan-300/80 font-semibold mt-0.5">High Agreement</div>
       </div>
 
@@ -4870,11 +4918,11 @@ function app(){
         <div class="text-[10px] text-slate-400 font-semibold mt-0.5">Top 5 Combined</div>
       </div>
 
-      <!-- 15-Fold Grand Acca Odds -->
+      <!-- 20-Fold Grand Acca Odds -->
       <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/15 to-[#121826] border border-amber-500/40">
-        <div class="text-[10px] uppercase font-bold tracking-wider text-amber-300">15-Fold Grand Odds</div>
-        <div class="font-num text-lg font-extrabold text-amber-400 mt-1" x-text="top15AccaOdds + 'x'">1.00x</div>
-        <div class="text-[10px] text-amber-300/80 font-semibold mt-0.5">All 15 Multiplier</div>
+        <div class="text-[10px] uppercase font-bold tracking-wider text-amber-300">20-Fold Grand Odds</div>
+        <div class="font-num text-lg font-extrabold text-amber-400 mt-1" x-text="top20AccaOdds + 'x'">1.00x</div>
+        <div class="text-[10px] text-amber-300/80 font-semibold mt-0.5">All 20 Multiplier</div>
       </div>
     </div>
 
@@ -4886,7 +4934,7 @@ function app(){
         <button @click="top15MarketFilter = 'all'; haptic(5)"
                 :class="top15MarketFilter === 'all' ? 'bg-amber-400 text-black font-bold' : 'bg-[#151D2E] text-slate-300 hover:bg-[#1D273B]'"
                 class="px-3 py-1.5 rounded-lg text-xs font-display tracking-wide transition-all cursor-pointer">
-          All 15 Bankers
+          All 20 Bankers
         </button>
         <button @click="top15MarketFilter = 'double_chance'; haptic(5)"
                 :class="top15MarketFilter === 'double_chance' ? 'bg-amber-400 text-black font-bold' : 'bg-[#151D2E] text-slate-300 hover:bg-[#1D273B]'"
@@ -5029,7 +5077,7 @@ function app(){
       <div class="text-4xl">⚽</div>
       <h3 class="font-display text-xl font-bold text-white">No Fixtures Available for Selected Date</h3>
       <p class="text-xs text-slate-400 max-w-md mx-auto">
-        Please select a different date using the calendar bar above to view the 15 safest daily banker predictions.
+        Please select a different date using the calendar bar above to view the 20 surest daily banker predictions.
       </p>
       <button @click="top15Date = (days[1]?.key || ''); haptic(10)"
               class="px-4 py-2 rounded-xl bg-amber-500 text-black font-bold text-xs cursor-pointer">
@@ -5045,24 +5093,28 @@ function app(){
         </div>
         <div class="space-y-1.5">
           <h4 class="font-display font-bold text-sm text-white flex items-center gap-2">
-            <span>Mathematical Risk Management: How to Bet the Daily Top 15</span>
+            <span>Mathematical Risk Management: How to Bet the Daily Top 20</span>
             <span class="px-2 py-0.2 rounded bg-amber-400/20 text-amber-300 text-[10px] font-num">QUARTER-KELLY RULE</span>
           </h4>
           <p class="text-xs text-slate-300 leading-relaxed">
-            While these 15 picks represent the highest win-probability selections available across all fixtures today (averaging <strong><span x-text="top15AvgProbability + '%'">90%</span></strong> win probability), in professional sports stochastic variance is unavoidable (e.g. early red cards, penalty decisions, deflections).
+            While these 20 picks represent the highest win-probability selections available across all fixtures today (averaging <strong><span x-text="top20AvgProbability + '%'">90%</span></strong> win probability), in professional sports stochastic variance is unavoidable (e.g. early red cards, penalty decisions, deflections).
           </p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs text-slate-300">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 text-xs text-slate-300">
             <div class="p-2.5 rounded-lg bg-[#0A0D14] border border-[#1E293B]">
               <strong class="text-emerald-400 block mb-0.5">Strategy A: 3-Fold Treble</strong>
-              Combine the top 3 locks for a solid ~1.80x multiplier with high joint survival probability.
+              Combine the top 3 locks for a solid ~1.80x multiplier with the highest joint survival probability.
             </div>
             <div class="p-2.5 rounded-lg bg-[#0A0D14] border border-[#1E293B]">
               <strong class="text-amber-400 block mb-0.5">Strategy B: 5-Fold Banker</strong>
-              Combine the top 5 locks for ~3.00x multiplier; ideal for medium-conviction weekly growth.
+              Combine the top 5 locks for ~3.00x multiplier; ideal for disciplined weekly growth.
             </div>
             <div class="p-2.5 rounded-lg bg-[#0A0D14] border border-[#1E293B]">
-              <strong class="text-cyan-400 block mb-0.5">Strategy C: Flat Staking</strong>
-              Never risk more than 2% to 5% of your total bankroll on any single accumulator ticket.
+              <strong class="text-indigo-400 block mb-0.5">Strategy C: 10-Fold Builder</strong>
+              Combine top 10 locks for ~15.00x - 30.00x odds using small stake sizing with high EV.
+            </div>
+            <div class="p-2.5 rounded-lg bg-[#0A0D14] border border-[#1E293B]">
+              <strong class="text-cyan-400 block mb-0.5">Strategy D: Flat Staking</strong>
+              Never risk more than 2% to 5% of your total bankroll on any single ticket.
             </div>
           </div>
         </div>
@@ -6707,7 +6759,7 @@ function app(){
             :class="activeView === 'daily-top15' ? 'text-amber-300 font-bold' : 'text-slate-400 font-medium'"
             class="flex flex-col items-center justify-center gap-1 py-2 px-1.5 transition-all min-h-[52px] active:scale-95">
       <span class="text-lg leading-none">⭐</span>
-      <span class="text-[10px] tracking-tight">Top 15</span>
+      <span class="text-[10px] tracking-tight">Top 20</span>
     </button>
     <button @click="activeView = 'beastboard'; haptic()"
             :class="activeView === 'beastboard' ? 'text-amber-300 font-bold' : 'text-slate-400 font-medium'"
