@@ -86,7 +86,8 @@ export const LEAGUES = [
   { id: 'kategoria_superiore', espn: null, name: 'Kategoria Superiore', country: 'Albania', flag: '🇦🇱', rho: -0.160, avgGoals: 2.30, homeAdv: 1.30, tierBase: 71, minElo: 64, maxElo: 78 },
   { id: 'armenia', espn: null, name: 'Armenian Premier League', country: 'Armenia', flag: '🇦🇲', rho: -0.135, avgGoals: 2.65, homeAdv: 1.25, tierBase: 71, minElo: 64, maxElo: 78 },
   { id: 'austria_erste', espn: 'aut.2', name: 'Austrian Erste Liga', country: 'Austria', flag: '🇦🇹', rho: -0.100, avgGoals: 2.95, homeAdv: 1.22, tierBase: 72, minElo: 65, maxElo: 79 },
-  { id: 'azerbaijan', espn: null, name: 'Azerbaijan Premier League', country: 'Azerbaijan', flag: '🇦🇿', rho: -0.155, avgGoals: 2.38, homeAdv: 1.28, tierBase: 72, minElo: 65, maxElo: 80 },
+  { id: 'azerbaijan', espn: null, name: 'Misli Premier League', country: 'Azerbaijan', flag: '🇦🇿', rho: -0.155, avgGoals: 2.38, homeAdv: 1.28, tierBase: 72, minElo: 65, maxElo: 80 },
+  { id: 'vysshaya_liga', espn: null, name: 'Vysshaya Liga', country: 'Belarus', flag: '🇧🇾', rho: -0.140, avgGoals: 2.52, homeAdv: 1.25, tierBase: 72, minElo: 65, maxElo: 80 },
   { id: 'bosnia', espn: null, name: 'Bosnia and Herzegovina Premijer Liga', country: 'Bosnia & Herzegovina', flag: '🇧🇦', rho: -0.150, avgGoals: 2.45, homeAdv: 1.32, tierBase: 72, minElo: 65, maxElo: 80 },
   { id: 'bulgaria', espn: null, name: 'Bulgarian First Professional League', country: 'Bulgaria', flag: '🇧🇬', rho: -0.145, avgGoals: 2.48, homeAdv: 1.28, tierBase: 73, minElo: 66, maxElo: 81 },
   { id: 'canpl', espn: null, name: 'Canadian Premier League', country: 'Canada', flag: '🇨🇦', rho: -0.120, avgGoals: 2.70, homeAdv: 1.26, tierBase: 72, minElo: 65, maxElo: 79 },
@@ -641,7 +642,17 @@ export const GLOBAL_CLUB_REGISTRY = {
   'the new saints': { name: 'The New Saints FC', rating: 73, domestic: 'cymru', form: ['W','W','W','W','W'], xgFor: 2.65, xgAgainst: 0.75 },
   'connahs quay': { name: 'Connah\'s Quay Nomads', rating: 71, domestic: 'cymru', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
   'penybont': { name: 'Penybont FC', rating: 71, domestic: 'cymru', form: ['W','W','D','W','D'], xgFor: 1.75, xgAgainst: 0.95 },
-  'bala town': { name: 'Bala Town FC', rating: 70, domestic: 'cymru', form: ['D','L','W','D','W'], xgFor: 1.55, xgAgainst: 1.20 }
+  'bala town': { name: 'Bala Town FC', rating: 70, domestic: 'cymru', form: ['D','L','W','D','W'], xgFor: 1.55, xgAgainst: 1.20 },
+
+  // --- Belarus Vysshaya Liga ---
+  'dinamo minsk': { name: 'Dinamo Minsk', rating: 77, domestic: 'vysshaya_liga', form: ['W','W','W','D','W'], xgFor: 2.20, xgAgainst: 0.65 },
+  'neman grodno': { name: 'Neman Grodno', rating: 75, domestic: 'vysshaya_liga', form: ['W','D','W','W','W'], xgFor: 1.95, xgAgainst: 0.80 },
+  'torpedo belaz': { name: 'Torpedo-BelAZ Zhodino', rating: 74, domestic: 'vysshaya_liga', form: ['D','W','W','D','W'], xgFor: 1.75, xgAgainst: 0.70 },
+  'bate borisov': { name: 'BATE Borisov', rating: 73, domestic: 'vysshaya_liga', form: ['L','W','D','W','L'], xgFor: 1.65, xgAgainst: 1.10 },
+  'dinamo brest': { name: 'Dinamo Brest', rating: 73, domestic: 'vysshaya_liga', form: ['W','W','L','D','W'], xgFor: 2.05, xgAgainst: 1.15 },
+  'gomel': { name: 'FC Gomel', rating: 71, domestic: 'vysshaya_liga', form: ['D','L','W','D','W'], xgFor: 1.45, xgAgainst: 1.15 },
+  'slavia mozyr': { name: 'Slavia Mozyr', rating: 71, domestic: 'vysshaya_liga', form: ['L','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.25 },
+  'isloch minsk': { name: 'Isloch Minsk', rating: 72, domestic: 'vysshaya_liga', form: ['W','D','D','L','W'], xgFor: 1.55, xgAgainst: 1.05 }
 };
 
 export const OFFICIAL_LEAGUE_TABLES = {
@@ -1970,6 +1981,12 @@ export const OFFICIAL_ROUND_FIXTURES = {
   cymru: [
     { h: 'The New Saints FC', a: 'Connah\'s Quay Nomads', day: 4, hh: 19, mm: 45, big: true },
     { h: 'Penybont FC', a: 'Bala Town FC', day: 5, hh: 14, mm: 30, big: false }
+  ],
+  vysshaya_liga: [
+    { h: 'Dinamo Minsk', a: 'Neman Grodno', day: 4, hh: 17, mm: 0, big: true },
+    { h: 'Torpedo-BelAZ Zhodino', a: 'BATE Borisov', day: 5, hh: 15, mm: 0, big: true },
+    { h: 'Dinamo Brest', a: 'FC Gomel', day: 5, hh: 18, mm: 30, big: false },
+    { h: 'Slavia Mozyr', a: 'Isloch Minsk', day: 4, hh: 14, mm: 0, big: false }
   ]
 };
 
@@ -1986,8 +2003,8 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
   const standingsLeagues = Object.keys(standingsMap);
   console.log(`[FixtureGen] Standings successfully loaded for ${standingsLeagues.length} leagues.`);
 
-  // Range from -7 days to 35 days ahead covers full active international and continental rounds
-  const startD = new Date(base.getTime() - 7 * 24 * 60 * 60 * 1000);
+  // Range from yesterday to 35 days ahead covers active and upcoming matches without stale past seasons
+  const startD = new Date(base.getTime() - 24 * 60 * 60 * 1000);
   const endD = new Date(base.getTime() + 35 * 24 * 60 * 60 * 1000);
   const startStr = `${startD.getFullYear()}${pad(startD.getMonth() + 1)}${pad(startD.getDate())}`;
   const endStr = `${endD.getFullYear()}${pad(endD.getMonth() + 1)}${pad(endD.getDate())}`;
@@ -2052,6 +2069,9 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
 
       const kickoffIso = e.date || comp.date;
       const kickoffDate = new Date(kickoffIso);
+      if (isNaN(kickoffDate.getTime()) || kickoffDate.getTime() < startD.getTime() || kickoffDate.getTime() > endD.getTime()) {
+        continue;
+      }
       const y = kickoffDate.getFullYear();
       const m = pad(kickoffDate.getMonth() + 1);
       const d = pad(kickoffDate.getDate());

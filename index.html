@@ -797,7 +797,8 @@ const LEAGUES = [
   { id:'kategoria_superiore', name:'Kategoria Superiore', country:'Albania', flag:'🇦🇱', rho: -0.160 },
   { id:'armenia', name:'Armenian Premier League', country:'Armenia', flag:'🇦🇲', rho: -0.135 },
   { id:'austria_erste', name:'Austrian Erste Liga', country:'Austria', flag:'🇦🇹', rho: -0.100 },
-  { id:'azerbaijan', name:'Azerbaijan Premier League', country:'Azerbaijan', flag:'🇦🇿', rho: -0.155 },
+  { id:'azerbaijan', name:'Misli Premier League', country:'Azerbaijan', flag:'🇦🇿', rho: -0.155 },
+  { id:'vysshaya_liga', name:'Vysshaya Liga', country:'Belarus', flag:'🇧🇾', rho: -0.140 },
   { id:'bosnia', name:'Bosnia and Herzegovina Premijer Liga', country:'Bosnia & Herzegovina', flag:'🇧🇦', rho: -0.150 },
   { id:'bulgaria', name:'Bulgarian First Professional League', country:'Bulgaria', flag:'🇧🇬', rho: -0.145 },
   { id:'canpl', name:'Canadian Premier League', country:'Canada', flag:'🇨🇦', rho: -0.120 },
@@ -1859,7 +1860,10 @@ function app(){
         this.dataSource = 'LIVE DIXON-COLES SYNC';
         this.updatedAt = json.meta && json.meta.generated_at ? new Date(json.meta.generated_at) : new Date();
 
-        const todayKey = this.days[1].key;
+        // Dynamically synchronize calendar day tabs so all scheduled dates have clickable chips
+        this.syncDaysWithFixtures();
+
+        const todayKey = this.days[1] ? this.days[1].key : this.dateKey(new Date());
         const hasToday = this.fixtures.some(m => (m.matchDate || this.dateKey(m.kickoff)) === todayKey);
         if (hasToday) {
           this.selectedDate = todayKey;
@@ -1902,6 +1906,35 @@ function app(){
       }
     },
 
+    syncDaysWithFixtures(){
+      if (!Array.isArray(this.fixtures) || !this.fixtures.length) return;
+      const dateSet = new Set(this.fixtures.map(m => m.matchDate || this.dateKey(m.kickoff)).filter(Boolean));
+      const existingKeys = new Set(this.days.map(d => d.key));
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      dateSet.forEach(key => {
+        if (!existingKeys.has(key)) {
+          const parts = key.split('-');
+          if (parts.length === 3) {
+            const dateObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            if (!isNaN(dateObj.getTime())) {
+              const diff = Math.round((dateObj.getTime() - today.getTime()) / (24 * 60 * 60 * 1000));
+              this.days.push({
+                key,
+                date: dateObj,
+                offset: diff,
+                label: diff === -1 ? 'Yesterday' : diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : dateObj.toLocaleDateString('en-GB', { weekday: 'short' }),
+                sub: dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+                year: dateObj.getFullYear(),
+                fullLabel: dateObj.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+              });
+            }
+          }
+        }
+      });
+      this.days.sort((a, b) => a.key.localeCompare(b.key));
+    },
+
     countByDay(key){
       if (key === 'all') return this.fixtures.length;
       return this.fixtures.filter(m => (m.matchDate || this.dateKey(m.kickoff)) === key).length;
@@ -1928,27 +1961,17 @@ function app(){
       this.selectedLeague = id;
       if (id) {
         this.openLeagues[id] = true;
-        const hasMatchesOnDay = this.dayMatches(this.selectedDate).some(m => m.league.id === id);
-        if (!hasMatchesOnDay) {
-          const match = this.fixtures.find(m => m.league.id === id);
-          if (match) {
-            const mDay = match.matchDate || this.dateKey(match.kickoff);
-            if (this.days.some(d => d.key === mDay)) {
-              this.selectedDate = mDay;
-            } else {
-              this.selectedDate = 'all';
-            }
-          } else {
-            this.selectedDate = 'all';
-          }
-        }
+        // When choosing a specific competition, display all scheduled rounds for that competition
+        this.selectedDate = 'all';
       }
     },
 
     get filteredGroups(){
       const q = this.query.trim().toLowerCase();
       const sel = this.selectedLeague;
-      const list = this.dayMatches(this.selectedDate).filter(m =>
+      // When searching by team or league keyword, search across all fixtures so games on any date are found
+      const baseList = q ? this.fixtures : this.dayMatches(this.selectedDate);
+      const list = baseList.filter(m =>
         (!this.bigOnly || m.isBig) &&
         (!sel || m.league.id === sel) &&
         (!q || m.home.name.toLowerCase().includes(q) || m.away.name.toLowerCase().includes(q) || m.league.name.toLowerCase().includes(q))
@@ -1963,7 +1986,9 @@ function app(){
         .map(l => ({ league: l, matches: list.filter(m => m.league.id === l.id) }));
     },
     get dayTotal(){ 
-      return this.dayMatches(this.selectedDate).filter(m => !this.selectedLeague || m.league.id === this.selectedLeague).length; 
+      const q = this.query.trim().toLowerCase();
+      const baseList = q ? this.fixtures : this.dayMatches(this.selectedDate);
+      return baseList.filter(m => !this.selectedLeague || m.league.id === this.selectedLeague).length; 
     },
     get shownTotal(){ return this.filteredGroups.reduce((s,g)=>s+g.matches.length, 0); },
     get selectedMatch(){ return this.fixtures.find(m => m.id === this.selectedMatchId) || null; },
@@ -1972,7 +1997,9 @@ function app(){
         .map((m,i)=>({ rank:i+1, id:m.id, dayKey:this.dateKey(m.kickoff), home:m.home.short, away:m.away.short, pick:m.topPick.selection, prob:m.probabilityIndex, league:m.league.name }));
     },
 
-    toggleLeague(id){ this.openLeagues[id] = !this.openLeagues[id]; },
+    toggleLeague(id){ 
+      this.openLeagues[id] = this.openLeagues[id] === false ? true : false; 
+    },
     safeNextTick(fn){
       if (typeof this.$nextTick === 'function') {
         this.$nextTick(fn);
@@ -2869,7 +2896,7 @@ function app(){
           <!-- Collapsible League Header -->
           <button @click="toggleLeague(g.league.id)"
             class="w-full flex items-center gap-3.5 px-4 sm:px-5 py-3.5 bg-gradient-to-r from-[#121826] to-[#0E131F] border-b border-[#222E46] hover:bg-[#162033] transition-colors group">
-            <svg class="w-4 h-4 text-amber-400 transition-transform duration-300" :class="openLeagues[g.league.id] ? 'rotate-90' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+            <svg class="w-4 h-4 text-amber-400 transition-transform duration-300" :class="openLeagues[g.league.id] !== false ? 'rotate-90' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
             <span class="text-xl leading-none" x-text="g.league.flag">🏴</span>
             <!-- Bright, Bold League Name for Rapid Scanning -->
             <span class="font-display font-extrabold text-base text-white tracking-wide group-hover:text-amber-300 transition-colors" x-text="g.league.name">Premier League</span>
@@ -2878,7 +2905,7 @@ function app(){
           </button>
 
           <!-- Match cards list -->
-          <div x-show="openLeagues[g.league.id]" x-transition.opacity.duration.300ms class="divide-y divide-[#1A2337] bg-[#0B0F19]">
+          <div x-show="openLeagues[g.league.id] !== false" x-transition.opacity.duration.300ms class="divide-y divide-[#1A2337] bg-[#0B0F19]">
             <template x-for="(m, mi) in g.matches" :key="m.id">
               <button @click="select(m)"
                 class="match-card w-full text-left px-4 sm:px-5 py-3.5 grid grid-cols-[auto_1fr_auto] sm:grid-cols-[76px_1fr_auto_auto] items-center gap-3.5 sm:gap-4 transition-all"
