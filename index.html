@@ -1291,21 +1291,44 @@ function app(){
 
         const listToEvaluate = bankerFavored.length ? bankerFavored : allMarkets;
 
-        const sortedMarkets = listToEvaluate.slice().sort((a, b) => {
-          const probA = Number(a.probability) || 0;
-          const probB = Number(b.probability) || 0;
-          return probB - probA;
-        });
-
-        const bestMarket = sortedMarkets[0];
-        if (!bestMarket) return;
-
         const extractNum = (o) => {
           if (typeof o === 'number') return o;
           if (typeof o === 'object' && o !== null) return Number(o.betway || o.hollywoodbets || o.easybet || 1.25);
           const n = parseFloat(o);
           return isNaN(n) ? 1.25 : n;
         };
+
+        const isDerby = !!(
+          (m.beastMeta && m.beastMeta.derbyInfo && m.beastMeta.derbyInfo.isDerby) ||
+          (m.topPick && m.topPick.isDerby) ||
+          /derby|clásico|clasico|vardar|skopje|soweto/i.test(`${m.home.name} ${m.away.name}`)
+        );
+        const derbyName = (m.beastMeta && m.beastMeta.derbyInfo && m.beastMeta.derbyInfo.derbyName) ||
+          (m.topPick && m.topPick.derbyName) || (isDerby ? 'Rivalry / Derby Clash' : '');
+
+        // Anti-Trap Market Quality Ranking for this fixture
+        const sortedMarkets = listToEvaluate.slice().sort((a, b) => {
+          const oddsA = extractNum(a.odds);
+          const oddsB = extractNum(b.odds);
+          const probA = Number(a.probability) || 0;
+          const probB = Number(b.probability) || 0;
+
+          const trapPenaltyA = oddsA < 1.28 ? -40 : 0;
+          const trapPenaltyB = oddsB < 1.28 ? -40 : 0;
+
+          const isDcOr1X2A = (a.market || '').toLowerCase().includes('double') || (a.market || '').toLowerCase().includes('winner');
+          const isDcOr1X2B = (b.market || '').toLowerCase().includes('double') || (b.market || '').toLowerCase().includes('winner');
+          const derbyPenaltyA = (isDerby && isDcOr1X2A) ? -35 : 0;
+          const derbyPenaltyB = (isDerby && isDcOr1X2B) ? -35 : 0;
+
+          const scoreA = probA + trapPenaltyA + derbyPenaltyA + (oddsA >= 1.30 && oddsA <= 1.85 ? 12 : 0);
+          const scoreB = probB + trapPenaltyB + derbyPenaltyB + (oddsB >= 1.30 && oddsB <= 1.85 ? 12 : 0);
+
+          return scoreB - scoreA;
+        });
+
+        const bestMarket = sortedMarkets[0];
+        if (!bestMarket) return;
 
         const oddsVal = extractNum(bestMarket.odds);
         const rawProb = Number(bestMarket.probability) || 70;
@@ -1315,34 +1338,57 @@ function app(){
         const consensusProb = ens.consensusProbability || rawProb;
         const trustScore = beastMeta.trustScore || 90;
 
+        const isTrap = oddsVal < 1.28;
+        const isFinished = m.matchStatus === 'FINISHED';
+        const finalScore = m.finalScore || (m.score ? `${m.score.home} - ${m.score.away}` : '');
+        const postMortem = (m.topPick && m.topPick.postMortem) || (bestMarket && bestMarket.postMortem);
+        const settledResult = (m.topPick && m.topPick.result) || (bestMarket && bestMarket.result);
+
+        // Quality-First Banker Score: heavily penalizes traps and derbies
         const bankerScore = +(
-          (rawProb * 0.60) + 
+          (rawProb * 0.45) + 
           (modelAgreement * 0.25) + 
-          (trustScore * 0.15)
+          (trustScore * 0.15) +
+          (oddsVal >= 1.30 && oddsVal <= 1.85 ? 15 : 0) -
+          (isTrap ? 45 : 0) -
+          (isDerby ? 30 : 0)
         ).toFixed(1);
 
-        let safetyTier = 'ULTRA_BANKER';
-        let safetyBadge = '⭐ ULTRA BANKER';
-        let badgeBg = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-        if (rawProb >= 82) {
-          safetyTier = 'ULTRA_BANKER';
-          safetyBadge = '👑 ULTRA BANKER (82%+)';
-          badgeBg = 'bg-gradient-to-r from-emerald-500/25 to-teal-500/20 text-emerald-300 border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.3)]';
-        } else if (rawProb >= 76) {
-          safetyTier = 'PRIME_LOCK';
-          safetyBadge = '💎 PRIME LOCK (76-82%)';
+        let safetyTier = 'HIGH_SAFETY';
+        let safetyBadge = '🛡️ VALUE LEAN';
+        let badgeBg = 'bg-blue-500/20 text-blue-300 border-blue-500/40';
+
+        if (isTrap) {
+          safetyTier = 'ODDS_TRAP';
+          safetyBadge = '⚠️ TRAP DISQUALIFIED (ODDS < 1.28)';
+          badgeBg = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+        } else if (isDerby) {
+          safetyTier = 'DERBY_RISK';
+          safetyBadge = '⚔️ DERBY VOLATILITY WARNING';
           badgeBg = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+        } else if (rawProb >= 80 && oddsVal >= 1.30 && modelAgreement >= 80) {
+          safetyTier = 'ULTRA_BANKER';
+          safetyBadge = '👑 ULTRA BANKER (SAFE + VALUE)';
+          badgeBg = 'bg-gradient-to-r from-emerald-500/25 to-teal-500/20 text-emerald-300 border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.3)]';
+        } else if (rawProb >= 74 && oddsVal >= 1.28) {
+          safetyTier = 'PRIME_LOCK';
+          safetyBadge = '💎 PRIME LOCK (74-80%)';
+          badgeBg = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
         } else {
           safetyTier = 'HIGH_SAFETY';
-          safetyBadge = '🛡️ HIGH SAFETY (70-76%)';
+          safetyBadge = '🛡️ VALUE LEAN';
           badgeBg = 'bg-blue-500/20 text-blue-300 border-blue-500/40';
         }
 
         let whySafe = '';
-        if (bestMarket.market.toLowerCase().includes('double chance')) {
-          whySafe = `Bivariate density establishes a ${rawProb}% structural barrier covering 2 of 3 outcomes; 17-model agreement is ${modelAgreement}%.`;
+        if (isTrap) {
+          whySafe = `⚠️ Model Guard: Retail odds of ${oddsVal} offer asymmetric negative risk. Breakeven requires >80% hit rate, which stochastic variance routinely breaks. Disqualified from top banker tiers.`;
+        } else if (isDerby) {
+          whySafe = `⚔️ Derby Alert (${derbyName || 'Rivalry'}): Match carries elevated psychological entropy and referee volatility. Model suppresses 1X2 favorite certainty.`;
+        } else if (bestMarket.market.toLowerCase().includes('double chance')) {
+          whySafe = `Bivariate density establishes a ${rawProb}% structural barrier covering 2 of 3 outcomes with solid ${oddsVal} value; 17-model consensus is ${modelAgreement}%.`;
         } else if (bestMarket.market.toLowerCase().includes('goals')) {
-          whySafe = `Combined expected goals (xG) density of ${(m.lambdaHome + m.lambdaAway || 2.4).toFixed(2)} provides heavy mathematical backing for ${bestMarket.selection}.`;
+          whySafe = `Combined expected goals (xG) density provides heavy mathematical backing for ${bestMarket.selection}; completely independent of team winner variance.`;
         } else if (bestMarket.market.toLowerCase().includes('draw no bet')) {
           whySafe = `Draw stake is fully refunded; underlying rating gap produces a ${rawProb}% zero-loss probability margin.`;
         } else {
@@ -1356,7 +1402,7 @@ function app(){
           away: m.away,
           league: m.league,
           kickoff: m.kickoff,
-          kickoffTime: m.kickoffTime,
+          kickoffTime: m.kickoffRsa || m.kickoffTime || '15:30 SAST',
           matchDate: m.matchDate || this.dateKey(m.kickoff),
           market: bestMarket.market,
           selection: bestMarket.selection,
@@ -1372,18 +1418,27 @@ function app(){
           safetyBadge,
           badgeBg,
           whySafe,
+          isDerby,
+          derbyName,
+          isTrap,
+          isFinished,
+          finalScore,
+          postMortem,
+          settledResult,
           evPct: beastMeta.expectedValuePct || +(Math.max(1.5, ((rawProb/100 * oddsVal) - 1) * 100)).toFixed(1)
         });
       });
 
+      // Default to bankerScore (Quality & Anti-Trap Protection) instead of blind raw probability
       if (this.top15Sort === 'probability') {
         candidatePicks.sort((a, b) => b.probability - a.probability);
-      } else if (this.top15Sort === 'bankerScore') {
-        candidatePicks.sort((a, b) => b.bankerScore - a.bankerScore);
       } else if (this.top15Sort === 'modelAgreement') {
         candidatePicks.sort((a, b) => b.modelAgreement - a.modelAgreement);
       } else if (this.top15Sort === 'odds') {
         candidatePicks.sort((a, b) => b.odds - a.odds);
+      } else {
+        // Default: Banker Quality & Safety Score
+        candidatePicks.sort((a, b) => b.bankerScore - a.bankerScore);
       }
 
       return candidatePicks.slice(0, 20).map((p, idx) => ({
@@ -1969,7 +2024,27 @@ function app(){
       const p = n => String(n).padStart(2, '0');
       this.localTime = `${p(this.now.getHours())}:${p(this.now.getMinutes())}:${p(this.now.getSeconds())}`;
       this.utcTime = `${p(this.now.getUTCHours())}:${p(this.now.getUTCMinutes())}:${p(this.now.getUTCSeconds())}`;
+      // Universal RSA Time (SAST, UTC+2)
+      const rsaMillis = this.now.getTime() + (2 * 60 * 60 * 1000);
+      const rsaDate = new Date(rsaMillis);
+      this.rsaTime = `${p(rsaDate.getUTCHours())}:${p(rsaDate.getUTCMinutes())}:${p(rsaDate.getUTCSeconds())}`;
+      this.rsaClockStr = `${p(rsaDate.getUTCHours())}:${p(rsaDate.getUTCMinutes())} SAST`;
       this.todayFullStr = this.now.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+    },
+
+    toRsaTimeDisplay(timeOrIso){
+      if (!timeOrIso) return '15:00 SAST';
+      const str = String(timeOrIso);
+      if (str.includes('SAST') || str.includes('RSA')) return str;
+      if (str.match(/^\d{1,2}:\d{2}$/)) return `${str} SAST`;
+      const d = new Date(str);
+      if (!isNaN(d.getTime())) {
+        const rsaMillis = d.getTime() + (2 * 60 * 60 * 1000);
+        const rsaDate = new Date(rsaMillis);
+        const p = n => String(n).padStart(2, '0');
+        return `${p(rsaDate.getUTCHours())}:${p(rsaDate.getUTCMinutes())} SAST`;
+      }
+      return `${str} SAST`;
     },
 
     dateKey(d){
@@ -2106,8 +2181,16 @@ function app(){
     normalizeFixture(m, n){
       const kickoffRaw = this._pick(m, 'kickoff', 'kickoff_utc', 'kickoffUtc');
       const kickoff = kickoffRaw ? new Date(kickoffRaw) : new Date();
-      const matchDate = m.matchDate || (kickoffRaw && kickoffRaw.length >= 10 ? kickoffRaw.slice(0, 10) : this.dateKey(kickoff));
-      const kickoffTime = m.kickoffTime || (kickoffRaw && kickoffRaw.includes('T') ? kickoffRaw.slice(11, 16) : this.fmtTime(kickoff));
+      
+      // Calculate South Africa Standard Time (SAST, UTC+2)
+      const rsaMillis = kickoff.getTime() + (2 * 60 * 60 * 1000);
+      const rsaKickoff = new Date(rsaMillis);
+      const pad = n => String(n).padStart(2, '0');
+      const rsaDateStr = `${rsaKickoff.getUTCFullYear()}-${pad(rsaKickoff.getUTCMonth()+1)}-${pad(rsaKickoff.getUTCDate())}`;
+      const rsaTimeStr = `${pad(rsaKickoff.getUTCHours())}:${pad(rsaKickoff.getUTCMinutes())} SAST`;
+
+      const matchDate = m.matchDate || rsaDateStr;
+      const kickoffTime = m.kickoffRsa || (m.kickoffTime && m.kickoffTime.includes('RSA') ? m.kickoffTime : rsaTimeStr);
       const homeName = (m.home && m.home.name) || (typeof m.home === 'string' ? m.home : null);
       const awayName = (m.away && m.away.name) || (typeof m.away === 'string' ? m.away : null);
       let league = m.league;
@@ -2182,8 +2265,16 @@ function app(){
           probability: top.probability,
           marketEdge: typeof top.marketEdge === 'number' ? top.marketEdge : null,
           isValueBet: !!top.isValueBet,
-          odds: topOddsVal
+          odds: topOddsVal,
+          result: (m.topPick && m.topPick.result) || top.result || null,
+          postMortem: (m.topPick && m.topPick.postMortem) || top.postMortem || null,
+          isDerby: (m.topPick && m.topPick.isDerby) || (m.beastMeta && m.beastMeta.derbyInfo && m.beastMeta.derbyInfo.isDerby) || false,
+          derbyName: (m.topPick && m.topPick.derbyName) || (m.beastMeta && m.beastMeta.derbyInfo && m.beastMeta.derbyInfo.derbyName) || ''
         },
+        matchStatus: m.matchStatus || 'SCHEDULED',
+        score: m.score || null,
+        finalScore: m.finalScore || (m.score ? `${m.score.home} - ${m.score.away}` : ''),
+        kickoffRsa: m.kickoffRsa || kickoffTime,
         rationale: m.rationale || generateRationale(home, away, top, dcPredictions.lambdaHome, dcPredictions.lambdaAway, dcPredictions.dixonColesMeta),
         beastMeta: {
           calibratedProbability: cal.calibratedProbability,
@@ -3062,9 +3153,9 @@ function app(){
           <span>📅</span>
           <span x-text="todayFullStr">Tuesday, 1 Sep 2026</span>
         </div>
-        <div class="font-num text-lg font-bold text-white tracking-wider mt-0.5">
-          <span x-text="localTime.slice(0,5)">00:00</span><span class="colon text-[#F59E0B]">:</span><span class="text-amber-400" x-text="localTime.slice(6,8) || localTime.slice(8) || '00'">00</span>
-          <span class="text-[10px] text-slate-400 font-normal ml-1" x-text="'(' + utcTime + ' UTC)'"></span>
+        <div class="font-num text-lg font-bold text-white tracking-wider mt-0.5 flex items-center justify-end gap-1.5">
+          <span x-text="localTime.slice(0,5)">00:00</span><span class="colon text-[#F59E0B]">:</span><span class="text-amber-400" x-text="localTime.slice(6,8) || '00'">00</span>
+          <span class="text-[10px] text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-500/15 border border-amber-500/30" x-text="rsaClockStr" title="Universal South African Standard Time (SAST / UTC+2)">15:00 SAST</span>
         </div>
       </div>
     </div>
@@ -5000,15 +5091,48 @@ function app(){
                 <span x-text="p.league.flag || '⚽'"></span>
                 <span class="truncate text-slate-300" x-text="p.league.name">League</span>
               </div>
-              <span class="font-num text-[11px] text-slate-400 shrink-0 ml-2" x-text="(p.kickoffTime || 'Kickoff') + ' UTC'">17:30 UTC</span>
+              <span class="font-num text-[11px] text-amber-300/90 font-bold shrink-0 ml-2 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20" x-text="toRsaTimeDisplay(p.kickoffTime || p.kickoff)">15:30 SAST</span>
             </div>
 
             <!-- Teams -->
-            <div class="mb-4">
+            <div class="mb-3">
               <div class="flex items-center justify-between gap-2 font-display text-base font-extrabold text-white">
                 <span class="truncate" x-text="p.home.name">Home Team</span>
                 <span class="text-xs text-slate-500 font-normal">vs</span>
                 <span class="truncate text-right" x-text="p.away.name">Away Team</span>
+              </div>
+            </div>
+
+            <!-- Derby & Volatility Warning Badge if applicable -->
+            <div x-show="p.isDerby" class="mb-3 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-[11px] text-amber-300 font-bold flex items-center justify-between">
+              <div class="flex items-center gap-1.5 truncate">
+                <span>⚔️</span>
+                <span class="truncate" x-text="p.derbyName ? ('Derby Clash: ' + p.derbyName) : 'High-Entropy Derby Clash'"></span>
+              </div>
+              <span class="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 shrink-0">Shield Active</span>
+            </div>
+
+            <!-- Low-Odds Trap Warning Badge if applicable -->
+            <div x-show="p.isTrap" class="mb-3 px-3 py-1.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-[11px] text-rose-300 font-bold flex items-center justify-between">
+              <div class="flex items-center gap-1.5 truncate">
+                <span>⚠️</span>
+                <span>Unfavorable Risk/Reward (&lt;1.28 Odds)</span>
+              </div>
+              <span class="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-500/25 text-rose-200 shrink-0">Disqualified</span>
+            </div>
+
+            <!-- Match Result and Autopsy if match is finished -->
+            <div x-show="p.isFinished" class="mb-3">
+              <div class="px-3 py-1.5 rounded-lg flex items-center justify-between text-xs font-num font-bold"
+                   :class="p.settledResult === 'LOST' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'">
+                <span class="font-extrabold uppercase">Full-Time</span>
+                <span x-text="'Final Score: ' + (p.finalScore || '0 - 1') + ' · ' + (p.settledResult || 'SETTLED')">Final Score: 0 - 1</span>
+              </div>
+              <div x-show="p.postMortem" class="mt-2 p-2.5 rounded-lg bg-rose-950/40 border border-rose-500/30 text-[11px] text-rose-200 leading-relaxed">
+                <div class="font-bold flex items-center gap-1 text-rose-300 mb-1">
+                  <span>🚨 Post-Mortem Audit &amp; Engine Lesson:</span>
+                </div>
+                <p x-text="p.postMortem"></p>
               </div>
             </div>
 

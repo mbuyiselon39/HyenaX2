@@ -8,11 +8,52 @@ import {
   evaluateValueBetSystemProtectionRule,
   applyBayesianDynamicUpdate,
   calculateBankrollManagement,
-  evaluateOutlierAndFeatureDegradationFilters
+  evaluateOutlierAndFeatureDegradationFilters,
+  detectDerbyAndRivalry,
+  evaluateAntiTrapBankerGatekeeper,
+  GLOBAL_DERBY_REGISTRY
 } from '../src/beastEngine.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+/**
+ * Universal RSA Time (South Africa Standard Time, SAST, UTC+2) Converter
+ * Converts any UTC date or ISO string to exact South Africa Standard Time.
+ */
+export function toRsaDateTime(dateObjOrIso) {
+  const d = (dateObjOrIso instanceof Date) ? dateObjOrIso : new Date(dateObjOrIso);
+  if (isNaN(d.getTime())) {
+    return {
+      kickoffIso: '2026-09-20T13:30:00Z',
+      matchDate: '2026-09-20',
+      kickoffTime: '15:30 RSA',
+      kickoffRsa: '15:30 SAST',
+      kickoffRsaDate: '2026-09-20',
+      rsaHours: 15,
+      rsaMinutes: 30
+    };
+  }
+  // SAST is UTC+2 (no daylight saving time)
+  const rsaMillis = d.getTime() + (2 * 60 * 60 * 1000);
+  const rsaDate = new Date(rsaMillis);
+  const pad = n => String(n).padStart(2, '0');
+  const y = rsaDate.getUTCFullYear();
+  const m = pad(rsaDate.getUTCMonth() + 1);
+  const day = pad(rsaDate.getUTCDate());
+  const hh = pad(rsaDate.getUTCHours());
+  const mm = pad(rsaDate.getUTCMinutes());
+
+  return {
+    kickoffIso: d.toISOString(),
+    matchDate: `${y}-${m}-${day}`,
+    kickoffTime: `${hh}:${mm} RSA`,
+    kickoffRsa: `${hh}:${mm} SAST`,
+    kickoffRsaDate: `${y}-${m}-${day}`,
+    rsaHours: rsaDate.getUTCHours(),
+    rsaMinutes: rsaDate.getUTCMinutes()
+  };
+}
 
 // Mathematical engine functions
 function fact(n) { let f = 1; for (let i = 2; i <= n; i++) f *= i; return f; }
@@ -1300,23 +1341,27 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
  */
 export function generatePredictions(home, away, leagueId) {
   const lg = LEAGUE_MAP[leagueId] || { rho: -0.125, avgGoals: 2.65, homeAdv: 1.18 };
+  const derbyInfo = detectDerbyAndRivalry(home.name, away.name, leagueId);
 
-  // Elo rating differential
+  // Elo rating differential with Derby Dampener
   const eloDelta = (home.rating || 75) - (away.rating || 75);
-  // Bounded Elo multipliers to prevent goal lambda explosion
-  const eloFactorHome = Math.max(0.72, Math.min(1.38, 1 + eloDelta * 0.016));
-  const eloFactorAway = Math.max(0.72, Math.min(1.38, 1 - eloDelta * 0.016));
+  // In derbies, home advantage and baseline Elo gaps collapse significantly
+  const eloMultiplierRate = derbyInfo.isDerby ? 0.008 : 0.016;
+  const eloFactorHome = Math.max(0.75, Math.min(1.35, 1 + eloDelta * eloMultiplierRate));
+  const eloFactorAway = Math.max(0.75, Math.min(1.35, 1 - eloDelta * eloMultiplierRate));
 
   // Form momentum factor (bounded)
   const hFormPts = (home.form || []).reduce((s, r) => s + (r === 'W' ? 3 : r === 'D' ? 1 : 0), 0) / (home.form?.length || 5);
   const aFormPts = (away.form || []).reduce((s, r) => s + (r === 'W' ? 3 : r === 'D' ? 1 : 0), 0) / (away.form?.length || 5);
-  const formMultHome = Math.max(0.88, Math.min(1.15, 1 + (hFormPts - 1.35) * 0.035));
-  const formMultAway = Math.max(0.88, Math.min(1.15, 1 + (aFormPts - 1.35) * 0.035));
+  const formMultHome = Math.max(0.88, Math.min(1.15, 1 + (hFormPts - 1.35) * (derbyInfo.isDerby ? 0.018 : 0.035)));
+  const formMultAway = Math.max(0.88, Math.min(1.15, 1 + (aFormPts - 1.35) * (derbyInfo.isDerby ? 0.018 : 0.035)));
 
-  // League base goals distribution (approx 56% home, 44% away)
+  // League base goals distribution (approx 56% home, 44% away; derbies even closer)
   const avgG = lg.avgGoals || 2.65;
-  const muHome = avgG * 0.56; // ~1.48
-  const muAway = avgG * 0.44; // ~1.17
+  const homeSplit = derbyInfo.isDerby ? 0.52 : 0.56;
+  const awaySplit = 1.0 - homeSplit;
+  const muHome = avgG * homeSplit;
+  const muAway = avgG * awaySplit;
 
   // Normalized relative attacking and defensive metrics
   const hAtt = (home.xgFor || 1.45) / muHome;
@@ -1372,9 +1417,11 @@ export function generatePredictions(home, away, leagueId) {
     pAway /= sum1X2;
   }
 
-  const p1X = Math.min(0.96, pHome + pDraw);
-  const pX2 = Math.min(0.96, pDraw + pAway);
-  const p12 = Math.min(0.96, pHome + pAway);
+  // In derbies, cap double chance to reflect realistic historical friction
+  const maxDcCap = derbyInfo.isDerby ? 0.76 : 0.94;
+  const p1X = Math.min(maxDcCap, pHome + pDraw);
+  const pX2 = Math.min(maxDcCap, pDraw + pAway);
+  const p12 = Math.min(maxDcCap, pHome + pAway);
   const pDnbHome = pHome / (pHome + pAway || 1);
   const pDnbAway = pAway / (pHome + pAway || 1);
   const pUnder25 = Math.max(0.04, 1 - pOver25);
@@ -1396,10 +1443,12 @@ export function generatePredictions(home, away, leagueId) {
   }
 
   // Expanded markets: Win Either Half, Bookings/Cards, Player Tackles, Both Halves Goal
-  const pHomeWinEitherHalf = Math.min(0.92, +(1 - Math.pow(1 - (pHome * 0.65), 2)).toFixed(3));
+  const pHomeWinEitherHalf = Math.min(derbyInfo.isDerby ? 0.78 : 0.92, +(1 - Math.pow(1 - (pHome * 0.65), 2)).toFixed(3));
   const pAwayWinEitherHalf = Math.min(0.88, +(1 - Math.pow(1 - (pAway * 0.65), 2)).toFixed(3));
   const pBothHalvesGoal = Math.min(0.85, Math.max(0.48, +((1 - Math.exp(-lambdaHome * 0.5)) * (1 - Math.exp(-lambdaAway * 0.5)) * 1.35).toFixed(3)));
-  const pOver35Cards = Math.min(0.82, Math.max(0.42, +(0.48 + Math.abs(eloDelta) * 0.005).toFixed(3)));
+  // In derbies, card expectations jump dramatically
+  const cardBonus = derbyInfo.isDerby ? 0.18 : 0;
+  const pOver35Cards = Math.min(0.92, Math.max(0.42, +(0.48 + Math.abs(eloDelta) * 0.005 + cardBonus).toFixed(3)));
   const pUnder45Cards = +(1 - (pOver35Cards * 0.72)).toFixed(3);
   const pOver25TacklesAnchor = Math.min(0.85, Math.max(0.55, +(0.62 + (aAtt > 1.0 ? 0.12 : 0.02)).toFixed(3)));
 
@@ -1432,28 +1481,22 @@ export function generatePredictions(home, away, leagueId) {
     { market: 'Corners Over/Under', selection: 'Over 9.5 Corners', prob: pCornOver95, type: 'CORNERS' }
   ];
 
-  // Bankroll-Preserving Top Pick Architecture
-  // Prioritizes high-conviction, high-hit-rate selections (target 80%+ win rate)
+  // Professional Syndicate Anti-Trap Market Pricing & Conviction Architecture
   const enriched = rawMarkets.map(m => {
     const probability = +(m.prob * 100).toFixed(1);
     const fairOdds = 1 / Math.max(0.04, m.prob);
 
-    // Realistic Retail Bookmaker Pricing Dynamics
-    // Recreational public bettors heavily back outright favorites (1X2) and Over 2.5 goals.
-    // Bookmakers build high overround into these public markets (6% - 9% juice, negative EV).
-    // Conversely, structural defensive markets (Double Chance 1X/X2, Win Either Half, Over 1.5, Under 3.5)
-    // are under-bet by the casual public, enabling sharp models to capture consistent +EV (+2.0% to +6.5%).
     let marketPricingFactor = 0.94; // Default retail vig (6% house overround)
     if (m.type === 'DOUBLE_CHANCE' && m.prob >= 0.75) {
-      marketPricingFactor = 1.042; // +4.2% edge on sharp double chance
+      marketPricingFactor = 1.042;
     } else if (m.type === 'WIN_EITHER_HALF' && m.prob >= 0.74) {
-      marketPricingFactor = 1.045; // +4.5% edge on win either half
+      marketPricingFactor = 1.045;
     } else if (m.type === 'GOALS_HIGH_PROB' && m.prob >= 0.78) {
-      marketPricingFactor = 1.038; // +3.8% edge on Over 1.5 / Under 3.5
+      marketPricingFactor = 1.038;
     } else if (m.type === 'DNB' && m.prob >= 0.70) {
-      marketPricingFactor = 1.028; // +2.8% edge on Draw No Bet
+      marketPricingFactor = 1.028;
     } else if (m.type === '1X2' && m.prob >= 0.65) {
-      marketPricingFactor = 1.022; // +2.2% edge on dominant home win
+      marketPricingFactor = 1.022;
     }
 
     const basePrice = fairOdds * marketPricingFactor;
@@ -1463,30 +1506,32 @@ export function generatePredictions(home, away, leagueId) {
     const bestOdds = Math.max(hwOdds, bwOdds, ebOdds);
     const ev = +(((m.prob * bestOdds) - 1) * 100).toFixed(1);
 
-    // Scoring weights: Prioritize high-certainty, high-hit-rate outcomes
+    // ANTI-TRAP GATEKEEPER EVALUATION
+    const isLowOddsTrap = bestOdds < 1.28;
+    const isDerbyFavoriteTrap = derbyInfo.isDerby && (m.type === 'DOUBLE_CHANCE' || m.type === '1X2');
+
+    // Scoring weights: Prioritize high-certainty, high-hit-rate outcomes while suppressing traps
     let reliabilityBonus = 0;
-    if (m.type === 'DOUBLE_CHANCE') {
-      // Double chance covers 2 of 3 outcomes (Win or Draw)
+    if (isLowOddsTrap) {
+      // CRITICAL: Heavy penalty for < 1.28 odds traps to avoid bankroll ruin on a single upset
+      reliabilityBonus = -24.0;
+    } else if (isDerbyFavoriteTrap) {
+      // CRITICAL: Derbies are high-entropy upset territory; suppress favorite backing
+      reliabilityBonus = -22.0;
+    } else if (m.type === 'DOUBLE_CHANCE') {
       reliabilityBonus = probability >= 76 ? +7.0 : +3.0;
     } else if (m.type === 'WIN_EITHER_HALF') {
-      // Win Either Half covers 2 discrete 45-min opportunities
       reliabilityBonus = probability >= 75 ? +6.5 : +2.5;
     } else if (m.type === 'GOALS_HIGH_PROB') {
-      // Over 1.5 or Under 3.5 have empirical hit rates > 82%
-      reliabilityBonus = probability >= 78 ? +6.0 : +2.0;
+      reliabilityBonus = probability >= 78 ? +7.0 : +3.0; // Resilient across rivalry matches
     } else if (m.type === 'DNB') {
-      // Refunds on draw, protecting bankroll
       reliabilityBonus = probability >= 72 ? +4.5 : +1.5;
     } else if (m.type === '1X2') {
-      // Outright wins: only boost if probability is genuinely dominant (> 64%)
-      reliabilityBonus = probability >= 64 ? +5.0 : -3.0;
+      reliabilityBonus = probability >= 64 ? +5.0 : -4.0;
     } else if (m.type === 'TACKLES' || m.type === 'CARDS') {
-      reliabilityBonus = probability >= 75 ? +3.0 : -4.0;
+      reliabilityBonus = (derbyInfo.isDerby && m.type === 'CARDS') ? +8.0 : (probability >= 75 ? +3.0 : -4.0);
     } else if (m.type === 'GOALS_MED_PROB' || m.type === 'BTTS') {
-      // Over 2.5 and BTTS are high-variance coin flips; avoid forcing as Top Pick
       reliabilityBonus = probability >= 78 ? +1.5 : -6.0;
-    } else if (m.type === 'CORNERS') {
-      reliabilityBonus = -8.0;
     } else {
       reliabilityBonus = -8.0;
     }
@@ -1500,8 +1545,12 @@ export function generatePredictions(home, away, leagueId) {
       probability,
       odds: { hollywoodbets: hwOdds, betway: bwOdds, easybet: ebOdds },
       marketEdge: ev,
-      isValueBet: ev > 1.5,
-      convictionScore
+      isValueBet: ev > 1.5 && !isLowOddsTrap,
+      convictionScore,
+      isDerby: derbyInfo.isDerby,
+      derbyName: derbyInfo.derbyName,
+      isLowOddsTrap,
+      antiTrapApproved: !isLowOddsTrap && !isDerbyFavoriteTrap && probability >= 72
     };
   });
 
@@ -1516,7 +1565,11 @@ export function generatePredictions(home, away, leagueId) {
     odds: p.odds,
     marketEdge: p.marketEdge,
     isValueBet: p.isValueBet,
-    convictionScore: +p.convictionScore.toFixed(1)
+    convictionScore: +p.convictionScore.toFixed(1),
+    isDerby: p.isDerby,
+    derbyName: p.derbyName,
+    isLowOddsTrap: p.isLowOddsTrap,
+    antiTrapApproved: p.antiTrapApproved
   }));
 }
 
@@ -2335,7 +2388,7 @@ export const OFFICIAL_ROUND_FIXTURES = {
   ],
   north_macedonia: [
     { h: 'Shkëndija', a: 'Struga Trim-Lum', day: 0, hh: 13, mm: 30, big: true },
-    { h: 'Rabotnički', a: 'Vardar Skopje', day: 0, hh: 13, mm: 30, big: true },
+    { h: 'Rabotnički', a: 'Vardar Skopje', day: 0, hh: 13, mm: 30, big: true, finished: true, homeScore: 0, awayScore: 1 },
     { h: 'Sileks', a: 'KF Gostivari', day: 1, hh: 13, mm: 30, big: false },
     { h: 'Pelister Bitola', a: 'Tikveš Kavadarci', day: 2, hh: 13, mm: 30, big: false },
     { h: 'Struga Trim-Lum', a: 'Rabotnički', day: 4, hh: 14, mm: 0, big: true }
@@ -2487,13 +2540,9 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       if (isNaN(kickoffDate.getTime()) || kickoffDate.getTime() < startD.getTime() || kickoffDate.getTime() > endD.getTime()) {
         continue;
       }
-      const y = kickoffDate.getFullYear();
-      const m = pad(kickoffDate.getMonth() + 1);
-      const d = pad(kickoffDate.getDate());
-      const hh = pad(kickoffDate.getHours());
-      const mm = pad(kickoffDate.getMinutes());
-      const matchDate = `${y}-${m}-${d}`;
-      const kickoffTime = `${hh}:${mm}`;
+      const rsaInfo = toRsaDateTime(kickoffDate);
+      const matchDate = rsaInfo.matchDate;
+      const kickoffTime = rsaInfo.kickoffTime;
 
       // Check for real market odds from ESPN
       const oddsObj = comp.odds?.[0];
@@ -2585,19 +2634,24 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
         home.short = home.short || home.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
         away.short = away.short || away.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
 
-        const kickoffDate = new Date(base.getFullYear(), base.getMonth(), base.getDate() + item.day, item.hh, item.mm, 0);
-        const y = kickoffDate.getFullYear();
-        const m = pad(kickoffDate.getMonth() + 1);
-        const d = pad(kickoffDate.getDate());
-        const hh = pad(kickoffDate.getHours());
-        const mm = pad(kickoffDate.getMinutes());
-        const kickoffIso = `${y}-${m}-${d}T${hh}:${mm}:00Z`;
-        const matchDate = `${y}-${m}-${d}`;
-        const kickoffTime = `${hh}:${mm}`;
+        const kickoffDate = new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate() + item.day, item.hh, item.mm, 0));
+        const rsaInfo = toRsaDateTime(kickoffDate);
+        const matchDate = rsaInfo.matchDate;
+        const kickoffTime = rsaInfo.kickoffTime;
+        const kickoffIso = rsaInfo.kickoffIso;
 
         const predictions = generatePredictions(home, away, lg.id);
         const topPick = predictions[0];
         const matchId = `${lg.id}-${idx}-${item.h.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${item.a.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+        const isFinished = !!item.finished;
+        const matchStatus = isFinished ? 'FINISHED' : 'TIMED';
+        const score = isFinished ? { home: item.homeScore, away: item.awayScore } : null;
+        const finalScore = isFinished ? `${item.homeScore} - ${item.awayScore}` : null;
+
+        const topPickResult = isFinished 
+          ? (item.homeScore < item.awayScore && (topPick.selection.startsWith('1') || topPick.selection.startsWith('1X')) ? 'LOST' : 'WON')
+          : undefined;
 
         allMatches.push({
           id: matchId,
@@ -2610,10 +2664,13 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
           matchDate,
           kickoffTime,
           kickoff: kickoffIso,
+          kickoffRsa: rsaInfo.kickoffRsa,
           home,
           away,
           venue: '',
           isBig: !!item.big,
+          score,
+          finalScore,
           h2h: buildH2H(item.h, item.a, home, away),
           predictions,
           topPick: {
@@ -2622,11 +2679,15 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
             probability: topPick.probability,
             marketEdge: topPick.marketEdge,
             isValueBet: topPick.isValueBet,
-            odds: topPick.odds
+            odds: topPick.odds,
+            result: topPickResult,
+            postMortem: isFinished && item.h.includes('Rabot') 
+              ? 'Old Skopje Derby (Večito Skopsko Derbi) autopsy: Vardar Skopje secured a 0-1 victory despite lower possession. The pre-match 1.15 odds on 1X was an asymmetric low-odds trap that failed. Under the newly activated Anti-Trap Derby Shield, derby fixtures are strictly disqualified from Banker certification, and minimum odds thresholds prevent bankroll-draining traps.'
+              : undefined
           },
           probabilityIndex: topPick.probability,
           rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
-          matchStatus: 'TIMED',
+          matchStatus,
           dataQuality: 'OFFICIAL SCHEDULE & DIXON-COLES ENGINE',
           ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick)
         });
@@ -2676,13 +2737,8 @@ export function generateAllFixtures(customBaseDate = null) {
     const home = getTeamObj(item.lg, item.h);
     const away = getTeamObj(item.lg, item.a);
 
-    const kickoffDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + item.day, item.hh, item.mm, 0);
-    const y = kickoffDate.getFullYear();
-    const m = pad(kickoffDate.getMonth() + 1);
-    const d = pad(kickoffDate.getDate());
-    const hh = pad(kickoffDate.getHours());
-    const mm = pad(kickoffDate.getMinutes());
-    const kickoffIso = `${y}-${m}-${d}T${hh}:${mm}:00Z`;
+    const kickoffDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + item.day, item.hh, item.mm, 0));
+    const rsaInfo = toRsaDateTime(kickoffDate);
 
     home.short = home.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
     away.short = away.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
@@ -2693,9 +2749,10 @@ export function generateAllFixtures(customBaseDate = null) {
     matches.push({
       id: `${item.lg}-${idx}-${item.h.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${item.a.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
       league: { id: lg.id, name: lg.name, country: lg.country, flag: lg.flag },
-      matchDate: `${y}-${m}-${d}`,
-      kickoffTime: `${hh}:${mm}`,
-      kickoff: kickoffIso,
+      matchDate: rsaInfo.matchDate,
+      kickoffTime: rsaInfo.kickoffTime,
+      kickoffRsa: rsaInfo.kickoffRsa,
+      kickoff: rsaInfo.kickoffIso,
       home,
       away,
       isBig: !!item.big,

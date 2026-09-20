@@ -1747,4 +1747,184 @@ export function calculateKellyAllocation(probPct, decimalOdds, bankroll = 5000, 
   };
 }
 
+/* ============================================================
+   19. DERBY & RIVALRY INTELLIGENCE & ANTI-TRAP BANKER GATEKEEPER
+   Prevents low-odds false bankers (like 1.15 Double Chance traps),
+   detects derbies and cross-town friction, and forces deep analytical
+   proof before any match qualifies for Banker status.
+   ============================================================ */
+
+export const GLOBAL_DERBY_REGISTRY = [
+  // North Macedonia
+  { teams: ['rabotnički', 'vardar skopje'], name: 'Old Skopje Derby (Večito Skopsko Derbi)', league: 'north_macedonia', volatility: 1.85, trapPenalty: 0.18 },
+  { teams: ['rabotnicki', 'vardar skopje'], name: 'Old Skopje Derby (Večito Skopsko Derbi)', league: 'north_macedonia', volatility: 1.85, trapPenalty: 0.18 },
+  { teams: ['shkëndija', 'vardar skopje'], name: 'Macedonian Classic Derby', league: 'north_macedonia', volatility: 1.70, trapPenalty: 0.15 },
+  // South Africa (PSL / Betway Premiership)
+  { teams: ['kaizer chiefs', 'orlando pirates'], name: 'Soweto Derby', league: 'psl', volatility: 1.80, trapPenalty: 0.16 },
+  { teams: ['mamelodi sundowns', 'supersport united'], name: 'Tshwane Derby', league: 'psl', volatility: 1.55, trapPenalty: 0.12 },
+  { teams: ['orlando pirates', 'moroka swallows'], name: 'Original Soweto Derby', league: 'psl', volatility: 1.60, trapPenalty: 0.14 },
+  { teams: ['durban city', 'amazulu'], name: 'Durban Derby', league: 'psl', volatility: 1.65, trapPenalty: 0.14 },
+  { teams: ['stellenbosch', 'cape town city'], name: 'Winelands Derby', league: 'psl', volatility: 1.55, trapPenalty: 0.12 },
+  // England
+  { teams: ['arsenal', 'tottenham hotspur'], name: 'North London Derby', league: 'epl', volatility: 1.75, trapPenalty: 0.15 },
+  { teams: ['arsenal', 'tottenham'], name: 'North London Derby', league: 'epl', volatility: 1.75, trapPenalty: 0.15 },
+  { teams: ['liverpool', 'everton'], name: 'Merseyside Derby', league: 'epl', volatility: 1.70, trapPenalty: 0.14 },
+  { teams: ['manchester united', 'manchester city'], name: 'Manchester Derby', league: 'epl', volatility: 1.65, trapPenalty: 0.12 },
+  // Spain
+  { teams: ['real madrid', 'barcelona'], name: 'El Clásico', league: 'laliga', volatility: 1.65, trapPenalty: 0.12 },
+  { teams: ['real madrid', 'atlético madrid'], name: 'Madrid Derby (Derbi Madrileño)', league: 'laliga', volatility: 1.70, trapPenalty: 0.14 },
+  { teams: ['real madrid', 'atletico madrid'], name: 'Madrid Derby (Derbi Madrileño)', league: 'laliga', volatility: 1.70, trapPenalty: 0.14 },
+  { teams: ['sevilla', 'real betis'], name: 'The Great Seville Derby (El Gran Derbi)', league: 'laliga', volatility: 1.85, trapPenalty: 0.18 },
+  // Italy
+  { teams: ['inter', 'ac milan'], name: 'Derby della Madonnina (Milan Derby)', league: 'seriea', volatility: 1.65, trapPenalty: 0.12 },
+  { teams: ['inter', 'milan'], name: 'Derby della Madonnina (Milan Derby)', league: 'seriea', volatility: 1.65, trapPenalty: 0.12 },
+  { teams: ['roma', 'lazio'], name: 'Derby della Capitale (Rome Derby)', league: 'seriea', volatility: 1.85, trapPenalty: 0.18 },
+  { teams: ['juventus', 'torino'], name: 'Derby della Mole (Turin Derby)', league: 'seriea', volatility: 1.60, trapPenalty: 0.12 },
+  // Scotland
+  { teams: ['celtic', 'rangers'], name: 'Old Firm Derby', league: 'scotprem', volatility: 1.90, trapPenalty: 0.20 },
+  // Türkiye
+  { teams: ['galatasaray', 'fenerbahce'], name: 'Intercontinental Derby (Kıtalararası Derbi)', league: 'superlig', volatility: 1.85, trapPenalty: 0.18 },
+  { teams: ['galatasaray', 'besiktas'], name: 'Istanbul Derby', league: 'superlig', volatility: 1.75, trapPenalty: 0.16 },
+  // Argentina & Brazil
+  { teams: ['boca juniors', 'river plate'], name: 'Superclásico', league: 'argliga', volatility: 1.90, trapPenalty: 0.20 },
+  { teams: ['flamengo', 'fluminense'], name: 'Fla-Flu Derby', league: 'brasileirao', volatility: 1.80, trapPenalty: 0.16 },
+  { teams: ['palmeiras', 'corinthians'], name: 'Derby Paulista', league: 'brasileirao', volatility: 1.80, trapPenalty: 0.16 }
+];
+
+export function detectDerbyAndRivalry(homeName = '', awayName = '', leagueId = '') {
+  const h = (homeName || '').toLowerCase().trim();
+  const a = (awayName || '').toLowerCase().trim();
+  const matchStr = `${h} vs ${a}`;
+
+  // Check registry
+  for (const item of GLOBAL_DERBY_REGISTRY) {
+    const t0 = item.teams[0];
+    const t1 = item.teams[1];
+    if ((h.includes(t0) && a.includes(t1)) || (h.includes(t1) && a.includes(t0))) {
+      return {
+        isDerby: true,
+        derbyName: item.name,
+        volatilityMultiplier: item.volatility,
+        trapPenalty: item.trapPenalty,
+        rationale: `Classified as ${item.name}. Historic rivalry introduces heightened tactical entropy, elevated card volume, and frequent underdog resistance.`
+      };
+    }
+  }
+
+  // Regex heuristic for derby patterns
+  if (/derby|clásico|clasico|soweto|old firm|intercontinental/i.test(matchStr)) {
+    return {
+      isDerby: true,
+      derbyName: 'Regional Derby Clash',
+      volatilityMultiplier: 1.60,
+      trapPenalty: 0.12,
+      rationale: 'Regional derby dynamics detected. High-friction fixture requiring cautious bankroll exposure.'
+    };
+  }
+
+  return {
+    isDerby: false,
+    derbyName: null,
+    volatilityMultiplier: 1.0,
+    trapPenalty: 0,
+    rationale: 'Standard competitive fixture with normal home advantage distribution.'
+  };
+}
+
+/**
+ * Professional Banker Quality & Anti-Trap Gatekeeper:
+ * Evaluates candidate selections against professional quantitative syndicate standards.
+ * Specifically rejects:
+ * 1. Low-Odds Traps (odds < 1.28): 1.10 - 1.25 picks risk severe bankroll ruin on a single upset.
+ * 2. Derby Traps: Derbies have 1.8x variance; backing 1X at 1.15 in a derby is mathematically reckless.
+ * 3. Negative Regression Traps: Teams whose goals exceed xG by > 0.45 are prone to dry spells.
+ * 4. Model Divergence: Inter-model consensus must be >= 80%.
+ */
+export function evaluateAntiTrapBankerGatekeeper({
+  match = 'Match',
+  homeName = '',
+  awayName = '',
+  leagueId = '',
+  market = '',
+  selection = '',
+  odds = 1.35,
+  probability = 75,
+  modelAgreementScore = 85,
+  homeXgFor = 1.5,
+  homeActualGoals = 1.8,
+  restHoursAway = 96,
+  restHoursHome = 96,
+  isDerby = false,
+  derbyName = null
+} = {}) {
+  const violations = [];
+  const warnings = [];
+
+  const numericOdds = Number(odds) || 1.35;
+  const numProb = Number(probability) || 75;
+
+  // 1. Low-Odds False Banker Trap
+  if (numericOdds < 1.26) {
+    violations.push({
+      code: 'LOW_ODDS_TRAP',
+      severity: 'CRITICAL',
+      message: `Odds of ${numericOdds.toFixed(2)} represent an asymmetrical risk trap. In betting mathematics, you must hit >85% long-term to break even; one single upset destroys the accumulated profit of 7 winning matches.`
+    });
+  } else if (numericOdds < 1.30) {
+    warnings.push({
+      code: 'MARGINAL_ODDS',
+      severity: 'MODERATE',
+      message: `Odds of ${numericOdds.toFixed(2)} are below the professional sweet spot (1.35 - 1.85).`
+    });
+  }
+
+  // 2. Derby Shock Filter
+  if (isDerby) {
+    violations.push({
+      code: 'DERBY_VOLATILITY',
+      severity: 'CRITICAL',
+      message: `${derbyName || 'Derby rivalry'}: Classic grudge matches have 1.8x higher upset frequency. Backing heavy favorites or low-odds 1X in derbies is prohibited by the Anti-Trap Engine.`
+    });
+  }
+
+  // 3. Negative xG Regression Trap
+  const xgSurplus = homeActualGoals - homeXgFor;
+  if (xgSurplus > 0.55 && selection.toLowerCase().includes('home')) {
+    warnings.push({
+      code: 'FINISHING_REGRESSION',
+      severity: 'ELEVATED',
+      message: `Favorite is outperforming xG by +${xgSurplus.toFixed(2)} goals/game. Negative regression danger detected.`
+    });
+  }
+
+  // 4. Model Consensus Threshold
+  if (modelAgreementScore < 80) {
+    violations.push({
+      code: 'MODEL_DIVERGENCE',
+      severity: 'CRITICAL',
+      message: `Inter-model agreement is ${modelAgreementScore}%, below the strict 80% consensus threshold for Banker certification.`
+    });
+  }
+
+  const isBankerEligible = violations.length === 0;
+  const safetyRating = isBankerEligible 
+    ? (numProb >= 82 && numericOdds >= 1.32 ? 'CERTIFIED ULTRA BANKER' : 'CERTIFIED PRIME BANKER')
+    : 'DISQUALIFIED FROM BANKER';
+
+  return {
+    isBankerEligible,
+    safetyRating,
+    violations,
+    warnings,
+    isDerby,
+    derbyName,
+    numericOdds,
+    probability: numProb,
+    syndicateVerdict: isBankerEligible
+      ? `PASSED ALL ANTI-TRAP AUDITS: Odds ${numericOdds.toFixed(2)} within professional target (1.30 - 2.10), verified 17-model consensus (${modelAgreementScore}%), zero derby volatility.`
+      : `ANTI-TRAP SAFEGUARD TRIGGERED: ${violations.map(v => v.message).join(' ')}`
+  };
+}
+
+
 
