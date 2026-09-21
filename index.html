@@ -4207,8 +4207,8 @@ function app(){
                         <div class="flex items-center gap-1 shrink-0">
                           <template x-if="p.deepVetting">
                             <span class="px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase font-num border"
-                                  :class="p.deepVetting.status === 'VETTED' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : (p.deepVetting.status === 'PENDING' ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-rose-500/20 text-rose-300 border-rose-500/40')"
-                                  x-text="p.deepVetting.status === 'VETTED' ? '✓ VETTED' : (p.deepVetting.status === 'PENDING' ? '⚠️ PENDING' : '⛔ DISQUALIFIED')">
+                                  :class="p.deepVetting?.status === 'VETTED' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : (p.deepVetting?.status === 'PENDING' ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-rose-500/20 text-rose-300 border-rose-500/40')"
+                                  x-text="p.deepVetting?.status === 'VETTED' ? '✓ VETTED' : (p.deepVetting?.status === 'PENDING' ? '⚠️ PENDING' : '⛔ DISQUALIFIED')">
                             </span>
                           </template>
                           <template x-if="p.deepVetting && p.deepVetting.isEliteDeepMarketTop20">
@@ -4224,7 +4224,7 @@ function app(){
                         <div class="min-w-0">
                           <div class="font-display font-bold text-sm text-white truncate" x-text="p.selection">Over 2.5</div>
                           <!-- Deep Vetting Audit Details note -->
-                          <div x-show="p.deepVetting && p.deepVetting.summary" class="text-[10px] text-slate-400 mt-0.5 truncate" x-text="p.deepVetting.summary"></div>
+                          <div x-show="p.deepVetting && p.deepVetting.summary" class="text-[10px] text-slate-400 mt-0.5 truncate" x-text="p.deepVetting?.summary || ''"></div>
                         </div>
                         <div class="text-right">
                           <div class="font-num text-xl font-black leading-none" :class="tier(p.probability).text" x-text="p.probability.toFixed(1) + '%'">79.4%</div>
@@ -6517,20 +6517,20 @@ function app(){
               </button>
             </div>
 
-            <p class="text-xs text-emerald-200/90 leading-relaxed" x-text="betSlipResult.optimisedTicket.reasoning"></p>
+            <p class="text-xs text-emerald-200/90 leading-relaxed" x-text="betSlipResult?.optimisedTicket?.reasoning || ''"></p>
 
             <div class="grid grid-cols-3 gap-3 text-center text-xs">
               <div class="p-2.5 rounded-xl bg-[#080A0F] border border-emerald-500/30">
                 <div class="text-[10px] text-slate-400">Optimised Odds</div>
-                <div class="font-num font-bold text-amber-300 text-sm mt-0.5" x-text="'@' + betSlipResult.optimisedTicket.combinedOdds"></div>
+                <div class="font-num font-bold text-amber-300 text-sm mt-0.5" x-text="'@' + (betSlipResult?.optimisedTicket?.combinedOdds || '1.00')"></div>
               </div>
               <div class="p-2.5 rounded-xl bg-[#080A0F] border border-emerald-500/30">
                 <div class="text-[10px] text-slate-400">Optimised Win Prob</div>
-                <div class="font-num font-bold text-emerald-400 text-sm mt-0.5" x-text="betSlipResult.optimisedTicket.compoundProbability + '%'"></div>
+                <div class="font-num font-bold text-emerald-400 text-sm mt-0.5" x-text="(betSlipResult?.optimisedTicket?.compoundProbability || '0') + '%'"></div>
               </div>
               <div class="p-2.5 rounded-xl bg-[#080A0F] border border-emerald-500/30">
                 <div class="text-[10px] text-slate-400">Expected Value</div>
-                <div class="font-num font-bold text-cyan-300 text-sm mt-0.5" x-text="'+' + betSlipResult.optimisedTicket.compoundEV + '%'"></div>
+                <div class="font-num font-bold text-cyan-300 text-sm mt-0.5" x-text="'+' + (betSlipResult?.optimisedTicket?.compoundEV || '0') + '%'"></div>
               </div>
             </div>
           </div>
