@@ -1817,22 +1817,42 @@ export function generatePredictions(home, away, leagueId) {
   // Sort primarily by conviction score for distinct, highly accurate top picks
   enriched.sort((a, b) => b.convictionScore - a.convictionScore);
 
-  return enriched.map((p, idx) => ({
-    rank: idx + 1,
-    market: p.market,
-    selection: p.selection,
-    marketCategory: p.marketCategory,
-    probability: p.probability,
-    odds: p.odds,
-    marketEdge: p.marketEdge,
-    isValueBet: p.isValueBet,
-    convictionScore: +p.convictionScore.toFixed(1),
-    isDerby: p.isDerby,
-    derbyName: p.derbyName,
-    isLowOddsTrap: p.isLowOddsTrap,
-    antiTrapApproved: p.antiTrapApproved,
-    deepVetting: p.deepVetting
-  }));
+  // Group predictions by category, keep top per category up to ~45-50 total
+  const byCategory = {};
+  for (const p of enriched) {
+    const cat = p.marketCategory || 'STANDARD';
+    if (!byCategory[cat]) byCategory[cat] = [];
+    byCategory[cat].push(p);
+  }
+
+  const selected = [];
+  for (const [cat, list] of Object.entries(byCategory)) {
+    const limit = (cat === 'STANDARD' || cat === 'CORNERS') ? 10 : 8;
+    selected.push(...list.slice(0, limit));
+  }
+  selected.sort((a, b) => b.convictionScore - a.convictionScore);
+
+  return selected.map((p, idx) => {
+    const item = {
+      rank: idx + 1,
+      market: p.market,
+      selection: p.selection,
+      marketCategory: p.marketCategory,
+      probability: p.probability,
+      odds: p.odds,
+      marketEdge: p.marketEdge,
+      convictionScore: +p.convictionScore.toFixed(1)
+    };
+    if (p.isValueBet) item.isValueBet = true;
+    if (p.isDerby) {
+      item.isDerby = true;
+      item.derbyName = p.derbyName;
+    }
+    if (p.isLowOddsTrap) item.isLowOddsTrap = true;
+    if (!p.antiTrapApproved) item.antiTrapApproved = false;
+    if (p.deepVetting) item.deepVetting = p.deepVetting;
+    return item;
+  });
 }
 
 export function buildH2H(homeName, awayName, home = null, away = null, leagueId = 'other') {
@@ -2308,9 +2328,6 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   teleResult.strictVetting = strictVetting;
   teleResult.multiLayerVerification = strictVetting.multiLayerVerification;
   teleResult.contextAudit = strictVetting.multiLayerVerification.humanContextCheck;
-  teleResult.beastMeta.strictVetting = strictVetting;
-  teleResult.beastMeta.multiLayerVerification = strictVetting.multiLayerVerification;
-  teleResult.beastMeta.tacticalProfiles = tacticalProfiles;
 
   return teleResult;
 }
@@ -3263,12 +3280,12 @@ export async function saveFixtures(customBaseDate = null) {
   const outputPath = path.join(__dirname, '../data/fixtures.json');
   const dir = path.dirname(outputPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(fixturesData, null, 2), 'utf-8');
+  fs.writeFileSync(outputPath, JSON.stringify(fixturesData), 'utf-8');
 
   // Also sync dist/data/fixtures.json if dist directory exists
   const distOutputPath = path.join(__dirname, '../dist/data/fixtures.json');
   if (fs.existsSync(path.dirname(distOutputPath))) {
-    fs.writeFileSync(distOutputPath, JSON.stringify(fixturesData, null, 2), 'utf-8');
+    fs.writeFileSync(distOutputPath, JSON.stringify(fixturesData), 'utf-8');
   }
 
   console.log(`[FixtureGen] ✓ Saved ${fixturesData.matches.length} fixtures across ${fixturesData.meta.league_count} leagues at ${outputPath}`);
@@ -3280,7 +3297,7 @@ export function saveFixturesSync(customBaseDate = null) {
   const outputPath = path.join(__dirname, '../data/fixtures.json');
   const dir = path.dirname(outputPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(fixturesData, null, 2), 'utf-8');
+  fs.writeFileSync(outputPath, JSON.stringify(fixturesData), 'utf-8');
   return fixturesData;
 }
 
@@ -3366,12 +3383,12 @@ export function updateFixtureAndRecalculate(matchId, updates = {}) {
   if (updates.matchStatus) match.matchStatus = updates.matchStatus;
   if (updates.reason) match.updateReason = updates.reason;
 
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+  fs.writeFileSync(filePath, JSON.stringify(data), 'utf8');
 
   // Sync dist if exists
   const distPath = path.join(__dirname, '../dist/data/fixtures.json');
   if (fs.existsSync(path.dirname(distPath))) {
-    fs.writeFileSync(distPath, JSON.stringify(data, null, 2), 'utf8');
+    fs.writeFileSync(distPath, JSON.stringify(data), 'utf8');
   }
 
   return match;
@@ -3437,10 +3454,10 @@ export function updateTeamAndPropagate(teamName, updates = {}) {
     });
 
     if (affectedMatchesCount > 0) {
-      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+      fs.writeFileSync(filePath, JSON.stringify(data), 'utf8');
       const distPath = path.join(__dirname, '../dist/data/fixtures.json');
       if (fs.existsSync(path.dirname(distPath))) {
-        fs.writeFileSync(distPath, JSON.stringify(data, null, 2), 'utf8');
+        fs.writeFileSync(distPath, JSON.stringify(data), 'utf8');
       }
     }
   }
@@ -3551,10 +3568,10 @@ export function applyMatchResultAndAdaptRatings(matchId, homeScore, awayScore) {
     }
   });
 
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+  fs.writeFileSync(filePath, JSON.stringify(data), 'utf8');
   const distPath = path.join(__dirname, '../dist/data/fixtures.json');
   if (fs.existsSync(path.dirname(distPath))) {
-    fs.writeFileSync(distPath, JSON.stringify(data, null, 2), 'utf8');
+    fs.writeFileSync(distPath, JSON.stringify(data), 'utf8');
   }
 
   return {

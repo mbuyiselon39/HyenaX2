@@ -2433,24 +2433,14 @@ export function evaluateDeepMarketVetting({
     ? 'VETTED' 
     : (violations.some(v => v.code === 'TACTICAL_LINEUP_PENDING' || v.code === 'REFEREE_UNCONFIRMED') ? 'PENDING' : 'DISQUALIFIED');
 
-  return {
-    marketCategory,
+  const dv = {
     status,
-    isFullyVetted: violations.length === 0,
-    qualifiesTop20,
-    isEliteDeepMarketTop20,
     refereeClauseApproved,
-    tacticalLineupApproved,
-    oddsIntegrityApproved,
-    violations,
-    liquidityStatus: 'HIGH_GLOBAL_LIQUIDITY',
-    refereeName: ref.name || 'Designated Match Official',
-    refereeCardRate: ref.avgYellows ? `${ref.avgYellows} Y/G` : '3.8 Y/G',
-    refereeFoulsPerGame: ref.foulsPerGame ? `${ref.foulsPerGame} F/G` : '22.4 F/G',
-    lineupStatus: corners.lineupValidationStatus || 'LOCKED_AND_CONFIRMED',
-    wingersFullbacksLocked: !!corners.wingersFullbacksLocked,
-    summary: violations.length === 0
-      ? 'PASSED: Deep-market tactical telemetry, official referee assignment, and lineup integrity fully verified.'
-      : `HELD: ${violations.map(v => v.message).join('; ')}`
+    tacticalLineupApproved
   };
+  if (isEliteDeepMarketTop20) dv.isEliteDeepMarketTop20 = true;
+  if (violations.length > 0) {
+    dv.summary = violations[0].message;
+  }
+  return dv;
 }
