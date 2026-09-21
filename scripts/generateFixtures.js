@@ -2323,6 +2323,121 @@ function americanToDecimal(american) {
 }
 
 export const OFFICIAL_ROUND_FIXTURES = {
+  psl: [
+    { h: 'Mamelodi Sundowns', a: 'Kaizer Chiefs', day: 0, hh: 15, mm: 0, big: true },
+    { h: 'Orlando Pirates', a: 'Stellenbosch FC', day: 0, hh: 17, mm: 30, big: true },
+    { h: 'SuperSport United', a: 'Cape Town City', day: 1, hh: 17, mm: 30, big: false },
+    { h: 'AmaZulu', a: 'Golden Arrows', day: 2, hh: 15, mm: 0, big: true },
+    { h: 'Polokwane City', a: 'Sekhukhune United', day: 3, hh: 15, mm: 0, big: false },
+    { h: 'TS Galaxy', a: 'Chippa United', day: 4, hh: 17, mm: 30, big: false },
+    { h: 'Richards Bay', a: 'Marumo Gallants', day: 5, hh: 15, mm: 0, big: false },
+    { h: 'Magesi FC', a: 'Orlando Pirates', day: 6, hh: 15, mm: 0, big: true }
+  ],
+  epl: [
+    { h: 'Manchester City', a: 'Arsenal', day: 0, hh: 16, mm: 30, big: true },
+    { h: 'Liverpool', a: 'Chelsea', day: 1, hh: 16, mm: 30, big: true },
+    { h: 'Tottenham Hotspur', a: 'Manchester United', day: 2, hh: 17, mm: 30, big: true },
+    { h: 'Aston Villa', a: 'Newcastle United', day: 3, hh: 14, mm: 0, big: true },
+    { h: 'Brighton', a: 'West Ham United', day: 4, hh: 15, mm: 0, big: false },
+    { h: 'Fulham', a: 'Brentford', day: 5, hh: 15, mm: 0, big: true },
+    { h: 'Everton', a: 'Crystal Palace', day: 5, hh: 17, mm: 30, big: false },
+    { h: 'AFC Bournemouth', a: 'Wolverhampton Wanderers', day: 6, hh: 14, mm: 0, big: false }
+  ],
+  laliga: [
+    { h: 'Real Madrid', a: 'Barcelona', day: 0, hh: 19, mm: 0, big: true },
+    { h: 'Atlético Madrid', a: 'Athletic Club', day: 1, hh: 19, mm: 0, big: true },
+    { h: 'Villarreal', a: 'Real Betis', day: 2, hh: 17, mm: 30, big: true },
+    { h: 'Real Sociedad', a: 'Sevilla', day: 3, hh: 19, mm: 0, big: true },
+    { h: 'Girona', a: 'Valencia', day: 4, hh: 15, mm: 15, big: false },
+    { h: 'Celta Vigo', a: 'Osasuna', day: 5, hh: 17, mm: 30, big: false }
+  ],
+  seriea: [
+    { h: 'Internazionale', a: 'AC Milan', day: 0, hh: 18, mm: 45, big: true },
+    { h: 'Juventus', a: 'Napoli', day: 1, hh: 16, mm: 0, big: true },
+    { h: 'AS Roma', a: 'Lazio', day: 2, hh: 18, mm: 45, big: true },
+    { h: 'Atalanta', a: 'Fiorentina', day: 3, hh: 16, mm: 0, big: true },
+    { h: 'Torino', a: 'Bologna', day: 4, hh: 18, mm: 45, big: false },
+    { h: 'Como', a: 'Parma', day: 5, hh: 13, mm: 0, big: false }
+  ],
+  bundesliga: [
+    { h: 'Bayern Munich', a: 'Bayer Leverkusen', day: 0, hh: 16, mm: 30, big: true },
+    { h: 'Borussia Dortmund', a: 'RB Leipzig', day: 1, hh: 16, mm: 30, big: true },
+    { h: 'Eintracht Frankfurt', a: 'VfB Stuttgart', day: 2, hh: 14, mm: 30, big: true },
+    { h: 'Borussia Mönchengladbach', a: 'VfL Wolfsburg', day: 3, hh: 14, mm: 30, big: false },
+    { h: 'SC Freiburg', a: 'Union Berlin', day: 4, hh: 14, mm: 30, big: false },
+    { h: 'TSG Hoffenheim', a: 'Werder Bremen', day: 5, hh: 16, mm: 30, big: false }
+  ],
+  ligue1: [
+    { h: 'Paris Saint-Germain', a: 'Marseille', day: 0, hh: 18, mm: 45, big: true },
+    { h: 'AS Monaco', a: 'Lille', day: 1, hh: 19, mm: 0, big: true },
+    { h: 'Lyon', a: 'Stade Rennais', day: 2, hh: 18, mm: 45, big: true },
+    { h: 'OGC Nice', a: 'RC Lens', day: 3, hh: 15, mm: 0, big: false },
+    { h: 'Toulouse', a: 'Strasbourg', day: 4, hh: 17, mm: 0, big: false }
+  ],
+  eredivisie: [
+    { h: 'Ajax', a: 'PSV Eindhoven', day: 0, hh: 15, mm: 45, big: true },
+    { h: 'Feyenoord', a: 'AZ Alkmaar', day: 1, hh: 13, mm: 30, big: true },
+    { h: 'FC Twente', a: 'FC Utrecht', day: 2, hh: 15, mm: 45, big: true },
+    { h: 'SC Heerenveen', a: 'Go Ahead Eagles', day: 3, hh: 19, mm: 0, big: false },
+    { h: 'NEC Nijmegen', a: 'Sparta Rotterdam', day: 4, hh: 13, mm: 30, big: false }
+  ],
+  ligaportugal: [
+    { h: 'Sporting CP', a: 'Benfica', day: 0, hh: 19, mm: 30, big: true },
+    { h: 'FC Porto', a: 'Braga', day: 1, hh: 19, mm: 30, big: true },
+    { h: 'Vitória de Guimarães', a: 'Famalicao', day: 2, hh: 17, mm: 0, big: false },
+    { h: 'Rio Ave', a: 'Estrela', day: 3, hh: 19, mm: 15, big: false },
+    { h: 'Moreirense', a: 'Gil Vicente', day: 4, hh: 14, mm: 30, big: false }
+  ],
+  jupiler: [
+    { h: 'Club Brugge', a: 'Anderlecht', day: 0, hh: 17, mm: 30, big: true },
+    { h: 'Genk', a: 'Union Saint-Gilloise', day: 1, hh: 15, mm: 0, big: true },
+    { h: 'Gent', a: 'Standard Liège', day: 2, hh: 17, mm: 30, big: false },
+    { h: 'Royal Antwerp', a: 'Cercle Brugge', day: 3, hh: 19, mm: 45, big: false },
+    { h: 'KV Mechelen', a: 'Charleroi', day: 4, hh: 15, mm: 0, big: false }
+  ],
+  brasileirao: [
+    { h: 'Flamengo', a: 'Palmeiras', day: 0, hh: 19, mm: 0, big: true },
+    { h: 'Botafogo', a: 'São Paulo', day: 1, hh: 19, mm: 30, big: true },
+    { h: 'Corinthians', a: 'Atlético Mineiro', day: 2, hh: 19, mm: 0, big: true },
+    { h: 'Internacional', a: 'Grêmio', day: 3, hh: 18, mm: 0, big: true },
+    { h: 'Fluminense', a: 'Fortaleza', day: 4, hh: 19, mm: 0, big: false },
+    { h: 'Cruzeiro', a: 'Vasco da Gama', day: 5, hh: 19, mm: 30, big: false }
+  ],
+  mls: [
+    { h: 'Inter Miami', a: 'Los Angeles FC', day: 0, hh: 22, mm: 30, big: true },
+    { h: 'LA Galaxy', a: 'Seattle Sounders FC', day: 1, hh: 23, mm: 0, big: true },
+    { h: 'Columbus Crew', a: 'FC Cincinnati', day: 2, hh: 22, mm: 30, big: true },
+    { h: 'New York Red Bulls', a: 'New York City FC', day: 3, hh: 22, mm: 0, big: true },
+    { h: 'Philadelphia Union', a: 'Atlanta United', day: 4, hh: 22, mm: 30, big: false }
+  ],
+  ligamx: [
+    { h: 'Club América', a: 'Guadalajara', day: 0, hh: 23, mm: 0, big: true },
+    { h: 'Tigres UANL', a: 'CF Monterrey', day: 1, hh: 23, mm: 0, big: true },
+    { h: 'Cruz Azul', a: 'Pumas UNAM', day: 2, hh: 22, mm: 0, big: true },
+    { h: 'Deportivo Toluca', a: 'Pachuca', day: 3, hh: 17, mm: 0, big: false },
+    { h: 'Santos Laguna', a: 'Club León', day: 4, hh: 22, mm: 0, big: false }
+  ],
+  superlig: [
+    { h: 'Galatasaray', a: 'Fenerbahce', day: 0, hh: 17, mm: 0, big: true },
+    { h: 'Besiktas', a: 'Trabzonspor', day: 1, hh: 17, mm: 0, big: true },
+    { h: 'Istanbul Basaksehir', a: 'Samsunspor', day: 2, hh: 17, mm: 0, big: false },
+    { h: 'Kasimpasa', a: 'Sivasspor', day: 3, hh: 17, mm: 0, big: false },
+    { h: 'Antalyaspor', a: 'Gaziantep FK', day: 4, hh: 17, mm: 0, big: false }
+  ],
+  scotprem: [
+    { h: 'Celtic', a: 'Rangers', day: 0, hh: 11, mm: 30, big: true },
+    { h: 'Aberdeen', a: 'Heart of Midlothian', day: 1, hh: 14, mm: 0, big: true },
+    { h: 'Hibernian', a: 'Kilmarnock', day: 2, hh: 14, mm: 0, big: false },
+    { h: 'St. Mirren', a: 'Dundee FC', day: 3, hh: 14, mm: 0, big: false },
+    { h: 'Motherwell', a: 'Dundee United', day: 4, hh: 14, mm: 0, big: false }
+  ],
+  championship: [
+    { h: 'Leeds United', a: 'Burnley', day: 0, hh: 11, mm: 30, big: true },
+    { h: 'Sheffield United', a: 'Sunderland', day: 1, hh: 14, mm: 0, big: true },
+    { h: 'West Bromwich Albion', a: 'Watford', day: 2, hh: 14, mm: 0, big: false },
+    { h: 'Middlesbrough', a: 'Coventry City', day: 3, hh: 14, mm: 0, big: false },
+    { h: 'Norwich City', a: 'Blackburn Rovers', day: 4, hh: 14, mm: 0, big: false }
+  ],
   ucl: [
     { h: 'Real Madrid', a: 'Bayern Munich', day: 2, hh: 19, mm: 0, big: true },
     { h: 'Manchester City', a: 'Inter Milan', day: 2, hh: 19, mm: 0, big: true },
@@ -2343,11 +2458,6 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Red Bull Salzburg', a: 'Rapid Wien', day: 4, hh: 15, mm: 0, big: true },
     { h: 'SK Sturm Graz', a: 'LASK', day: 5, hh: 13, mm: 30, big: true },
     { h: 'Austria Wien', a: 'Wolfsberger AC', day: 5, hh: 16, mm: 0, big: false }
-  ],
-  belgium: [
-    { h: 'Club Brugge', a: 'Anderlecht', day: 4, hh: 17, mm: 30, big: true },
-    { h: 'Genk', a: 'Union Saint-Gilloise', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Gent', a: 'Standard Liège', day: 5, hh: 17, mm: 30, big: false }
   ],
   superliga: [
     { h: 'FC Copenhagen', a: 'Brøndby IF', day: 4, hh: 14, mm: 0, big: true },
