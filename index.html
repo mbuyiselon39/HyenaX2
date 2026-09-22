@@ -4,7 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>HyenaX | The Ndlela Millionaires GoldPack - Predictive Football Intelligence</title>
-<meta name="description" content="HyenaX - The Ndlela Millionaires GoldPack: Dixon-Coles bivariate probability models, AI-consensus football predictions and odds intelligence across 108 global leagues and competitions with Daily Top 20 Surest Wins." />
+<meta name="description" content="Ndlela Millionaires Beast Mode Football Intelligence Engine featuring Daily Top 20 Banker Predictions, 17-Model Unified Consensus Stack (GBDT, GNNs, LSTMs, Transformers, Bradley-Terry, and Bivariate Poisson), Empirical Probability Calibration, Fair Odds & +EV Detection, Trust & Volatility Scoring, Accumulator Optimizer, Bet Slip Code X-Ray (Hollywoodbets, EasyBet, Betway), and live fixture synchronization across 141 global men's and women's leagues in South African Standard Time (SAST, UTC+2)." />
+<meta property="og:title" content="HyenaX - The Ndlela Millionaires GoldPack" />
+<meta property="og:description" content="Ndlela Millionaires Beast Mode Football Intelligence Engine featuring Daily Top 20 Banker Predictions, 17-Model Unified Consensus Stack, Empirical Probability Calibration, and live fixture synchronization across 141 global men's and women's leagues in South African Standard Time (SAST, UTC+2)." />
 
 <!-- PWA / installability -->
 <meta name="theme-color" content="#080A0F" />
@@ -845,43 +847,87 @@ const LEAGUES = [
   { id:'brasileiro_serieb', name:'Brasileiro Série B', country:'Brazil', flag:'🇧🇷', rho: -0.170 },
   { id:'algeria', name:'Algeria Ligue 1', country:'Algeria', flag:'🇩🇿', rho: -0.180 },
   { id:'netherlands_eerste', name:'Netherlands Eerste Divisie', country:'Netherlands', flag:'🇳🇱', rho: -0.085 },
-  { id:'germany_3liga', name:'Germany 3. Liga', country:'Germany', flag:'🇩🇪', rho: -0.100 }
+  { id:'germany_3liga', name:'Germany 3. Liga', country:'Germany', flag:'🇩🇪', rho: -0.100 },
+  { id:'hollywoodbets_super_league', name:'Hollywoodbets Super League', country:'South Africa', flag:'🇿🇦', rho: -0.165 },
+  { id:'wsl', name:'Barclays Women’s Super League (WSL)', country:'England', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', rho: -0.100 },
+  { id:'nwsl', name:'National Women’s Soccer League (NWSL)', country:'USA', flag:'🇺🇸', rho: -0.095 },
+  { id:'liga_f', name:'Liga F', country:'Spain', flag:'🇪🇸', rho: -0.090 },
+  { id:'fra_w1', name:'Première Ligue Féminine', country:'France', flag:'🇫🇷', rho: -0.095 },
+  { id:'fra_w2', name:'Seconde Ligue Féminine', country:'France', flag:'🇫🇷', rho: -0.110 },
+  { id:'ger_w1', name:'Google Pixel Frauen-Bundesliga', country:'Germany', flag:'🇩🇪', rho: -0.090 },
+  { id:'ger_w2', name:'2. Frauen-Bundesliga', country:'Germany', flag:'🇩🇪', rho: -0.100 },
+  { id:'ita_w1', name:'Serie A Femminile', country:'Italy', flag:'🇮🇹', rho: -0.115 },
+  { id:'ita_w2', name:'Serie B Femminile', country:'Italy', flag:'🇮🇹', rho: -0.125 },
+  { id:'ned_w1', name:'Vrouwen Eredivisie', country:'Netherlands', flag:'🇳🇱', rho: -0.085 },
+  { id:'por_w1', name:'Liga BPI', country:'Portugal', flag:'🇵🇹', rho: -0.110 },
+  { id:'swe_w1', name:'OBOS Damallsvenskan', country:'Sweden', flag:'🇸🇪', rho: -0.100 },
+  { id:'swe_w2', name:'Elitettan', country:'Sweden', flag:'🇸🇪', rho: -0.105 },
+  { id:'nor_w1', name:'Toppserien', country:'Norway', flag:'🇳🇴', rho: -0.100 },
+  { id:'nor_w2', name:'1. Divisjon Kvinner', country:'Norway', flag:'🇳🇴', rho: -0.110 },
+  { id:'den_w1', name:'Gjensidige Kvindeliga', country:'Denmark', flag:'🇩🇰', rho: -0.105 },
+  { id:'sco_w1', name:'Scottish Women’s Premier League (SWPL 1)', country:'Scotland', flag:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', rho: -0.095 },
+  { id:'bra_w1', name:'Brasileirão Feminino Série A1', country:'Brazil', flag:'🇧🇷', rho: -0.120 },
+  { id:'mex_w1', name:'Liga MX Femenil', country:'Mexico', flag:'🇲🇽', rho: -0.105 },
+  { id:'aus_w1', name:'Ninja A-League Women', country:'Australia', flag:'🇦🇺', rho: -0.090 },
+  { id:'jpn_w1', name:'WE League', country:'Japan', flag:'🇯🇵', rho: -0.120 },
+  { id:'eng_w2', name:'Barclays Women’s Championship', country:'England', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', rho: -0.110 },
+  { id:'esp_w2', name:'Primera Federación Femenina', country:'Spain', flag:'🇪🇸', rho: -0.115 },
+  { id:'usl_super_league', name:'USL Super League', country:'USA', flag:'🇺🇸', rho: -0.095 },
+  { id:'womens_champions_league', name:'UEFA Women’s Champions League', country:'Europe', flag:'⭐', rho: -0.085 },
+  { id:'womens_caf_cl', name:'CAF Women’s Champions League', country:'Africa', flag:'🌍', rho: -0.130 },
+  { id:'womens_copa_libertadores', name:'Copa Libertadores Femenina', country:'South America', flag:'🏆', rho: -0.115 },
+  { id:'womens_afc_cl', name:'AFC Women’s Champions League', country:'Asia', flag:'🌏', rho: -0.110 },
+  { id:'womens_concacaf_w', name:'CONCACAF W Champions Cup', country:'North America', flag:'🏆', rho: -0.095 },
+  { id:'womens_fa_cup', name:'Women’s FA Cup', country:'England', flag:'🏆', rho: -0.105 },
+  { id:'copa_de_la_reina', name:'Copa de la Reina', country:'Spain', flag:'🏆', rho: -0.100 },
+  { id:'dfb_pokal_frauen', name:'DFB-Pokal Frauen', country:'Germany', flag:'🏆', rho: -0.095 }
 ];
 
 const SEED_MATCHES = [
-  // Today's real matches (day 0)
-  ['epl','Leeds United',77,['W','D','W','L','D'],1.5,1.3,'Newcastle United',81,['W','D','W','L','W'],1.8,1.2, 0,19,0,true],
-  ['laliga','Villarreal',78,['W','L','D','W','L'],1.6,1.3,'Real Betis',77,['D','D','W','W','L'],1.4,1.2, 0,19,0,true],
-  ['seriea','Como',73,['D','L','W','D','L'],1.2,1.4,'Parma',73,['L','W','D','L','D'],1.2,1.4, 0,16,30,false],
-  ['seriea','Torino',76,['D','W','L','D','W'],1.3,1.2,'AS Roma',80,['W','D','L','W','W'],1.6,1.1, 0,16,30,true],
-  ['seriea','Internazionale',87,['W','W','D','W','W'],2.3,0.8,'Udinese',75,['W','L','D','W','L'],1.3,1.3, 0,18,45,true],
-  ['superlig','Gaziantep FK',73,['D','L','W','D','L'],1.1,1.4,'Fenerbahce',82,['W','D','W','W','L'],2.0,1.1, 0,17,0,true],
-  ['ligaportugal','Rio Ave',74,['D','L','W','D','L'],1.2,1.3,'Estrela',72,['L','D','L','W','D'],1.0,1.4, 0,17,45,false],
-  ['ligaportugal','Moreirense',73,['D','W','L','D','W'],1.2,1.2,'Maritimo',71,['L','D','W','L','D'],1.0,1.3, 0,19,15,false],
-  ['ligaportugal','Braga',79,['D','W','W','L','W'],1.7,1.2,'Estoril',73,['L','W','D','L','D'],1.2,1.5, 0,19,45,true],
-  ['brasileirao','Bahia',76,['W','D','L','W','D'],1.4,1.2,'Remo',70,['L','D','W','L','L'],0.9,1.4, 0,23,0,false],
-  ['mls','San Diego FC',74,['D','W','L','D','W'],1.3,1.4,'Philadelphia Union',76,['W','D','W','L','D'],1.5,1.3, 0,1,0,false],
-  ['ligamx','Santos',74,['L','D','W','L','D'],1.2,1.4,'FC Juarez',72,['D','L','L','W','D'],1.1,1.5, 0,1,0,false],
-  ['ligamx','Guadalajara',78,['D','W','L','W','D'],1.4,1.1,'Pumas UNAM',77,['W','D','D','L','W'],1.4,1.2, 0,1,7,false],
+  // Today's real 2026/2027 matches (Monday 21 September 2026 - day 0)
+  ['epl','West Ham United FC',79,['W','D','L','W','D'],1.5,1.2,'Coventry City',73,['W','W','D','L','L'],1.2,1.4, 0,21,0,true],
+  ['championship','Preston North End',73,['D','W','L','D','L'],1.2,1.3,'Sheffield United FC',79,['W','W','D','L','W'],1.6,1.1, 0,21,0,true],
+  ['superlig','Gaziantep FK',73,['D','L','W','D','L'],1.1,1.4,'Trabzonspor',80,['W','D','W','W','L'],1.8,1.1, 0,19,0,true],
+  ['superlig','Göztepe',74,['W','D','D','W','L'],1.3,1.2,'Kayserispor',72,['L','D','L','W','D'],1.0,1.4, 0,19,0,false],
+  ['germany_3liga','Dynamo Dresden',74,['W','W','D','W','L'],1.6,1.1,'Arminia Bielefeld',72,['D','L','W','D','W'],1.3,1.3, 0,19,0,true],
+  ['cyprus','Apollon Limassol',76,['W','W','D','L','W'],1.5,1.0,'Enosis Neon Paralimni',68,['L','L','D','L','D'],0.8,1.6, 0,19,0,false],
+  ['ligaportugal','Boavista',72,['D','L','L','W','D'],1.0,1.5,'Benfica',86,['W','W','W','D','W'],2.2,0.8, 0,21,15,true],
+  ['ligue2','FC Metz',74,['W','D','W','L','D'],1.4,1.1,'Guingamp',73,['D','W','L','W','D'],1.2,1.2, 0,20,45,false],
+  ['netherlands_eerste','Excelsior Rotterdam',74,['W','W','D','L','W'],1.7,1.2,'FC Den Bosch',72,['D','L','W','W','D'],1.3,1.4, 0,20,0,true],
+  ['netherlands_eerste','De Graafschap',73,['W','D','W','L','D'],1.5,1.3,'Helmond Sport',71,['L','W','D','L','D'],1.1,1.5, 0,20,0,false],
+  ['superettan','Degerfors IF',72,['W','D','W','L','D'],1.4,1.2,'Landskrona BoIS',71,['D','L','W','D','L'],1.2,1.3, 0,19,0,false],
+  ['superettan','Östers IF',73,['W','W','D','L','W'],1.5,1.1,'Helsingborgs IF',71,['D','D','L','W','D'],1.1,1.3, 0,19,0,false],
+  ['argentina','Aldosivi',69,['L','D','W','L','D'],0.9,1.3,'Atlético Tucumán',73,['W','D','D','W','L'],1.2,1.0, 0,19,30,false],
+  ['korean_kleague','FC Seoul',76,['W','D','W','L','D'],1.4,1.1,'Gangwon FC',75,['W','W','L','D','W'],1.3,1.2, 0,12,0,true],
+  ['thai_league','Buriram United',78,['W','W','W','D','W'],2.2,0.9,'Port FC',75,['W','D','W','L','D'],1.6,1.2, 0,14,0,true],
 
-  // Real Betway Premiership (PSL) fixtures
-  ['psl','Orlando Pirates',82,['W','W','D','W','W'],1.8,0.9,'Durban City',68,['D','D','L','W','D'],0.9,1.4, 3,17,30,true],
-  ['psl','Richards Bay FC',70,['L','D','L','W','L'],0.9,1.4,'Sekhukhune United FC',73,['W','D','L','D','W'],1.2,1.1, 5,13,0,false],
-  ['psl','Polokwane City FC',71,['W','D','D','L','L'],1.0,1.2,'AmaZulu',72,['L','W','D','L','D'],1.0,1.3, 5,15,30,false],
-  ['psl','Kruger United',67,['D','L','W','D','L'],0.8,1.4,'Stellenbosch',76,['W','D','L','W','D'],1.3,1.1, 5,18,0,true],
-  ['psl','Golden Arrows',70,['L','L','D','W','L'],0.9,1.5,'Kaizer Chiefs',79,['W','D','W','W','L'],1.5,1.0, 6,13,0,true],
-  ['psl','Marumo Gallants',69,['D','L','W','L','D'],1.0,1.4,'Orlando Pirates',82,['W','W','D','W','W'],1.8,0.9, 6,13,0,true],
-  ['psl','Milford FC',67,['L','D','L','D','W'],0.8,1.4,'Durban City',68,['D','D','L','W','D'],0.9,1.4, 6,13,0,false],
-  ['psl','TS Galaxy FC',71,['D','L','W','L','D'],1.1,1.3,'Chippa United',69,['D','L','L','D','W'],0.8,1.4, 6,15,30,false],
+  // Real 2026/2027 Betway Premiership (PSL) Tuesday Midweek Matches (day 1 - 22 Sep 2026)
+  ['psl','Mamelodi Sundowns FC',85,['W','W','W','D','W'],2.1,0.7,'AmaZulu FC',71,['L','W','D','L','D'],0.9,1.4, 1,19,30,true],
+  ['psl','Stellenbosch FC',77,['W','D','W','L','D'],1.4,1.0,'Orlando Pirates FC',83,['W','W','W','W','D'],1.9,0.8, 1,19,30,true],
+  ['psl','TS Galaxy',72,['W','D','L','W','L'],1.1,1.2,'SuperSport United FC',76,['D','W','D','W','L'],1.3,1.1, 1,19,30,false],
 
-  // Real upcoming European & World fixtures
-  ['championship','Preston',73,['D','W','L','D','L'],1.2,1.3,'Sheffield United',78,['W','W','D','L','W'],1.6,1.1, 1,19,45,false],
-  ['ucl','Juventus',84,['D','W','W','D','W'],1.8,0.8,'Borussia Dortmund',84,['W','D','W','L','W'],2.1,1.3, 2,20,0,true],
-  ['ucl','Paris Saint-Germain',90,['W','W','W','D','W'],2.7,0.8,'Atalanta',81,['W','W','L','W','D'],1.9,1.2, 2,20,0,true],
-  ['epl','Arsenal',88,['W','W','D','W','W'],2.2,0.8,'Everton',74,['L','D','W','L','D'],1.1,1.4, 5,15,0,true],
-  ['epl','Liverpool',89,['W','W','D','W','W'],2.3,1.0,'Aston Villa',79,['D','W','L','W','D'],1.6,1.3, 5,17,30,true],
-  ['laliga','Real Madrid',91,['W','W','W','W','D'],2.6,0.7,'Espanyol',75,['L','D','W','L','D'],1.1,1.5, 5,20,0,true],
-  ['bundesliga','Bayern Munich',90,['W','W','W','W','W'],2.8,0.9,'Bayer Leverkusen',85,['W','D','W','W','D'],2.2,1.0, 5,17,30,true]
+  // Real 2026/2027 Betway Premiership (PSL) Wednesday Midweek Matches (day 2 - 23 Sep 2026)
+  ['psl','Kaizer Chiefs FC',80,['W','W','D','W','L'],1.6,1.0,'Polokwane City',72,['D','L','W','D','L'],1.0,1.3, 2,19,30,true],
+  ['psl','Cape Town City FC',75,['D','W','L','D','W'],1.3,1.2,'Chippa United FC',70,['L','D','L','W','D'],0.9,1.4, 2,19,30,false],
+  ['psl','Lamontville Golden Arrows FC',71,['L','L','D','W','L'],1.0,1.5,'Sekhukhune United',74,['W','D','L','D','W'],1.2,1.1, 2,19,30,false],
+
+  // Real 2026/2027 Betway Premiership (PSL) Thursday Matches (day 3 - 24 Sep 2026)
+  ['psl','Magesi FC',68,['L','D','L','W','L'],0.8,1.4,'Richards Bay',70,['D','L','D','L','W'],0.9,1.3, 3,19,30,false],
+
+  // Real 2026/2027 Betway Premiership (PSL) Weekend Matches (day 5 & 6)
+  ['psl','SuperSport United FC',76,['D','W','D','W','L'],1.3,1.1,'Mamelodi Sundowns FC',85,['W','W','W','D','W'],2.1,0.7, 5,15,0,true],
+  ['psl','Kaizer Chiefs FC',80,['W','W','D','W','L'],1.6,1.0,'AmaZulu FC',71,['L','W','D','L','D'],0.9,1.4, 5,17,30,true],
+  ['psl','Orlando Pirates FC',83,['W','W','W','W','D'],1.9,0.8,'Polokwane City',72,['D','L','W','D','L'],1.0,1.3, 5,20,0,true],
+  ['psl','Chippa United FC',70,['L','D','L','W','D'],0.9,1.4,'Richards Bay',70,['D','L','D','L','W'],0.9,1.3, 6,15,0,false],
+  ['psl','Stellenbosch FC',77,['W','D','W','L','D'],1.4,1.0,'Cape Town City FC',75,['D','W','L','D','W'],1.3,1.2, 6,17,30,true],
+
+  // European & World 2026/2027 Upcoming Round Matches
+  ['ucl','Juventus',84,['D','W','W','D','W'],1.8,0.8,'Borussia Dortmund',84,['W','D','W','L','W'],2.1,1.3, 2,21,0,true],
+  ['ucl','Paris Saint-Germain',90,['W','W','W','D','W'],2.7,0.8,'Atalanta',81,['W','W','L','W','D'],1.9,1.2, 2,21,0,true],
+  ['epl','Arsenal',88,['W','W','D','W','W'],2.2,0.8,'Everton',74,['L','D','W','L','D'],1.1,1.4, 5,16,0,true],
+  ['epl','Liverpool',89,['W','W','D','W','W'],2.3,1.0,'Aston Villa',79,['D','W','L','W','D'],1.6,1.3, 5,18,30,true],
+  ['laliga','Real Madrid',91,['W','W','W','W','D'],2.6,0.7,'Espanyol',75,['L','D','W','L','D'],1.1,1.5, 5,21,0,true],
+  ['bundesliga','Bayern Munich',90,['W','W','W','W','W'],2.8,0.9,'Bayer Leverkusen',85,['W','D','W','W','D'],2.2,1.0, 5,18,30,true]
 ];
 
 /* ---------- Alpine store ---------- */
@@ -1216,14 +1262,19 @@ function app(){
       if (this.top15Date && this.fixtures.some(m => (m.matchDate || this.dateKey(m.kickoff)) === this.top15Date)) {
         return this.top15Date;
       }
-      const todayKey = this.days[1] ? this.days[1].key : this.dateKey(new Date());
+      const todayKey = this.dateKey(new Date());
       const hasToday = this.fixtures.some(m => (m.matchDate || this.dateKey(m.kickoff)) === todayKey);
       if (hasToday) return todayKey;
       if (this.selectedDate && this.selectedDate !== 'all' && this.fixtures.some(m => (m.matchDate || this.dateKey(m.kickoff)) === this.selectedDate)) {
         return this.selectedDate;
       }
       if (this.fixtures.length) {
-        const nearest = this.fixtures.reduce((a, b) => Math.abs(a.kickoff - Date.now()) < Math.abs(b.kickoff - Date.now()) ? a : b);
+        const upcoming = this.fixtures.filter(m => m.matchStatus !== 'FINISHED' && new Date(m.kickoff).getTime() >= Date.now() - 3600000);
+        if (upcoming.length) {
+          const nearest = upcoming.reduce((a, b) => Math.abs(new Date(a.kickoff) - Date.now()) < Math.abs(new Date(b.kickoff) - Date.now()) ? a : b);
+          return nearest.matchDate || this.dateKey(nearest.kickoff);
+        }
+        const nearest = this.fixtures.reduce((a, b) => Math.abs(new Date(a.kickoff) - Date.now()) < Math.abs(new Date(b.kickoff) - Date.now()) ? a : b);
         return nearest.matchDate || this.dateKey(nearest.kickoff);
       }
       return todayKey;
@@ -1395,6 +1446,16 @@ function app(){
 
         if (isDisqualified) {
           return; // Strictly eliminate from Daily Top 20 Surest Wins!
+        }
+
+        // ACCURACY & RECENCY GUARD:
+        // When evaluating today or upcoming future dates, strictly exclude finished matches and matches that have already kicked off!
+        const todayStr = this.dateKey(new Date());
+        const kickoffMs = new Date(m.kickoff).getTime();
+        const nowMs = Date.now();
+        const isPastKickoff = !isNaN(kickoffMs) && kickoffMs < (nowMs - 15 * 60 * 1000);
+        if (targetDate >= todayStr && (m.matchStatus === 'FINISHED' || m.matchStatus === 'POSTPONED' || isPastKickoff)) {
+          return;
         }
 
         const isFinished = m.matchStatus === 'FINISHED';
@@ -2247,7 +2308,8 @@ function app(){
           fullLabel: i === -1 ? `Yesterday (${d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })})` : i === 0 ? `Today (${d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })})` : d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' }),
         });
       }
-      this.selectedDate = this.days[1].key;
+      const todayObj = this.days.find(d => d.offset === 0);
+      this.selectedDate = todayObj ? todayObj.key : this.dateKey(new Date());
       this.fixtures = SEED_MATCHES.map((row, n) => this.expand(row, n));
       const leagueCounts = {};
       for (const m of this.fixtures) leagueCounts[m.league.name] = (leagueCounts[m.league.name] || 0) + 1;
@@ -2514,7 +2576,7 @@ function app(){
         // Dynamically synchronize calendar day tabs so all scheduled dates have clickable chips
         this.syncDaysWithFixtures();
 
-        const todayKey = this.days[1] ? this.days[1].key : this.dateKey(new Date());
+        const todayKey = this.dateKey(new Date());
         const hasToday = this.fixtures.some(m => (m.matchDate || this.dateKey(m.kickoff)) === todayKey);
         if (hasToday) {
           this.selectedDate = todayKey;
@@ -3563,7 +3625,7 @@ function app(){
             </p>
           </div>
         </div>
-        <button @click="top15Date = (selectedDate !== 'all' ? selectedDate : (days[1]?.key || '')); activeView = 'daily-top15'; haptic(15)"
+        <button @click="top15Date = dateKey(new Date()); activeView = 'daily-top15'; haptic(15)"
                 class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-display font-extrabold text-xs tracking-wider shadow-lg shadow-amber-500/20 active:scale-95 transition-all shrink-0 flex items-center gap-2 relative z-10 cursor-pointer">
           <span>Explore Top 20 Bankers</span>
           <span>→</span>
@@ -6009,7 +6071,7 @@ function app(){
       <p class="text-xs text-slate-400 max-w-md mx-auto">
         Please select a different date using the calendar bar above to view the 20 surest daily banker predictions.
       </p>
-      <button @click="top15Date = (days[1]?.key || ''); haptic(10)"
+      <button @click="top15Date = dateKey(new Date()); haptic(10)"
               class="px-4 py-2 rounded-xl bg-amber-500 text-black font-bold text-xs cursor-pointer">
         Switch to Today's Fixtures
       </button>
