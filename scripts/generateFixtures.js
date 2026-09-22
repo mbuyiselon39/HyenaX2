@@ -263,9 +263,9 @@ export const GLOBAL_CLUB_REGISTRY = {
   'psv': { name: 'PSV Eindhoven', rating: 82, domestic: 'eredivisie', form: ['W','W','W','W','D'], xgFor: 2.45, xgAgainst: 0.95 },
 
   // --- Tier 3 Mid-Europe Giants & Powerhouses (Elo 79 - 82) ---
-  'salzburg': { name: 'RB Salzburg', rating: 81, domestic: null, form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
-  'rb salzburg': { name: 'RB Salzburg', rating: 81, domestic: null, form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
-  'red bull salzburg': { name: 'RB Salzburg', rating: 81, domestic: null, form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
+  'salzburg': { name: 'RB Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
+  'rb salzburg': { name: 'RB Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
+  'red bull salzburg': { name: 'RB Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
   'celtic': { name: 'Celtic', rating: 81, domestic: 'scotprem', form: ['W','W','W','W','D'], xgFor: 2.30, xgAgainst: 0.95 },
   'feyenoord': { name: 'Feyenoord', rating: 81, domestic: 'eredivisie', form: ['W','W','D','W','W'], xgFor: 2.20, xgAgainst: 1.10 },
   'feyenoord rotterdam': { name: 'Feyenoord', rating: 81, domestic: 'eredivisie', form: ['W','W','D','W','W'], xgFor: 2.20, xgAgainst: 1.10 },
@@ -273,13 +273,13 @@ export const GLOBAL_CLUB_REGISTRY = {
   'lille': { name: 'Lille', rating: 81, domestic: 'ligue1', form: ['W','D','W','W','D'], xgFor: 1.80, xgAgainst: 1.10 },
   'lyon': { name: 'Lyon', rating: 81, domestic: 'ligue1', form: ['W','L','W','W','D'], xgFor: 1.85, xgAgainst: 1.30 },
   'olympique lyonnais': { name: 'Lyon', rating: 81, domestic: 'ligue1', form: ['W','L','W','W','D'], xgFor: 1.85, xgAgainst: 1.30 },
-  'shakhtar donetsk': { name: 'Shakhtar Donetsk', rating: 81, domestic: null, form: ['W','W','D','W','W'], xgFor: 2.05, xgAgainst: 1.10 },
-  'shakhtar': { name: 'Shakhtar Donetsk', rating: 81, domestic: null, form: ['W','W','D','W','W'], xgFor: 2.05, xgAgainst: 1.10 },
+  'shakhtar donetsk': { name: 'Shakhtar Donetsk', rating: 81, domestic: 'ukraine', form: ['W','W','D','W','W'], xgFor: 2.05, xgAgainst: 1.10 },
+  'shakhtar': { name: 'Shakhtar Donetsk', rating: 81, domestic: 'ukraine', form: ['W','W','D','W','W'], xgFor: 2.05, xgAgainst: 1.10 },
   'galatasaray': { name: 'Galatasaray', rating: 81, domestic: 'superlig', form: ['W','W','W','W','D'], xgFor: 2.25, xgAgainst: 1.10 },
   'fenerbahce': { name: 'Fenerbahce', rating: 81, domestic: 'superlig', form: ['W','D','W','W','L'], xgFor: 2.15, xgAgainst: 1.10 },
   'besiktas': { name: 'Besiktas', rating: 80, domestic: 'superlig', form: ['W','W','D','W','L'], xgFor: 1.95, xgAgainst: 1.25 },
-  'olympiacos': { name: 'Olympiacos', rating: 80, domestic: null, form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 1.05 },
-  'olympiacos piraeus': { name: 'Olympiacos', rating: 80, domestic: null, form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 1.05 },
+  'olympiacos': { name: 'Olympiacos', rating: 80, domestic: 'greece', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 1.05 },
+  'olympiacos piraeus': { name: 'Olympiacos', rating: 80, domestic: 'greece', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 1.05 },
   'crystal palace': { name: 'Crystal Palace', rating: 80, domestic: 'epl', form: ['D','W','L','W','D'], xgFor: 1.50, xgAgainst: 1.30 },
   'manchester united': { name: 'Manchester United', rating: 80, domestic: 'epl', form: ['L','W','D','W','L'], xgFor: 1.55, xgAgainst: 1.40 },
   'brighton': { name: 'Brighton', rating: 80, domestic: 'epl', form: ['W','D','L','W','D'], xgFor: 1.70, xgAgainst: 1.35 },
@@ -300,81 +300,82 @@ export const GLOBAL_CLUB_REGISTRY = {
   'union st gilloise': { name: 'Union St.-Gilloise', rating: 79, domestic: 'jupiler', form: ['W','W','D','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
   'royale union saint gilloise': { name: 'Union St.-Gilloise', rating: 79, domestic: 'jupiler', form: ['W','W','D','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
   'club brugge': { name: 'Club Brugge', rating: 79, domestic: 'jupiler', form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 1.15 },
-  'sparta prague': { name: 'Sparta Prague', rating: 79, domestic: null, form: ['W','W','W','D','W'], xgFor: 2.05, xgAgainst: 1.05 },
-  'sparta praha': { name: 'Sparta Prague', rating: 79, domestic: null, form: ['W','W','W','D','W'], xgFor: 2.05, xgAgainst: 1.05 },
+  'sparta prague': { name: 'Sparta Prague', rating: 79, domestic: 'czech', form: ['W','W','W','D','W'], xgFor: 2.05, xgAgainst: 1.05 },
+  'sparta praha': { name: 'Sparta Prague', rating: 79, domestic: 'czech', form: ['W','W','W','D','W'], xgFor: 2.05, xgAgainst: 1.05 },
 
   // --- Tier 4 European Contenders (Elo 76 - 78) ---
   'anderlecht': { name: 'Anderlecht', rating: 78, domestic: 'jupiler', form: ['W','D','W','D','L'], xgFor: 1.65, xgAgainst: 1.25 },
   'rsc anderlecht': { name: 'Anderlecht', rating: 78, domestic: 'jupiler', form: ['W','D','W','D','L'], xgFor: 1.65, xgAgainst: 1.25 },
-  'dinamo zagreb': { name: 'Dinamo Zagreb', rating: 78, domestic: null, form: ['W','W','D','W','W'], xgFor: 1.90, xgAgainst: 1.10 },
-  'sk sturm graz': { name: 'SK Sturm Graz', rating: 78, domestic: null, form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 1.20 },
-  'sturm graz': { name: 'SK Sturm Graz', rating: 78, domestic: null, form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 1.20 },
+  'dinamo zagreb': { name: 'Dinamo Zagreb', rating: 78, domestic: 'croatia', form: ['W','W','D','W','W'], xgFor: 1.90, xgAgainst: 1.10 },
+  'sk sturm graz': { name: 'SK Sturm Graz', rating: 78, domestic: 'austria', form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 1.20 },
+  'sturm graz': { name: 'SK Sturm Graz', rating: 78, domestic: 'austria', form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 1.20 },
   'celta vigo': { name: 'Celta Vigo', rating: 78, domestic: 'laliga', form: ['W','D','L','W','D'], xgFor: 1.55, xgAgainst: 1.35 },
   'celta': { name: 'Celta Vigo', rating: 78, domestic: 'laliga', form: ['W','D','L','W','D'], xgFor: 1.55, xgAgainst: 1.35 },
   'getafe': { name: 'Getafe', rating: 78, domestic: 'laliga', form: ['D','W','D','L','W'], xgFor: 1.35, xgAgainst: 1.15 },
+  'las palmas': { name: 'UD Las Palmas', rating: 77, domestic: 'laliga', form: ['L','D','L','D','L'], xgFor: 1.15, xgAgainst: 1.65 },
   'braga': { name: 'Braga', rating: 79, domestic: 'ligaportugal', form: ['D','W','W','L','W'], xgFor: 1.75, xgAgainst: 1.25 },
-  'slavia prague': { name: 'Slavia Prague', rating: 78, domestic: null, form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 0.95 },
-  'bodo glimt': { name: 'Bodo/Glimt', rating: 78, domestic: null, form: ['W','W','D','W','L'], xgFor: 2.05, xgAgainst: 1.20 },
-  'viktoria plzen': { name: 'Viktoria Plzen', rating: 77, domestic: null, form: ['W','W','D','W','L'], xgFor: 1.65, xgAgainst: 1.20 },
+  'slavia prague': { name: 'Slavia Prague', rating: 78, domestic: 'czech', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 0.95 },
+  'bodo glimt': { name: 'Bodo/Glimt', rating: 78, domestic: 'eliteserien', form: ['W','W','D','W','L'], xgFor: 2.05, xgAgainst: 1.20 },
+  'viktoria plzen': { name: 'Viktoria Plzen', rating: 77, domestic: 'czech', form: ['W','W','D','W','L'], xgFor: 1.65, xgAgainst: 1.20 },
   'leeds united': { name: 'Leeds United', rating: 77, domestic: 'epl', form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
-  'panathinaikos': { name: 'Panathinaikos', rating: 77, domestic: null, form: ['W','W','D','L','W'], xgFor: 1.70, xgAgainst: 1.15 },
-  'paok': { name: 'PAOK', rating: 78, domestic: null, form: ['W','W','D','W','D'], xgFor: 1.85, xgAgainst: 1.10 },
-  'red star belgrade': { name: 'Red Star Belgrade', rating: 77, domestic: null, form: ['W','W','W','D','W'], xgFor: 2.00, xgAgainst: 1.15 },
-  'crvena zvezda': { name: 'Red Star Belgrade', rating: 77, domestic: null, form: ['W','W','W','D','W'], xgFor: 2.00, xgAgainst: 1.15 },
-  'ferencvaros': { name: 'Ferencvaros', rating: 76, domestic: null, form: ['W','W','D','L','W'], xgFor: 1.65, xgAgainst: 1.25 },
-  'fc midtjylland': { name: 'FC Midtjylland', rating: 76, domestic: null, form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 1.20 },
-  'midtjylland': { name: 'FC Midtjylland', rating: 76, domestic: null, form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 1.20 },
-  'young boys': { name: 'Young Boys', rating: 77, domestic: null, form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.30 },
-  'malmo ff': { name: 'Malmö FF', rating: 76, domestic: null, form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 1.15 },
-  'lask linz': { name: 'LASK Linz', rating: 76, domestic: null, form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.30 },
-  'lask': { name: 'LASK Linz', rating: 76, domestic: null, form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.30 },
-  'aek athens': { name: 'AEK Athens', rating: 77, domestic: null, form: ['W','W','D','W','L'], xgFor: 1.75, xgAgainst: 1.15 },
+  'panathinaikos': { name: 'Panathinaikos', rating: 77, domestic: 'greece', form: ['W','W','D','L','W'], xgFor: 1.70, xgAgainst: 1.15 },
+  'paok': { name: 'PAOK', rating: 78, domestic: 'greece', form: ['W','W','D','W','D'], xgFor: 1.85, xgAgainst: 1.10 },
+  'red star belgrade': { name: 'Red Star Belgrade', rating: 77, domestic: 'serbia', form: ['W','W','W','D','W'], xgFor: 2.00, xgAgainst: 1.15 },
+  'crvena zvezda': { name: 'Red Star Belgrade', rating: 77, domestic: 'serbia', form: ['W','W','W','D','W'], xgFor: 2.00, xgAgainst: 1.15 },
+  'ferencvaros': { name: 'Ferencvaros', rating: 76, domestic: 'hungary', form: ['W','W','D','L','W'], xgFor: 1.65, xgAgainst: 1.25 },
+  'fc midtjylland': { name: 'FC Midtjylland', rating: 76, domestic: 'superliga', form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 1.20 },
+  'midtjylland': { name: 'FC Midtjylland', rating: 76, domestic: 'superliga', form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 1.20 },
+  'young boys': { name: 'Young Boys', rating: 77, domestic: 'swiss', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.30 },
+  'malmo ff': { name: 'Malmö FF', rating: 76, domestic: 'allsvenskan', form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 1.15 },
+  'lask linz': { name: 'LASK Linz', rating: 76, domestic: 'austria', form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.30 },
+  'lask': { name: 'LASK Linz', rating: 76, domestic: 'austria', form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.30 },
+  'aek athens': { name: 'AEK Athens', rating: 77, domestic: 'greece', form: ['W','W','D','W','L'], xgFor: 1.75, xgAgainst: 1.15 },
   'kaa gent': { name: 'KAA Gent', rating: 76, domestic: 'jupiler', form: ['W','D','W','L','D'], xgFor: 1.60, xgAgainst: 1.25 },
   'gent': { name: 'KAA Gent', rating: 76, domestic: 'jupiler', form: ['W','D','W','L','D'], xgFor: 1.60, xgAgainst: 1.25 },
   'trabzonspor': { name: 'Trabzonspor', rating: 77, domestic: 'superlig', form: ['W','D','D','W','L'], xgFor: 1.65, xgAgainst: 1.30 },
-  'hajduk split': { name: 'Hajduk Split', rating: 75, domestic: null, form: ['W','W','D','L','W'], xgFor: 1.60, xgAgainst: 1.20 },
-  'fc lugano': { name: 'FC Lugano', rating: 75, domestic: null, form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
-  'lugano': { name: 'FC Lugano', rating: 75, domestic: null, form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
+  'hajduk split': { name: 'Hajduk Split', rating: 75, domestic: 'croatia', form: ['W','W','D','L','W'], xgFor: 1.60, xgAgainst: 1.20 },
+  'fc lugano': { name: 'FC Lugano', rating: 75, domestic: 'swiss', form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
+  'lugano': { name: 'FC Lugano', rating: 75, domestic: 'swiss', form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
 
   // --- Tier 5 Challengers (Elo 72 - 75) ---
   'sunderland': { name: 'Sunderland', rating: 75, domestic: 'championship', form: ['W','W','D','L','W'], xgFor: 1.45, xgAgainst: 1.25 },
-  'lech poznan': { name: 'Lech Poznan', rating: 75, domestic: null, form: ['W','D','W','L','D'], xgFor: 1.45, xgAgainst: 1.35 },
-  'jagiellonia bialystok': { name: 'Jagiellonia Bialystok', rating: 74, domestic: null, form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.40 },
-  'jagiellonia': { name: 'Jagiellonia Bialystok', rating: 74, domestic: null, form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.40 },
+  'lech poznan': { name: 'Lech Poznan', rating: 75, domestic: 'ekstraklasa', form: ['W','D','W','L','D'], xgFor: 1.45, xgAgainst: 1.35 },
+  'jagiellonia bialystok': { name: 'Jagiellonia Bialystok', rating: 74, domestic: 'ekstraklasa', form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.40 },
+  'jagiellonia': { name: 'Jagiellonia Bialystok', rating: 74, domestic: 'ekstraklasa', form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.40 },
   'nec nijmegen': { name: 'NEC Nijmegen', rating: 74, domestic: 'eredivisie', form: ['L','D','W','L','D'], xgFor: 1.25, xgAgainst: 1.60 },
   'nec': { name: 'NEC Nijmegen', rating: 74, domestic: 'eredivisie', form: ['L','D','W','L','D'], xgFor: 1.25, xgAgainst: 1.60 },
-  'hapoel beer sheva': { name: 'Hapoel Be\'er Sheva', rating: 73, domestic: null, form: ['D','W','D','L','W'], xgFor: 1.30, xgAgainst: 1.35 },
-  'hapoel beer': { name: 'Hapoel Be\'er Sheva', rating: 73, domestic: null, form: ['D','W','D','L','W'], xgFor: 1.30, xgAgainst: 1.35 },
-  'lillestrom': { name: 'Lillestrom', rating: 72, domestic: null, form: ['D','L','W','D','L'], xgFor: 1.15, xgAgainst: 1.45 },
-  'agf': { name: 'AGF', rating: 73, domestic: null, form: ['D','W','L','D','W'], xgFor: 1.35, xgAgainst: 1.35 },
-  'agf aarhus': { name: 'AGF', rating: 73, domestic: null, form: ['D','W','L','D','W'], xgFor: 1.35, xgAgainst: 1.35 },
-  'viking fk': { name: 'Viking FK', rating: 74, domestic: null, form: ['W','D','L','W','D'], xgFor: 1.50, xgAgainst: 1.40 },
-  'viking': { name: 'Viking FK', rating: 74, domestic: null, form: ['W','D','L','W','D'], xgFor: 1.50, xgAgainst: 1.40 },
+  'hapoel beer sheva': { name: 'Hapoel Be\'er Sheva', rating: 73, domestic: 'israel', form: ['D','W','D','L','W'], xgFor: 1.30, xgAgainst: 1.35 },
+  'hapoel beer': { name: 'Hapoel Be\'er Sheva', rating: 73, domestic: 'israel', form: ['D','W','D','L','W'], xgFor: 1.30, xgAgainst: 1.35 },
+  'lillestrom': { name: 'Lillestrom', rating: 72, domestic: 'eliteserien', form: ['D','L','W','D','L'], xgFor: 1.15, xgAgainst: 1.45 },
+  'agf': { name: 'AGF', rating: 73, domestic: 'superliga', form: ['D','W','L','D','W'], xgFor: 1.35, xgAgainst: 1.35 },
+  'agf aarhus': { name: 'AGF', rating: 73, domestic: 'superliga', form: ['D','W','L','D','W'], xgFor: 1.35, xgAgainst: 1.35 },
+  'viking fk': { name: 'Viking FK', rating: 74, domestic: 'eliteserien', form: ['W','D','L','W','D'], xgFor: 1.50, xgAgainst: 1.40 },
+  'viking': { name: 'Viking FK', rating: 74, domestic: 'eliteserien', form: ['W','D','L','W','D'], xgFor: 1.50, xgAgainst: 1.40 },
   'como': { name: 'Como', rating: 73, domestic: 'seriea', form: ['D','L','W','D','L'], xgFor: 1.20, xgAgainst: 1.40 },
   'parma': { name: 'Parma', rating: 73, domestic: 'seriea', form: ['L','W','D','L','D'], xgFor: 1.20, xgAgainst: 1.40 },
   'lens': { name: 'Lens', rating: 78, domestic: 'ligue1', form: ['W','D','D','W','L'], xgFor: 1.55, xgAgainst: 1.20 },
 
   // --- Tier 6 Lesser & Qualifier Clubs (Elo 64 - 71) ---
-  'levski sofia': { name: 'Levski Sofia', rating: 71, domestic: null, form: ['W','D','L','W','D'], xgFor: 1.15, xgAgainst: 1.45 },
-  'ofi crete': { name: 'OFI Crete', rating: 71, domestic: null, form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.50 },
-  'omonia nicosia': { name: 'Omonia Nicosia', rating: 71, domestic: null, form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.50 },
-  'omonia': { name: 'Omonia Nicosia', rating: 71, domestic: null, form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.50 },
-  'csu craiova': { name: 'CSU Craiova', rating: 71, domestic: null, form: ['D','W','L','D','L'], xgFor: 1.15, xgAgainst: 1.45 },
-  'cska sofia': { name: 'CSKA Sofia', rating: 71, domestic: null, form: ['L','W','D','L','D'], xgFor: 1.10, xgAgainst: 1.50 },
-  'mjallby aif': { name: 'Mjällby AIF', rating: 71, domestic: null, form: ['W','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.40 },
-  'mjallby': { name: 'Mjällby AIF', rating: 71, domestic: null, form: ['W','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.40 },
-  'nk celje': { name: 'NK Celje', rating: 70, domestic: null, form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.55 },
-  'celje': { name: 'NK Celje', rating: 70, domestic: null, form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.55 },
-  'torreense': { name: 'Torreense', rating: 70, domestic: null, form: ['D','L','D','W','L'], xgFor: 1.00, xgAgainst: 1.40 },
-  'ararat armenia': { name: 'Ararat-Armenia', rating: 69, domestic: null, form: ['L','D','W','D','L'], xgFor: 0.95, xgAgainst: 1.55 },
-  'kups kuopio': { name: 'KuPS Kuopio', rating: 68, domestic: null, form: ['W','L','D','W','L'], xgFor: 1.05, xgAgainst: 1.45 },
-  'kups': { name: 'KuPS Kuopio', rating: 68, domestic: null, form: ['W','L','D','W','L'], xgFor: 1.05, xgAgainst: 1.45 },
-  'borac banja luka': { name: 'Borac Banja Luka', rating: 68, domestic: null, form: ['D','L','W','D','L'], xgFor: 1.00, xgAgainst: 1.50 },
-  'riga fc': { name: 'Riga FC', rating: 68, domestic: null, form: ['W','D','L','W','L'], xgFor: 1.10, xgAgainst: 1.50 },
-  'kairat almaty': { name: 'Kairat Almaty', rating: 67, domestic: null, form: ['L','W','D','L','D'], xgFor: 1.00, xgAgainst: 1.55 },
-  'egnatia': { name: 'Egnatia', rating: 67, domestic: null, form: ['D','L','L','W','D'], xgFor: 0.95, xgAgainst: 1.55 },
-  'inter d escaldes': { name: 'Inter D\'Escaldes', rating: 64, domestic: null, form: ['L','D','L','L','D'], xgFor: 0.75, xgAgainst: 1.85 },
-  'sabah fk': { name: 'Sabah FK', rating: 69, domestic: null, form: ['L','D','W','D','L'], xgFor: 1.00, xgAgainst: 1.55 },
+  'levski sofia': { name: 'Levski Sofia', rating: 71, domestic: 'bulgaria', form: ['W','D','L','W','D'], xgFor: 1.15, xgAgainst: 1.45 },
+  'ofi crete': { name: 'OFI Crete', rating: 71, domestic: 'greece', form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.50 },
+  'omonia nicosia': { name: 'Omonia Nicosia', rating: 71, domestic: 'cyprus', form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.50 },
+  'omonia': { name: 'Omonia Nicosia', rating: 71, domestic: 'cyprus', form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.50 },
+  'csu craiova': { name: 'CSU Craiova', rating: 71, domestic: 'romania', form: ['D','W','L','D','L'], xgFor: 1.15, xgAgainst: 1.45 },
+  'cska sofia': { name: 'CSKA Sofia', rating: 71, domestic: 'bulgaria', form: ['L','W','D','L','D'], xgFor: 1.10, xgAgainst: 1.50 },
+  'mjallby aif': { name: 'Mjällby AIF', rating: 71, domestic: 'allsvenskan', form: ['W','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.40 },
+  'mjallby': { name: 'Mjällby AIF', rating: 71, domestic: 'allsvenskan', form: ['W','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.40 },
+  'nk celje': { name: 'NK Celje', rating: 70, domestic: 'slovenia', form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.55 },
+  'celje': { name: 'NK Celje', rating: 70, domestic: 'slovenia', form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.55 },
+  'torreense': { name: 'Torreense', rating: 70, domestic: 'ligaportugal', form: ['D','L','D','W','L'], xgFor: 1.00, xgAgainst: 1.40 },
+  'ararat armenia': { name: 'Ararat-Armenia', rating: 69, domestic: 'armenia', form: ['L','D','W','D','L'], xgFor: 0.95, xgAgainst: 1.55 },
+  'kups kuopio': { name: 'KuPS Kuopio', rating: 68, domestic: 'finland', form: ['W','L','D','W','L'], xgFor: 1.05, xgAgainst: 1.45 },
+  'kups': { name: 'KuPS Kuopio', rating: 68, domestic: 'finland', form: ['W','L','D','W','L'], xgFor: 1.05, xgAgainst: 1.45 },
+  'borac banja luka': { name: 'Borac Banja Luka', rating: 68, domestic: 'bosnia', form: ['D','L','W','D','L'], xgFor: 1.00, xgAgainst: 1.50 },
+  'riga fc': { name: 'Riga FC', rating: 68, domestic: 'uecl', form: ['W','D','L','W','L'], xgFor: 1.10, xgAgainst: 1.50 },
+  'kairat almaty': { name: 'Kairat Almaty', rating: 67, domestic: 'kazakhstan', form: ['L','W','D','L','D'], xgFor: 1.00, xgAgainst: 1.55 },
+  'egnatia': { name: 'Egnatia', rating: 67, domestic: 'kategoria_superiore', form: ['D','L','L','W','D'], xgFor: 0.95, xgAgainst: 1.55 },
+  'inter d escaldes': { name: 'Inter D\'Escaldes', rating: 64, domestic: 'uecl', form: ['L','D','L','L','D'], xgFor: 0.75, xgAgainst: 1.85 },
+  'sabah fk': { name: 'Sabah FK', rating: 69, domestic: 'azerbaijan', form: ['L','D','W','D','L'], xgFor: 1.00, xgAgainst: 1.55 },
 
   // --- Austrian Bundesliga ---
   'red bull salzburg': { name: 'Red Bull Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.25, xgAgainst: 0.95 },
@@ -468,8 +469,8 @@ export const GLOBAL_CLUB_REGISTRY = {
   'wydad ac': { name: 'Wydad AC', rating: 78, domestic: 'botola', form: ['W','L','W','D','W'], xgFor: 1.70, xgAgainst: 0.85 },
   'far rabat': { name: 'AS FAR Rabat', rating: 78, domestic: 'botola', form: ['W','W','D','W','W'], xgFor: 1.85, xgAgainst: 0.75 },
   'rs berkane': { name: 'RS Berkane', rating: 78, domestic: 'botola', form: ['W','W','W','D','W'], xgFor: 1.75, xgAgainst: 0.65 },
-  'esperance de tunis': { name: 'Espérance de Tunis', rating: 80, domestic: null, form: ['W','W','D','W','W'], xgFor: 1.95, xgAgainst: 0.70 },
-  'tp mazembe': { name: 'TP Mazembe', rating: 78, domestic: null, form: ['W','D','W','L','W'], xgFor: 1.80, xgAgainst: 0.85 },
+  'esperance de tunis': { name: 'Espérance de Tunis', rating: 80, domestic: 'tunisia', form: ['W','W','D','W','W'], xgFor: 1.95, xgAgainst: 0.70 },
+  'tp mazembe': { name: 'TP Mazembe', rating: 78, domestic: 'caf_cl', form: ['W','D','W','L','W'], xgFor: 1.80, xgAgainst: 0.85 },
 
   // --- Asian / AFC Champions League Elite ---
   'al hilal': { name: 'Al Hilal', rating: 84, domestic: 'saudi', form: ['W','W','W','W','W'], xgFor: 2.65, xgAgainst: 0.80 },
@@ -484,8 +485,11 @@ export const GLOBAL_CLUB_REGISTRY = {
   'shanghai port': { name: 'Shanghai Port', rating: 77, domestic: 'csl', form: ['W','W','W','W','L'], xgFor: 2.70, xgAgainst: 1.10 },
   'shanghai shenhua': { name: 'Shanghai Shenhua', rating: 76, domestic: 'csl', form: ['W','W','W','D','W'], xgFor: 2.35, xgAgainst: 0.80 },
   'chengdu rongcheng': { name: 'Chengdu Rongcheng', rating: 75, domestic: 'csl', form: ['W','D','W','W','L'], xgFor: 1.95, xgAgainst: 1.05 },
-  'ulsan hd': { name: 'Ulsan HD', rating: 78, domestic: null, form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 1.00 },
-  'al ain': { name: 'Al Ain', rating: 79, domestic: null, form: ['W','D','W','L','W'], xgFor: 2.05, xgAgainst: 1.25 },
+  'ulsan hd': { name: 'Ulsan HD', rating: 78, domestic: 'kleague1', form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 1.00 },
+  'al ain': { name: 'Al Ain', rating: 79, domestic: 'afc_cl', form: ['W','D','W','L','W'], xgFor: 2.05, xgAgainst: 1.25 },
+  'al shorta': { name: 'Al Shorta', rating: 74, domestic: 'afc_cl', form: ['D','W','L','W','D'], xgFor: 1.40, xgAgainst: 1.55 },
+  'al rayyan': { name: 'Al Rayyan', rating: 76, domestic: 'afc_cl', form: ['W','L','W','D','L'], xgFor: 1.70, xgAgainst: 1.50 },
+  'gwangju fc': { name: 'Gwangju FC', rating: 76, domestic: 'kleague1', form: ['W','W','D','L','W'], xgFor: 1.80, xgAgainst: 1.20 },
 
   // --- Australian A-League Men ---
   'melbourne city': { name: 'Melbourne City', rating: 75, domestic: 'aleague', form: ['W','W','D','L','W'], xgFor: 1.85, xgAgainst: 1.20 },
@@ -507,10 +511,32 @@ export const GLOBAL_CLUB_REGISTRY = {
   'atletico mineiro': { name: 'Atlético Mineiro', rating: 81, domestic: 'brasileirao', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.00 },
   'ldu quito': { name: 'LDU Quito', rating: 78, domestic: 'ecuador', form: ['W','W','D','W','W'], xgFor: 1.95, xgAgainst: 0.80 },
   'independiente del valle': { name: 'Independiente del Valle', rating: 78, domestic: 'ecuador', form: ['W','W','W','D','L'], xgFor: 2.00, xgAgainst: 0.85 },
+  'barcelona sc': { name: 'Barcelona SC', rating: 77, domestic: 'ecuador', form: ['W','W','D','W','L'], xgFor: 1.85, xgAgainst: 0.80 },
+  'emelec': { name: 'Emelec', rating: 76, domestic: 'ecuador', form: ['D','W','L','W','D'], xgFor: 1.55, xgAgainst: 0.95 },
   'penarol': { name: 'Peñarol', rating: 77, domestic: 'uruguay', form: ['W','W','W','D','W'], xgFor: 1.85, xgAgainst: 0.70 },
   'nacional': { name: 'Nacional', rating: 77, domestic: 'uruguay', form: ['W','W','D','W','W'], xgFor: 1.85, xgAgainst: 0.75 },
   'colo colo': { name: 'Colo-Colo', rating: 77, domestic: 'chile', form: ['W','W','W','W','D'], xgFor: 1.80, xgAgainst: 0.75 },
   'universidad de chile': { name: 'Universidad de Chile', rating: 76, domestic: 'chile', form: ['W','W','D','W','L'], xgFor: 1.75, xgAgainst: 0.85 },
+  'audax italiano': { name: 'Audax Italiano', rating: 74, domestic: 'chile', form: ['W','W','D','W','W'], xgFor: 1.55, xgAgainst: 0.95 },
+  'universidad catolica': { name: 'Universidad Católica', rating: 76, domestic: 'chile', form: ['W','D','W','L','W'], xgFor: 1.70, xgAgainst: 0.85 },
+  'union espanola': { name: 'Unión Española', rating: 74, domestic: 'chile', form: ['D','W','L','W','D'], xgFor: 1.50, xgAgainst: 1.05 },
+  'coquimbo unido': { name: 'Coquimbo Unido', rating: 74, domestic: 'chile', form: ['W','W','D','W','L'], xgFor: 1.50, xgAgainst: 0.90 },
+  'huachipato': { name: 'Huachipato', rating: 73, domestic: 'chile', form: ['L','D','W','D','L'], xgFor: 1.35, xgAgainst: 1.20 },
+  'palestino': { name: 'Palestino', rating: 74, domestic: 'chile', form: ['W','D','L','W','D'], xgFor: 1.50, xgAgainst: 1.05 },
+  'cobresal': { name: 'Cobresal', rating: 74, domestic: 'chile', form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.35 },
+  'deportes iquique': { name: 'Deportes Iquique', rating: 74, domestic: 'chile', form: ['W','D','W','L','L'], xgFor: 1.60, xgAgainst: 1.45 },
+  'o higgins': { name: 'O\'Higgins', rating: 73, domestic: 'chile', form: ['D','W','L','D','L'], xgFor: 1.30, xgAgainst: 1.40 },
+  'ohiggins': { name: 'O\'Higgins', rating: 73, domestic: 'chile', form: ['D','W','L','D','L'], xgFor: 1.30, xgAgainst: 1.40 },
+  'deportes copiap': { name: 'Deportes Copiapó', rating: 72, domestic: 'chile', form: ['L','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.65 },
+  'deportes copiapo': { name: 'Deportes Copiapó', rating: 72, domestic: 'chile', form: ['L','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.65 },
+  'colo-colo': { name: 'Colo-Colo', rating: 77, domestic: 'chile', form: ['W','W','W','W','D'], xgFor: 1.80, xgAgainst: 0.75 },
+  'barracas central': { name: 'Barracas Central', rating: 71, domestic: 'argliga', form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.35 },
+  'independiente rivadavia': { name: 'Independiente Rivadavia', rating: 71, domestic: 'argliga', form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.30 },
+  'lanus': { name: 'Lanús', rating: 76, domestic: 'argliga', form: ['W','D','W','D','L'], xgFor: 1.55, xgAgainst: 1.00 },
+  'estudiantes lp': { name: 'Estudiantes LP', rating: 76, domestic: 'argliga', form: ['W','W','D','L','W'], xgFor: 1.50, xgAgainst: 0.95 },
+  'estudiantes de la plata': { name: 'Estudiantes LP', rating: 76, domestic: 'argliga', form: ['W','W','D','L','W'], xgFor: 1.50, xgAgainst: 0.95 },
+  'racing santander': { name: 'Racing Santander', rating: 74, domestic: 'laliga', form: ['W','W','W','D','L'], xgFor: 1.65, xgAgainst: 1.05 },
+  'rayo vallecano': { name: 'Rayo Vallecano', rating: 74, domestic: 'laliga', form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.30 },
   'olimpia': { name: 'Olimpia', rating: 77, domestic: 'paraguay', form: ['W','W','D','W','W'], xgFor: 1.75, xgAgainst: 0.70 },
   'cerro porteno': { name: 'Cerro Porteño', rating: 77, domestic: 'paraguay', form: ['W','D','W','L','W'], xgFor: 1.70, xgAgainst: 0.80 },
   'libertad': { name: 'Libertad', rating: 77, domestic: 'paraguay', form: ['W','L','W','W','D'], xgFor: 1.75, xgAgainst: 0.85 },
@@ -1221,6 +1247,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
   function finalize(obj) {
     return {
       ...obj,
+      domestic: obj.domestic || leagueId,
       name: idInfo.name || teamName,
       short: idInfo.short || teamName.slice(0, 3).toUpperCase(),
       logo: idInfo.logo || rawLogo || null
@@ -1252,6 +1279,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
       form: finalForm,
       xgFor: finalXgFor,
       xgAgainst: finalXgAgainst,
+      domestic: regEntry.domestic || leagueId,
       statsSource: 'authoritative-club-registry'
     });
   }
@@ -2358,20 +2386,13 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Marumo Gallants', a: 'Orlando Pirates', day: -1, hh: 15, mm: 0, big: true, finished: true, homeScore: 0, awayScore: 2 },
     { h: 'TS Galaxy', a: 'Chippa United', day: -1, hh: 17, mm: 30, big: false, finished: true, homeScore: 1, awayScore: 0 },
     { h: 'Milford FC', a: 'Durban City', day: -1, hh: 15, mm: 0, big: false, finished: true, homeScore: 0, awayScore: 1 },
-    // Midweek Round 2 (Tuesday 22 & Wednesday 23 Sep 2026)
-    { h: 'Mamelodi Sundowns', a: 'AmaZulu', day: 1, hh: 19, mm: 30, big: true },
-    { h: 'Stellenbosch FC', a: 'Orlando Pirates', day: 1, hh: 19, mm: 30, big: true },
-    { h: 'TS Galaxy', a: 'SuperSport United', day: 1, hh: 19, mm: 30, big: false },
-    { h: 'Kaizer Chiefs', a: 'Polokwane City', day: 2, hh: 19, mm: 30, big: true },
-    { h: 'Cape Town City', a: 'Chippa United', day: 2, hh: 19, mm: 30, big: false },
-    { h: 'Golden Arrows', a: 'Sekhukhune United', day: 2, hh: 19, mm: 30, big: false },
-    { h: 'Magesi FC', a: 'Richards Bay', day: 3, hh: 19, mm: 30, big: false },
-    // Weekend Round 3 (Saturday 26 & Sunday 27 Sep 2026)
-    { h: 'SuperSport United', a: 'Mamelodi Sundowns', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Kaizer Chiefs', a: 'AmaZulu', day: 5, hh: 17, mm: 30, big: true },
-    { h: 'Orlando Pirates', a: 'Polokwane City', day: 5, hh: 20, mm: 0, big: true },
-    { h: 'Chippa United', a: 'Richards Bay', day: 6, hh: 15, mm: 0, big: false },
-    { h: 'Stellenbosch FC', a: 'Cape Town City', day: 6, hh: 17, mm: 30, big: true }
+    // Weekend Round 2 (Saturday 26 & Sunday 27 Sep 2026 - Betway Premiership)
+    { h: 'Richards Bay', a: 'Sekhukhune United', day: 5, hh: 15, mm: 0, big: false },
+    { h: 'Polokwane City', a: 'AmaZulu', day: 5, hh: 15, mm: 0, big: false },
+    { h: 'Stellenbosch FC', a: 'Orlando Pirates', day: 5, hh: 17, mm: 30, big: true },
+    { h: 'Mamelodi Sundowns', a: 'Chippa United', day: 5, hh: 20, mm: 0, big: true },
+    { h: 'TS Galaxy', a: 'SuperSport United', day: 6, hh: 15, mm: 0, big: false },
+    { h: 'Kaizer Chiefs', a: 'Cape Town City', day: 6, hh: 17, mm: 30, big: true }
   ],
   epl: [
     // Completed fixtures (Sunday 20 Sep 2026)
@@ -2379,8 +2400,6 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'AFC Bournemouth', a: 'Liverpool', day: -1, hh: 15, mm: 0, big: true, finished: true, homeScore: 0, awayScore: 1 },
     { h: 'Leeds United', a: 'Crystal Palace', day: -1, hh: 15, mm: 0, big: false, finished: true, homeScore: 0, awayScore: 0 },
     { h: 'Fulham', a: 'Manchester United', day: -1, hh: 17, mm: 30, big: true, finished: true, homeScore: 1, awayScore: 2 },
-    // Monday Night Football (21 Sep 2026)
-    { h: 'West Ham United', a: 'Coventry City', day: 0, hh: 21, mm: 0, big: false },
     // Weekend Round (Saturday 26 & Sunday 27 Sep 2026)
     { h: 'Newcastle United', a: 'Manchester City', day: 5, hh: 13, mm: 30, big: true },
     { h: 'Arsenal', a: 'Leicester City', day: 5, hh: 16, mm: 0, big: true },
@@ -2393,21 +2412,23 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Manchester United', a: 'Tottenham Hotspur', day: 6, hh: 17, mm: 30, big: true }
   ],
   laliga: [
-    // Completed fixtures (Sunday 20 Sep 2026)
-    { h: 'Club Atlético de Madrid', a: 'Real Madrid', day: -1, hh: 21, mm: 0, big: true, finished: true, homeScore: 1, awayScore: 1 },
-    { h: 'Villarreal', a: 'Levante', day: -1, hh: 18, mm: 30, big: true, finished: true, homeScore: 4, awayScore: 2 },
-    { h: 'Valencia', a: 'Real Sociedad', day: -1, hh: 16, mm: 15, big: true, finished: true, homeScore: 0, awayScore: 1 },
-    { h: 'Getafe', a: 'Leganés', day: -1, hh: 14, mm: 0, big: false, finished: true, homeScore: 1, awayScore: 2 },
-    // Midweek Round (Tuesday 22 to Thursday 24 Sep 2026)
-    { h: 'Real Madrid', a: 'Deportivo Alavés', day: 1, hh: 21, mm: 0, big: true },
+    // Completed fixtures (Sunday 20 Sep 2026 - Matchday 6)
+    { h: 'Villarreal', a: 'Barcelona', day: -1, hh: 18, mm: 30, big: true, finished: true, homeScore: 1, awayScore: 5 },
+    { h: 'Real Madrid', a: 'Espanyol', day: -1, hh: 21, mm: 0, big: true, finished: true, homeScore: 4, awayScore: 1 },
+    { h: 'Rayo Vallecano', a: 'Club Atlético de Madrid', day: -1, hh: 21, mm: 0, big: true, finished: true, homeScore: 1, awayScore: 1 },
+    { h: 'Getafe', a: 'Leganés', day: -1, hh: 14, mm: 0, big: false, finished: true, homeScore: 1, awayScore: 1 },
+    // Tuesday 22 Sep 2026 (Matchday 7)
+    { h: 'Valencia', a: 'Osasuna', day: 1, hh: 19, mm: 0, big: true },
     { h: 'Sevilla', a: 'Real Valladolid', day: 1, hh: 19, mm: 0, big: true },
-    { h: 'Valencia', a: 'Osasuna', day: 1, hh: 19, mm: 0, big: false },
-    { h: 'Barcelona', a: 'Getafe', day: 2, hh: 21, mm: 0, big: true },
+    { h: 'Real Madrid', a: 'Deportivo Alavés', day: 1, hh: 21, mm: 0, big: true },
+    // Wednesday 23 Sep 2026 (Matchday 7)
     { h: 'Girona', a: 'Rayo Vallecano', day: 2, hh: 19, mm: 0, big: false },
-    { h: 'Celta Vigo', a: 'Atlético Madrid', day: 3, hh: 21, mm: 0, big: true },
-    { h: 'Espanyol', a: 'Villarreal', day: 3, hh: 19, mm: 0, big: false },
+    { h: 'Barcelona', a: 'Getafe', day: 2, hh: 21, mm: 0, big: true },
+    // Thursday 24 Sep 2026 (Matchday 7)
+    { h: 'Espanyol', a: 'Villarreal', day: 3, hh: 19, mm: 0, big: true },
     { h: 'Las Palmas', a: 'Real Betis', day: 3, hh: 19, mm: 0, big: false },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
+    { h: 'Celta Vigo', a: 'Atlético Madrid', day: 3, hh: 21, mm: 0, big: true },
+    // Weekend Round (Friday 25 to Sunday 27 Sep 2026 - Matchday 8)
     { h: 'Real Valladolid', a: 'Mallorca', day: 4, hh: 21, mm: 0, big: false },
     { h: 'Getafe', a: 'Deportivo Alavés', day: 5, hh: 14, mm: 0, big: false },
     { h: 'Rayo Vallecano', a: 'Leganés', day: 5, hh: 16, mm: 15, big: false },
@@ -2424,11 +2445,6 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Juventus', a: 'Napoli', day: -1, hh: 18, mm: 0, big: true, finished: true, homeScore: 0, awayScore: 0 },
     { h: 'AS Roma', a: 'Udinese', day: -1, hh: 18, mm: 0, big: true, finished: true, homeScore: 3, awayScore: 0 },
     { h: 'Fiorentina', a: 'Lazio', day: -1, hh: 12, mm: 30, big: true, finished: true, homeScore: 2, awayScore: 1 },
-    // Coppa Italia Midweek (Tuesday 22 & Wednesday 23 Sep 2026)
-    { h: 'Cagliari', a: 'Cremonese', day: 1, hh: 18, mm: 30, big: false },
-    { h: 'Torino', a: 'Empoli', day: 1, hh: 21, mm: 0, big: true },
-    { h: 'Genoa', a: 'Sampdoria', day: 2, hh: 21, mm: 0, big: true },
-    { h: 'Napoli', a: 'Palermo', day: 2, hh: 21, mm: 0, big: true },
     // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
     { h: 'AC Milan', a: 'Lecce', day: 4, hh: 20, mm: 45, big: true },
     { h: 'Udinese', a: 'Internazionale', day: 5, hh: 15, mm: 0, big: true },
@@ -2664,16 +2680,8 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Oleksandriya', a: 'Polissya Zhytomyr', day: 6, hh: 13, mm: 30, big: true },
     { h: 'Kryvbas Kryvyi Rih', a: 'Karpaty Lviv', day: 6, hh: 16, mm: 0, big: false }
   ],
-  caf_cl: [
-    { h: 'Al Ahly', a: 'Mamelodi Sundowns', day: 11, hh: 19, mm: 0, big: true },
-    { h: 'Espérance de Tunis', a: 'Pyramids FC', day: 11, hh: 17, mm: 0, big: true },
-    { h: 'Orlando Pirates', a: 'TP Mazembe', day: 12, hh: 18, mm: 0, big: true }
-  ],
-  caf_cc: [
-    { h: 'Zamalek', a: 'RS Berkane', day: 11, hh: 19, mm: 0, big: true },
-    { h: 'USM Alger', a: 'Simba SC', day: 12, hh: 17, mm: 0, big: true },
-    { h: 'CS Sfaxien', a: 'Stellenbosch', day: 12, hh: 16, mm: 0, big: false }
-  ],
+  caf_cl: [],
+  caf_cc: [],
   botola: [
     { h: 'Raja Casablanca', a: 'Wydad AC', day: 5, hh: 18, mm: 0, big: true },
     { h: 'RS Berkane', a: 'AS FAR Rabat', day: 6, hh: 16, mm: 0, big: true },
@@ -2685,9 +2693,10 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Ceramica Cleopatra', a: 'Smouha', day: 6, hh: 19, mm: 0, big: false }
   ],
   afc_cl: [
-    { h: 'Al Hilal', a: 'Al Nassr', day: 8, hh: 18, mm: 0, big: true },
-    { h: 'Vissel Kobe', a: 'Shanghai Port', day: 8, hh: 11, mm: 0, big: true },
-    { h: 'Al Ain', a: 'Al Ittihad', day: 9, hh: 17, mm: 0, big: true }
+    // AFC Champions League Elite Matchday 2 (30 Sep - 1 Oct 2026)
+    { h: 'Al Nassr', a: 'Al Rayyan', day: 9, hh: 20, mm: 0, big: true },
+    { h: 'Al Hilal', a: 'Al Shorta', day: 10, hh: 20, mm: 0, big: true },
+    { h: 'Kawasaki Frontale', a: 'Gwangju FC', day: 10, hh: 12, mm: 0, big: false }
   ],
   aleague: [
     { h: 'Melbourne City', a: 'Melbourne Victory', day: 5, hh: 9, mm: 45, big: true },
@@ -2712,11 +2721,10 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Al Ettifaq', a: 'Al Fateh', day: 5, hh: 20, mm: 0, big: false }
   ],
   argliga: [
-    // Monday Night Clausura (21 Sep 2026)
+    // Completed Monday Night Clausura (21 Sep 2026)
     { h: 'Aldosivi', a: 'Atlético Tucumán', day: 0, hh: 19, mm: 30, big: false },
     { h: 'Belgrano', a: 'Estudiantes Río Cuarto', day: 0, hh: 20, mm: 15, big: false },
     { h: 'Vélez Sarsfield', a: 'Tigre', day: 0, hh: 22, mm: 30, big: true },
-    { h: 'Barracas Central', a: 'Independiente Rivadavia', day: 0, hh: 23, mm: 0, big: false },
     // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
     { h: 'Racing Club', a: 'Platense', day: 4, hh: 22, mm: 0, big: true },
     { h: 'Boca Juniors', a: 'Argentinos Juniors', day: 5, hh: 20, mm: 0, big: true },
@@ -2728,25 +2736,19 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Always Ready', a: 'Oriente Petrolero', day: 4, hh: 19, mm: 0, big: false }
   ],
   chile: [
-    { h: 'Colo-Colo', a: 'Universidad de Chile', day: 5, hh: 19, mm: 0, big: true },
-    { h: 'Universidad Católica', a: 'Unión Española', day: 4, hh: 21, mm: 30, big: false }
+    // Weekend Matchday 26 (Saturday 26 & Sunday 27 Sep 2026)
+    { h: 'Colo-Colo', a: 'Cobresal', day: 5, hh: 23, mm: 0, big: true },
+    { h: 'Deportes Iquique', a: 'Universidad de Chile', day: 6, hh: 18, mm: 30, big: true },
+    { h: 'Audax Italiano', a: 'O\'Higgins', day: 6, hh: 21, mm: 0, big: false },
+    { h: 'Universidad Católica', a: 'Deportes Copiapó', day: 6, hh: 23, mm: 30, big: true }
   ],
   colombia: [
-    { h: 'Jaguares de Córdoba', a: 'Independiente Medellín', day: 1, hh: 23, mm: 0, big: false },
+    // Weekend Round
     { h: 'Millonarios', a: 'Santa Fe', day: 4, hh: 23, mm: 0, big: true },
     { h: 'Atlético Nacional', a: 'América de Cali', day: 5, hh: 21, mm: 10, big: true }
   ],
-  libertadores: [
-    // Quarter-finals 2nd leg
-    { h: 'Colo-Colo', a: 'River Plate', day: 1, hh: 2, mm: 30, big: true },
-    { h: 'Fluminense', a: 'Atlético Mineiro', day: 2, hh: 23, mm: 55, big: true },
-    { h: 'Botafogo', a: 'São Paulo', day: 2, hh: 2, mm: 30, big: true },
-    { h: 'Flamengo', a: 'Peñarol', day: 3, hh: 23, mm: 55, big: true }
-  ],
-  sudamericana: [
-    { h: 'Racing Club', a: 'Cruzeiro', day: 3, hh: 22, mm: 0, big: true },
-    { h: 'Lanús', a: 'Corinthians', day: 4, hh: 22, mm: 0, big: true }
-  ],
+  libertadores: [],
+  sudamericana: [],
   uruguay: [
     // Monday Night fixture (21 Sep 2026)
     { h: 'Central Español', a: 'Montevideo City Torque', day: 0, hh: 23, mm: 30, big: false },
@@ -2755,7 +2757,7 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Defensor Sporting', a: 'Danubio', day: 4, hh: 18, mm: 30, big: false }
   ],
   ecuador: [
-    // Monday Night fixture (21 Sep 2026)
+    // Completed Monday Night fixture (21 Sep 2026)
     { h: 'Manta F.C.', a: 'Orense', day: 0, hh: 21, mm: 0, big: false },
     // Weekend Round
     { h: 'LDU Quito', a: 'Independiente del Valle', day: 5, hh: 20, mm: 30, big: true },
@@ -2777,16 +2779,8 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'CSD Municipal', a: 'Comunicaciones FC', day: 5, hh: 19, mm: 0, big: true },
     { h: 'Antigua GFC', a: 'Xelajú', day: 4, hh: 22, mm: 0, big: false }
   ],
-  uefa_nations: [
-    { h: 'Malta', a: 'Andorra', day: 3, hh: 18, mm: 0, big: false },
-    { h: 'Israel', a: 'Austria', day: 3, hh: 20, mm: 45, big: true },
-    { h: 'Republic of Ireland', a: 'Kosovo', day: 3, hh: 20, mm: 45, big: true }
-  ],
-  afcon: [
-    { h: 'Morocco', a: 'Nigeria', day: 13, hh: 20, mm: 0, big: true },
-    { h: 'Senegal', a: 'Egypt', day: 14, hh: 20, mm: 0, big: true },
-    { h: 'Ivory Coast', a: 'Algeria', day: 14, hh: 17, mm: 0, big: true }
-  ],
+  uefa_nations: [],
+  afcon: [],
   kategoria_superiore: [
     { h: 'KF Partizani', a: 'KF Tirana', day: 4, hh: 17, mm: 0, big: true },
     { h: 'Egnatia', a: 'Vllaznia', day: 5, hh: 14, mm: 0, big: false }
@@ -2911,130 +2905,89 @@ export const OFFICIAL_ROUND_FIXTURES = {
     { h: 'Slavia Mozyr', a: 'Isloch Minsk', day: 4, hh: 14, mm: 0, big: false }
   ],
   zimbabwe: [
-    { h: 'Simba Bhora', a: 'Highlanders FC', day: 0, hh: 15, mm: 0, big: true },
-    { h: 'Dynamos FC', a: 'FC Platinum', day: 0, hh: 15, mm: 0, big: true },
-    { h: 'Manica Diamonds', a: 'CAPS United', day: 1, hh: 15, mm: 0, big: false },
-    { h: 'Ngezi Platinum Stars', a: 'Chicken Inn', day: 2, hh: 15, mm: 0, big: false },
-    { h: 'FC Platinum', a: 'Simba Bhora', day: 4, hh: 15, mm: 0, big: true }
+    { h: 'Simba Bhora', a: 'Highlanders FC', day: 5, hh: 15, mm: 0, big: true },
+    { h: 'Dynamos FC', a: 'FC Platinum', day: 5, hh: 15, mm: 0, big: true },
+    { h: 'FC Platinum', a: 'Simba Bhora', day: 6, hh: 15, mm: 0, big: true }
   ],
   uzbekistan: [
-    { h: 'Pakhtakor Tashkent', a: 'Navbahor Namangan', day: 0, hh: 14, mm: 30, big: true },
-    { h: 'Nasaf Qarshi', a: 'Neftchi Fergana', day: 0, hh: 14, mm: 30, big: true },
-    { h: 'AGMK Almalyk', a: 'Sogdiana Jizzakh', day: 1, hh: 15, mm: 0, big: false },
-    { h: 'Bunyodkor', a: 'Olympic Tashkent', day: 2, hh: 14, mm: 0, big: false },
-    { h: 'Navbahor Namangan', a: 'Nasaf Qarshi', day: 5, hh: 14, mm: 30, big: true }
+    { h: 'Pakhtakor Tashkent', a: 'Navbahor Namangan', day: 5, hh: 14, mm: 30, big: true },
+    { h: 'Nasaf Qarshi', a: 'Neftchi Fergana', day: 5, hh: 14, mm: 30, big: true },
+    { h: 'Navbahor Namangan', a: 'Nasaf Qarshi', day: 6, hh: 14, mm: 30, big: true }
   ],
   usl_championship: [
-    { h: 'Louisville City FC', a: 'Charleston Battery', day: 0, hh: 23, mm: 30, big: true },
-    { h: 'Tampa Bay Rowdies', a: 'Detroit City FC', day: 0, hh: 23, mm: 30, big: false },
-    { h: 'Sacramento Republic', a: 'Phoenix Rising', day: 1, hh: 2, mm: 0, big: true },
-    { h: 'New Mexico United', a: 'Colorado Springs Switchbacks', day: 2, hh: 1, mm: 0, big: false },
-    { h: 'Charleston Battery', a: 'Tampa Bay Rowdies', day: 4, hh: 23, mm: 0, big: true }
+    { h: 'Louisville City FC', a: 'Charleston Battery', day: 5, hh: 23, mm: 30, big: true },
+    { h: 'Tampa Bay Rowdies', a: 'Detroit City FC', day: 5, hh: 23, mm: 30, big: false },
+    { h: 'Charleston Battery', a: 'Tampa Bay Rowdies', day: 6, hh: 23, mm: 0, big: true }
   ],
   tunisia: [
-    { h: 'Espérance de Tunis', a: 'Étoile du Sahel', day: 0, hh: 14, mm: 30, big: true },
-    { h: 'Club Africain', a: 'US Monastir', day: 0, hh: 14, mm: 30, big: true },
-    { h: 'CS Sfaxien', a: 'Stade Tunisien', day: 1, hh: 14, mm: 30, big: false },
-    { h: 'CA Bizertin', a: 'ES Métlaoui', day: 2, hh: 14, mm: 30, big: false },
-    { h: 'Étoile du Sahel', a: 'Club Africain', day: 4, hh: 14, mm: 30, big: true }
+    { h: 'Espérance de Tunis', a: 'Étoile du Sahel', day: 5, hh: 14, mm: 30, big: true },
+    { h: 'Club Africain', a: 'US Monastir', day: 5, hh: 14, mm: 30, big: true },
+    { h: 'Étoile du Sahel', a: 'Club Africain', day: 6, hh: 14, mm: 30, big: true }
   ],
   thai_league: [
-    { h: 'Buriram United', a: 'Port FC', day: 0, hh: 12, mm: 0, big: true },
-    { h: 'Bangkok United', a: 'BG Pathum United', day: 0, hh: 13, mm: 0, big: true },
-    { h: 'Muangthong United', a: 'Ratchaburi', day: 1, hh: 12, mm: 30, big: false },
-    { h: 'Chiangrai United', a: 'Chonburi FC', day: 2, hh: 12, mm: 0, big: false },
-    { h: 'BG Pathum United', a: 'Buriram United', day: 5, hh: 12, mm: 30, big: true }
+    { h: 'Buriram United', a: 'Port FC', day: 5, hh: 12, mm: 0, big: true },
+    { h: 'Bangkok United', a: 'BG Pathum United', day: 5, hh: 13, mm: 0, big: true },
+    { h: 'BG Pathum United', a: 'Buriram United', day: 6, hh: 12, mm: 30, big: true }
   ],
   sweden_superettan: [
-    { h: 'Degerfors IF', a: 'Landskrona BoIS', day: 0, hh: 13, mm: 0, big: true },
-    { h: 'Östers IF', a: 'Helsingborgs IF', day: 0, hh: 15, mm: 0, big: true },
-    { h: 'Sandvikens IF', a: 'IK Brage', day: 1, hh: 13, mm: 0, big: false },
-    { h: 'Trelleborgs FF', a: 'Örebro SK', day: 2, hh: 17, mm: 0, big: false },
-    { h: 'Helsingborgs IF', a: 'Degerfors IF', day: 4, hh: 14, mm: 0, big: true }
+    { h: 'Degerfors IF', a: 'Landskrona BoIS', day: 5, hh: 13, mm: 0, big: true },
+    { h: 'Östers IF', a: 'Helsingborgs IF', day: 5, hh: 15, mm: 0, big: true },
+    { h: 'Helsingborgs IF', a: 'Degerfors IF', day: 6, hh: 14, mm: 0, big: true }
   ],
   romania: [
-    { h: 'FCSB', a: 'Dinamo București', day: 0, hh: 18, mm: 0, big: true },
-    { h: 'Universitatea Craiova', a: 'CFR Cluj', day: 0, hh: 15, mm: 30, big: true },
-    { h: 'Rapid București', a: 'Universitatea Cluj', day: 1, hh: 18, mm: 0, big: false },
-    { h: 'Oțelul Galați', a: 'Sepsi OSK', day: 2, hh: 15, mm: 30, big: false },
-    { h: 'CFR Cluj', a: 'FCSB', day: 4, hh: 19, mm: 0, big: true }
+    { h: 'FCSB', a: 'Dinamo București', day: 5, hh: 18, mm: 0, big: true },
+    { h: 'Universitatea Craiova', a: 'CFR Cluj', day: 5, hh: 15, mm: 30, big: true },
+    { h: 'CFR Cluj', a: 'FCSB', day: 6, hh: 19, mm: 0, big: true }
   ],
   kleague1: [
-    { h: 'Ulsan HD', a: 'Pohang Steelers', day: 0, hh: 7, mm: 30, big: true },
-    { h: 'FC Seoul', a: 'Gangwon FC', day: 0, hh: 10, mm: 0, big: true },
-    { h: 'Gimcheon Sangmu', a: 'Suwon FC', day: 1, hh: 7, mm: 30, big: false },
-    { h: 'Incheon United', a: 'Jeju United', day: 2, hh: 7, mm: 30, big: false },
-    { h: 'Pohang Steelers', a: 'FC Seoul', day: 5, hh: 7, mm: 0, big: true }
+    { h: 'Ulsan HD', a: 'Pohang Steelers', day: 5, hh: 7, mm: 30, big: true },
+    { h: 'FC Seoul', a: 'Gangwon FC', day: 5, hh: 10, mm: 0, big: true },
+    { h: 'Pohang Steelers', a: 'FC Seoul', day: 6, hh: 7, mm: 0, big: true }
   ],
   puerto_rico: [
-    { h: 'Academia Quintana', a: 'Metropolitan FA', day: 0, hh: 23, mm: 0, big: true },
-    { h: 'Bayamón FC', a: 'Puerto Rico Surf', day: 0, hh: 21, mm: 0, big: false },
-    { h: 'Guaynabo Gol SC', a: 'Caguas Sporting FC', day: 1, hh: 22, mm: 0, big: false },
-    { h: 'Fraigcomar', a: 'Mayagüez FC', day: 2, hh: 20, mm: 0, big: false },
-    { h: 'Metropolitan FA', a: 'Bayamón FC', day: 4, hh: 22, mm: 0, big: true }
+    { h: 'Academia Quintana', a: 'Metropolitan FA', day: 5, hh: 23, mm: 0, big: true },
+    { h: 'Bayamón FC', a: 'Puerto Rico Surf', day: 5, hh: 21, mm: 0, big: false },
+    { h: 'Metropolitan FA', a: 'Bayamón FC', day: 6, hh: 22, mm: 0, big: true }
   ],
   poland_1liga: [
-    { h: 'Wisła Kraków', a: 'Arka Gdynia', day: 0, hh: 15, mm: 30, big: true },
-    { h: 'Bruk-Bet Termalica', a: 'Miedź Legnica', day: 0, hh: 18, mm: 0, big: true },
-    { h: 'Ruch Chorzów', a: 'Wisła Płock', day: 1, hh: 16, mm: 0, big: false },
-    { h: 'ŁKS Łódź', a: 'Górnik Łęczna', day: 2, hh: 17, mm: 0, big: false },
-    { h: 'Arka Gdynia', a: 'Bruk-Bet Termalica', day: 4, hh: 16, mm: 0, big: true }
+    { h: 'Wisła Kraków', a: 'Arka Gdynia', day: 5, hh: 15, mm: 30, big: true },
+    { h: 'Bruk-Bet Termalica', a: 'Miedź Legnica', day: 5, hh: 18, mm: 0, big: true },
+    { h: 'Arka Gdynia', a: 'Bruk-Bet Termalica', day: 6, hh: 16, mm: 0, big: true }
   ],
   panama: [
-    { h: 'Tauro FC', a: 'CD Plaza Amador', day: 0, hh: 22, mm: 0, big: true },
-    { h: 'CA Independiente', a: 'San Francisco FC', day: 0, hh: 23, mm: 30, big: true },
-    { h: 'Sporting San Miguelito', a: 'Alianza FC', day: 1, hh: 22, mm: 0, big: false },
-    { h: 'Herrera FC', a: 'Deportivo Árabe Unido', day: 2, hh: 21, mm: 0, big: false },
-    { h: 'CD Plaza Amador', a: 'CA Independiente', day: 4, hh: 22, mm: 30, big: true }
+    { h: 'Tauro FC', a: 'CD Plaza Amador', day: 5, hh: 22, mm: 0, big: true },
+    { h: 'CA Independiente', a: 'San Francisco FC', day: 5, hh: 23, mm: 30, big: true },
+    { h: 'CD Plaza Amador', a: 'CA Independiente', day: 6, hh: 22, mm: 30, big: true }
   ],
   norway_1div: [
-    { h: 'Vålerenga', a: 'Bryne FK', day: 0, hh: 14, mm: 0, big: true },
-    { h: 'Moss FK', a: 'Lyn 1896', day: 0, hh: 16, mm: 0, big: false },
-    { h: 'Egersunds IK', a: 'Kongsvinger IL', day: 1, hh: 14, mm: 0, big: false },
-    { h: 'Sogndal', a: 'Raufoss IL', day: 2, hh: 17, mm: 0, big: false },
-    { h: 'Bryne FK', a: 'Moss FK', day: 5, hh: 15, mm: 0, big: true }
+    { h: 'Vålerenga', a: 'Bryne FK', day: 5, hh: 14, mm: 0, big: true },
+    { h: 'Moss FK', a: 'Lyn 1896', day: 5, hh: 16, mm: 0, big: false },
+    { h: 'Bryne FK', a: 'Moss FK', day: 6, hh: 15, mm: 0, big: true }
   ],
   north_macedonia: [
-    { h: 'Shkëndija', a: 'Struga Trim-Lum', day: 0, hh: 13, mm: 30, big: true },
-    { h: 'Rabotnički', a: 'Vardar Skopje', day: 0, hh: 13, mm: 30, big: true, finished: true, homeScore: 0, awayScore: 1 },
-    { h: 'Sileks', a: 'KF Gostivari', day: 1, hh: 13, mm: 30, big: false },
-    { h: 'Pelister Bitola', a: 'Tikveš Kavadarci', day: 2, hh: 13, mm: 30, big: false },
-    { h: 'Struga Trim-Lum', a: 'Rabotnički', day: 4, hh: 14, mm: 0, big: true }
+    { h: 'Shkëndija', a: 'Struga Trim-Lum', day: 5, hh: 13, mm: 30, big: true },
+    { h: 'Struga Trim-Lum', a: 'Rabotnički', day: 6, hh: 14, mm: 0, big: true }
   ],
   iceland_1deild: [
-    { h: 'ÍBV Vestmannaeyjar', a: 'Keflavík ÍF', day: 0, hh: 17, mm: 0, big: true },
-    { h: 'Fjölnir', a: 'Afturelding', day: 0, hh: 17, mm: 0, big: false },
-    { h: 'Grindavík', a: 'Þróttur Reykjavík', day: 1, hh: 16, mm: 30, big: false },
-    { h: 'Leiknir Reykjavík', a: 'Njarðvík', day: 2, hh: 17, mm: 0, big: false },
-    { h: 'Keflavík ÍF', a: 'Fjölnir', day: 5, hh: 16, mm: 0, big: true }
+    { h: 'ÍBV Vestmannaeyjar', a: 'Keflavík ÍF', day: 5, hh: 17, mm: 0, big: true },
+    { h: 'Keflavík ÍF', a: 'Fjölnir', day: 6, hh: 16, mm: 0, big: true }
   ],
   iceland_urvalsdeild: [
-    { h: 'Víkingur Reykjavík', a: 'Breiðablik', day: 0, hh: 19, mm: 15, big: true },
-    { h: 'Valur Reykjavík', a: 'Stjarnan', day: 0, hh: 17, mm: 0, big: true },
-    { h: 'FH Hafnarfjörður', a: 'ÍA Akranes', day: 1, hh: 18, mm: 0, big: false },
-    { h: 'KR Reykjavík', a: 'KA Akureyri', day: 2, hh: 17, mm: 0, big: false },
-    { h: 'Breiðablik', a: 'Valur Reykjavík', day: 4, hh: 18, mm: 0, big: true }
+    { h: 'Víkingur Reykjavík', a: 'Breiðablik', day: 5, hh: 19, mm: 15, big: true },
+    { h: 'Breiðablik', a: 'Valur Reykjavík', day: 6, hh: 18, mm: 0, big: true }
   ],
   finland_ykkosliiga: [
-    { h: 'KTP Kotka', a: 'FF Jaro', day: 0, hh: 14, mm: 0, big: true },
-    { h: 'TPS Turku', a: 'JIPPO Joensuu', day: 0, hh: 16, mm: 0, big: false },
-    { h: 'SJK Akatemia', a: 'SalPa', day: 1, hh: 15, mm: 0, big: false },
-    { h: 'PK-35 Helsinki', a: 'MP Mikkeli', day: 2, hh: 14, mm: 0, big: false },
-    { h: 'FF Jaro', a: 'TPS Turku', day: 5, hh: 15, mm: 0, big: true }
+    { h: 'KTP Kotka', a: 'FF Jaro', day: 5, hh: 14, mm: 0, big: true },
+    { h: 'FF Jaro', a: 'TPS Turku', day: 6, hh: 15, mm: 0, big: true }
   ],
   finland_ykkonen: [
-    { h: 'Klubi 04', a: 'KPV Kokkola', day: 0, hh: 13, mm: 0, big: true },
-    { h: 'OLS Oulu', a: 'Atlantis FC', day: 0, hh: 15, mm: 0, big: false },
-    { h: 'Jazz Pori', a: 'RoPS Rovaniemi', day: 1, hh: 14, mm: 0, big: false },
-    { h: 'EPS Espoo', a: 'PKKU Kerava', day: 2, hh: 16, mm: 0, big: false },
-    { h: 'KPV Kokkola', a: 'OLS Oulu', day: 4, hh: 14, mm: 0, big: true }
+    { h: 'Klubi 04', a: 'KPV Kokkola', day: 5, hh: 13, mm: 0, big: true },
+    { h: 'KPV Kokkola', a: 'OLS Oulu', day: 6, hh: 14, mm: 0, big: true }
   ],
   brasileiro_serieb: [
-    { h: 'Santos FC', a: 'Sport Recife', day: 0, hh: 20, mm: 0, big: true },
-    { h: 'Novorizontino', a: 'Mirassol', day: 0, hh: 22, mm: 30, big: true },
-    { h: 'América Mineiro', a: 'Ceará SC', day: 1, hh: 21, mm: 0, big: false },
-    { h: 'Vila Nova', a: 'Coritiba', day: 2, hh: 23, mm: 0, big: false },
-    { h: 'Sport Recife', a: 'América Mineiro', day: 4, hh: 20, mm: 0, big: true }
+    { h: 'Santos FC', a: 'Sport Recife', day: 5, hh: 20, mm: 0, big: true },
+    { h: 'Novorizontino', a: 'Mirassol', day: 5, hh: 22, mm: 30, big: true },
+    { h: 'Sport Recife', a: 'América Mineiro', day: 6, hh: 20, mm: 0, big: true }
   ],
   austria_erste: [
     { h: 'SV Ried', a: 'Admira Wacker', day: 4, hh: 18, mm: 10, big: true },

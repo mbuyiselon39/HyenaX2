@@ -206,7 +206,21 @@ export const WOMENS_AND_CUPS_TEAMS = {
   'charlton athletic women': { name: 'Charlton Athletic Women', rating: 78, domestic: 'womens_championship', form: ['W','D','W','W','L'], xgFor: 1.80, xgAgainst: 1.15 },
   'durham cwefc': { name: 'Durham Women FC', rating: 77, domestic: 'womens_championship', form: ['L','W','D','W','D'], xgFor: 1.55, xgAgainst: 1.30 },
   'sheffield united women': { name: 'Sheffield United Women', rating: 76, domestic: 'womens_championship', form: ['L','D','L','W','L'], xgFor: 1.30, xgAgainst: 1.55 },
-  'newcastle united women': { name: 'Newcastle United Women', rating: 78, domestic: 'womens_championship', form: ['W','W','L','D','W'], xgFor: 1.90, xgAgainst: 1.20 }
+  'newcastle united women': { name: 'Newcastle United Women', rating: 78, domestic: 'womens_championship', form: ['W','W','L','D','W'], xgFor: 1.90, xgAgainst: 1.20 },
+  'hb koge women': { name: 'HB Køge Women', rating: 76, domestic: 'uwcl', form: ['W','L','W','D','L'], xgFor: 1.30, xgAgainst: 1.60 },
+  'benfica women': { name: 'Benfica Women', rating: 82, domestic: 'uwcl', form: ['W','W','W','D','L'], xgFor: 1.85, xgAgainst: 1.15 },
+  'oh leuven women': { name: 'OH Leuven Women', rating: 77, domestic: 'uwcl', form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.50 },
+  'servette chenois feminin': { name: 'Servette Chênois Féminin', rating: 77, domestic: 'uwcl', form: ['W','W','D','L','W'], xgFor: 1.45, xgAgainst: 1.45 },
+  'austria wien women': { name: 'Austria Wien Women', rating: 76, domestic: 'uwcl', form: ['W','L','W','D','L'], xgFor: 1.30, xgAgainst: 1.65 },
+  'watford women': { name: 'Watford Women', rating: 74, domestic: 'womens_championship', form: ['L','D','L','W','L'], xgFor: 1.15, xgAgainst: 1.70 },
+  'sunderland women': { name: 'Sunderland Women', rating: 75, domestic: 'womens_championship', form: ['D','W','L','W','D'], xgFor: 1.30, xgAgainst: 1.50 },
+  'nottingham forest women': { name: 'Nottingham Forest Women', rating: 74, domestic: 'womens_championship', form: ['W','L','W','L','D'], xgFor: 1.25, xgAgainst: 1.60 },
+  'dc power fc': { name: 'DC Power FC', rating: 76, domestic: 'usl_super_league', form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.30 },
+  'fort lauderdale united fc': { name: 'Fort Lauderdale United FC', rating: 76, domestic: 'usl_super_league', form: ['D','W','W','L','D'], xgFor: 1.45, xgAgainst: 1.35 },
+  'vfl wolfsburg frauen': { name: 'VfL Wolfsburg Frauen', rating: 85, domestic: 'frauen_bundesliga', form: ['W','W','W','D','W'], xgFor: 2.45, xgAgainst: 0.85 },
+  'acf fiorentina femminile': { name: 'ACF Fiorentina Femminile', rating: 78, domestic: 'serie_a_fem', form: ['W','D','W','L','W'], xgFor: 1.70, xgAgainst: 1.25 },
+  'galatasaray petrol ofisi kadin': { name: 'Galatasaray Petrol Ofisi Kadın', rating: 77, domestic: 'uwcl', form: ['W','W','D','W','L'], xgFor: 1.85, xgAgainst: 1.20 },
+  'sk slavia praha zeny': { name: 'SK Slavia Praha Ženy', rating: 77, domestic: 'uwcl', form: ['W','W','W','D','L'], xgFor: 1.80, xgAgainst: 1.15 }
 };
 
 export const WOMENS_AND_CUPS_CALENDAR_FIXTURES = [
@@ -286,8 +300,34 @@ export const WOMENS_AND_CUPS_CALENDAR_FIXTURES = [
   { leagueId: 'womens_championship', h: 'London City Lionesses', a: 'Birmingham City Women', date: '2026-09-20', hh: 15, mm: 0, big: true, finished: true, homeScore: 1, awayScore: 0 },
   { leagueId: 'womens_championship', h: 'Newcastle United Women', a: 'Charlton Athletic Women', date: '2026-09-27', hh: 15, mm: 0, big: false, finished: false },
 
+  // USL Super League (USA)
+  { leagueId: 'usl_super_league', h: 'DC Power FC', a: 'Fort Lauderdale United FC', date: '2026-09-22', hh: 17, mm: 0, big: false, finished: false },
+
   // UEFA Women's Champions League (UWCL Qualifiers & Group Stage)
-  { leagueId: 'uwcl', h: 'Arsenal Women', a: 'BK Häcken Women', date: '2026-09-23', hh: 20, mm: 30, big: true, finished: false },
-  { leagueId: 'uwcl', h: 'Paris FC Féminin', a: 'Manchester City Women', date: '2026-09-24', hh: 19, mm: 0, big: true, finished: false },
-  { leagueId: 'uwcl', h: 'Juventus Women', a: 'Paris Saint-Germain Féminin', date: '2026-09-24', hh: 21, mm: 0, big: true, finished: false }
+  // Tuesday 22 September 2026
+  { leagueId: 'uwcl', h: 'Bayern Munich Frauen', a: 'Manchester City Women', date: '2026-09-22', hh: 18, mm: 45, big: true, finished: false },
+  { leagueId: 'uwcl', h: 'Inter Milan Women', a: 'BK Häcken Women', date: '2026-09-22', hh: 18, mm: 45, big: true, finished: false },
+  { leagueId: 'uwcl', h: 'Arsenal Women', a: 'HB Køge Women', date: '2026-09-22', hh: 21, mm: 0, big: true, finished: false },
+  { leagueId: 'uwcl', h: 'Juventus Women', a: 'Benfica Women', date: '2026-09-22', hh: 21, mm: 0, big: true, finished: false },
+  { leagueId: 'uwcl', h: 'Real Madrid Femenino', a: 'Paris Saint-Germain Féminin', date: '2026-09-22', hh: 21, mm: 0, big: true, finished: false },
+
+  // Wednesday 23 September 2026
+  { leagueId: 'uwcl', h: 'OH Leuven Women', a: 'AS Roma Women', date: '2026-09-23', hh: 18, mm: 45, big: false, finished: false },
+  { leagueId: 'uwcl', h: 'Servette Chênois Féminin', a: 'Olympique Lyonnais Féminin', date: '2026-09-23', hh: 18, mm: 45, big: true, finished: false },
+  { leagueId: 'uwcl', h: 'FC Barcelona Femení', a: 'Paris FC Féminin', date: '2026-09-23', hh: 21, mm: 0, big: true, finished: false },
+  { leagueId: 'uwcl', h: 'Chelsea Women', a: 'Austria Wien Women', date: '2026-09-23', hh: 21, mm: 0, big: true, finished: false },
+
+  // Thursday 24 September 2026
+  { leagueId: 'uwcl', h: 'VfL Wolfsburg Frauen', a: 'ACF Fiorentina Femminile', date: '2026-09-24', hh: 18, mm: 45, big: true, finished: false },
+  { leagueId: 'uwcl', h: 'Galatasaray Petrol Ofisi Kadın', a: 'SK Slavia Praha Ženy', date: '2026-09-24', hh: 20, mm: 0, big: false, finished: false },
+
+  // English Subway Women's League Cup (Wednesday 23 September 2026)
+  { leagueId: 'womens_league_cup', h: 'Tottenham Hotspur Women', a: 'West Ham United Women', date: '2026-09-23', hh: 20, mm: 0, big: true, finished: false },
+  { leagueId: 'womens_league_cup', h: 'Crystal Palace Women', a: 'Watford Women', date: '2026-09-23', hh: 20, mm: 0, big: false, finished: false },
+  { leagueId: 'womens_league_cup', h: 'Nottingham Forest Women', a: 'Aston Villa Women', date: '2026-09-23', hh: 20, mm: 0, big: false, finished: false },
+  { leagueId: 'womens_league_cup', h: 'Manchester United Women', a: 'Sheffield United Women', date: '2026-09-23', hh: 20, mm: 0, big: true, finished: false },
+  { leagueId: 'womens_league_cup', h: 'Liverpool Women', a: 'Sunderland Women', date: '2026-09-23', hh: 20, mm: 0, big: true, finished: false },
+  { leagueId: 'womens_league_cup', h: 'Everton Women', a: 'Birmingham City Women', date: '2026-09-23', hh: 20, mm: 0, big: false, finished: false },
+  { leagueId: 'womens_league_cup', h: 'Leicester City Women', a: 'London City Lionesses', date: '2026-09-23', hh: 20, mm: 30, big: false, finished: false },
+  { leagueId: 'womens_league_cup', h: 'Brighton & Hove Albion Women', a: 'Charlton Athletic Women', date: '2026-09-23', hh: 20, mm: 45, big: false, finished: false }
 ];
