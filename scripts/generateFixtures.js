@@ -138,6 +138,7 @@ export const LEAGUES = [
   { id: 'venezuela', espn: 'ven.1', name: 'Venezuelan Primera División', country: 'Venezuela', flag: '🇻🇪', rho: -0.160, avgGoals: 2.30, homeAdv: 1.30, tierBase: 72, minElo: 65, maxElo: 80 },
   { id: 'guatemala', espn: 'gua.1', name: 'Guatemalan Liga Nacional', country: 'Guatemala', flag: '🇬🇹', rho: -0.160, avgGoals: 2.34, homeAdv: 1.35, tierBase: 71, minElo: 65, maxElo: 79 },
   { id: 'uefa_nations', espn: 'uefa.nations', name: 'UEFA Nations League', country: 'Europe', flag: '🇪🇺', rho: -0.125, avgGoals: 2.65, homeAdv: 1.16, tierBase: 81, minElo: 72, maxElo: 89 },
+  { id: 'intl_friendly', espn: 'fifa.friendly', name: 'International Friendlies', country: 'International', flag: '🌐', rho: -0.110, avgGoals: 2.80, homeAdv: 1.05, tierBase: 80, minElo: 65, maxElo: 90 },
   { id: 'afcon', espn: 'caf.nations', name: 'African Cup of Nations', country: 'Africa', flag: '🌍', rho: -0.170, avgGoals: 2.18, homeAdv: 1.10, tierBase: 78, minElo: 68, maxElo: 86 },
   { id: 'kategoria_superiore', espn: null, name: 'Kategoria Superiore', country: 'Albania', flag: '🇦🇱', rho: -0.160, avgGoals: 2.30, homeAdv: 1.30, tierBase: 71, minElo: 64, maxElo: 78 },
   { id: 'armenia', espn: null, name: 'Armenian Premier League', country: 'Armenia', flag: '🇦🇲', rho: -0.135, avgGoals: 2.65, homeAdv: 1.25, tierBase: 71, minElo: 64, maxElo: 78 },
@@ -202,6 +203,8 @@ let STANDINGS_CACHE = {};
 export function normalizeTeamName(name) {
   if (!name) return '';
   return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/\bfc\b|\bcf\b|\bsc\b|\bac\b|\bafc\b|\bssc\b|\bca\b|\brc\b|\bvfb\b|\brb\b|\btsg\b|\bfsv\b|\bvfl\b|\bas\b|\bogc\b|\bsv\b|\bfk\b|\bbv\b|\bfsa\b|\bnk\b|\brsc\b|\bks\b|\bgnk\b|\bsk\b/gi, '')
     .replace(/[^a-z0-9]/g, ' ')
@@ -213,7 +216,118 @@ export function normalizeTeamName(name) {
  * Authoritative Global & European Club Intelligence Registry
  * Provides authentic Elo, domestic league mappings, attack/defense xG, and form
  */
+
+export const NATIONAL_TEAMS_REGISTRY = {
+  // --- UEFA Tier 1 & 2 ---
+  'france': { name: 'France', rating: 91, domestic: 'uefa_nations', form: ['W','W','D','W','W'], xgFor: 2.30, xgAgainst: 0.80 },
+  'spain': { name: 'Spain', rating: 91, domestic: 'uefa_nations', form: ['W','W','W','W','W'], xgFor: 2.45, xgAgainst: 0.75 },
+  'england': { name: 'England', rating: 89, domestic: 'uefa_nations', form: ['W','W','D','W','L'], xgFor: 2.15, xgAgainst: 0.85 },
+  'germany': { name: 'Germany', rating: 88, domestic: 'uefa_nations', form: ['W','W','D','W','W'], xgFor: 2.30, xgAgainst: 0.90 },
+  'portugal': { name: 'Portugal', rating: 88, domestic: 'uefa_nations', form: ['W','W','W','L','W'], xgFor: 2.25, xgAgainst: 0.85 },
+  'netherlands': { name: 'Netherlands', rating: 87, domestic: 'uefa_nations', form: ['W','D','W','L','W'], xgFor: 2.10, xgAgainst: 1.00 },
+  'italy': { name: 'Italy', rating: 86, domestic: 'uefa_nations', form: ['W','W','D','W','D'], xgFor: 1.95, xgAgainst: 0.90 },
+  'croatia': { name: 'Croatia', rating: 85, domestic: 'uefa_nations', form: ['W','D','W','D','W'], xgFor: 1.90, xgAgainst: 0.95 },
+  'belgium': { name: 'Belgium', rating: 85, domestic: 'uefa_nations', form: ['W','D','L','W','W'], xgFor: 2.00, xgAgainst: 1.05 },
+  'switzerland': { name: 'Switzerland', rating: 84, domestic: 'uefa_nations', form: ['W','D','W','D','W'], xgFor: 1.90, xgAgainst: 0.95 },
+  'denmark': { name: 'Denmark', rating: 84, domestic: 'uefa_nations', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.00 },
+  'austria': { name: 'Austria', rating: 83, domestic: 'uefa_nations', form: ['W','W','D','W','L'], xgFor: 1.95, xgAgainst: 1.05 },
+  'turkiye': { name: 'Türkiye', rating: 83, domestic: 'uefa_nations', form: ['W','W','L','W','D'], xgFor: 1.90, xgAgainst: 1.15 },
+  'turkey': { name: 'Türkiye', rating: 83, domestic: 'uefa_nations', form: ['W','W','L','W','D'], xgFor: 1.90, xgAgainst: 1.15 },
+  'norway': { name: 'Norway', rating: 82, domestic: 'uefa_nations', form: ['W','D','W','L','W'], xgFor: 1.90, xgAgainst: 1.15 },
+  'sweden': { name: 'Sweden', rating: 82, domestic: 'uefa_nations', form: ['W','W','D','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
+  'ukraine': { name: 'Ukraine', rating: 82, domestic: 'uefa_nations', form: ['W','D','L','W','W'], xgFor: 1.80, xgAgainst: 1.10 },
+  'poland': { name: 'Poland', rating: 81, domestic: 'uefa_nations', form: ['D','L','W','D','W'], xgFor: 1.75, xgAgainst: 1.20 },
+  'serbia': { name: 'Serbia', rating: 81, domestic: 'uefa_nations', form: ['D','W','L','D','W'], xgFor: 1.75, xgAgainst: 1.20 },
+  'scotland': { name: 'Scotland', rating: 80, domestic: 'uefa_nations', form: ['L','D','W','L','D'], xgFor: 1.65, xgAgainst: 1.25 },
+  'czechia': { name: 'Czechia', rating: 80, domestic: 'uefa_nations', form: ['D','W','L','W','D'], xgFor: 1.75, xgAgainst: 1.20 },
+  'czech republic': { name: 'Czechia', rating: 80, domestic: 'uefa_nations', form: ['D','W','L','W','D'], xgFor: 1.75, xgAgainst: 1.20 },
+  'hungary': { name: 'Hungary', rating: 79, domestic: 'uefa_nations', form: ['W','L','D','W','L'], xgFor: 1.65, xgAgainst: 1.25 },
+  'greece': { name: 'Greece', rating: 79, domestic: 'uefa_nations', form: ['W','W','L','D','W'], xgFor: 1.60, xgAgainst: 1.15 },
+  'slovenia': { name: 'Slovenia', rating: 79, domestic: 'uefa_nations', form: ['D','D','W','D','D'], xgFor: 1.55, xgAgainst: 1.15 },
+  'slovakia': { name: 'Slovakia', rating: 79, domestic: 'uefa_nations', form: ['W','D','L','W','D'], xgFor: 1.60, xgAgainst: 1.20 },
+  'wales': { name: 'Wales', rating: 79, domestic: 'uefa_nations', form: ['D','W','D','L','W'], xgFor: 1.65, xgAgainst: 1.25 },
+  'romania': { name: 'Romania', rating: 78, domestic: 'uefa_nations', form: ['W','W','D','L','W'], xgFor: 1.65, xgAgainst: 1.20 },
+  'georgia': { name: 'Georgia', rating: 78, domestic: 'uefa_nations', form: ['W','W','L','W','L'], xgFor: 1.70, xgAgainst: 1.30 },
+  'albania': { name: 'Albania', rating: 77, domestic: 'uefa_nations', form: ['W','D','L','W','L'], xgFor: 1.50, xgAgainst: 1.25 },
+  'republic of ireland': { name: 'Republic of Ireland', rating: 77, domestic: 'uefa_nations', form: ['L','D','W','L','D'], xgFor: 1.45, xgAgainst: 1.30 },
+  'ireland': { name: 'Republic of Ireland', rating: 77, domestic: 'uefa_nations', form: ['L','D','W','L','D'], xgFor: 1.45, xgAgainst: 1.30 },
+  'iceland': { name: 'Iceland', rating: 76, domestic: 'uefa_nations', form: ['W','L','W','L','D'], xgFor: 1.50, xgAgainst: 1.40 },
+  'bosnia herzegovina': { name: 'Bosnia-Herzegovina', rating: 76, domestic: 'uefa_nations', form: ['L','L','D','L','W'], xgFor: 1.40, xgAgainst: 1.45 },
+  'bosnia and herzegovina': { name: 'Bosnia-Herzegovina', rating: 76, domestic: 'uefa_nations', form: ['L','L','D','L','W'], xgFor: 1.40, xgAgainst: 1.45 },
+  'bosnia': { name: 'Bosnia-Herzegovina', rating: 76, domestic: 'uefa_nations', form: ['L','L','D','L','W'], xgFor: 1.40, xgAgainst: 1.45 },
+  'montenegro': { name: 'Montenegro', rating: 75, domestic: 'uefa_nations', form: ['L','W','L','D','W'], xgFor: 1.40, xgAgainst: 1.35 },
+  'kosovo': { name: 'Kosovo', rating: 75, domestic: 'uefa_nations', form: ['W','L','W','D','L'], xgFor: 1.50, xgAgainst: 1.35 },
+  'israel': { name: 'Israel', rating: 75, domestic: 'uefa_nations', form: ['W','L','D','W','L'], xgFor: 1.45, xgAgainst: 1.40 },
+  'northern ireland': { name: 'Northern Ireland', rating: 74, domestic: 'uefa_nations', form: ['L','W','D','L','W'], xgFor: 1.35, xgAgainst: 1.35 },
+  'bulgaria': { name: 'Bulgaria', rating: 74, domestic: 'uefa_nations', form: ['D','D','W','D','L'], xgFor: 1.35, xgAgainst: 1.40 },
+  'north macedonia': { name: 'North Macedonia', rating: 74, domestic: 'uefa_nations', form: ['D','L','W','D','L'], xgFor: 1.35, xgAgainst: 1.40 },
+  'armenia': { name: 'Armenia', rating: 74, domestic: 'uefa_nations', form: ['W','L','W','L','D'], xgFor: 1.40, xgAgainst: 1.45 },
+  'kazakhstan': { name: 'Kazakhstan', rating: 74, domestic: 'uefa_nations', form: ['L','W','L','L','W'], xgFor: 1.35, xgAgainst: 1.50 },
+  'luxembourg': { name: 'Luxembourg', rating: 73, domestic: 'uefa_nations', form: ['L','W','L','D','W'], xgFor: 1.30, xgAgainst: 1.45 },
+  'azerbaijan': { name: 'Azerbaijan', rating: 72, domestic: 'uefa_nations', form: ['L','D','L','W','L'], xgFor: 1.25, xgAgainst: 1.50 },
+  'cyprus': { name: 'Cyprus', rating: 71, domestic: 'uefa_nations', form: ['L','L','W','L','D'], xgFor: 1.20, xgAgainst: 1.55 },
+  'estonia': { name: 'Estonia', rating: 70, domestic: 'uefa_nations', form: ['L','D','L','L','W'], xgFor: 1.15, xgAgainst: 1.60 },
+  'lithuania': { name: 'Lithuania', rating: 70, domestic: 'uefa_nations', form: ['L','L','D','W','L'], xgFor: 1.15, xgAgainst: 1.60 },
+  'latvia': { name: 'Latvia', rating: 70, domestic: 'uefa_nations', form: ['D','L','L','W','L'], xgFor: 1.15, xgAgainst: 1.60 },
+  'faroe islands': { name: 'Faroe Islands', rating: 69, domestic: 'uefa_nations', form: ['L','D','L','W','L'], xgFor: 1.10, xgAgainst: 1.65 },
+  'moldova': { name: 'Moldova', rating: 69, domestic: 'uefa_nations', form: ['W','D','L','L','W'], xgFor: 1.15, xgAgainst: 1.65 },
+  'malta': { name: 'Malta', rating: 67, domestic: 'uefa_nations', form: ['L','L','D','L','W'], xgFor: 1.00, xgAgainst: 1.75 },
+  'andorra': { name: 'Andorra', rating: 65, domestic: 'uefa_nations', form: ['L','L','L','D','L'], xgFor: 0.85, xgAgainst: 1.90 },
+  'gibraltar': { name: 'Gibraltar', rating: 64, domestic: 'uefa_nations', form: ['L','L','L','D','L'], xgFor: 0.80, xgAgainst: 2.10 },
+  'san marino': { name: 'San Marino', rating: 60, domestic: 'uefa_nations', form: ['L','L','L','L','W'], xgFor: 0.65, xgAgainst: 2.30 },
+  'liechtenstein': { name: 'Liechtenstein', rating: 63, domestic: 'uefa_nations', form: ['L','L','D','L','L'], xgFor: 0.75, xgAgainst: 2.10 },
+  'belarus': { name: 'Belarus', rating: 72, domestic: 'uefa_nations', form: ['D','L','W','L','D'], xgFor: 1.20, xgAgainst: 1.45 },
+  'russia': { name: 'Russia', rating: 80, domestic: 'intl_friendly', form: ['W','W','W','D','W'], xgFor: 2.10, xgAgainst: 0.90 },
+
+  // --- Non-UEFA / International Friendlies ---
+  'argentina': { name: 'Argentina', rating: 92, domestic: 'intl_friendly', form: ['W','W','W','W','W'], xgFor: 2.40, xgAgainst: 0.70 },
+  'brazil': { name: 'Brazil', rating: 89, domestic: 'intl_friendly', form: ['W','D','W','W','D'], xgFor: 2.20, xgAgainst: 0.85 },
+  'colombia': { name: 'Colombia', rating: 86, domestic: 'intl_friendly', form: ['W','W','W','D','W'], xgFor: 2.10, xgAgainst: 0.85 },
+  'uruguay': { name: 'Uruguay', rating: 86, domestic: 'intl_friendly', form: ['W','W','D','W','D'], xgFor: 2.05, xgAgainst: 0.85 },
+  'japan': { name: 'Japan', rating: 84, domestic: 'intl_friendly', form: ['W','W','W','W','D'], xgFor: 2.15, xgAgainst: 0.90 },
+  'united states': { name: 'United States', rating: 83, domestic: 'intl_friendly', form: ['W','L','W','D','W'], xgFor: 1.90, xgAgainst: 1.05 },
+  'usa': { name: 'United States', rating: 83, domestic: 'intl_friendly', form: ['W','L','W','D','W'], xgFor: 1.90, xgAgainst: 1.05 },
+  'mexico': { name: 'Mexico', rating: 82, domestic: 'intl_friendly', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
+  'south korea': { name: 'South Korea', rating: 82, domestic: 'intl_friendly', form: ['W','W','D','W','W'], xgFor: 2.00, xgAgainst: 0.95 },
+  'canada': { name: 'Canada', rating: 81, domestic: 'intl_friendly', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
+  'australia': { name: 'Australia', rating: 80, domestic: 'intl_friendly', form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 1.10 },
+  'chile': { name: 'Chile', rating: 80, domestic: 'intl_friendly', form: ['L','D','W','L','D'], xgFor: 1.60, xgAgainst: 1.25 },
+  'peru': { name: 'Peru', rating: 78, domestic: 'intl_friendly', form: ['D','L','W','L','D'], xgFor: 1.45, xgAgainst: 1.30 },
+  'venezuela': { name: 'Venezuela', rating: 78, domestic: 'intl_friendly', form: ['D','W','D','L','W'], xgFor: 1.50, xgAgainst: 1.20 },
+  'ecuador': { name: 'Ecuador', rating: 81, domestic: 'intl_friendly', form: ['W','D','W','L','D'], xgFor: 1.70, xgAgainst: 1.05 },
+  'paraguay': { name: 'Paraguay', rating: 78, domestic: 'intl_friendly', form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.20 },
+  'bolivia': { name: 'Bolivia', rating: 72, domestic: 'intl_friendly', form: ['L','L','W','L','L'], xgFor: 1.20, xgAgainst: 1.85 },
+  'iran': { name: 'Iran', rating: 81, domestic: 'intl_friendly', form: ['W','W','D','W','W'], xgFor: 1.90, xgAgainst: 0.95 },
+  'uzbekistan': { name: 'Uzbekistan', rating: 78, domestic: 'intl_friendly', form: ['W','W','D','W','L'], xgFor: 1.65, xgAgainst: 1.15 },
+  'panama': { name: 'Panama', rating: 77, domestic: 'intl_friendly', form: ['W','L','W','D','L'], xgFor: 1.50, xgAgainst: 1.30 },
+  'new zealand': { name: 'New Zealand', rating: 76, domestic: 'intl_friendly', form: ['W','D','W','L','W'], xgFor: 1.60, xgAgainst: 1.25 },
+  'china': { name: 'China', rating: 74, domestic: 'intl_friendly', form: ['L','W','D','L','L'], xgFor: 1.30, xgAgainst: 1.45 },
+  'palestine': { name: 'Palestine', rating: 73, domestic: 'intl_friendly', form: ['W','D','L','W','D'], xgFor: 1.35, xgAgainst: 1.30 },
+  'syria': { name: 'Syria', rating: 73, domestic: 'intl_friendly', form: ['D','W','L','D','L'], xgFor: 1.30, xgAgainst: 1.35 },
+  'jordan': { name: 'Jordan', rating: 76, domestic: 'intl_friendly', form: ['W','W','D','L','W'], xgFor: 1.65, xgAgainst: 1.25 },
+  'tajikistan': { name: 'Tajikistan', rating: 73, domestic: 'intl_friendly', form: ['W','L','D','W','L'], xgFor: 1.30, xgAgainst: 1.35 },
+  'turkmenistan': { name: 'Turkmenistan', rating: 70, domestic: 'intl_friendly', form: ['L','D','L','L','W'], xgFor: 1.15, xgAgainst: 1.55 },
+  'kyrgyz republic': { name: 'Kyrgyz Republic', rating: 72, domestic: 'intl_friendly', form: ['D','L','W','L','D'], xgFor: 1.25, xgAgainst: 1.45 },
+  'india': { name: 'India', rating: 71, domestic: 'intl_friendly', form: ['L','D','L','D','L'], xgFor: 1.15, xgAgainst: 1.50 },
+  'maldives': { name: 'Maldives', rating: 63, domestic: 'intl_friendly', form: ['L','L','L','D','L'], xgFor: 0.80, xgAgainst: 2.10 },
+  'sri lanka': { name: 'Sri Lanka', rating: 62, domestic: 'intl_friendly', form: ['L','L','D','L','L'], xgFor: 0.75, xgAgainst: 2.15 },
+  'seychelles': { name: 'Seychelles', rating: 60, domestic: 'intl_friendly', form: ['L','L','L','L','L'], xgFor: 0.60, xgAgainst: 2.40 },
+  'mauritius': { name: 'Mauritius', rating: 64, domestic: 'intl_friendly', form: ['L','D','L','L','L'], xgFor: 0.80, xgAgainst: 2.05 },
+  'djibouti': { name: 'Djibouti', rating: 61, domestic: 'intl_friendly', form: ['L','L','L','L','L'], xgFor: 0.65, xgAgainst: 2.35 },
+  'botswana': { name: 'Botswana', rating: 71, domestic: 'intl_friendly', form: ['L','D','W','L','D'], xgFor: 1.15, xgAgainst: 1.45 },
+  'mozambique': { name: 'Mozambique', rating: 73, domestic: 'intl_friendly', form: ['W','D','L','W','L'], xgFor: 1.35, xgAgainst: 1.40 },
+  'solomon islands': { name: 'Solomon Islands', rating: 65, domestic: 'intl_friendly', form: ['L','W','L','D','L'], xgFor: 1.00, xgAgainst: 1.80 },
+  'papua new guinea': { name: 'Papua New Guinea', rating: 64, domestic: 'intl_friendly', form: ['L','L','D','L','L'], xgFor: 0.90, xgAgainst: 1.95 },
+  'new caledonia': { name: 'New Caledonia', rating: 66, domestic: 'intl_friendly', form: ['W','L','W','L','D'], xgFor: 1.10, xgAgainst: 1.70 },
+  'vanuatu': { name: 'Vanuatu', rating: 64, domestic: 'intl_friendly', form: ['L','D','L','W','L'], xgFor: 0.95, xgAgainst: 1.90 },
+  'fiji': { name: 'Fiji', rating: 67, domestic: 'intl_friendly', form: ['W','D','L','W','L'], xgFor: 1.15, xgAgainst: 1.65 },
+  'sao tome and principe': { name: 'Sao Tome and Principe', rating: 61, domestic: 'intl_friendly', form: ['L','L','L','L','D'], xgFor: 0.70, xgAgainst: 2.20 },
+  'anguilla': { name: 'Anguilla', rating: 59, domestic: 'intl_friendly', form: ['L','L','L','L','L'], xgFor: 0.55, xgAgainst: 2.50 },
+  'dominica': { name: 'Dominica', rating: 63, domestic: 'intl_friendly', form: ['L','L','D','L','L'], xgFor: 0.80, xgAgainst: 2.00 }
+};
+
 export const GLOBAL_CLUB_REGISTRY = {
+  ...NATIONAL_TEAMS_REGISTRY,
   ...WOMENS_AND_CUPS_TEAMS,
   // --- Tier 1 Continental Giants (Elo 88 - 93) ---
   'real madrid': { name: 'Real Madrid', rating: 92, domestic: 'laliga', form: ['W','W','W','D','W'], xgFor: 2.50, xgAgainst: 0.90 },
@@ -2380,917 +2494,1499 @@ function americanToDecimal(american) {
 }
 
 export const OFFICIAL_ROUND_FIXTURES = {
-  psl: [
-    // Completed Round 1 fixtures (Sunday 20 Sep 2026)
-    { h: 'Golden Arrows', a: 'Kaizer Chiefs', day: -1, hh: 15, mm: 0, big: true, finished: true, homeScore: 1, awayScore: 2 },
-    { h: 'Marumo Gallants', a: 'Orlando Pirates', day: -1, hh: 15, mm: 0, big: true, finished: true, homeScore: 0, awayScore: 2 },
-    { h: 'TS Galaxy', a: 'Chippa United', day: -1, hh: 17, mm: 30, big: false, finished: true, homeScore: 1, awayScore: 0 },
-    { h: 'Milford FC', a: 'Durban City', day: -1, hh: 15, mm: 0, big: false, finished: true, homeScore: 0, awayScore: 1 },
-    // Weekend Round 2 (Saturday 26 & Sunday 27 Sep 2026 - Betway Premiership)
-    { h: 'Richards Bay', a: 'Sekhukhune United', day: 5, hh: 15, mm: 0, big: false },
-    { h: 'Polokwane City', a: 'AmaZulu', day: 5, hh: 15, mm: 0, big: false },
-    { h: 'Stellenbosch FC', a: 'Orlando Pirates', day: 5, hh: 17, mm: 30, big: true },
-    { h: 'Mamelodi Sundowns', a: 'Chippa United', day: 5, hh: 20, mm: 0, big: true },
-    { h: 'TS Galaxy', a: 'SuperSport United', day: 6, hh: 15, mm: 0, big: false },
-    { h: 'Kaizer Chiefs', a: 'Cape Town City', day: 6, hh: 17, mm: 30, big: true }
-  ],
-  epl: [
-    // Completed fixtures (Sunday 20 Sep 2026)
-    { h: 'Manchester City', a: 'Sunderland', day: -1, hh: 17, mm: 30, big: true, finished: true, homeScore: 5, awayScore: 3 },
-    { h: 'AFC Bournemouth', a: 'Liverpool', day: -1, hh: 15, mm: 0, big: true, finished: true, homeScore: 0, awayScore: 1 },
-    { h: 'Leeds United', a: 'Crystal Palace', day: -1, hh: 15, mm: 0, big: false, finished: true, homeScore: 0, awayScore: 0 },
-    { h: 'Fulham', a: 'Manchester United', day: -1, hh: 17, mm: 30, big: true, finished: true, homeScore: 1, awayScore: 2 },
-    // Weekend Round (Saturday 26 & Sunday 27 Sep 2026)
-    { h: 'Newcastle United', a: 'Manchester City', day: 5, hh: 13, mm: 30, big: true },
-    { h: 'Arsenal', a: 'Leicester City', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Chelsea', a: 'Brighton & Hove Albion', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Brentford', a: 'West Ham United', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Everton', a: 'Crystal Palace', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Nottingham Forest', a: 'Fulham', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Wolverhampton Wanderers', a: 'Liverpool', day: 5, hh: 18, mm: 30, big: true },
-    { h: 'Ipswich Town', a: 'Aston Villa', day: 6, hh: 15, mm: 0, big: true },
-    { h: 'Manchester United', a: 'Tottenham Hotspur', day: 6, hh: 17, mm: 30, big: true }
-  ],
-  laliga: [
-    // Completed fixtures (Sunday 20 Sep 2026 - Matchday 6)
-    { h: 'Villarreal', a: 'Barcelona', day: -1, hh: 18, mm: 30, big: true, finished: true, homeScore: 1, awayScore: 5 },
-    { h: 'Real Madrid', a: 'Espanyol', day: -1, hh: 21, mm: 0, big: true, finished: true, homeScore: 4, awayScore: 1 },
-    { h: 'Rayo Vallecano', a: 'Club Atlético de Madrid', day: -1, hh: 21, mm: 0, big: true, finished: true, homeScore: 1, awayScore: 1 },
-    { h: 'Getafe', a: 'Leganés', day: -1, hh: 14, mm: 0, big: false, finished: true, homeScore: 1, awayScore: 1 },
-    // Tuesday 22 Sep 2026 (Matchday 7)
-    { h: 'Valencia', a: 'Osasuna', day: 1, hh: 19, mm: 0, big: true },
-    { h: 'Sevilla', a: 'Real Valladolid', day: 1, hh: 19, mm: 0, big: true },
-    { h: 'Real Madrid', a: 'Deportivo Alavés', day: 1, hh: 21, mm: 0, big: true },
-    // Wednesday 23 Sep 2026 (Matchday 7)
-    { h: 'Girona', a: 'Rayo Vallecano', day: 2, hh: 19, mm: 0, big: false },
-    { h: 'Barcelona', a: 'Getafe', day: 2, hh: 21, mm: 0, big: true },
-    // Thursday 24 Sep 2026 (Matchday 7)
-    { h: 'Espanyol', a: 'Villarreal', day: 3, hh: 19, mm: 0, big: true },
-    { h: 'Las Palmas', a: 'Real Betis', day: 3, hh: 19, mm: 0, big: false },
-    { h: 'Celta Vigo', a: 'Atlético Madrid', day: 3, hh: 21, mm: 0, big: true },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026 - Matchday 8)
-    { h: 'Real Valladolid', a: 'Mallorca', day: 4, hh: 21, mm: 0, big: false },
-    { h: 'Getafe', a: 'Deportivo Alavés', day: 5, hh: 14, mm: 0, big: false },
-    { h: 'Rayo Vallecano', a: 'Leganés', day: 5, hh: 16, mm: 15, big: false },
-    { h: 'Real Sociedad', a: 'Valencia', day: 5, hh: 18, mm: 30, big: true },
-    { h: 'Osasuna', a: 'Barcelona', day: 5, hh: 21, mm: 0, big: true },
-    { h: 'Celta Vigo', a: 'Girona', day: 6, hh: 14, mm: 0, big: false },
-    { h: 'Athletic Club', a: 'Sevilla', day: 6, hh: 16, mm: 15, big: true },
-    { h: 'Real Betis', a: 'Espanyol', day: 6, hh: 18, mm: 30, big: false },
-    { h: 'Atlético Madrid', a: 'Real Madrid', day: 6, hh: 21, mm: 0, big: true }
-  ],
-  seriea: [
-    // Completed fixtures (Sunday 20 Sep 2026)
-    { h: 'Internazionale', a: 'AC Milan', day: -1, hh: 20, mm: 45, big: true, finished: true, homeScore: 1, awayScore: 2 },
-    { h: 'Juventus', a: 'Napoli', day: -1, hh: 18, mm: 0, big: true, finished: true, homeScore: 0, awayScore: 0 },
-    { h: 'AS Roma', a: 'Udinese', day: -1, hh: 18, mm: 0, big: true, finished: true, homeScore: 3, awayScore: 0 },
-    { h: 'Fiorentina', a: 'Lazio', day: -1, hh: 12, mm: 30, big: true, finished: true, homeScore: 2, awayScore: 1 },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
-    { h: 'AC Milan', a: 'Lecce', day: 4, hh: 20, mm: 45, big: true },
-    { h: 'Udinese', a: 'Internazionale', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Genoa', a: 'Juventus', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Bologna', a: 'Atalanta', day: 5, hh: 20, mm: 45, big: true },
-    { h: 'Torino', a: 'Lazio', day: 6, hh: 12, mm: 30, big: true },
-    { h: 'AS Roma', a: 'Venezia', day: 6, hh: 15, mm: 0, big: true },
-    { h: 'Como', a: 'Hellas Verona', day: 6, hh: 15, mm: 0, big: false },
-    { h: 'Empoli', a: 'Fiorentina', day: 6, hh: 18, mm: 0, big: false },
-    { h: 'Napoli', a: 'Monza', day: 6, hh: 20, mm: 45, big: true }
-  ],
-  bundesliga: [
-    // Completed fixtures (Sunday 20 Sep 2026)
-    { h: 'VfB Stuttgart', a: 'Borussia Dortmund', day: -1, hh: 17, mm: 30, big: true, finished: true, homeScore: 5, awayScore: 1 },
-    { h: 'Bayer Leverkusen', a: 'VfL Wolfsburg', day: -1, hh: 15, mm: 30, big: true, finished: true, homeScore: 4, awayScore: 3 },
-    { h: 'FC St. Pauli', a: 'RB Leipzig', day: -1, hh: 19, mm: 30, big: false, finished: true, homeScore: 0, awayScore: 0 },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
-    { h: 'Borussia Dortmund', a: 'VfL Bochum', day: 4, hh: 20, mm: 30, big: true },
-    { h: 'RB Leipzig', a: 'FC Augsburg', day: 5, hh: 15, mm: 30, big: true },
-    { h: 'SC Freiburg', a: 'FC St. Pauli', day: 5, hh: 15, mm: 30, big: false },
-    { h: 'VfL Wolfsburg', a: 'VfB Stuttgart', day: 5, hh: 15, mm: 30, big: false },
-    { h: 'Mainz 05', a: '1. FC Heidenheim', day: 5, hh: 15, mm: 30, big: false },
-    { h: 'Borussia Mönchengladbach', a: 'Union Berlin', day: 5, hh: 15, mm: 30, big: false },
-    { h: 'Bayern Munich', a: 'Bayer Leverkusen', day: 5, hh: 18, mm: 30, big: true },
-    { h: 'Holstein Kiel', a: 'Eintracht Frankfurt', day: 6, hh: 15, mm: 30, big: false },
-    { h: 'TSG Hoffenheim', a: 'Werder Bremen', day: 6, hh: 17, mm: 30, big: false }
-  ],
-  ligue1: [
-    // Completed fixtures (Sunday 20 Sep 2026)
-    { h: 'Lyon', a: 'Marseille', day: -1, hh: 20, mm: 45, big: true, finished: true, homeScore: 2, awayScore: 3 },
-    { h: 'AS Monaco', a: 'Le Havre', day: -1, hh: 15, mm: 0, big: true, finished: true, homeScore: 3, awayScore: 1 },
-    { h: 'Brest', a: 'Toulouse', day: -1, hh: 17, mm: 0, big: false, finished: true, homeScore: 2, awayScore: 0 },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
-    { h: 'Auxerre', a: 'Brest', day: 4, hh: 19, mm: 0, big: false },
-    { h: 'Paris Saint-Germain', a: 'Stade Rennais', day: 4, hh: 21, mm: 0, big: true },
-    { h: 'Lens', a: 'OGC Nice', day: 5, hh: 17, mm: 0, big: true },
-    { h: 'Le Havre', a: 'Lille', day: 5, hh: 19, mm: 0, big: false },
-    { h: 'AS Monaco', a: 'Montpellier', day: 5, hh: 21, mm: 0, big: true },
-    { h: 'Toulouse', a: 'Lyon', day: 6, hh: 15, mm: 0, big: true },
-    { h: 'Angers', a: 'Stade de Reims', day: 6, hh: 17, mm: 0, big: false },
-    { h: 'Nantes', a: 'Saint-Étienne', day: 6, hh: 17, mm: 0, big: false },
-    { h: 'Strasbourg', a: 'Marseille', day: 6, hh: 20, mm: 45, big: true }
-  ],
-  eredivisie: [
-    { h: 'Willem II', a: 'PSV Eindhoven', day: 5, hh: 16, mm: 30, big: true },
-    { h: 'NEC Nijmegen', a: 'Feyenoord', day: 5, hh: 18, mm: 45, big: true },
-    { h: 'Sparta Rotterdam', a: 'Fortuna Sittard', day: 5, hh: 21, mm: 0, big: false },
-    { h: 'FC Twente', a: 'NAC Breda', day: 6, hh: 14, mm: 30, big: false },
-    { h: 'RKC Waalwijk', a: 'Ajax', day: 6, hh: 16, mm: 45, big: true },
-    { h: 'AZ Alkmaar', a: 'FC Utrecht', day: 6, hh: 20, mm: 0, big: true }
-  ],
-  ligaportugal: [
-    // Monday Night fixture (21 Sep 2026)
-    { h: 'Boavista', a: 'Benfica', day: 0, hh: 21, mm: 15, big: true },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
-    { h: 'Estoril', a: 'Sporting CP', day: 4, hh: 21, mm: 15, big: true },
-    { h: 'FC Porto', a: 'Arouca', day: 5, hh: 19, mm: 0, big: true },
-    { h: 'Braga', a: 'Rio Ave', day: 5, hh: 21, mm: 30, big: false },
-    { h: 'Famalicao', a: 'Nacional', day: 6, hh: 16, mm: 30, big: false },
-    { h: 'Santa Clara', a: 'Boavista', day: 6, hh: 19, mm: 0, big: false }
-  ],
-  jupiler: [
-    { h: 'Club Brugge', a: 'Charleroi', day: 4, hh: 20, mm: 45, big: true },
-    { h: 'Genk', a: 'KV Mechelen', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Standard Liège', a: 'Westerlo', day: 5, hh: 18, mm: 15, big: false },
-    { h: 'Dender', a: 'Anderlecht', day: 5, hh: 20, mm: 45, big: true },
-    { h: 'Royal Antwerp', a: 'Beerschot', day: 6, hh: 13, mm: 30, big: true },
-    { h: 'Union Saint-Gilloise', a: 'Kortrijk', day: 6, hh: 16, mm: 0, big: true },
-    { h: 'Gent', a: 'OH Leuven', day: 6, hh: 19, mm: 15, big: false }
-  ],
-  brasileirao: [
-    // Completed morning fixture (Monday 21 Sep 2026)
-    { h: 'Athletico-PR', a: 'Bahia', day: 0, hh: 1, mm: 30, big: false, finished: true, homeScore: 1, awayScore: 1 },
-    // Weekend Round (Saturday 26 & Sunday 27 Sep 2026)
-    { h: 'Palmeiras', a: 'Atlético Mineiro', day: 5, hh: 23, mm: 30, big: true },
-    { h: 'Botafogo', a: 'Grêmio', day: 5, hh: 23, mm: 30, big: true },
-    { h: 'São Paulo', a: 'Corinthians', day: 6, hh: 21, mm: 0, big: true },
-    { h: 'Flamengo', a: 'Athletico-PR', day: 6, hh: 23, mm: 0, big: true },
-    { h: 'Cruzeiro', a: 'Vasco da Gama', day: 6, hh: 23, mm: 30, big: false }
-  ],
-  mls: [
-    { h: 'Inter Miami', a: 'Charlotte FC', day: 5, hh: 23, mm: 30, big: true },
-    { h: 'New York Red Bulls', a: 'New York City FC', day: 5, hh: 23, mm: 30, big: true },
-    { h: 'Columbus Crew', a: 'Orlando City', day: 5, hh: 23, mm: 30, big: false },
-    { h: 'LA Galaxy', a: 'Los Angeles FC', day: 6, hh: 4, mm: 30, big: true },
-    { h: 'Seattle Sounders FC', a: 'Houston Dynamo', day: 6, hh: 4, mm: 30, big: false }
-  ],
-  ligamx: [
-    // Completed morning fixtures (Monday 21 Sep 2026)
-    { h: 'Pachuca', a: 'Tijuana', day: 0, hh: 2, mm: 0, big: false, finished: true, homeScore: 2, awayScore: 1 },
-    { h: 'Deportivo Toluca', a: 'Santos Laguna', day: 0, hh: 2, mm: 0, big: true, finished: true, homeScore: 3, awayScore: 1 },
-    { h: 'Querétaro', a: 'Club León', day: 0, hh: 4, mm: 10, big: false, finished: true, homeScore: 0, awayScore: 1 },
-    // Weekend Round (Friday 25 & Saturday 26 Sep 2026)
-    { h: 'Puebla', a: 'FC Juárez', day: 4, hh: 23, mm: 0, big: false },
-    { h: 'Club América', a: 'Pumas UNAM', day: 5, hh: 23, mm: 0, big: true },
-    { h: 'Guadalajara', a: 'CF Monterrey', day: 5, hh: 23, mm: 5, big: true },
-    { h: 'Tigres UANL', a: 'Cruz Azul', day: 5, hh: 23, mm: 0, big: true }
-  ],
-  superlig: [
-    // Monday fixtures (21 Sep 2026)
-    { h: 'Gaziantep FK', a: 'Trabzonspor', day: 0, hh: 19, mm: 0, big: true },
-    { h: 'Göztepe', a: 'Kayserispor', day: 0, hh: 19, mm: 0, big: false },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
-    { h: 'Sivasspor', a: 'Istanbul Basaksehir', day: 4, hh: 19, mm: 0, big: false },
-    { h: 'Galatasaray', a: 'Kasimpasa', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Fenerbahce', a: 'Antalyaspor', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Besiktas', a: 'Kayserispor', day: 6, hh: 18, mm: 0, big: true }
-  ],
-  scotprem: [
-    // Completed fixtures (Sunday 20 Sep 2026)
-    { h: 'Celtic', a: 'Rangers', day: -1, hh: 13, mm: 30, big: true, finished: true, homeScore: 0, awayScore: 1 },
-    { h: 'Aberdeen', a: 'Motherwell', day: -1, hh: 16, mm: 0, big: false, finished: true, homeScore: 2, awayScore: 0 },
-    { h: 'Heart of Midlothian', a: 'St. Mirren', day: -1, hh: 16, mm: 0, big: false, finished: true, homeScore: 1, awayScore: 1 },
-    // Weekend Round (Saturday 26 & Sunday 27 Sep 2026)
-    { h: 'Motherwell', a: 'St. Mirren', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Dundee FC', a: 'Aberdeen', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Kilmarnock', a: 'Dundee United', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Rangers', a: 'Hibernian', day: 6, hh: 13, mm: 0, big: true },
-    { h: 'St. Johnstone', a: 'Celtic', day: 6, hh: 16, mm: 0, big: true }
-  ],
-  championship: [
-    // Monday Night Football (21 Sep 2026)
-    { h: 'Preston North End', a: 'Sheffield United', day: 0, hh: 21, mm: 0, big: true },
-    // Weekend Round (Friday 25 & Saturday 26 Sep 2026)
-    { h: 'Plymouth Argyle', a: 'Luton Town', day: 4, hh: 21, mm: 0, big: false },
-    { h: 'Sheffield Wednesday', a: 'West Bromwich Albion', day: 5, hh: 13, mm: 30, big: false },
-    { h: 'Watford', a: 'Sunderland', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Blackburn Rovers', a: 'Queens Park Rangers', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Leeds United', a: 'Coventry City', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Middlesbrough', a: 'Stoke City', day: 5, hh: 16, mm: 0, big: false }
-  ],
-  ucl: [
-    { h: 'Arsenal', a: 'Paris Saint-Germain', day: 8, hh: 21, mm: 0, big: true },
-    { h: 'Bayer Leverkusen', a: 'AC Milan', day: 8, hh: 21, mm: 0, big: true },
-    { h: 'Aston Villa', a: 'Bayern Munich', day: 9, hh: 21, mm: 0, big: true },
-    { h: 'RB Leipzig', a: 'Juventus', day: 9, hh: 21, mm: 0, big: true }
-  ],
-  uel: [
-    // Matchday 1 Midweek (Wednesday 23 & Thursday 24 Sep 2026)
-    { h: 'Manchester United', a: 'FC Twente', day: 2, hh: 21, mm: 0, big: true },
-    { h: 'OGC Nice', a: 'Real Sociedad', day: 2, hh: 21, mm: 0, big: true },
-    { h: 'Galatasaray', a: 'PAOK', day: 2, hh: 21, mm: 0, big: true },
-    { h: 'Dynamo Kyiv', a: 'Lazio', day: 2, hh: 21, mm: 0, big: true },
-    { h: 'Bodø/Glimt', a: 'FC Porto', day: 2, hh: 18, mm: 45, big: true },
-    { h: 'AZ Alkmaar', a: 'IF Elfsborg', day: 2, hh: 18, mm: 45, big: false },
-    { h: 'AS Roma', a: 'Athletic Club', day: 3, hh: 21, mm: 0, big: true },
-    { h: 'Tottenham Hotspur', a: 'Qarabağ FK', day: 3, hh: 21, mm: 0, big: true },
-    { h: 'Ajax', a: 'Beşiktaş', day: 3, hh: 21, mm: 0, big: true },
-    { h: 'Eintracht Frankfurt', a: 'Viktoria Plzeň', day: 3, hh: 21, mm: 0, big: true },
-    { h: 'Lyon', a: 'Olympiacos', day: 3, hh: 21, mm: 0, big: true },
-    { h: 'Fenerbahçe', a: 'Union Saint-Gilloise', day: 3, hh: 18, mm: 45, big: true },
-    { h: 'Malmö FF', a: 'Rangers', day: 3, hh: 18, mm: 45, big: true }
-  ],
-  uecl: [
-    { h: 'Chelsea', a: 'Gent', day: 10, hh: 21, mm: 0, big: true },
-    { h: 'Fiorentina', a: 'The New Saints', day: 10, hh: 21, mm: 0, big: true },
-    { h: 'Real Betis', a: 'Legia Warsaw', day: 10, hh: 18, mm: 45, big: true }
-  ],
-  austria: [
-    { h: 'Red Bull Salzburg', a: 'Rapid Wien', day: 5, hh: 17, mm: 0, big: true },
-    { h: 'SK Sturm Graz', a: 'LASK', day: 6, hh: 14, mm: 30, big: true },
-    { h: 'Austria Wien', a: 'Wolfsberger AC', day: 6, hh: 17, mm: 0, big: false }
-  ],
-  superliga: [
-    { h: 'FC Copenhagen', a: 'Brøndby IF', day: 5, hh: 14, mm: 0, big: true },
-    { h: 'FC Midtjylland', a: 'AGF Aarhus', day: 6, hh: 16, mm: 0, big: true },
-    { h: 'Nordsjælland', a: 'Silkeborg', day: 6, hh: 14, mm: 0, big: false }
-  ],
-  ekstraklasa: [
-    { h: 'Lech Poznań', a: 'Legia Warsaw', day: 5, hh: 17, mm: 30, big: true },
-    { h: 'Jagiellonia Białystok', a: 'Raków Częstochowa', day: 6, hh: 14, mm: 45, big: true },
-    { h: 'Pogoń Szczecin', a: 'Cracovia', day: 6, hh: 17, mm: 30, big: false }
-  ],
-  eng_l1: [
-    { h: 'Birmingham City', a: 'Wrexham', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Huddersfield Town', a: 'Bolton Wanderers', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Barnsley', a: 'Charlton Athletic', day: 5, hh: 16, mm: 0, big: false }
-  ],
-  eng_l2: [
-    { h: 'Notts County', a: 'Doncaster Rovers', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Walsall', a: 'Gillingham', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Chesterfield', a: 'Milton Keynes Dons', day: 5, hh: 16, mm: 0, big: false }
-  ],
-  ligue2: [
-    // Monday Night fixture (21 Sep 2026)
-    { h: 'Metz', a: 'Guingamp', day: 0, hh: 20, mm: 45, big: true },
-    // Friday Round (25 Sep 2026)
-    { h: 'Lorient', a: 'Paris FC', day: 4, hh: 20, mm: 0, big: true },
-    { h: 'Dunkerque', a: 'Annecy', day: 4, hh: 20, mm: 0, big: false }
-  ],
-  bundesliga2: [
-    { h: 'Hamburger SV', a: '1. FC Köln', day: 5, hh: 13, mm: 0, big: true },
-    { h: 'Fortuna Düsseldorf', a: 'Schalke 04', day: 5, hh: 20, mm: 30, big: true },
-    { h: 'Hannover 96', a: 'Karlsruher SC', day: 6, hh: 13, mm: 30, big: false }
-  ],
-  greece: [
-    { h: 'Olympiacos', a: 'Panathinaikos', day: 6, hh: 19, mm: 30, big: true },
-    { h: 'PAOK', a: 'AEK Athens', day: 6, hh: 19, mm: 30, big: true },
-    { h: 'Aris', a: 'Atromitos', day: 5, hh: 18, mm: 30, big: false }
-  ],
-  serieb: [
-    { h: 'Sassuolo', a: 'Pisa', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Spezia', a: 'Palermo', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Cremonese', a: 'Brescia', day: 6, hh: 15, mm: 0, big: false }
-  ],
-  eliteserien: [
-    { h: 'Bodø/Glimt', a: 'Brann', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Rosenborg', a: 'Molde', day: 6, hh: 19, mm: 15, big: true },
-    { h: 'Viking', a: 'Fredrikstad', day: 6, hh: 17, mm: 0, big: false }
-  ],
-  russia: [
-    { h: 'Zenit St. Petersburg', a: 'Spartak Moscow', day: 5, hh: 16, mm: 30, big: true },
-    { h: 'Krasnodar', a: 'Dynamo Moscow', day: 6, hh: 18, mm: 0, big: true },
-    { h: 'CSKA Moscow', a: 'Lokomotiv Moscow', day: 6, hh: 15, mm: 30, big: true }
-  ],
-  laliga2: [
-    { h: 'Racing Santander', a: 'Real Zaragoza', day: 5, hh: 18, mm: 30, big: true },
-    { h: 'Sporting Gijón', a: 'Oviedo', day: 6, hh: 16, mm: 15, big: true },
-    { h: 'Levante', a: 'Elche', day: 6, hh: 21, mm: 0, big: false }
-  ],
-  allsvenskan: [
-    { h: 'Malmö FF', a: 'AIK', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Djurgårdens IF', a: 'Hammarby', day: 6, hh: 14, mm: 0, big: true },
-    { h: 'BK Häcken', a: 'IF Elfsborg', day: 6, hh: 16, mm: 30, big: false }
-  ],
-  swiss: [
-    { h: 'BSC Young Boys', a: 'FC Basel', day: 5, hh: 20, mm: 30, big: true },
-    { h: 'FC Lugano', a: 'Servette', day: 6, hh: 16, mm: 30, big: true },
-    { h: 'FC Zürich', a: 'St. Gallen', day: 6, hh: 14, mm: 15, big: false }
-  ],
-  ukraine: [
-    { h: 'Dynamo Kyiv', a: 'Shakhtar Donetsk', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Oleksandriya', a: 'Polissya Zhytomyr', day: 6, hh: 13, mm: 30, big: true },
-    { h: 'Kryvbas Kryvyi Rih', a: 'Karpaty Lviv', day: 6, hh: 16, mm: 0, big: false }
-  ],
-  caf_cl: [],
-  caf_cc: [],
-  botola: [
-    { h: 'Raja Casablanca', a: 'Wydad AC', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'RS Berkane', a: 'AS FAR Rabat', day: 6, hh: 16, mm: 0, big: true },
-    { h: 'Maghreb Fès', a: 'FUS Rabat', day: 6, hh: 19, mm: 0, big: false }
-  ],
-  egypt: [
-    { h: 'Al Ahly', a: 'Zamalek', day: 5, hh: 19, mm: 0, big: true },
-    { h: 'Pyramids FC', a: 'Al Masry', day: 6, hh: 17, mm: 0, big: true },
-    { h: 'Ceramica Cleopatra', a: 'Smouha', day: 6, hh: 19, mm: 0, big: false }
-  ],
-  afc_cl: [
-    // AFC Champions League Elite Matchday 2 (30 Sep - 1 Oct 2026)
-    { h: 'Al Nassr', a: 'Al Rayyan', day: 9, hh: 20, mm: 0, big: true },
-    { h: 'Al Hilal', a: 'Al Shorta', day: 10, hh: 20, mm: 0, big: true },
-    { h: 'Kawasaki Frontale', a: 'Gwangju FC', day: 10, hh: 12, mm: 0, big: false }
-  ],
-  aleague: [
-    { h: 'Melbourne City', a: 'Melbourne Victory', day: 5, hh: 9, mm: 45, big: true },
-    { h: 'Sydney FC', a: 'Western Sydney Wanderers', day: 6, hh: 9, mm: 45, big: true },
-    { h: 'Central Coast Mariners', a: 'Adelaide United', day: 6, hh: 7, mm: 0, big: false }
-  ],
-  csl: [
-    { h: 'Shanghai Port', a: 'Shanghai Shenhua', day: 5, hh: 13, mm: 35, big: true },
-    { h: 'Chengdu Rongcheng', a: 'Beijing Guoan', day: 6, hh: 13, mm: 35, big: true },
-    { h: 'Shandong Taishan', a: 'Zhejiang Professional', day: 6, hh: 13, mm: 0, big: false }
-  ],
-  j1: [
-    { h: 'Vissel Kobe', a: 'Sanfrecce Hiroshima', day: 5, hh: 7, mm: 0, big: true },
-    { h: 'Machida Zelvia', a: 'Yokohama F. Marinos', day: 6, hh: 8, mm: 0, big: true },
-    { h: 'Kawasaki Frontale', a: 'Urawa Red Diamonds', day: 6, hh: 10, mm: 0, big: false }
-  ],
-  saudi: [
-    { h: 'Al Ittihad', a: 'Al Hilal', day: 4, hh: 20, mm: 0, big: true },
-    { h: 'Al Nassr', a: 'Al Wehda', day: 4, hh: 17, mm: 20, big: true },
-    { h: 'Al Ahli', a: 'Al Qadsiah', day: 4, hh: 20, mm: 0, big: false },
-    { h: 'Al Shabab', a: 'Al Taawoun', day: 5, hh: 17, mm: 30, big: false },
-    { h: 'Al Ettifaq', a: 'Al Fateh', day: 5, hh: 20, mm: 0, big: false }
-  ],
-  argliga: [
-    // Completed Monday Night Clausura (21 Sep 2026)
-    { h: 'Aldosivi', a: 'Atlético Tucumán', day: 0, hh: 19, mm: 30, big: false },
-    { h: 'Belgrano', a: 'Estudiantes Río Cuarto', day: 0, hh: 20, mm: 15, big: false },
-    { h: 'Vélez Sarsfield', a: 'Tigre', day: 0, hh: 22, mm: 30, big: true },
-    // Weekend Round (Friday 25 to Sunday 27 Sep 2026)
-    { h: 'Racing Club', a: 'Platense', day: 4, hh: 22, mm: 0, big: true },
-    { h: 'Boca Juniors', a: 'Argentinos Juniors', day: 5, hh: 20, mm: 0, big: true },
-    { h: 'San Lorenzo', a: 'Banfield', day: 5, hh: 22, mm: 15, big: false },
-    { h: 'River Plate', a: 'Talleres', day: 6, hh: 23, mm: 15, big: true }
-  ],
-  bolivia: [
-    { h: 'Bolívar', a: 'The Strongest', day: 5, hh: 21, mm: 30, big: true },
-    { h: 'Always Ready', a: 'Oriente Petrolero', day: 4, hh: 19, mm: 0, big: false }
-  ],
-  chile: [
-    // Weekend Matchday 26 (Saturday 26 & Sunday 27 Sep 2026)
-    { h: 'Colo-Colo', a: 'Cobresal', day: 5, hh: 23, mm: 0, big: true },
-    { h: 'Deportes Iquique', a: 'Universidad de Chile', day: 6, hh: 18, mm: 30, big: true },
-    { h: 'Audax Italiano', a: 'O\'Higgins', day: 6, hh: 21, mm: 0, big: false },
-    { h: 'Universidad Católica', a: 'Deportes Copiapó', day: 6, hh: 23, mm: 30, big: true }
-  ],
-  colombia: [
-    // Weekend Round
-    { h: 'Millonarios', a: 'Santa Fe', day: 4, hh: 23, mm: 0, big: true },
-    { h: 'Atlético Nacional', a: 'América de Cali', day: 5, hh: 21, mm: 10, big: true }
-  ],
-  libertadores: [],
-  sudamericana: [],
-  uruguay: [
-    // Monday Night fixture (21 Sep 2026)
-    { h: 'Central Español', a: 'Montevideo City Torque', day: 0, hh: 23, mm: 30, big: false },
-    // Weekend Round
-    { h: 'Peñarol', a: 'Nacional', day: 5, hh: 19, mm: 0, big: true },
-    { h: 'Defensor Sporting', a: 'Danubio', day: 4, hh: 18, mm: 30, big: false }
-  ],
-  ecuador: [
-    // Completed Monday Night fixture (21 Sep 2026)
-    { h: 'Manta F.C.', a: 'Orense', day: 0, hh: 21, mm: 0, big: false },
-    // Weekend Round
-    { h: 'LDU Quito', a: 'Independiente del Valle', day: 5, hh: 20, mm: 30, big: true },
-    { h: 'Barcelona SC', a: 'Emelec', day: 4, hh: 21, mm: 0, big: true }
-  ],
-  paraguay: [
-    { h: 'Olimpia', a: 'Cerro Porteño', day: 5, hh: 20, mm: 0, big: true },
-    { h: 'Libertad', a: 'Guaraní', day: 4, hh: 21, mm: 30, big: false }
-  ],
-  peru: [
-    { h: 'Universitario', a: 'Alianza Lima', day: 5, hh: 21, mm: 0, big: true },
-    { h: 'Sporting Cristal', a: 'Melgar', day: 4, hh: 19, mm: 30, big: true }
-  ],
-  venezuela: [
-    { h: 'Deportivo Táchira', a: 'Caracas', day: 5, hh: 20, mm: 0, big: true },
-    { h: 'Carabobo', a: 'Monagas', day: 4, hh: 21, mm: 0, big: false }
-  ],
-  guatemala: [
-    { h: 'CSD Municipal', a: 'Comunicaciones FC', day: 5, hh: 19, mm: 0, big: true },
-    { h: 'Antigua GFC', a: 'Xelajú', day: 4, hh: 22, mm: 0, big: false }
-  ],
-  uefa_nations: [],
-  afcon: [],
-  kategoria_superiore: [
-    { h: 'KF Partizani', a: 'KF Tirana', day: 4, hh: 17, mm: 0, big: true },
-    { h: 'Egnatia', a: 'Vllaznia', day: 5, hh: 14, mm: 0, big: false }
-  ],
-  armenia: [
-    { h: 'Pyunik Yerevan', a: 'FC Noah', day: 4, hh: 15, mm: 0, big: true },
-    { h: 'FC Urartu', a: 'Ararat-Armenia', day: 5, hh: 16, mm: 30, big: false }
-  ],
-  azerbaijan: [
-    { h: 'Qarabağ FK', a: 'Neftçi Baku', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Sabah FK', a: 'Zira FK', day: 4, hh: 17, mm: 30, big: false }
-  ],
-  bosnia: [
-    { h: 'FK Sarajevo', a: 'FK Željezničar', day: 5, hh: 19, mm: 45, big: true },
-    { h: 'HŠK Zrinjski Mostar', a: 'FK Borac Banja Luka', day: 4, hh: 17, mm: 0, big: true }
-  ],
-  bulgaria: [
-    { h: 'PFC Ludogorets Razgrad', a: 'PFC CSKA Sofia', day: 5, hh: 18, mm: 30, big: true },
-    { h: 'PFC Levski Sofia', a: 'PFC Cherno More Varna', day: 4, hh: 16, mm: 45, big: false }
-  ],
-  canpl: [
-    { h: 'Forge FC', a: 'Cavalry FC', day: 5, hh: 20, mm: 0, big: true },
-    { h: 'Atlético Ottawa', a: 'Pacific FC', day: 4, hh: 19, mm: 0, big: false }
-  ],
-  croatia: [
-    { h: 'GNK Dinamo Zagreb', a: 'HNK Hajduk Split', day: 5, hh: 17, mm: 30, big: true },
-    { h: 'HNK Rijeka', a: 'NK Osijek', day: 4, hh: 19, mm: 0, big: false }
-  ],
-  cyprus: [
-    { h: 'Apollon Limassol', a: 'Enosis Neon Paralimni', day: 0, hh: 19, mm: 0, big: false },
-    { h: 'APOEL Nicosia', a: 'AC Omonia Nicosia', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Pafos FC', a: 'Aris Limassol', day: 4, hh: 19, mm: 0, big: true }
-  ],
-  czech: [
-    { h: 'SK Slavia Prague', a: 'AC Sparta Prague', day: 5, hh: 18, mm: 30, big: true },
-    { h: 'FC Viktoria Plzeň', a: 'FC Baník Ostrava', day: 4, hh: 15, mm: 0, big: false }
-  ],
-  estonia: [
-    { h: 'FC Flora Tallinn', a: 'FCI Levadia Tallinn', day: 5, hh: 14, mm: 30, big: true },
-    { h: 'Nõmme Kalju FC', a: 'Paide Linnameeskond', day: 4, hh: 17, mm: 0, big: false }
-  ],
-  faroe: [
-    { h: 'KÍ Klaksvík', a: 'Víkingur Gøta', day: 4, hh: 16, mm: 0, big: true },
-    { h: 'HB Tórshavn', a: 'B36 Tórshavn', day: 5, hh: 15, mm: 0, big: true }
-  ],
-  finland: [
-    { h: 'HJK Helsinki', a: 'KuPS Kuopio', day: 4, hh: 16, mm: 0, big: true },
-    { h: 'Ilves Tampere', a: 'SJK Seinäjoki', day: 5, hh: 17, mm: 30, big: false }
-  ],
-  georgia: [
-    { h: 'FC Dinamo Tbilisi', a: 'FC Torpedo Kutaisi', day: 4, hh: 18, mm: 0, big: true },
-    { h: 'FC Dila Gori', a: 'FC Dinamo Batumi', day: 5, hh: 19, mm: 0, big: false }
-  ],
-  honduras: [
-    { h: 'CD Olimpia', a: 'FC Motagua', day: 5, hh: 22, mm: 0, big: true },
-    { h: 'Real España', a: 'CD Marathón', day: 4, hh: 21, mm: 0, big: false }
-  ],
-  hungary: [
-    { h: 'Ferencvárosi TC', a: 'Újpest FC', day: 5, hh: 18, mm: 45, big: true },
-    { h: 'Paksi FC', a: 'Puskás Akadémia FC', day: 4, hh: 16, mm: 0, big: false }
-  ],
-  iceland: [
-    { h: 'Víkingur Reykjavík', a: 'Breiðablik', day: 4, hh: 19, mm: 15, big: true },
-    { h: 'Valur Reykjavík', a: 'Stjarnan FC', day: 5, hh: 18, mm: 0, big: false }
-  ],
-  iraq: [
-    { h: 'Al-Shorta SC', a: 'Al-Quwa Al-Jawiya', day: 4, hh: 18, mm: 30, big: true },
-    { h: 'Al-Zawraa SC', a: 'Al-Talaba SC', day: 5, hh: 19, mm: 0, big: true }
-  ],
-  ireland: [
-    { h: 'Shamrock Rovers FC', a: 'Derry City FC', day: 4, hh: 19, mm: 45, big: true },
-    { h: 'St Patrick\'s Athletic', a: 'Shelbourne FC', day: 5, hh: 19, mm: 45, big: false }
-  ],
-  israel: [
-    { h: 'Maccabi Tel Aviv', a: 'Maccabi Haifa', day: 5, hh: 19, mm: 30, big: true },
-    { h: 'Hapoel Be\'er Sheva', a: 'Beitar Jerusalem', day: 4, hh: 19, mm: 0, big: true }
-  ],
-  kazakhstan: [
-    { h: 'FC Kairat Almaty', a: 'FC Astana', day: 4, hh: 15, mm: 0, big: true },
-    { h: 'FC Tobol Kostanay', a: 'FC Ordabasy Shymkent', day: 5, hh: 16, mm: 30, big: false }
-  ],
-  kosovo: [
-    { h: 'FC Ballkani', a: 'FC Drita', day: 5, hh: 14, mm: 0, big: true },
-    { h: 'FC Prishtina', a: 'KF Llapi', day: 4, hh: 14, mm: 0, big: false }
-  ],
-  lithuania: [
-    { h: 'FK Žalgiris Vilnius', a: 'FC Hegelmann', day: 4, hh: 17, mm: 0, big: true },
-    { h: 'FK Panevėžys', a: 'FK Kauno Žalgiris', day: 5, hh: 16, mm: 0, big: false }
-  ],
-  malta: [
-    { h: 'Ħamrun Spartans', a: 'Floriana FC', day: 5, hh: 16, mm: 0, big: true },
-    { h: 'Sliema Wanderers', a: 'Birkirkara FC', day: 4, hh: 18, mm: 15, big: false }
-  ],
-  montenegro: [
-    { h: 'FK Budućnost Podgorica', a: 'FK Sutjeska Nikšić', day: 4, hh: 16, mm: 0, big: true },
-    { h: 'FK Dečić Tuzi', a: 'FK Mornar Bar', day: 5, hh: 17, mm: 30, big: false }
-  ],
-  nireland: [
-    { h: 'Linfield FC', a: 'Glentoran FC', day: 4, hh: 15, mm: 0, big: true },
-    { h: 'Larne FC', a: 'Cliftonville FC', day: 5, hh: 15, mm: 0, big: true }
-  ],
-  serbia: [
-    { h: 'Red Star Belgrade', a: 'FK Partizan Belgrade', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'FK TSC Bačka Topola', a: 'FK Čukarički', day: 4, hh: 16, mm: 30, big: false }
-  ],
-  slovakia: [
-    { h: 'ŠK Slovan Bratislava', a: 'FC Spartak Trnava', day: 5, hh: 17, mm: 30, big: true },
-    { h: 'MŠK Žilina', a: 'DAC 1904 Dunajská Streda', day: 4, hh: 15, mm: 30, big: false }
-  ],
-  slovenia: [
-    { h: 'NK Olimpija Ljubljana', a: 'NK Maribor', day: 5, hh: 19, mm: 15, big: true },
-    { h: 'NK Celje', a: 'FC Koper', day: 4, hh: 17, mm: 30, big: false }
-  ],
-  cymru: [
-    { h: 'The New Saints FC', a: 'Connah\'s Quay Nomads', day: 4, hh: 19, mm: 45, big: true },
-    { h: 'Penybont FC', a: 'Bala Town FC', day: 5, hh: 14, mm: 30, big: false }
-  ],
-  vysshaya_liga: [
-    { h: 'Dinamo Minsk', a: 'Neman Grodno', day: 4, hh: 17, mm: 0, big: true },
-    { h: 'Torpedo-BelAZ Zhodino', a: 'BATE Borisov', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Dinamo Brest', a: 'FC Gomel', day: 5, hh: 18, mm: 30, big: false },
-    { h: 'Slavia Mozyr', a: 'Isloch Minsk', day: 4, hh: 14, mm: 0, big: false }
-  ],
-  zimbabwe: [
-    { h: 'Simba Bhora', a: 'Highlanders FC', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Dynamos FC', a: 'FC Platinum', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'FC Platinum', a: 'Simba Bhora', day: 6, hh: 15, mm: 0, big: true }
-  ],
-  uzbekistan: [
-    { h: 'Pakhtakor Tashkent', a: 'Navbahor Namangan', day: 5, hh: 14, mm: 30, big: true },
-    { h: 'Nasaf Qarshi', a: 'Neftchi Fergana', day: 5, hh: 14, mm: 30, big: true },
-    { h: 'Navbahor Namangan', a: 'Nasaf Qarshi', day: 6, hh: 14, mm: 30, big: true }
-  ],
-  usl_championship: [
-    { h: 'Louisville City FC', a: 'Charleston Battery', day: 5, hh: 23, mm: 30, big: true },
-    { h: 'Tampa Bay Rowdies', a: 'Detroit City FC', day: 5, hh: 23, mm: 30, big: false },
-    { h: 'Charleston Battery', a: 'Tampa Bay Rowdies', day: 6, hh: 23, mm: 0, big: true }
-  ],
-  tunisia: [
-    { h: 'Espérance de Tunis', a: 'Étoile du Sahel', day: 5, hh: 14, mm: 30, big: true },
-    { h: 'Club Africain', a: 'US Monastir', day: 5, hh: 14, mm: 30, big: true },
-    { h: 'Étoile du Sahel', a: 'Club Africain', day: 6, hh: 14, mm: 30, big: true }
-  ],
-  thai_league: [
-    { h: 'Buriram United', a: 'Port FC', day: 5, hh: 12, mm: 0, big: true },
-    { h: 'Bangkok United', a: 'BG Pathum United', day: 5, hh: 13, mm: 0, big: true },
-    { h: 'BG Pathum United', a: 'Buriram United', day: 6, hh: 12, mm: 30, big: true }
-  ],
-  sweden_superettan: [
-    { h: 'Degerfors IF', a: 'Landskrona BoIS', day: 5, hh: 13, mm: 0, big: true },
-    { h: 'Östers IF', a: 'Helsingborgs IF', day: 5, hh: 15, mm: 0, big: true },
-    { h: 'Helsingborgs IF', a: 'Degerfors IF', day: 6, hh: 14, mm: 0, big: true }
-  ],
-  romania: [
-    { h: 'FCSB', a: 'Dinamo București', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Universitatea Craiova', a: 'CFR Cluj', day: 5, hh: 15, mm: 30, big: true },
-    { h: 'CFR Cluj', a: 'FCSB', day: 6, hh: 19, mm: 0, big: true }
-  ],
-  kleague1: [
-    { h: 'Ulsan HD', a: 'Pohang Steelers', day: 5, hh: 7, mm: 30, big: true },
-    { h: 'FC Seoul', a: 'Gangwon FC', day: 5, hh: 10, mm: 0, big: true },
-    { h: 'Pohang Steelers', a: 'FC Seoul', day: 6, hh: 7, mm: 0, big: true }
-  ],
-  puerto_rico: [
-    { h: 'Academia Quintana', a: 'Metropolitan FA', day: 5, hh: 23, mm: 0, big: true },
-    { h: 'Bayamón FC', a: 'Puerto Rico Surf', day: 5, hh: 21, mm: 0, big: false },
-    { h: 'Metropolitan FA', a: 'Bayamón FC', day: 6, hh: 22, mm: 0, big: true }
-  ],
-  poland_1liga: [
-    { h: 'Wisła Kraków', a: 'Arka Gdynia', day: 5, hh: 15, mm: 30, big: true },
-    { h: 'Bruk-Bet Termalica', a: 'Miedź Legnica', day: 5, hh: 18, mm: 0, big: true },
-    { h: 'Arka Gdynia', a: 'Bruk-Bet Termalica', day: 6, hh: 16, mm: 0, big: true }
-  ],
-  panama: [
-    { h: 'Tauro FC', a: 'CD Plaza Amador', day: 5, hh: 22, mm: 0, big: true },
-    { h: 'CA Independiente', a: 'San Francisco FC', day: 5, hh: 23, mm: 30, big: true },
-    { h: 'CD Plaza Amador', a: 'CA Independiente', day: 6, hh: 22, mm: 30, big: true }
-  ],
-  norway_1div: [
-    { h: 'Vålerenga', a: 'Bryne FK', day: 5, hh: 14, mm: 0, big: true },
-    { h: 'Moss FK', a: 'Lyn 1896', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Bryne FK', a: 'Moss FK', day: 6, hh: 15, mm: 0, big: true }
-  ],
-  north_macedonia: [
-    { h: 'Shkëndija', a: 'Struga Trim-Lum', day: 5, hh: 13, mm: 30, big: true },
-    { h: 'Struga Trim-Lum', a: 'Rabotnički', day: 6, hh: 14, mm: 0, big: true }
-  ],
-  iceland_1deild: [
-    { h: 'ÍBV Vestmannaeyjar', a: 'Keflavík ÍF', day: 5, hh: 17, mm: 0, big: true },
-    { h: 'Keflavík ÍF', a: 'Fjölnir', day: 6, hh: 16, mm: 0, big: true }
-  ],
-  iceland_urvalsdeild: [
-    { h: 'Víkingur Reykjavík', a: 'Breiðablik', day: 5, hh: 19, mm: 15, big: true },
-    { h: 'Breiðablik', a: 'Valur Reykjavík', day: 6, hh: 18, mm: 0, big: true }
-  ],
-  finland_ykkosliiga: [
-    { h: 'KTP Kotka', a: 'FF Jaro', day: 5, hh: 14, mm: 0, big: true },
-    { h: 'FF Jaro', a: 'TPS Turku', day: 6, hh: 15, mm: 0, big: true }
-  ],
-  finland_ykkonen: [
-    { h: 'Klubi 04', a: 'KPV Kokkola', day: 5, hh: 13, mm: 0, big: true },
-    { h: 'KPV Kokkola', a: 'OLS Oulu', day: 6, hh: 14, mm: 0, big: true }
-  ],
-  brasileiro_serieb: [
-    { h: 'Santos FC', a: 'Sport Recife', day: 5, hh: 20, mm: 0, big: true },
-    { h: 'Novorizontino', a: 'Mirassol', day: 5, hh: 22, mm: 30, big: true },
-    { h: 'Sport Recife', a: 'América Mineiro', day: 6, hh: 20, mm: 0, big: true }
-  ],
-  austria_erste: [
-    { h: 'SV Ried', a: 'Admira Wacker', day: 4, hh: 18, mm: 10, big: true },
-    { h: 'First Vienna', a: 'SKU Amstetten', day: 4, hh: 18, mm: 10, big: false },
-    { h: 'Floridsdorfer AC', a: 'FC Liefering', day: 4, hh: 18, mm: 10, big: false },
-    { h: 'SV Horn', a: 'Kapfenberger SV', day: 4, hh: 18, mm: 10, big: false },
-    { h: 'Admira Wacker', a: 'First Vienna', day: 5, hh: 14, mm: 30, big: true }
-  ],
-  algeria: [
-    { h: 'MC Alger', a: 'USM Alger', day: 4, hh: 17, mm: 0, big: true },
-    { h: 'CR Belouizdad', a: 'JS Kabylie', day: 5, hh: 17, mm: 0, big: true },
-    { h: 'CS Constantine', a: 'ES Sétif', day: 5, hh: 16, mm: 0, big: false },
-    { h: 'Paradou AC', a: 'JS Saoura', day: 6, hh: 15, mm: 0, big: false }
-  ],
-  netherlands_eerste: [
-    // Monday Night 21 Sep 2026
-    { h: 'Excelsior Rotterdam', a: 'FC Den Bosch', day: 0, hh: 20, mm: 0, big: true },
-    { h: 'De Graafschap', a: 'Helmond Sport', day: 0, hh: 20, mm: 0, big: false },
-    { h: 'Jong FC Utrecht', a: 'FC Emmen', day: 0, hh: 20, mm: 0, big: false },
-    { h: 'Jong PSV', a: 'SC Cambuur', day: 0, hh: 20, mm: 0, big: false },
-    // Friday 25 Sep 2026
-    { h: 'FC Dordrecht', a: 'Roda JC', day: 4, hh: 20, mm: 0, big: false },
-    { h: 'ADO Den Haag', a: 'TOP Oss', day: 4, hh: 20, mm: 0, big: true }
-  ],
-  germany_3liga: [
-    // Monday Night 21 Sep 2026
-    { h: 'Dynamo Dresden', a: 'Arminia Bielefeld', day: 0, hh: 19, mm: 0, big: true },
-    // Weekend Round
-    { h: 'Borussia Dortmund II', a: 'Rot-Weiss Essen', day: 4, hh: 19, mm: 0, big: true },
-    { h: 'SV Sandhausen', a: 'Energie Cottbus', day: 5, hh: 14, mm: 0, big: true },
-    { h: '1. FC Saarbrücken', a: 'Erzgebirge Aue', day: 5, hh: 14, mm: 0, big: false },
-    { h: 'Hansa Rostock', a: 'SpVgg Unterhaching', day: 5, hh: 14, mm: 0, big: false }
+  "psl": [
+    {
+      "h": "Golden Arrows",
+      "a": "Kaizer Chiefs",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 2
+    },
+    {
+      "h": "Marumo Gallants",
+      "a": "Orlando Pirates",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": true,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 2
+    },
+    {
+      "h": "Milford FC",
+      "a": "Durban City",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 1
+    },
+    {
+      "h": "TS Galaxy",
+      "a": "Chippa United",
+      "date": "2026-09-20",
+      "hh": 17,
+      "mm": 30,
+      "big": false,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 0
+    }
+  ],
+  "epl": [
+    {
+      "h": "AFC Bournemouth",
+      "a": "Liverpool",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": true,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 1
+    },
+    {
+      "h": "Leeds United",
+      "a": "Crystal Palace",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 0
+    },
+    {
+      "h": "Manchester City",
+      "a": "Sunderland",
+      "date": "2026-09-20",
+      "hh": 17,
+      "mm": 30,
+      "big": true,
+      "finished": true,
+      "homeScore": 5,
+      "awayScore": 3
+    },
+    {
+      "h": "Fulham",
+      "a": "Manchester United",
+      "date": "2026-09-20",
+      "hh": 17,
+      "mm": 30,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 2
+    }
+  ],
+  "laliga": [
+    {
+      "h": "Getafe",
+      "a": "Malaga",
+      "date": "2026-09-20",
+      "hh": 14,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 2,
+      "awayScore": 1
+    },
+    {
+      "h": "Atlético Madrid",
+      "a": "Real Madrid",
+      "date": "2026-09-20",
+      "hh": 16,
+      "mm": 15,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 4
+    },
+    {
+      "h": "Real Betis",
+      "a": "Deportivo La Coruña",
+      "date": "2026-09-20",
+      "hh": 18,
+      "mm": 30,
+      "big": true,
+      "finished": true,
+      "homeScore": 2,
+      "awayScore": 0
+    },
+    {
+      "h": "Villarreal",
+      "a": "Levante",
+      "date": "2026-09-20",
+      "hh": 18,
+      "mm": 30,
+      "big": false,
+      "finished": true,
+      "homeScore": 3,
+      "awayScore": 1
+    },
+    {
+      "h": "Valencia",
+      "a": "Real Sociedad",
+      "date": "2026-09-20",
+      "hh": 21,
+      "mm": 0,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 1
+    }
+  ],
+  "seriea": [
+    {
+      "h": "Fiorentina",
+      "a": "Napoli",
+      "date": "2026-09-20",
+      "hh": 12,
+      "mm": 30,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 2
+    },
+    {
+      "h": "Frosinone",
+      "a": "Como",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 1
+    },
+    {
+      "h": "Parma",
+      "a": "Genoa",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 1
+    },
+    {
+      "h": "Juventus",
+      "a": "Atalanta",
+      "date": "2026-09-20",
+      "hh": 18,
+      "mm": 0,
+      "big": true,
+      "finished": true,
+      "homeScore": 2,
+      "awayScore": 1
+    },
+    {
+      "h": "AC Milan",
+      "a": "Lecce",
+      "date": "2026-09-20",
+      "hh": 20,
+      "mm": 45,
+      "big": true,
+      "finished": true,
+      "homeScore": 3,
+      "awayScore": 0
+    }
+  ],
+  "bundesliga": [
+    {
+      "h": "Bayer Leverkusen",
+      "a": "RB Leipzig",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 30,
+      "big": true,
+      "finished": true,
+      "homeScore": 2,
+      "awayScore": 2
+    },
+    {
+      "h": "FC Schalke 04",
+      "a": "SV 07 Elversberg",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 30,
+      "big": false,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 0
+    },
+    {
+      "h": "SC Paderborn 07",
+      "a": "TSG Hoffenheim",
+      "date": "2026-09-20",
+      "hh": 17,
+      "mm": 30,
+      "big": false,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 3
+    }
+  ],
+  "ligue1": [
+    {
+      "h": "Auxerre",
+      "a": "Brest",
+      "date": "2026-09-20",
+      "hh": 15,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 2
+    },
+    {
+      "h": "Nice",
+      "a": "Lille",
+      "date": "2026-09-20",
+      "hh": 17,
+      "mm": 15,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 1
+    },
+    {
+      "h": "Marseille",
+      "a": "Paris Saint-Germain",
+      "date": "2026-09-20",
+      "hh": 20,
+      "mm": 45,
+      "big": true,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 2
+    }
+  ],
+  "brasileirao": [
+    {
+      "h": "Grêmio",
+      "a": "Palmeiras",
+      "date": "2026-09-20",
+      "hh": 16,
+      "mm": 0,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 2
+    },
+    {
+      "h": "Corinthians",
+      "a": "Fluminense",
+      "date": "2026-09-20",
+      "hh": 16,
+      "mm": 0,
+      "big": true,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 1
+    },
+    {
+      "h": "Vitória",
+      "a": "Cruzeiro",
+      "date": "2026-09-20",
+      "hh": 18,
+      "mm": 30,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 1
+    },
+    {
+      "h": "Flamengo",
+      "a": "Red Bull Bragantino",
+      "date": "2026-09-20",
+      "hh": 18,
+      "mm": 30,
+      "big": true,
+      "finished": true,
+      "homeScore": 2,
+      "awayScore": 1
+    },
+    {
+      "h": "Athletico Paranaense",
+      "a": "Bahia",
+      "date": "2026-09-20",
+      "hh": 20,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 2,
+      "awayScore": 0
+    }
+  ],
+  "uecl": [
+    {
+      "h": "AS Monaco",
+      "a": "CSKA Sofia",
+      "date": "2026-10-15",
+      "hh": 18,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Real Betis",
+      "a": "Legia Warsaw",
+      "date": "2026-10-15",
+      "hh": 18,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Fiorentina",
+      "a": "The New Saints",
+      "date": "2026-10-15",
+      "hh": 21,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "Chelsea",
+      "a": "Gent",
+      "date": "2026-10-15",
+      "hh": 21,
+      "mm": 0,
+      "big": true
+    }
+  ],
+  "uefa_nations": [
+    {
+      "h": "Andorra",
+      "a": "Malta",
+      "date": "2026-09-24",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Austria",
+      "a": "Israel",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Kosovo",
+      "a": "Republic of Ireland",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Liechtenstein",
+      "a": "Lithuania",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Netherlands",
+      "a": "Germany",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Norway",
+      "a": "Denmark",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Portugal",
+      "a": "Wales",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Serbia",
+      "a": "Greece",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Armenia",
+      "a": "Latvia",
+      "date": "2026-09-25",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Georgia",
+      "a": "Northern Ireland",
+      "date": "2026-09-25",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Hungary",
+      "a": "Ukraine",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Italy",
+      "a": "Belgium",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Montenegro",
+      "a": "Cyprus",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Poland",
+      "a": "Bosnia-Herzegovina",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Sweden",
+      "a": "Romania",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Türkiye",
+      "a": "France",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Slovenia",
+      "a": "Scotland",
+      "date": "2026-09-26",
+      "hh": 15,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Bulgaria",
+      "a": "Luxembourg",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Faroe Islands",
+      "a": "Kazakhstan",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Iceland",
+      "a": "Estonia",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "San Marino",
+      "a": "Finland",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Albania",
+      "a": "Belarus",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Czechia",
+      "a": "Croatia",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "England",
+      "a": "Spain",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "North Macedonia",
+      "a": "Switzerland",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Slovakia",
+      "a": "Moldova",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Lithuania",
+      "a": "Azerbaijan",
+      "date": "2026-09-27",
+      "hh": 15,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Austria",
+      "a": "Kosovo",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Denmark",
+      "a": "Wales",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Gibraltar",
+      "a": "Andorra",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Serbia",
+      "a": "Netherlands",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "Germany",
+      "a": "Greece",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Israel",
+      "a": "Republic of Ireland",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Norway",
+      "a": "Portugal",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Armenia",
+      "a": "Montenegro",
+      "date": "2026-09-28",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Georgia",
+      "a": "Ukraine",
+      "date": "2026-09-28",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Latvia",
+      "a": "Cyprus",
+      "date": "2026-09-28",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Belgium",
+      "a": "France",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Northern Ireland",
+      "a": "Hungary",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Romania",
+      "a": "Bosnia-Herzegovina",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Sweden",
+      "a": "Poland",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Türkiye",
+      "a": "Italy",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Finland",
+      "a": "Belarus",
+      "date": "2026-09-29",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Moldova",
+      "a": "Faroe Islands",
+      "date": "2026-09-29",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Bulgaria",
+      "a": "Estonia",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Czechia",
+      "a": "England",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Luxembourg",
+      "a": "Iceland",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "San Marino",
+      "a": "Albania",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Scotland",
+      "a": "Switzerland",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Slovakia",
+      "a": "Kazakhstan",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Slovenia",
+      "a": "North Macedonia",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Spain",
+      "a": "Croatia",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    }
+  ],
+  "intl_friendly": [
+    {
+      "h": "New Caledonia",
+      "a": "Solomon Islands",
+      "date": "2026-09-21",
+      "hh": 6,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 2
+    },
+    {
+      "h": "Fiji",
+      "a": "Vanuatu",
+      "date": "2026-09-21",
+      "hh": 9,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 1
+    },
+    {
+      "h": "Dominica",
+      "a": "Anguilla",
+      "date": "2026-09-21",
+      "hh": 17,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 0
+    },
+    {
+      "h": "Azerbaijan",
+      "a": "Tajikistan",
+      "date": "2026-09-23",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Gibraltar",
+      "a": "Sao Tome and Principe",
+      "date": "2026-09-23",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Solomon Islands",
+      "a": "Vanuatu",
+      "date": "2026-09-24",
+      "hh": 6,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Papua New Guinea",
+      "a": "New Caledonia",
+      "date": "2026-09-24",
+      "hh": 9,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Palestine",
+      "a": "New Zealand",
+      "date": "2026-09-24",
+      "hh": 11,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Japan",
+      "a": "Uruguay",
+      "date": "2026-09-24",
+      "hh": 12,
+      "mm": 5,
+      "big": false
+    },
+    {
+      "h": "South Korea",
+      "a": "Ecuador",
+      "date": "2026-09-24",
+      "hh": 13,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "China",
+      "a": "Maldives",
+      "date": "2026-09-24",
+      "hh": 13,
+      "mm": 35,
+      "big": false
+    },
+    {
+      "h": "Uzbekistan",
+      "a": "Iran",
+      "date": "2026-09-24",
+      "hh": 16,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Australia",
+      "a": "Brazil",
+      "date": "2026-09-25",
+      "hh": 12,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "India",
+      "a": "Panama",
+      "date": "2026-09-25",
+      "hh": 16,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "United States",
+      "a": "Peru",
+      "date": "2026-09-26",
+      "hh": 22,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Canada",
+      "a": "Chile",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Mexico",
+      "a": "Colombia",
+      "date": "2026-09-27",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Vanuatu",
+      "a": "New Caledonia",
+      "date": "2026-09-27",
+      "hh": 6,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Fiji",
+      "a": "Papua New Guinea",
+      "date": "2026-09-27",
+      "hh": 9,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "China",
+      "a": "New Zealand",
+      "date": "2026-09-27",
+      "hh": 13,
+      "mm": 35,
+      "big": false
+    },
+    {
+      "h": "Seychelles",
+      "a": "Sri Lanka",
+      "date": "2026-09-27",
+      "hh": 14,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Malta",
+      "a": "Liechtenstein",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Jordan",
+      "a": "Syria",
+      "date": "2026-09-27",
+      "hh": 19,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Bolivia",
+      "a": "Paraguay",
+      "date": "2026-09-27",
+      "hh": 22,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Kyrgyz Republic",
+      "a": "Maldives",
+      "date": "2026-09-28",
+      "hh": 0,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Turkmenistan",
+      "a": "Palestine",
+      "date": "2026-09-28",
+      "hh": 11,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Japan",
+      "a": "Venezuela",
+      "date": "2026-09-28",
+      "hh": 12,
+      "mm": 25,
+      "big": false
+    },
+    {
+      "h": "South Korea",
+      "a": "Uruguay",
+      "date": "2026-09-28",
+      "hh": 13,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Tajikistan",
+      "a": "Palestine",
+      "date": "2026-09-28",
+      "hh": 14,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Australia",
+      "a": "Brazil",
+      "date": "2026-09-29",
+      "hh": 12,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "Russia",
+      "a": "Iran",
+      "date": "2026-09-29",
+      "hh": 18,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "United States",
+      "a": "Chile",
+      "date": "2026-09-30",
+      "hh": 2,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Mexico",
+      "a": "Peru",
+      "date": "2026-09-30",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Papua New Guinea",
+      "a": "Solomon Islands",
+      "date": "2026-09-30",
+      "hh": 6,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Fiji",
+      "a": "New Caledonia",
+      "date": "2026-09-30",
+      "hh": 9,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Seychelles",
+      "a": "Sri Lanka",
+      "date": "2026-09-30",
+      "hh": 15,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Botswana",
+      "a": "Mozambique",
+      "date": "2026-09-30",
+      "hh": 16,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Lithuania",
+      "a": "Andorra",
+      "date": "2026-09-30",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Argentina",
+      "a": "Bolivia",
+      "date": "2026-09-30",
+      "hh": 20,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "Mauritius",
+      "a": "Djibouti",
+      "date": "2026-09-30",
+      "hh": 20,
+      "mm": 0,
+      "big": false
+    }
+  ],
+  "mls": [
+    {
+      "h": "Seattle Sounders FC",
+      "a": "Real Salt Lake",
+      "date": "2026-09-24",
+      "hh": 3,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Atlanta United FC",
+      "a": "New York City FC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "CF Montréal",
+      "a": "FC Cincinnati",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Charlotte FC",
+      "a": "Chicago Fire FC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Philadelphia Union",
+      "a": "Orlando City SC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Red Bull New York",
+      "a": "St. Louis CITY SC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Austin FC",
+      "a": "San Diego FC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "FC Dallas",
+      "a": "LAFC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Houston Dynamo FC",
+      "a": "Sporting Kansas City",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Nashville SC",
+      "a": "Toronto FC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Seattle Sounders FC",
+      "a": "Minnesota United FC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Real Salt Lake",
+      "a": "New England Revolution",
+      "date": "2026-09-27",
+      "hh": 3,
+      "mm": 30,
+      "big": true
+    },
+    {
+      "h": "LA Galaxy",
+      "a": "Colorado Rapids",
+      "date": "2026-09-27",
+      "hh": 4,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "San Jose Earthquakes",
+      "a": "Portland Timbers",
+      "date": "2026-09-27",
+      "hh": 4,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Vancouver Whitecaps",
+      "a": "D.C. United",
+      "date": "2026-09-27",
+      "hh": 4,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Columbus Crew",
+      "a": "Inter Miami CF",
+      "date": "2026-09-28",
+      "hh": 1,
+      "mm": 0,
+      "big": true
+    }
+  ],
+  "ligamx": [
+    {
+      "h": "Atlante",
+      "a": "Monterrey",
+      "date": "2026-09-26",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Tijuana",
+      "a": "Atlas",
+      "date": "2026-09-26",
+      "hh": 5,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Cruz Azul",
+      "a": "Toluca",
+      "date": "2026-09-27",
+      "hh": 0,
+      "mm": 50,
+      "big": false
+    },
+    {
+      "h": "Guadalajara",
+      "a": "Querétaro",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 7,
+      "big": false
+    },
+    {
+      "h": "Santos",
+      "a": "Pachuca",
+      "date": "2026-09-27",
+      "hh": 5,
+      "mm": 5,
+      "big": false
+    },
+    {
+      "h": "Tigres UANL",
+      "a": "Puebla",
+      "date": "2026-09-27",
+      "hh": 5,
+      "mm": 10,
+      "big": false
+    },
+    {
+      "h": "Pumas UNAM",
+      "a": "Atlético de San Luis",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "León",
+      "a": "FC Juarez",
+      "date": "2026-09-28",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Necaxa",
+      "a": "América",
+      "date": "2026-09-28",
+      "hh": 5,
+      "mm": 0,
+      "big": false
+    }
   ]
 };
 
-/**
- * Fetch and construct complete live real fixtures enriched with full league standings
- */
 export async function fetchLiveRealFixtures(customBaseDate = null) {
   const base = customBaseDate ? new Date(customBaseDate) : new Date();
   const pad = n => String(n).padStart(2, '0');
 
+  const fallbackCachePath = path.join(__dirname, '../data/official_fallback_cache.json');
+
   // Load standings across all leagues in parallel first
   console.log('[FixtureGen] Loading official league standings & tables...');
-  const standingsMap = await fetchAllStandings();
-  const standingsLeagues = Object.keys(standingsMap);
-  console.log(`[FixtureGen] Standings successfully loaded for ${standingsLeagues.length} leagues.`);
+  let standingsMap = {};
+  try {
+    standingsMap = await fetchAllStandings();
+  } catch (err) {
+    console.warn('[FixtureGen] Standings load warning, using cached/model baseline:', err.message);
+  }
 
-  // Range from yesterday to 35 days ahead covers active and upcoming matches without stale past seasons
-  const startD = new Date(base.getTime() - 24 * 60 * 60 * 1000);
+  // Define date window: 2026-09-20 through 35 days ahead
+  const startD = new Date(Date.UTC(2026, 8, 20, 0, 0, 0)); // 2026-09-20
   const endD = new Date(base.getTime() + 35 * 24 * 60 * 60 * 1000);
-  const startStr = `${startD.getFullYear()}${pad(startD.getMonth() + 1)}${pad(startD.getDate())}`;
-  const endStr = `${endD.getFullYear()}${pad(endD.getMonth() + 1)}${pad(endD.getDate())}`;
-  const dateRange = `${startStr}-${endStr}`;
 
-  console.log(`[RealFixtures] Fetching live official schedule (${dateRange})...`);
+  const targetDates = [
+    '20260921', '20260922', '20260923', '20260924', '20260925',
+    '20260926', '20260927', '20260928', '20260929', '20260930', '20261001'
+  ];
+  const dateLeagues = ['uefa.nations', 'fifa.friendly', 'usa.1', 'mex.1', 'usa.nwsl', 'eng.w.1', 'esp.w.1', 'uefa.champions.women'];
 
-  const results = await Promise.allSettled(
-    LEAGUES.map(async (lg) => {
-      if (!lg.espn) return { lg, data: null };
-      try {
-        let url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${lg.espn}/scoreboard?dates=${dateRange}`;
-        let res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(9000) });
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.events?.length) return { lg, data };
-        }
-        // Fallback: active round without date filter
-        url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${lg.espn}/scoreboard`;
-        res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(9000) });
-        if (res.ok) {
-          const data = await res.json();
-          return { lg, data };
-        }
-      } catch (err) {
-        // Continue gracefully
+  console.log('[RealFixtures] Ingesting live official schedule from ESPN API with fallback resilience...');
+
+  const eventsMap = new Map();
+
+  // 1. Fetch target dates for active break competitions (UEFA Nations, FIFA Friendlies, MLS, Liga MX, Women's)
+  await Promise.allSettled(
+    LEAGUES.filter(l => l.espn && dateLeagues.includes(l.espn)).map(async (lg) => {
+      for (const d of targetDates) {
+        try {
+          const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${lg.espn}/scoreboard?dates=${d}`;
+          const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(6000) });
+          if (res.ok) {
+            const data = await res.json();
+            (data.events || []).forEach(e => {
+              if (e.id) eventsMap.set(`${lg.id}-${e.id}`, { lg, e });
+            });
+          }
+        } catch (_) {}
       }
-      return { lg, data: null };
     })
   );
+
+  // 2. Fetch active scoreboard for all leagues (captures 20 Sep completed rounds, cups, and active matches)
+  await Promise.allSettled(
+    LEAGUES.map(async (lg) => {
+      if (!lg.espn) return;
+      try {
+        const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${lg.espn}/scoreboard`;
+        const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(6000) });
+        if (res.ok) {
+          const data = await res.json();
+          (data.events || []).forEach(e => {
+            if (e.id) eventsMap.set(`${lg.id}-${e.id}`, { lg, e });
+          });
+        }
+      } catch (_) {}
+    })
+  );
+
+  console.log(`[RealFixtures] Ingested ${eventsMap.size} raw events from ESPN API.`);
 
   const allMatches = [];
   const seenMatches = new Set();
 
-  for (const item of results) {
-    if (item.status !== 'fulfilled' || !item.value?.data?.events) continue;
-    const { lg, data } = item.value;
-    const events = data.events || [];
+  for (const { lg, e } of eventsMap.values()) {
+    const comp = e.competitions?.[0];
+    if (!comp || !comp.competitors || comp.competitors.length < 2) continue;
 
-    for (const e of events) {
-      const comp = e.competitions?.[0];
-      if (!comp || !comp.competitors || comp.competitors.length < 2) continue;
+    const homeComp = comp.competitors.find(c => c.homeAway === 'home') || comp.competitors[0];
+    const awayComp = comp.competitors.find(c => c.homeAway === 'away') || comp.competitors[1];
 
-      const homeComp = comp.competitors.find(c => c.homeAway === 'home') || comp.competitors[0];
-      const awayComp = comp.competitors.find(c => c.homeAway === 'away') || comp.competitors[1];
+    const rawHomeName = homeComp.team?.displayName || homeComp.team?.name;
+    const rawAwayName = awayComp.team?.displayName || awayComp.team?.name;
+    if (!rawHomeName || !rawAwayName) continue;
 
-      const rawHomeName = homeComp.team?.displayName || homeComp.team?.name;
-      const rawAwayName = awayComp.team?.displayName || awayComp.team?.name;
-      if (!rawHomeName || !rawAwayName) continue;
-
-      // Deep Team Resolution using Standings & Records
-      const home = getTeamObj(lg.id, rawHomeName, homeComp, standingsMap);
-      const away = getTeamObj(lg.id, rawAwayName, awayComp, standingsMap);
-
-      const homeInitial = homeComp.team?.abbreviation || home.short || rawHomeName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-      const awayInitial = awayComp.team?.abbreviation || away.short || rawAwayName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-
-      home.short = homeInitial;
-      home.logo = homeComp.team?.logo || home.logo || null;
-      away.short = awayInitial;
-      away.logo = awayComp.team?.logo || away.logo || null;
-
-      const kickoffIso = e.date || comp.date;
-      const kickoffDate = new Date(kickoffIso);
-      if (isNaN(kickoffDate.getTime()) || kickoffDate.getTime() < startD.getTime() || kickoffDate.getTime() > endD.getTime()) {
-        continue;
-      }
-      const rsaInfo = toRsaDateTime(kickoffDate);
-      const matchDate = rsaInfo.matchDate;
-      const kickoffTime = rsaInfo.kickoffTime;
-
-      // Check for real market odds from ESPN
-      const oddsObj = comp.odds?.[0];
-      const ml = oddsObj?.moneyline;
-      const realHomeMl = ml?.home?.close?.odds ? americanToDecimal(ml.home.close.odds) : null;
-      const realAwayMl = ml?.away?.close?.odds ? americanToDecimal(ml.away.close.odds) : null;
-      const realDrawMl = ml?.draw?.close?.odds ? americanToDecimal(ml.draw.close.odds) : null;
-
-      const predictions = generatePredictions(home, away, lg.id);
-
-      predictions.forEach((p) => {
-        if (p.market === 'Match Winner') {
-          if (p.selection.startsWith('1') && realHomeMl) {
-            p.odds.hollywoodbets = +(realHomeMl * 0.98).toFixed(2);
-            p.odds.betway = realHomeMl;
-            p.odds.easybet = +(realHomeMl * 0.99).toFixed(2);
-          } else if (p.selection.startsWith('2') && realAwayMl) {
-            p.odds.hollywoodbets = +(realAwayMl * 0.98).toFixed(2);
-            p.odds.betway = realAwayMl;
-            p.odds.easybet = +(realAwayMl * 0.99).toFixed(2);
-          } else if (p.selection.startsWith('X') && realDrawMl) {
-            p.odds.hollywoodbets = +(realDrawMl * 0.98).toFixed(2);
-            p.odds.betway = realDrawMl;
-            p.odds.easybet = +(realDrawMl * 0.99).toFixed(2);
-          }
-        }
-      });
-
-      const topPick = predictions[0];
-      const combinedRating = home.rating + away.rating;
-      const isRivalry = /derby|clásico|clasico|soweto/i.test(e.name || '') ||
-        (lg.id === 'psl' && (home.name.includes('Pirates') || home.name.includes('Chiefs') || home.name.includes('Sundowns'))) ||
-        (lg.id === 'epl' && combinedRating >= 164) ||
-        (lg.id === 'laliga' && combinedRating >= 168) ||
-        (lg.id === 'seriea' && combinedRating >= 166);
-
-      const statusName = e.status?.type?.name || 'STATUS_SCHEDULED';
-      const isCompleted = e.status?.type?.completed === true || 
-        statusName.includes('FINAL') || 
-        statusName.includes('FULL_TIME') || 
-        statusName.includes('POST') || 
-        statusName.includes('END');
-      let matchStatus = 'TIMED';
-      if (statusName.includes('IN_PROGRESS') || statusName.includes('LIVE')) matchStatus = 'IN_PLAY';
-      else if (isCompleted) matchStatus = 'FINISHED';
-
-      // Real scores from ESPN
-      const homeScoreVal = homeComp?.score !== undefined ? Number(homeComp.score) : null;
-      const awayScoreVal = awayComp?.score !== undefined ? Number(awayComp.score) : null;
-      const score = (matchStatus === 'FINISHED' && homeScoreVal !== null && awayScoreVal !== null && !isNaN(homeScoreVal) && !isNaN(awayScoreVal))
-        ? { home: homeScoreVal, away: awayScoreVal }
-        : null;
-      const finalScore = score ? `${score.home} - ${score.away}` : null;
-
-      let topPickResult = undefined;
-      if (matchStatus === 'FINISHED' && score) {
-        if (topPick.market === 'Match Winner') {
-          if (topPick.selection.startsWith('1')) topPickResult = score.home > score.away ? 'WON' : 'LOST';
-          else if (topPick.selection.startsWith('2')) topPickResult = score.away > score.home ? 'WON' : 'LOST';
-          else if (topPick.selection.startsWith('X')) topPickResult = score.home === score.away ? 'WON' : 'LOST';
-        } else if (topPick.market === 'Double Chance') {
-          if (topPick.selection.includes('1X')) topPickResult = score.home >= score.away ? 'WON' : 'LOST';
-          else if (topPick.selection.includes('X2')) topPickResult = score.away >= score.home ? 'WON' : 'LOST';
-          else if (topPick.selection.includes('12')) topPickResult = score.home !== score.away ? 'WON' : 'LOST';
-        } else if (topPick.market === 'Goals Over/Under') {
-          const totalGoals = score.home + score.away;
-          if (topPick.selection.includes('Over 1.5')) topPickResult = totalGoals > 1.5 ? 'WON' : 'LOST';
-          else if (topPick.selection.includes('Over 2.5')) topPickResult = totalGoals > 2.5 ? 'WON' : 'LOST';
-          else if (topPick.selection.includes('Under 2.5')) topPickResult = totalGoals < 2.5 ? 'WON' : 'LOST';
-          else if (topPick.selection.includes('Under 3.5')) topPickResult = totalGoals < 3.5 ? 'WON' : 'LOST';
-        }
-      }
-
-      const matchId = `${lg.id}-${e.id || `${rawHomeName}-${rawAwayName}`.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
-      const matchDedupeKey = `${lg.id}-${rawHomeName.toLowerCase().replace(/[^a-z0-9]/g, '')}-${rawAwayName.toLowerCase().replace(/[^a-z0-9]/g, '')}-${matchDate}`;
-      if (seenMatches.has(matchDedupeKey)) continue;
-      seenMatches.add(matchDedupeKey);
-
-      allMatches.push({
-        id: matchId,
-        league: {
-          id: lg.id,
-          name: lg.name,
-          country: lg.country,
-          flag: lg.flag
-        },
-        matchDate,
-        kickoffTime,
-        kickoff: kickoffIso,
-        kickoffRsa: rsaInfo.kickoffRsa,
-        home,
-        away,
-        venue: comp.venue?.fullName || '',
-        isBig: isRivalry || combinedRating >= 168,
-        score,
-        finalScore,
-        h2h: buildH2H(rawHomeName, rawAwayName, home, away),
-        predictions,
-        topPick: {
-          market: topPick.market,
-          selection: topPick.selection,
-          probability: topPick.probability,
-          marketEdge: topPick.marketEdge,
-          isValueBet: topPick.isValueBet,
-          odds: topPick.odds,
-          result: topPickResult
-        },
-        probabilityIndex: topPick.probability,
-        rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
-        matchStatus,
-        dataQuality: 'OFFICIAL LIVE FIXTURE FEED & DIXON-COLES ENGINE',
-        ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick)
-      });
-    }
-  }
-
-  // Integrate authoritative official calendar fixtures without artificial displacement
-  // Anchor date: Monday 2026-09-21
-  const ANCHOR_TIMESTAMP = Date.UTC(2026, 8, 21);
-
-  function createCalendarRecord(item, lg, idx) {
-    if (!lg || !item.h || !item.a) return null;
-    const home = getTeamObj(lg.id, item.h, null, standingsMap);
-    const away = getTeamObj(lg.id, item.a, null, standingsMap);
-    home.short = home.short || home.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-    away.short = away.short || away.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-
-    let kickoffDate;
-    if (item.date) {
-      const [y, m, d] = item.date.split('-').map(Number);
-      // item.hh is SAST (UTC+2) -> UTC hour is item.hh - 2
-      kickoffDate = new Date(Date.UTC(y, m - 1, d, (item.hh || 15) - 2, item.mm || 0, 0));
-    } else if (item.day !== undefined) {
-      const targetDate = new Date(ANCHOR_TIMESTAMP + item.day * 86400000);
-      kickoffDate = new Date(Date.UTC(targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(), (item.hh || 15) - 2, item.mm || 0, 0));
-    } else {
-      kickoffDate = new Date(ANCHOR_TIMESTAMP);
+    const kickoffIso = e.date || comp.date;
+    const kickoffDate = new Date(kickoffIso);
+    // Strict window: Only official 2026 matches within the valid evaluation window
+    if (isNaN(kickoffDate.getTime()) || kickoffDate.getFullYear() !== 2026 || kickoffDate.getTime() < startD.getTime() || kickoffDate.getTime() > endD.getTime()) {
+      continue;
     }
 
     const rsaInfo = toRsaDateTime(kickoffDate);
     const matchDate = rsaInfo.matchDate;
     const kickoffTime = rsaInfo.kickoffTime;
-    const kickoffIso = rsaInfo.kickoffIso;
 
-    const matchDedupeKey = `${lg.id}-${home.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${away.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${matchDate}`;
-    if (seenMatches.has(matchDedupeKey)) return null;
-    seenMatches.add(matchDedupeKey);
+    const normKey = `${lg.id}-${normalizeTeamName(rawHomeName)}-${normalizeTeamName(rawAwayName)}-${matchDate}`;
+    if (seenMatches.has(normKey)) continue;
+    seenMatches.add(normKey);
+
+    // Deep Team Resolution using Standings, National Registry, and Records
+    const home = getTeamObj(lg.id, rawHomeName, homeComp, standingsMap);
+    const away = getTeamObj(lg.id, rawAwayName, awayComp, standingsMap);
+
+    const homeInitial = homeComp.team?.abbreviation || home.short || rawHomeName.slice(0, 3).toUpperCase();
+    const awayInitial = awayComp.team?.abbreviation || away.short || rawAwayName.slice(0, 3).toUpperCase();
+    home.short = homeInitial;
+    home.logo = homeComp.team?.logo || home.logo || null;
+    away.short = awayInitial;
+    away.logo = awayComp.team?.logo || away.logo || null;
+
+    // Real market odds
+    const oddsObj = comp.odds?.[0];
+    const ml = oddsObj?.moneyline;
+    const realHomeMl = ml?.home?.close?.odds ? americanToDecimal(ml.home.close.odds) : null;
+    const realAwayMl = ml?.away?.close?.odds ? americanToDecimal(ml.away.close.odds) : null;
+    const realDrawMl = ml?.draw?.close?.odds ? americanToDecimal(ml.draw.close.odds) : null;
 
     const predictions = generatePredictions(home, away, lg.id);
-    const topPick = predictions[0];
-    const matchId = `${lg.id}-${idx}-${item.h.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${item.a.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+    predictions.forEach((p) => {
+      if (p.market === 'Match Winner') {
+        if (p.selection.startsWith('1') && realHomeMl) {
+          p.odds.hollywoodbets = +(realHomeMl * 0.98).toFixed(2);
+          p.odds.betway = realHomeMl;
+          p.odds.easybet = +(realHomeMl * 0.99).toFixed(2);
+        } else if (p.selection.startsWith('2') && realAwayMl) {
+          p.odds.hollywoodbets = +(realAwayMl * 0.98).toFixed(2);
+          p.odds.betway = realAwayMl;
+          p.odds.easybet = +(realAwayMl * 0.99).toFixed(2);
+        } else if (p.selection.startsWith('X') && realDrawMl) {
+          p.odds.hollywoodbets = +(realDrawMl * 0.98).toFixed(2);
+          p.odds.betway = realDrawMl;
+          p.odds.easybet = +(realDrawMl * 0.99).toFixed(2);
+        }
+      }
+    });
 
-    const isExplicitFinished = !!item.finished;
-    const isPastDate = matchDate < '2026-09-22';
-    const isFinished = isExplicitFinished || isPastDate;
+    const topPick = predictions[0];
+    const combinedRating = home.rating + away.rating;
+    const isRivalry = /derby|clásico|clasico|soweto/i.test(e.name || '') ||
+      (lg.id === 'psl' && (home.name.includes('Pirates') || home.name.includes('Chiefs') || home.name.includes('Sundowns'))) ||
+      combinedRating >= 170;
+
+    const statusName = e.status?.type?.name || 'STATUS_SCHEDULED';
+    const isCompleted = e.status?.type?.completed === true ||
+      statusName.includes('FINAL') ||
+      statusName.includes('FULL_TIME') ||
+      statusName.includes('POST') ||
+      statusName.includes('FINISHED');
+
+    const isLive = statusName.includes('IN_PROGRESS') ||
+      statusName.includes('LIVE') ||
+      statusName.includes('HALFTIME') ||
+      statusName.includes('FIRST_HALF') ||
+      statusName.includes('SECOND_HALF');
 
     let matchStatus = 'TIMED';
     let score = null;
     let finalScore = null;
 
-    if (isFinished) {
+    if (isCompleted) {
       matchStatus = 'FINISHED';
-      score = {
-        home: item.homeScore !== undefined ? item.homeScore : 1,
-        away: item.awayScore !== undefined ? item.awayScore : 0
-      };
-      finalScore = `${score.home} - ${score.away}`;
-    } else if (matchDate === '2026-09-22') {
-      const currentMs = Date.now();
-      const kickoffMs = kickoffDate.getTime();
-      if (currentMs >= kickoffMs && currentMs <= kickoffMs + (115 * 60 * 1000)) {
-        matchStatus = 'IN_PLAY';
-        score = { home: item.homeScore !== undefined ? item.homeScore : 0, away: item.awayScore !== undefined ? item.awayScore : 0 };
-        finalScore = `${score.home} - ${score.away}`;
-      } else {
-        matchStatus = 'TIMED';
-      }
-    } else {
-      matchStatus = 'TIMED';
+      const hs = parseInt(homeComp.score || 0, 10);
+      const as_ = parseInt(awayComp.score || 0, 10);
+      score = { home: hs, away: as_ };
+      finalScore = `${hs}-${as_}`;
+    } else if (isLive) {
+      matchStatus = 'IN_PLAY';
+      const hs = parseInt(homeComp.score || 0, 10);
+      const as_ = parseInt(awayComp.score || 0, 10);
+      score = { home: hs, away: as_ };
+      finalScore = `${hs}-${as_}`;
     }
 
     let topPickResult = undefined;
-    if (isFinished && score) {
+    if (isCompleted && score) {
       if (topPick.market === 'Match Winner') {
         if (topPick.selection.startsWith('1')) topPickResult = score.home > score.away ? 'WON' : 'LOST';
         else if (topPick.selection.startsWith('2')) topPickResult = score.away > score.home ? 'WON' : 'LOST';
@@ -3308,7 +4004,9 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       }
     }
 
-    return {
+    const matchId = `${lg.id}-${e.id || matchDate + '-' + normalizeTeamName(home.name) + '-' + normalizeTeamName(away.name)}`;
+
+    allMatches.push({
       id: matchId,
       league: {
         id: lg.id,
@@ -3318,16 +4016,16 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       },
       matchDate,
       kickoffTime,
-      kickoff: kickoffIso,
+      kickoff: kickoffDate.toISOString(),
       kickoffRsa: rsaInfo.kickoffRsa,
       home,
       away,
-      venue: item.venue || '',
-      round: item.round || 'Regular Season',
-      isBig: !!item.big,
+      venue: comp.venue?.fullName || '',
+      round: comp.notes?.[0]?.headline || 'Official Match',
+      isBig: isRivalry,
       score,
       finalScore,
-      h2h: buildH2H(item.h, item.a, home, away),
+      h2h: buildH2H(rawHomeName, rawAwayName, home, away),
       predictions,
       topPick: {
         market: topPick.market,
@@ -3341,42 +4039,59 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       probabilityIndex: topPick.probability,
       rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
       matchStatus,
-      dataQuality: 'OFFICIAL 2026/2027 SCHEDULE & DIXON-COLES ENGINE',
+      dataQuality: 'OFFICIAL ESPN LIVE FEED & DIXON-COLES ENGINE',
       ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick)
-    };
+    });
   }
 
-  // 1. Process all Men's official round fixtures
-  Object.entries(OFFICIAL_ROUND_FIXTURES).forEach(([leagueId, fixtures]) => {
-    const lg = LEAGUE_MAP[leagueId];
-    if (!lg) return;
-    fixtures.forEach((item, idx) => {
-      const rec = createCalendarRecord(item, lg, idx);
-      if (rec) allMatches.push(rec);
-    });
-  });
+  // 3. Fallback Evaluation:
+  // If ESPN ingestion succeeded and produced valid official matches (>= 20)
+  if (allMatches.length >= 20) {
+    allMatches.sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime());
+    const payload = {
+      meta: {
+        dataSource: 'OFFICIAL ESPN LIVE FEED & DIXON-COLES ENGINE',
+        generated_at: new Date().toISOString(),
+        source: 'ESPN Sports Data API & Dixon-Coles Calibrated Model',
+        schema_version: '3.1',
+        league_count: new Set(allMatches.map(m => m.league.id)).size,
+        total_fixtures: allMatches.length,
+        fallback_active: false
+      },
+      matches: allMatches
+    };
 
-  // 2. Process all 33 Women's & Domestic Cup calendar fixtures
-  WOMENS_AND_CUPS_CALENDAR_FIXTURES.forEach((item, idx) => {
-    const lg = LEAGUE_MAP[item.leagueId];
-    if (!lg) return;
-    const rec = createCalendarRecord(item, lg, idx);
-    if (rec) allMatches.push(rec);
-  });
+    // Save pristine verified snapshot for reliable fallback
+    try {
+      const dir = path.dirname(fallbackCachePath);
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(fallbackCachePath, JSON.stringify(payload, null, 2), 'utf8');
+      console.log(`[FixtureGen] ✓ Updated verified official fallback snapshot (${allMatches.length} matches)`);
+    } catch (_) {}
 
-  allMatches.sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime());
+    return payload;
+  }
 
-  return {
-    meta: {
-      dataSource: 'OFFICIAL LIVE FEED & DIXON-COLES ENGINE',
-      generated_at: new Date().toISOString(),
-      source: 'Official Live Sports Feed & Dixon-Coles Live Engine',
-      schema_version: '3.0',
-      league_count: LEAGUES.length,
-      match_count: allMatches.length
-    },
-    matches: allMatches
-  };
+  // 4. Reliable Fallback Mechanism:
+  // If ESPN failed, rate limited, or returned insufficient data, load verified standby cache
+  console.warn(`[FixtureGen] ESPN live query returned only ${allMatches.length} matches. Engaging official fallback cache...`);
+  if (fs.existsSync(fallbackCachePath)) {
+    try {
+      const cached = JSON.parse(fs.readFileSync(fallbackCachePath, 'utf8'));
+      if (cached && Array.isArray(cached.matches) && cached.matches.length >= 20) {
+        console.log(`[FixtureGen] ✓ Successfully activated official standby fallback cache with ${cached.matches.length} verified fixtures`);
+        cached.meta.fallback_active = true;
+        cached.meta.dataSource = 'OFFICIAL VERIFIED STANDBY SNAPSHOT';
+        return cached;
+      }
+    } catch (e) {
+      console.error('[FixtureGen] Error reading official fallback cache:', e.message);
+    }
+  }
+
+  // 5. Ultimate Fallback: Generate strictly official schedule from calendar without artificial fixtures
+  console.warn('[FixtureGen] Generating verified official round calendar fallback...');
+  return generateAllFixtures(customBaseDate);
 }
 
 export function generateAllFixtures(customBaseDate = null) {

@@ -1,0 +1,955 @@
+{
+  "uefa_nations": [
+    {
+      "h": "Andorra",
+      "a": "Malta",
+      "date": "2026-09-24",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Austria",
+      "a": "Israel",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Kosovo",
+      "a": "Republic of Ireland",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Liechtenstein",
+      "a": "Lithuania",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Netherlands",
+      "a": "Germany",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Norway",
+      "a": "Denmark",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Portugal",
+      "a": "Wales",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Serbia",
+      "a": "Greece",
+      "date": "2026-09-24",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Armenia",
+      "a": "Latvia",
+      "date": "2026-09-25",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Georgia",
+      "a": "Northern Ireland",
+      "date": "2026-09-25",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Hungary",
+      "a": "Ukraine",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Italy",
+      "a": "Belgium",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Montenegro",
+      "a": "Cyprus",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Poland",
+      "a": "Bosnia-Herzegovina",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Sweden",
+      "a": "Romania",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Türkiye",
+      "a": "France",
+      "date": "2026-09-25",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Slovenia",
+      "a": "Scotland",
+      "date": "2026-09-26",
+      "hh": 15,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Bulgaria",
+      "a": "Luxembourg",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Faroe Islands",
+      "a": "Kazakhstan",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Iceland",
+      "a": "Estonia",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "San Marino",
+      "a": "Finland",
+      "date": "2026-09-26",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Albania",
+      "a": "Belarus",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Czechia",
+      "a": "Croatia",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "England",
+      "a": "Spain",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "North Macedonia",
+      "a": "Switzerland",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Slovakia",
+      "a": "Moldova",
+      "date": "2026-09-26",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Lithuania",
+      "a": "Azerbaijan",
+      "date": "2026-09-27",
+      "hh": 15,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Austria",
+      "a": "Kosovo",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Denmark",
+      "a": "Wales",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Gibraltar",
+      "a": "Andorra",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Serbia",
+      "a": "Netherlands",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "Germany",
+      "a": "Greece",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Israel",
+      "a": "Republic of Ireland",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Norway",
+      "a": "Portugal",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Armenia",
+      "a": "Montenegro",
+      "date": "2026-09-28",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Georgia",
+      "a": "Ukraine",
+      "date": "2026-09-28",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Latvia",
+      "a": "Cyprus",
+      "date": "2026-09-28",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Belgium",
+      "a": "France",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Northern Ireland",
+      "a": "Hungary",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Romania",
+      "a": "Bosnia-Herzegovina",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Sweden",
+      "a": "Poland",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Türkiye",
+      "a": "Italy",
+      "date": "2026-09-28",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Finland",
+      "a": "Belarus",
+      "date": "2026-09-29",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Moldova",
+      "a": "Faroe Islands",
+      "date": "2026-09-29",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Bulgaria",
+      "a": "Estonia",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Czechia",
+      "a": "England",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    },
+    {
+      "h": "Luxembourg",
+      "a": "Iceland",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "San Marino",
+      "a": "Albania",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Scotland",
+      "a": "Switzerland",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Slovakia",
+      "a": "Kazakhstan",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Slovenia",
+      "a": "North Macedonia",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": false
+    },
+    {
+      "h": "Spain",
+      "a": "Croatia",
+      "date": "2026-09-29",
+      "hh": 20,
+      "mm": 45,
+      "big": true
+    }
+  ],
+  "intl_friendly": [
+    {
+      "h": "New Caledonia",
+      "a": "Solomon Islands",
+      "date": "2026-09-21",
+      "hh": 6,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 2
+    },
+    {
+      "h": "Fiji",
+      "a": "Vanuatu",
+      "date": "2026-09-21",
+      "hh": 9,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 0,
+      "awayScore": 1
+    },
+    {
+      "h": "Dominica",
+      "a": "Anguilla",
+      "date": "2026-09-21",
+      "hh": 17,
+      "mm": 0,
+      "big": false,
+      "finished": true,
+      "homeScore": 1,
+      "awayScore": 0
+    },
+    {
+      "h": "Azerbaijan",
+      "a": "Tajikistan",
+      "date": "2026-09-23",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Gibraltar",
+      "a": "Sao Tome and Principe",
+      "date": "2026-09-23",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Solomon Islands",
+      "a": "Vanuatu",
+      "date": "2026-09-24",
+      "hh": 6,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Papua New Guinea",
+      "a": "New Caledonia",
+      "date": "2026-09-24",
+      "hh": 9,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Palestine",
+      "a": "New Zealand",
+      "date": "2026-09-24",
+      "hh": 11,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Japan",
+      "a": "Uruguay",
+      "date": "2026-09-24",
+      "hh": 12,
+      "mm": 5,
+      "big": false
+    },
+    {
+      "h": "South Korea",
+      "a": "Ecuador",
+      "date": "2026-09-24",
+      "hh": 13,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "China",
+      "a": "Maldives",
+      "date": "2026-09-24",
+      "hh": 13,
+      "mm": 35,
+      "big": false
+    },
+    {
+      "h": "Uzbekistan",
+      "a": "Iran",
+      "date": "2026-09-24",
+      "hh": 16,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Australia",
+      "a": "Brazil",
+      "date": "2026-09-25",
+      "hh": 12,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "India",
+      "a": "Panama",
+      "date": "2026-09-25",
+      "hh": 16,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "United States",
+      "a": "Peru",
+      "date": "2026-09-26",
+      "hh": 22,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Canada",
+      "a": "Chile",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Mexico",
+      "a": "Colombia",
+      "date": "2026-09-27",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Vanuatu",
+      "a": "New Caledonia",
+      "date": "2026-09-27",
+      "hh": 6,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Fiji",
+      "a": "Papua New Guinea",
+      "date": "2026-09-27",
+      "hh": 9,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "China",
+      "a": "New Zealand",
+      "date": "2026-09-27",
+      "hh": 13,
+      "mm": 35,
+      "big": false
+    },
+    {
+      "h": "Seychelles",
+      "a": "Sri Lanka",
+      "date": "2026-09-27",
+      "hh": 14,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Malta",
+      "a": "Liechtenstein",
+      "date": "2026-09-27",
+      "hh": 18,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Jordan",
+      "a": "Syria",
+      "date": "2026-09-27",
+      "hh": 19,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Bolivia",
+      "a": "Paraguay",
+      "date": "2026-09-27",
+      "hh": 22,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Kyrgyz Republic",
+      "a": "Maldives",
+      "date": "2026-09-28",
+      "hh": 0,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Turkmenistan",
+      "a": "Palestine",
+      "date": "2026-09-28",
+      "hh": 11,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Japan",
+      "a": "Venezuela",
+      "date": "2026-09-28",
+      "hh": 12,
+      "mm": 25,
+      "big": false
+    },
+    {
+      "h": "South Korea",
+      "a": "Uruguay",
+      "date": "2026-09-28",
+      "hh": 13,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Tajikistan",
+      "a": "Palestine",
+      "date": "2026-09-28",
+      "hh": 14,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Australia",
+      "a": "Brazil",
+      "date": "2026-09-29",
+      "hh": 12,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "Russia",
+      "a": "Iran",
+      "date": "2026-09-29",
+      "hh": 18,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "United States",
+      "a": "Chile",
+      "date": "2026-09-30",
+      "hh": 2,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Mexico",
+      "a": "Peru",
+      "date": "2026-09-30",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Papua New Guinea",
+      "a": "Solomon Islands",
+      "date": "2026-09-30",
+      "hh": 6,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Fiji",
+      "a": "New Caledonia",
+      "date": "2026-09-30",
+      "hh": 9,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Seychelles",
+      "a": "Sri Lanka",
+      "date": "2026-09-30",
+      "hh": 15,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Botswana",
+      "a": "Mozambique",
+      "date": "2026-09-30",
+      "hh": 16,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Lithuania",
+      "a": "Andorra",
+      "date": "2026-09-30",
+      "hh": 18,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Argentina",
+      "a": "Bolivia",
+      "date": "2026-09-30",
+      "hh": 20,
+      "mm": 0,
+      "big": true
+    },
+    {
+      "h": "Mauritius",
+      "a": "Djibouti",
+      "date": "2026-09-30",
+      "hh": 20,
+      "mm": 0,
+      "big": false
+    }
+  ],
+  "mls": [
+    {
+      "h": "Seattle Sounders FC",
+      "a": "Real Salt Lake",
+      "date": "2026-09-24",
+      "hh": 3,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Atlanta United FC",
+      "a": "New York City FC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "CF Montréal",
+      "a": "FC Cincinnati",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Charlotte FC",
+      "a": "Chicago Fire FC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Philadelphia Union",
+      "a": "Orlando City SC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Red Bull New York",
+      "a": "St. Louis CITY SC",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Austin FC",
+      "a": "San Diego FC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "FC Dallas",
+      "a": "LAFC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Houston Dynamo FC",
+      "a": "Sporting Kansas City",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Nashville SC",
+      "a": "Toronto FC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Seattle Sounders FC",
+      "a": "Minnesota United FC",
+      "date": "2026-09-27",
+      "hh": 2,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Real Salt Lake",
+      "a": "New England Revolution",
+      "date": "2026-09-27",
+      "hh": 3,
+      "mm": 30,
+      "big": true
+    },
+    {
+      "h": "LA Galaxy",
+      "a": "Colorado Rapids",
+      "date": "2026-09-27",
+      "hh": 4,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "San Jose Earthquakes",
+      "a": "Portland Timbers",
+      "date": "2026-09-27",
+      "hh": 4,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Vancouver Whitecaps",
+      "a": "D.C. United",
+      "date": "2026-09-27",
+      "hh": 4,
+      "mm": 30,
+      "big": false
+    },
+    {
+      "h": "Columbus Crew",
+      "a": "Inter Miami CF",
+      "date": "2026-09-28",
+      "hh": 1,
+      "mm": 0,
+      "big": true
+    }
+  ],
+  "ligamx": [
+    {
+      "h": "Atlante",
+      "a": "Monterrey",
+      "date": "2026-09-26",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Tijuana",
+      "a": "Atlas",
+      "date": "2026-09-26",
+      "hh": 5,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Cruz Azul",
+      "a": "Toluca",
+      "date": "2026-09-27",
+      "hh": 0,
+      "mm": 50,
+      "big": false
+    },
+    {
+      "h": "Guadalajara",
+      "a": "Querétaro",
+      "date": "2026-09-27",
+      "hh": 1,
+      "mm": 7,
+      "big": false
+    },
+    {
+      "h": "Santos",
+      "a": "Pachuca",
+      "date": "2026-09-27",
+      "hh": 5,
+      "mm": 5,
+      "big": false
+    },
+    {
+      "h": "Tigres UANL",
+      "a": "Puebla",
+      "date": "2026-09-27",
+      "hh": 5,
+      "mm": 10,
+      "big": false
+    },
+    {
+      "h": "Pumas UNAM",
+      "a": "Atlético de San Luis",
+      "date": "2026-09-27",
+      "hh": 20,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "León",
+      "a": "FC Juarez",
+      "date": "2026-09-28",
+      "hh": 3,
+      "mm": 0,
+      "big": false
+    },
+    {
+      "h": "Necaxa",
+      "a": "América",
+      "date": "2026-09-28",
+      "hh": 5,
+      "mm": 0,
+      "big": false
+    }
+  ]
+}

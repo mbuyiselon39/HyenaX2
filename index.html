@@ -795,6 +795,7 @@ const LEAGUES = [
   { id:'venezuela', name:'Venezuelan Primera División', country:'Venezuela', flag:'🇻🇪', rho: -0.160 },
   { id:'guatemala', name:'Guatemalan Liga Nacional', country:'Guatemala', flag:'🇬🇹', rho: -0.160 },
   { id:'uefa_nations', name:'UEFA Nations League', country:'Europe', flag:'🇪🇺', rho: -0.125 },
+  { id:'intl_friendly', name:'International Friendlies', country:'International', flag:'🌐', rho: -0.110 },
   { id:'afcon', name:'African Cup of Nations', country:'Africa', flag:'🌍', rho: -0.170 },
   { id:'kategoria_superiore', name:'Kategoria Superiore', country:'Albania', flag:'🇦🇱', rho: -0.160 },
   { id:'armenia', name:'Armenian Premier League', country:'Armenia', flag:'🇦🇲', rho: -0.135 },
@@ -1140,6 +1141,15 @@ function app(){
       window.addEventListener('resize', () => { if (window.innerWidth >= 1024) this.drawerOpen = false; });
       window.addEventListener('popstate', () => { if (this.drawerOpen) this.drawerOpen = false; });
       this.loadRemote();
+      // Auto-update site every 60 seconds once official fixtures become available or change
+      setInterval(() => {
+        this.loadRemote(true);
+      }, 60000);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          this.loadRemote(true);
+        }
+      });
       this.fetchScraperStatus();
       this.fetchBeastLedger();
       this.runBacktestSimulation();
@@ -2570,10 +2580,16 @@ function app(){
 
         this.fixtures = json.matches.map((m, n) => this.normalizeFixture(m, n));
         this.openLeagues = Object.fromEntries(this.fixtures.map(m => [m.league.id, true]));
-        this.dataSource = 'LIVE DIXON-COLES SYNC';
-        this.updatedAt = json.meta && json.meta.generated_at ? new Date(json.meta.generated_at) : new Date();
+        if (json.meta) {
+          this.fallbackActive = !!json.meta.fallback_active;
+          this.dataSource = json.meta.dataSource || (this.fallbackActive ? 'OFFICIAL STANDBY SNAPSHOT' : 'OFFICIAL ESPN LIVE INGESTION');
+          this.updatedAt = json.meta.generated_at ? new Date(json.meta.generated_at) : new Date();
+        } else {
+          this.dataSource = 'OFFICIAL ESPN LIVE INGESTION';
+          this.updatedAt = new Date();
+        }
 
-        // Dynamically synchronize calendar day tabs so all scheduled dates have clickable chips
+        // Dynamically synchronize calendar day tabs so ONLY relevant dates with official confirmed matches appear
         this.syncDaysWithFixtures();
 
         const todayKey = this.dateKey(new Date());
@@ -2619,33 +2635,61 @@ function app(){
       }
     },
 
+    async forceSyncFixtures(){
+      if (this.isSyncingFeeds) return;
+      this.isSyncingFeeds = true;
+      try {
+        const res = await fetch('/api/fixtures/sync', { method: 'POST' });
+        if (res.ok) {
+          await this.loadRemote(false);
+        }
+      } catch (err) {
+        console.warn('Manual feed sync failed:', err);
+      } finally {
+        this.isSyncingFeeds = false;
+      }
+    },
+
     syncDaysWithFixtures(){
       if (!Array.isArray(this.fixtures) || !this.fixtures.length) return;
-      const dateSet = new Set(this.fixtures.map(m => m.matchDate || this.dateKey(m.kickoff)).filter(Boolean));
-      const existingKeys = new Set(this.days.map(d => d.key));
       const today = new Date();
       today.setHours(0,0,0,0);
-      dateSet.forEach(key => {
-        if (!existingKeys.has(key)) {
-          const parts = key.split('-');
-          if (parts.length === 3) {
-            const dateObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-            if (!isNaN(dateObj.getTime())) {
-              const diff = Math.round((dateObj.getTime() - today.getTime()) / (24 * 60 * 60 * 1000));
-              this.days.push({
-                key,
-                date: dateObj,
-                offset: diff,
-                label: diff === -1 ? 'Yesterday' : diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : dateObj.toLocaleDateString('en-GB', { weekday: 'short' }),
-                sub: dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
-                year: dateObj.getFullYear(),
-                fullLabel: dateObj.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
-              });
-            }
-          }
-        }
+      const todayKey = this.dateKey(today);
+
+      // Collect strictly dates that contain confirmed official matches
+      const dateSet = new Set();
+      this.fixtures.forEach(m => {
+        const k = m.matchDate || this.dateKey(m.kickoff);
+        if (k) dateSet.add(k);
       });
-      this.days.sort((a, b) => a.key.localeCompare(b.key));
+
+      const relevantDates = Array.from(dateSet).sort();
+      this.days = relevantDates.map(key => {
+        const parts = key.split('-');
+        const dateObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        const diff = Math.round((dateObj.getTime() - today.getTime()) / (24 * 60 * 60 * 1000));
+        return {
+          key,
+          date: dateObj,
+          offset: diff,
+          label: diff === -1 ? 'Yesterday' : diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : dateObj.toLocaleDateString('en-GB', { weekday: 'short' }),
+          sub: dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+          year: dateObj.getFullYear(),
+          fullLabel: diff === -1 ? `Yesterday (${dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })})` :
+                     diff === 0 ? `Today (${dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })})` :
+                     dateObj.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+        };
+      });
+
+      // Ensure selectedDate points to an official scheduled date
+      if (!this.selectedDate || this.selectedDate === 'all' || !this.days.some(d => d.key === this.selectedDate)) {
+        if (this.days.some(d => d.key === todayKey)) {
+          this.selectedDate = todayKey;
+        } else if (this.days.length) {
+          const upcoming = this.days.filter(d => d.offset >= 0);
+          this.selectedDate = (upcoming[0] || this.days[this.days.length - 1]).key;
+        }
+      }
     },
 
     countByDay(key){
@@ -3385,10 +3429,18 @@ function app(){
 
       <!-- Engine status -->
       <div class="hidden md:flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg border border-[#222E46] bg-[#0E131F]">
-        <span class="live-dot w-2 h-2 rounded-full bg-[#F59E0B]"></span>
+        <span class="live-dot w-2 h-2 rounded-full" :class="fallbackActive ? 'bg-amber-400' : 'bg-emerald-400'"></span>
         <div class="leading-tight">
-          <div class="font-num text-[11px] font-bold text-amber-400" x-text="dataSource">DIXON-COLES ENGINE</div>
-          <div class="text-[9px] text-slate-400 uppercase tracking-wider">Dixon-Coles 1997 · <span x-text="fmtAgo(updatedAt)">live</span></div>
+          <div class="font-num text-[11px] font-bold flex items-center gap-1.5" :class="fallbackActive ? 'text-amber-400' : 'text-emerald-400'">
+            <span x-text="dataSource">OFFICIAL ESPN LIVE FEED</span>
+          </div>
+          <div class="text-[9px] text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span x-text="fallbackActive ? 'Verified Standby' : 'Live Scoreboard'">Live Scoreboard</span> · <span x-text="fmtAgo(updatedAt)">live</span>
+            <button @click="forceSyncFixtures()" class="ml-1 text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-0.5 cursor-pointer" :title="'Force refresh official fixtures & predictions'">
+              <span :class="{ 'animate-spin': isSyncingFeeds }">🔄</span>
+              <span class="underline" x-text="isSyncingFeeds ? 'Syncing...' : 'Sync'">Sync</span>
+            </button>
+          </div>
         </div>
       </div>
 
