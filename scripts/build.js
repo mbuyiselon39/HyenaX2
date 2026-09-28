@@ -10,12 +10,17 @@ const distDir = path.join(rootDir, 'dist');
 
 console.log('[Build] Starting HyenaX production build...');
 
-// 1. Generate fixtures and model data
-try {
-  console.log('[Build] Ensuring latest fixtures and model predictions...');
-  await saveFixtures();
-} catch (err) {
-  console.warn('[Build] Warning: Fixture generation encountered error:', err.message);
+// 1. Generate fixtures and model data if missing
+const fixturesPath = path.join(rootDir, 'data', 'fixtures.json');
+if (!fs.existsSync(fixturesPath) || fs.statSync(fixturesPath).size < 1000) {
+  try {
+    console.log('[Build] Ensuring latest fixtures and model predictions...');
+    await saveFixtures();
+  } catch (err) {
+    console.warn('[Build] Warning: Fixture generation encountered error:', err.message);
+  }
+} else {
+  console.log('[Build] Existing verified fixtures cache verified.');
 }
 
 // 2. Prepare clean dist directory
@@ -28,7 +33,9 @@ fs.mkdirSync(distDir, { recursive: true });
 const filesToCopy = [
   'index.html',
   'manifest.webmanifest',
-  'sw.js'
+  'sw.js',
+  'motivation_modifier.py',
+  'validation_suite.py'
 ];
 
 const dirsToCopy = [

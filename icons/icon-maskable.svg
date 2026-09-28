@@ -1,53 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <radialGradient id="bgGradMask" cx="50%" cy="45%" r="65%">
-      <stop offset="0%" stop-color="#1F180A"/>
-      <stop offset="60%" stop-color="#0E1118"/>
-      <stop offset="100%" stop-color="#05070A"/>
+    <radialGradient id="cyberBgM" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#12182B"/>
+      <stop offset="45%" stop-color="#0B0F19"/>
+      <stop offset="100%" stop-color="#060913"/>
     </radialGradient>
-    <linearGradient id="goldRimMask" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFE57F"/>
-      <stop offset="25%" stop-color="#F59E0B"/>
-      <stop offset="50%" stop-color="#D97706"/>
-      <stop offset="75%" stop-color="#FDE047"/>
-      <stop offset="100%" stop-color="#92400E"/>
+    <linearGradient id="cyberGradientM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="50%" stop-color="#00B0FF"/>
+      <stop offset="100%" stop-color="#7C4DFF"/>
     </linearGradient>
-    <linearGradient id="goldInnerMask" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#FFFBEB"/>
-      <stop offset="35%" stop-color="#FBBF24"/>
-      <stop offset="70%" stop-color="#B45309"/>
-      <stop offset="100%" stop-color="#78350F"/>
+    <linearGradient id="accentGoldM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3B0"/>
+      <stop offset="25%" stop-color="#FFD700"/>
+      <stop offset="60%" stop-color="#FFA000"/>
+      <stop offset="100%" stop-color="#FF6F00"/>
+    </linearGradient>
+    <linearGradient id="isoTopGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="isoLeftGradM" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#060913"/>
+    </linearGradient>
+    <linearGradient id="isoRightGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A2234"/>
+      <stop offset="100%" stop-color="#0B0F19"/>
     </linearGradient>
   </defs>
 
-  <!-- Full Bleed Background for Maskable Icon -->
-  <rect width="512" height="512" fill="url(#bgGradMask)"/>
+  <rect width="512" height="512" fill="url(#cyberBgM)"/>
 
-  <!-- Safe Zone Medallion (Center 80%) -->
-  <g transform="translate(51.2, 51.2) scale(0.8)">
-    <circle cx="256" cy="230" r="170" fill="none" stroke="url(#goldRimMask)" stroke-width="14"/>
-    <circle cx="256" cy="230" r="152" fill="#0C0E14" stroke="url(#goldInnerMask)" stroke-width="5"/>
+  <!-- Centered Scaled 3D Isometric Cube -->
+  <g transform="translate(256, 235) scale(0.95)">
+    <polygon points="0,-120 104,-60 0,0 -104,-60" fill="url(#isoTopGradM)" stroke="url(#cyberGradientM)" stroke-width="3"/>
+    <polygon points="-104,-60 0,0 0,120 -104,60" fill="url(#isoLeftGradM)" stroke="rgba(0,229,255,0.4)" stroke-width="2.5"/>
+    <polygon points="0,0 104,-60 104,60 0,120" fill="url(#isoRightGradM)" stroke="rgba(124,77,255,0.5)" stroke-width="2.5"/>
 
-    <!-- Dollar sign -->
-    <g transform="translate(145, 125) scale(1.1)">
-      <path d="M45 10 L45 180 M65 10 L65 180" stroke="url(#goldRimMask)" stroke-width="8" stroke-linecap="round"/>
-      <path d="M85 45 C85 25, 30 20, 30 65 C30 105, 85 95, 85 140 C85 185, 20 180, 20 155" fill="none" stroke="url(#goldRimMask)" stroke-width="18" stroke-linecap="round"/>
-    </g>
+    <polygon points="0,-85 70,-45 0,-5 -70,-45" fill="none" stroke="url(#accentGoldM)" stroke-width="3.5"/>
+    <circle cx="0" cy="-45" r="7" fill="#FFD700"/>
+    
+    <line x1="0" y1="0" x2="0" y2="120" stroke="url(#cyberGradientM)" stroke-width="3"/>
+    <line x1="0" y1="0" x2="-104" y2="-60" stroke="url(#cyberGradientM)" stroke-width="2"/>
+    <line x1="0" y1="0" x2="104" y2="-60" stroke="#7C4DFF" stroke-width="2"/>
 
-    <!-- Hyena head -->
-    <g transform="translate(210, 110) scale(1.2)">
-      <path d="M40 30 L65 -15 L80 20 Z" fill="url(#goldInnerMask)" stroke="url(#goldRimMask)" stroke-width="2"/>
-      <path d="M25 40 L45 0 L55 35 Z" fill="url(#goldRimMask)" opacity="0.8"/>
-      <path d="M-10 70 L20 20 L45 50 L10 80 Z" fill="url(#goldInnerMask)"/>
-      <path d="M-20 110 L0 60 L25 90 L-5 125 Z" fill="url(#goldRimMask)"/>
-      <path d="M20 50 L75 35 L120 75 L115 105 L70 110 L40 135 L15 120 Z" fill="url(#goldInnerMask)" stroke="url(#goldRimMask)" stroke-width="3"/>
-      <path d="M70 110 L115 105 L130 95 L110 120 L75 125 Z" fill="url(#goldRimMask)"/>
-      <polygon points="65,65 78,58 72,70 60,68" fill="#FFFFFF" stroke="#000" stroke-width="1.5"/>
-      <circle cx="68" cy="64" r="2.5" fill="#000"/>
-    </g>
+    <circle cx="0" cy="0" r="14" fill="#060913" stroke="url(#accentGoldM)" stroke-width="3.5"/>
+    <circle cx="0" cy="0" r="6" fill="#FFD700"/>
+  </g>
 
-    <text x="215" y="445" font-family="'Space Grotesk', sans-serif" font-size="44" font-weight="900" fill="url(#goldRimMask)" text-anchor="middle" letter-spacing="4">HYENA</text>
-    <text x="320" y="445" font-family="'Space Grotesk', sans-serif" font-size="48" font-weight="900" fill="#FBBF24" stroke="#000" stroke-width="2" text-anchor="middle">X</text>
-    <text x="256" y="475" font-family="'IBM Plex Sans', sans-serif" font-size="14" font-weight="600" fill="#E5E7EB" text-anchor="middle" letter-spacing="1.5">THE NDLELA MILLIONAIRES GOLDPACK</text>
+  <g transform="translate(256, 430)">
+    <text x="-14" y="0" font-family="'Space Grotesk', sans-serif" font-size="42" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">HYENA</text>
+    <text x="68" y="0" font-family="'Space Grotesk', sans-serif" font-size="46" font-weight="900" fill="url(#accentGoldM)" text-anchor="middle">X</text>
+    <text x="0" y="28" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700" fill="#00E5FF" text-anchor="middle" letter-spacing="2.5">THE NDLELA MILLIONAIRES GOLDPACK</text>
   </g>
 </svg>

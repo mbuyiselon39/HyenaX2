@@ -1318,11 +1318,11 @@ export function calculateShinOverroundRemoval(oddsArrayOrMap) {
     return sumP;
   };
 
-  // 32-step bisection for high precision
-  for (let iter = 0; iter < 32; iter++) {
+  // 64-step bisection routine for high-precision Shin numerical matrix solver
+  for (let iter = 0; iter < 64; iter++) {
     const mid = (low + high) / 2;
     const sumMid = evalShinSum(mid);
-    if (Math.abs(sumMid - 1.0) < 1e-7) {
+    if (Math.abs(sumMid - 1.0) < 1e-10) {
       zOpt = mid;
       break;
     }
@@ -2444,3 +2444,161 @@ export function evaluateDeepMarketVetting({
   }
   return dv;
 }
+
+/* ============================================================
+   19. MARKET VOLATILITY GATEKEEPER & TRAP LINE DETECTION
+   Monitors implied bookmaker margin drift in the 4 hours before kickoff.
+   Rejects lines with drift > ±1.5%.
+   ============================================================ */
+export function evaluateMarketVolatilityGatekeeper({
+  openingOdds = [1.85, 3.40, 4.20],
+  closingOdds = [1.82, 3.45, 4.30],
+  hoursBeforeKickoff = 2.5,
+  trapThresholdPct = 1.5
+}) {
+  const openInv = openingOdds.reduce((acc, o) => acc + (1 / o), 0);
+  const closeInv = closingOdds.reduce((acc, o) => acc + (1 / o), 0);
+  const openMarginPct = +((openInv - 1) * 100).toFixed(2);
+  const closeMarginPct = +((closeInv - 1) * 100).toFixed(2);
+  const driftPct = +(closeMarginPct - openMarginPct).toFixed(2);
+  const absDriftPct = Math.abs(driftPct);
+
+  const isTrapLine = hoursBeforeKickoff <= 4.0 && absDriftPct > trapThresholdPct;
+  const auditTag = isTrapLine ? '[BOOKMAKER_TRAP_LINE: Implied Margin Volatility > ±1.5%]' : null;
+  const rejectionReason = isTrapLine
+    ? `Retail bookmaker margin drifted by ${driftPct > 0 ? '+' : ''}${driftPct}% (${openMarginPct}% -> ${closeMarginPct}%) within ${hoursBeforeKickoff}h of kickoff, exceeding safety threshold of ±${trapThresholdPct}%.`
+    : null;
+
+  return {
+    openMarginPct,
+    closeMarginPct,
+    driftPct,
+    absDriftPct,
+    hoursBeforeKickoff,
+    isTrapLine,
+    auditTag,
+    rejectionReason
+  };
+}
+
+/* ============================================================
+   20. LAYER 18: STRATEGIC ROTATION & MOTIVATION MODIFIER
+   Executes immediately after 17-model consensus completes.
+   Interpolates base probability with distraction penalties:
+   P_Final = P_Base * (1 - Pen_H) / ((P_Base * (1 - Pen_H)) + ((1 - P_Base) * (1 - Pen_A)))
+   ============================================================ */
+export function evaluateLayer18MotivationModifier({
+  baseProbabilityPct = 80.0,
+  homeUpcoming = [],
+  awayUpcoming = [],
+  baseLambda = 1.65,
+  baseMu = 0.95
+}) {
+  const TIER_WEIGHTS = {
+    UCL: 0.22,
+    UEL: 0.14,
+    'Domestic Derby': 0.16,
+    'Domestic Standard': 0.03,
+    'Dead-Rubber': 0.00
+  };
+
+  const computePenalty = (fixtures) => {
+    if (!fixtures || !fixtures.length) return { penalty: 0, tag: null, hours: 120, tier: 'None' };
+    const lead = fixtures[0];
+    const hours = Number(lead.hours_to_next_match || lead.hoursToNext || 120);
+    const tier = lead.competition_tier || lead.tier || 'Domestic Standard';
+    const dist = Number(lead.travel_distance_km || lead.travelDistance || 0);
+
+    if (hours > 96.0) {
+      return { penalty: 0, tag: null, hours, tier, note: 'Next match > 96h away' };
+    }
+
+    const urgency = Math.max(0.15, Math.min(1.0, (96.0 - hours) / (96.0 * 0.75)));
+    const baseW = TIER_WEIGHTS[tier] || 0.03;
+    const travelPen = dist > 500 ? Math.min(0.06, (dist / 1000) * 0.03) : 0;
+    const rawPen = (baseW * urgency) + travelPen;
+    const clampedPen = Math.min(0.38, Math.max(0, rawPen));
+
+    let tag = null;
+    if (clampedPen >= 0.08) {
+      if (tier === 'UCL') tag = `[STRATEGIC_ROTATION_RISK: Distraction due to upcoming UCL fixture (${hours.toFixed(0)}h)]`;
+      else if (tier === 'Domestic Derby') tag = `[STRATEGIC_ROTATION_RISK: Intense regional derby preparation (${hours.toFixed(0)}h)]`;
+      else if (tier === 'UEL') tag = `[STRATEGIC_ROTATION_RISK: Mid-week Europa League congestion (${hours.toFixed(0)}h)]`;
+      else tag = `[STRATEGIC_ROTATION_RISK: Short turnaround calendar compression (${hours.toFixed(0)}h)]`;
+    }
+
+    return {
+      penalty: +clampedPen.toFixed(4),
+      tag,
+      hours,
+      tier,
+      dist,
+      urgency: +urgency.toFixed(3)
+    };
+  };
+
+  const hPenData = computePenalty(homeUpcoming);
+  const aPenData = computePenalty(awayUpcoming);
+
+  const pBase = Math.max(0.01, Math.min(0.99, baseProbabilityPct / 100.0));
+  const hFactor = 1.0 - hPenData.penalty;
+  const aFactor = 1.0 - aPenData.penalty;
+
+  const num = pBase * hFactor;
+  const den = (pBase * hFactor) + ((1.0 - pBase) * aFactor);
+  const pFinal = den > 0 ? (num / den) : pBase;
+
+  const finalProbPct = +(pFinal * 100).toFixed(2);
+  const shiftPct = +(finalProbPct - baseProbabilityPct).toFixed(2);
+
+  const isDisqualified = (baseProbabilityPct >= 78.5 && finalProbPct < 78.5);
+  const activeTag = hPenData.tag || aPenData.tag || (isDisqualified ? '[STRATEGIC_ROTATION_RISK: Calendar Congestion Delta]' : null);
+
+  return {
+    layer: 18,
+    name: 'Strategic Rotation & Motivation Modifier',
+    baseProbabilityPct,
+    finalProbPct,
+    shiftPct,
+    homePenalty: hPenData.penalty,
+    awayPenalty: aPenData.penalty,
+    homeTelemetry: hPenData,
+    awayTelemetry: aPenData,
+    tacticalTag: activeTag,
+    isDisqualified,
+    adjustedLambda: +(baseLambda * hFactor).toFixed(2),
+    adjustedMu: +(baseMu * aFactor).toFixed(2)
+  };
+}
+
+/* ============================================================
+   21. ASYMMETRIC LOSS FUNCTION FOR ULTRA BANKERS
+   Penalizes False Positives 3.5x more severely than False Negatives.
+   ============================================================ */
+export function applyBankerAsymmetricRiskLoss(yTrue, yPredProb, isUltraBanker = true, volatilityIndex = 0.12) {
+  const p = Math.max(0.001, Math.min(0.999, yPredProb));
+  const fpWeight = isUltraBanker ? 3.5 : 1.0;
+
+  let loss = 0;
+  if (yTrue === 1) {
+    loss = 1.0 * Math.pow(1 - p, 2);
+  } else {
+    loss = fpWeight * Math.pow(p, 2);
+  }
+
+  let adjustedProb = p;
+  if (isUltraBanker && volatilityIndex > 0.20) {
+    const excessVol = Math.min(0.40, volatilityIndex - 0.20);
+    const reductionFactor = 1.0 - (excessVol * 1.5);
+    adjustedProb = +(p * Math.max(0.65, reductionFactor)).toFixed(4);
+  }
+
+  return {
+    loss: +loss.toFixed(5),
+    originalProbability: p,
+    adjustedProbability: adjustedProb,
+    fpPenaltyWeight: fpWeight,
+    volatilityDampenerApplied: isUltraBanker && volatilityIndex > 0.20
+  };
+}
+
