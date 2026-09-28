@@ -1,57 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <radialGradient id="cyberBgM" cx="50%" cy="40%" r="65%">
-      <stop offset="0%" stop-color="#12182B"/>
-      <stop offset="45%" stop-color="#0B0F19"/>
-      <stop offset="100%" stop-color="#060913"/>
+    <radialGradient id="bgGradM" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#151D2E"/>
+      <stop offset="60%" stop-color="#0E131F"/>
+      <stop offset="100%" stop-color="#080A0F"/>
     </radialGradient>
-    <linearGradient id="cyberGradientM" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00E5FF"/>
-      <stop offset="50%" stop-color="#00B0FF"/>
-      <stop offset="100%" stop-color="#7C4DFF"/>
-    </linearGradient>
-    <linearGradient id="accentGoldM" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF3B0"/>
-      <stop offset="25%" stop-color="#FFD700"/>
-      <stop offset="60%" stop-color="#FFA000"/>
-      <stop offset="100%" stop-color="#FF6F00"/>
-    </linearGradient>
-    <linearGradient id="isoTopGradM" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E293B"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <linearGradient id="isoLeftGradM" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0F172A"/>
-      <stop offset="100%" stop-color="#060913"/>
-    </linearGradient>
-    <linearGradient id="isoRightGradM" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1A2234"/>
-      <stop offset="100%" stop-color="#0B0F19"/>
+    <linearGradient id="goldGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE57F"/>
+      <stop offset="35%" stop-color="#F59E0B"/>
+      <stop offset="70%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#78350F"/>
     </linearGradient>
   </defs>
-
-  <rect width="512" height="512" fill="url(#cyberBgM)"/>
-
-  <!-- Centered Scaled 3D Isometric Cube -->
-  <g transform="translate(256, 235) scale(0.95)">
-    <polygon points="0,-120 104,-60 0,0 -104,-60" fill="url(#isoTopGradM)" stroke="url(#cyberGradientM)" stroke-width="3"/>
-    <polygon points="-104,-60 0,0 0,120 -104,60" fill="url(#isoLeftGradM)" stroke="rgba(0,229,255,0.4)" stroke-width="2.5"/>
-    <polygon points="0,0 104,-60 104,60 0,120" fill="url(#isoRightGradM)" stroke="rgba(124,77,255,0.5)" stroke-width="2.5"/>
-
-    <polygon points="0,-85 70,-45 0,-5 -70,-45" fill="none" stroke="url(#accentGoldM)" stroke-width="3.5"/>
-    <circle cx="0" cy="-45" r="7" fill="#FFD700"/>
-    
-    <line x1="0" y1="0" x2="0" y2="120" stroke="url(#cyberGradientM)" stroke-width="3"/>
-    <line x1="0" y1="0" x2="-104" y2="-60" stroke="url(#cyberGradientM)" stroke-width="2"/>
-    <line x1="0" y1="0" x2="104" y2="-60" stroke="#7C4DFF" stroke-width="2"/>
-
-    <circle cx="0" cy="0" r="14" fill="#060913" stroke="url(#accentGoldM)" stroke-width="3.5"/>
-    <circle cx="0" cy="0" r="6" fill="#FFD700"/>
+  <rect width="512" height="512" fill="url(#bgGradM)"/>
+  
+  <g transform="translate(256, 240) scale(0.9)">
+    <polygon points="0,-160 140,-80 140,80 0,160 -140,80 -140,-80" fill="#0E131F" stroke="url(#goldGradM)" stroke-width="6"/>
+    <text x="-44" y="28" font-family="'Space Grotesk', system-ui, sans-serif" font-size="130" font-weight="900" fill="#FFFFFF" text-anchor="middle">H</text>
+    <text x="44" y="28" font-family="'Space Grotesk', system-ui, sans-serif" font-size="135" font-weight="900" fill="url(#goldGradM)" text-anchor="middle">X</text>
   </g>
 
-  <g transform="translate(256, 430)">
-    <text x="-14" y="0" font-family="'Space Grotesk', sans-serif" font-size="42" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">HYENA</text>
-    <text x="68" y="0" font-family="'Space Grotesk', sans-serif" font-size="46" font-weight="900" fill="url(#accentGoldM)" text-anchor="middle">X</text>
-    <text x="0" y="28" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700" fill="#00E5FF" text-anchor="middle" letter-spacing="2.5">THE NDLELA MILLIONAIRES GOLDPACK</text>
-  </g>
+  <text x="256" y="445" font-family="'Space Grotesk', sans-serif" font-size="17" font-weight="800" fill="#F59E0B" text-anchor="middle" letter-spacing="3">HYENAX GOLDPACK</text>
 </svg>

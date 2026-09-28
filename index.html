@@ -981,23 +981,6 @@ function app(){
     strictVettingDirectiveActive: true,
     minProbabilityThreshold: 78.5,
 
-    // Layer 18: Strategic Rotation & Look-Ahead Penalty Suite
-    layer18ActiveTab: 'overview',
-    layer18SimHome: 'Arsenal',
-    layer18SimAway: 'Ipswich Town',
-    layer18SimTier: 'UCL',
-    layer18SimHours: 68,
-    layer18SimDist: 920,
-    layer18SimProb: 79.8,
-    layer18SimResult: null,
-    isLayer18Simulating: false,
-
-    // Gemini AI Deep Match & Banker Intelligence Analyst State
-    aiAnalysisModalOpen: false,
-    aiAnalysisMatch: null,
-    aiAnalysisLoading: false,
-    aiAnalysisResult: null,
-
     // Accumulator Studio State
     accumulatorLegs: [],
     accumulatorAnalysis: null,
@@ -2706,78 +2689,6 @@ function app(){
       }
     },
 
-    async runLayer18Simulation() {
-      this.isLayer18Simulating = true;
-      try {
-        const resp = await fetch(`/api/models/layer18/evaluate?home=${encodeURIComponent(this.layer18SimHome)}&away=${encodeURIComponent(this.layer18SimAway)}&prob=${this.layer18SimProb}`);
-        const data = await resp.json();
-        this.layer18SimResult = data.layer18;
-      } catch (err) {
-        // Fallback calculation
-        const hPen = (this.layer18SimTier === 'UCL' ? 0.22 : this.layer18SimTier === 'Domestic Derby' ? 0.16 : 0.03) * Math.max(0.15, (96 - this.layer18SimHours)/72) + (this.layer18SimDist > 500 ? 0.025 : 0);
-        const pBase = this.layer18SimProb / 100;
-        const pFin = (pBase * (1 - hPen)) / ((pBase * (1 - hPen)) + ((1 - pBase) * 1.0));
-        const finalPct = +(pFin * 100).toFixed(2);
-        this.layer18SimResult = {
-          baseProbabilityPct: this.layer18SimProb,
-          finalProbPct: finalPct,
-          shiftPct: +(finalPct - this.layer18SimProb).toFixed(2),
-          homePenalty: +hPen.toFixed(4),
-          awayPenalty: 0.0,
-          tacticalTag: hPen >= 0.08 ? `[STRATEGIC_ROTATION_RISK: Distraction due to upcoming ${this.layer18SimTier} fixture (${this.layer18SimHours}h)]` : null,
-          isDisqualified: (this.layer18SimProb >= 78.5 && finalPct < 78.5)
-        };
-      } finally {
-        this.isLayer18Simulating = false;
-      }
-    },
-
-    async openAiAnalysis(match) {
-      if (!match) return;
-      this.aiAnalysisMatch = match;
-      this.aiAnalysisModalOpen = true;
-      this.aiAnalysisLoading = true;
-      this.aiAnalysisResult = null;
-      try {
-        const payload = {
-          home: match.home?.name || 'Home Team',
-          away: match.away?.name || 'Away Team',
-          league: match.league?.name || 'League',
-          probability: match.bestPrediction?.probability || match.beastScore || 78.5,
-          market: match.bestPrediction?.market || 'Match Winner (1)',
-          odds: match.bestPrediction?.odds?.bestOdds || 1.65,
-          layer18: match.layer18Modifier || {
-            homePenalty: match.isBig ? 0.12 : 0.02,
-            awayPenalty: 0.01,
-            tacticalTag: match.isBig ? '[STRATEGIC_ROTATION_RISK: Distraction due to upcoming UCL fixture]' : null,
-            finalProbPct: match.bestPrediction?.probability,
-            isDisqualified: false
-          }
-        };
-        const resp = await fetch('/api/ai/analyze-match', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await resp.json();
-        this.aiAnalysisResult = data;
-      } catch (err) {
-        this.aiAnalysisResult = {
-          status: 'success',
-          source: 'deterministic-quantitative-engine',
-          analysis: 'Scouting report generated: 17-model consensus validated. Layer 18 calendar alignment confirms risk parameters within acceptable risk envelope.'
-        };
-      } finally {
-        this.aiAnalysisLoading = false;
-      }
-    },
-
-    closeAiAnalysis() {
-      this.aiAnalysisModalOpen = false;
-      this.aiAnalysisMatch = null;
-      this.aiAnalysisResult = null;
-    },
-
     syncDaysWithFixtures(){
       if (!Array.isArray(this.fixtures) || !this.fixtures.length) return;
       const today = new Date();
@@ -3325,47 +3236,23 @@ function app(){
 
 <style>
   :root {
-    --bg: #060913;
-    --bg-dark: #0B0F19;
+    --bg: #080A0F;
     --panel: #0E131F;
     --panel2: #121826;
     --card: #151D2E;
-    --line: #222E46;
-    --gold: #FFD700;
-    --gold-light: #FFF3B0;
+    --card-hover: #1C263C;
+    --border: #222E46;
+    --border-light: #2E3E5E;
+    --gold: #F59E0B;
+    --gold-light: #FDE047;
     --gold-dark: #B45309;
     --mint: #10B981;
-    --cyan: #00E5FF;
-    --purple: #7C4DFF;
+    --cyan: #06B6D4;
   }
   html { scroll-behavior:smooth; }
-  body { font-family:'IBM Plex Sans', 'Inter', system-ui, sans-serif; background:var(--bg); }
-  .font-display { font-family:'Space Grotesk', 'Inter', sans-serif; }
+  body { font-family:'IBM Plex Sans', system-ui, sans-serif; background:var(--bg); }
+  .font-display { font-family:'Space Grotesk', sans-serif; }
   .font-num { font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums; }
-
-  /* Cyberpunk Obsidian Glassmorphism Design Tokens */
-  .cyber-glass {
-    background: rgba(14, 19, 31, 0.78);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-  .cyber-card {
-    background: linear-gradient(135deg, rgba(18, 24, 38, 0.88) 0%, rgba(11, 15, 25, 0.92) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 229, 255, 0.14);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  }
-  .cyan-glow {
-    text-shadow: 0 0 14px rgba(0, 229, 255, 0.55);
-  }
-  .gold-glow {
-    text-shadow: 0 0 14px rgba(255, 215, 0, 0.6);
-  }
-  .purple-glow {
-    text-shadow: 0 0 14px rgba(124, 77, 255, 0.55);
-  }
 
   /* Gold and deep obsidian glow layers */
   .bg-grid {
@@ -3533,12 +3420,6 @@ function app(){
                 class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5">
           <span>⭐</span> Daily Top 20
           <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-400 text-black font-extrabold font-num">20</span>
-        </button>
-        <button @click="activeView = 'layer18'; haptic()"
-                :class="activeView === 'layer18' ? 'bg-gradient-to-r from-cyan-500/25 to-purple-500/20 text-cyan-300 border-cyan-500/60 shadow-[0_0_14px_rgba(0,229,255,0.35)]' : 'text-slate-400 hover:text-slate-200 border-transparent'"
-                class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5">
-          <span>⚡</span> Layer 18 Suite
-          <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-cyan-400 text-black font-extrabold font-num">18th</span>
         </button>
         <button @click="activeView = 'beastboard'"
                 :class="activeView === 'beastboard' ? 'bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.3)]' : 'text-slate-400 hover:text-slate-200 border-transparent'"
@@ -6814,328 +6695,6 @@ function app(){
     </template>
   </section>
 
-  <!-- ===================== VIEW: LAYER 18 STRATEGIC ROTATION & LOOK-AHEAD PENALTY SUITE ===================== -->
-  <section x-show="activeView === 'layer18'" class="mx-auto max-w-[1400px] px-4 py-8 space-y-8 relative z-10" x-cloak>
-    
-    <!-- Top Cyberpunk Obsidian Executive Header -->
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-[#222E46]">
-      <div>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00E5FF]/20 to-[#7C4DFF]/20 border border-[#00E5FF]/40 flex items-center justify-center text-xl shadow-[0_0_16px_rgba(0,229,255,0.3)]">
-            ⚡
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Layer 18: Strategic Rotation &amp; Look-Ahead Penalty Suite
-              </h2>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-[#00E5FF] to-[#7C4DFF] text-black font-num tracking-wide">POST-CONSENSUS ARBITRATOR</span>
-            </div>
-            <p class="text-xs text-slate-400 mt-1 font-num max-w-3xl">
-              Decoupled 18th layer mathematical post-processing engine. Quantifies calendar congestion asymmetry, mid-week UEFA distraction risks, and travel fatigue deltas to safeguard the platform's strict 78.5% win-probability filter.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Live Pipeline Health Badges -->
-      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
-        <span class="cyber-glass px-3 py-1.5 rounded-xl text-[11px] font-bold text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-          <span>&le; 96h LOOK-AHEAD WINDOW</span>
-        </span>
-        <span class="cyber-glass px-3 py-1.5 rounded-xl text-[11px] font-bold text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
-          <span>🛡️</span>
-          <span>78.5% STRICT BANKER FLOOR</span>
-        </span>
-        <button @click="runLayer18Simulation()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00E5FF] via-[#00B0FF] to-[#7C4DFF] text-black font-display font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
-          <span :class="isLayer18Simulating ? 'animate-spin' : ''">🔄</span>
-          <span>Simulate Clash</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- 4 High-Density Operational Telemetry Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="cyber-card p-5 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">UCL Distraction Penalty</span>
-          <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-rose-500/15 text-rose-300 border border-rose-500/30">TIER 1 CONGESTION</span>
-        </div>
-        <div class="font-display font-black text-3xl text-rose-400 mt-2">18% - 25%</div>
-        <div class="text-[11px] text-slate-400 mt-1 flex items-center justify-between">
-          <span>Decay Window: 96 Hours</span>
-          <span class="text-rose-300 font-bold">&lambda; Suppression</span>
-        </div>
-        <div class="text-[9px] text-slate-400 mt-2">Active on mid-week Champions League clashes</div>
-      </div>
-
-      <div class="cyber-card p-5 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Regional Derby Exposure</span>
-          <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500/15 text-amber-300 border border-amber-500/30">DERBY RISK</span>
-        </div>
-        <div class="font-display font-black text-3xl text-amber-300 mt-2">14% - 18%</div>
-        <div class="text-[11px] text-slate-400 mt-1 flex items-center justify-between">
-          <span>Emotional Drain</span>
-          <span class="text-amber-400 font-bold">Rotation Threat</span>
-        </div>
-        <div class="text-[9px] text-slate-400 mt-2">High-intensity rivalries before/after match</div>
-      </div>
-
-      <div class="cyber-card p-5 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Mathematical Formulation</span>
-          <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">BAYESIAN DELTA</span>
-        </div>
-        <div class="font-display font-black text-xl text-cyan-300 mt-2">P_Final = P_Base &times; (1-P_H) / Denom</div>
-        <div class="text-[11px] text-slate-400 mt-1 flex items-center justify-between">
-          <span>Zero Weight Tampering</span>
-          <span class="text-cyan-400 font-bold">Consensus Preserved</span>
-        </div>
-        <div class="text-[9px] text-slate-400 mt-2">Executes downstream of 17-model stack</div>
-      </div>
-
-      <div class="cyber-card p-5 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Disqualification Audit</span>
-          <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-purple-500/15 text-purple-300 border border-purple-500/30">RISK SHIELD</span>
-        </div>
-        <div class="font-display font-black text-3xl text-purple-300 mt-2">AUTO-TRIP</div>
-        <div class="text-[11px] text-slate-400 mt-1 flex items-center justify-between">
-          <span>Drop &lt; 78.5% Floor</span>
-          <span class="text-purple-400 font-bold">Instant Quarantine</span>
-        </div>
-        <div class="text-[9px] text-slate-400 mt-2">Routes directly to Audit Trail with tactical tag</div>
-      </div>
-    </div>
-
-    <!-- Interactive Layer 18 Asymmetric Simulator & Comparison Console -->
-    <div class="cyber-card rounded-2xl p-6 space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#222E46]">
-        <div>
-          <h3 class="font-display text-lg font-bold text-white flex items-center gap-2">
-            <span>🔬</span>
-            <span>Interactive Layer 18 Asymmetric Calendar Simulator</span>
-          </h3>
-          <p class="text-xs text-slate-400 mt-0.5">
-            Test how calendar compression on Team A affects their expected goal parameters (&lambda;) vs a rested domestic opponent.
-          </p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button @click="layer18SimTier = 'UCL'; layer18SimHours = 68; layer18SimDist = 950; runLayer18Simulation()"
-                  :class="layer18SimTier === 'UCL' ? 'bg-[#00E5FF]/20 text-cyan-300 border-cyan-400/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
-                  class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all">
-            UCL Away Preset
-          </button>
-          <button @click="layer18SimTier = 'Domestic Derby'; layer18SimHours = 60; layer18SimDist = 45; runLayer18Simulation()"
-                  :class="layer18SimTier === 'Domestic Derby' ? 'bg-amber-500/20 text-amber-300 border-amber-400/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
-                  class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all">
-            Derby Preset
-          </button>
-          <button @click="layer18SimTier = 'Domestic Standard'; layer18SimHours = 168; layer18SimDist = 80; runLayer18Simulation()"
-                  :class="layer18SimTier === 'Domestic Standard' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
-                  class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all">
-            Clean Schedule
-          </button>
-        </div>
-      </div>
-
-      <!-- Controls Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Home Contender</label>
-          <input type="text" x-model="layer18SimHome" @change="runLayer18Simulation()"
-                 class="w-full px-3 py-2 rounded-xl bg-[#0B0F19] border border-[#222E46] text-white text-xs font-medium focus:border-cyan-400 outline-none" />
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Opponent</label>
-          <input type="text" x-model="layer18SimAway" @change="runLayer18Simulation()"
-                 class="w-full px-3 py-2 rounded-xl bg-[#0B0F19] border border-[#222E46] text-white text-xs font-medium focus:border-cyan-400 outline-none" />
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-            Turnaround: <span class="text-cyan-300 font-num" x-text="layer18SimHours + ' hrs (' + (layer18SimHours/24).toFixed(1) + ' days)'"></span>
-          </label>
-          <input type="range" min="12" max="168" step="4" x-model="layer18SimHours" @input="runLayer18Simulation()"
-                 class="w-full accent-cyan-400 cursor-pointer" />
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-            17-Model Prior: <span class="text-amber-300 font-num" x-text="layer18SimProb + '%'"></span>
-          </label>
-          <input type="range" min="65.0" max="92.0" step="0.2" x-model="layer18SimProb" @input="runLayer18Simulation()"
-                 class="w-full accent-amber-400 cursor-pointer" />
-        </div>
-      </div>
-
-      <!-- Comparative Threat Matrix (Team A Distraction vs Team B Rest) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-        
-        <!-- Team A Card -->
-        <div class="cyber-glass rounded-2xl p-5 border border-rose-500/30 space-y-3 relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-rose-400 animate-pulse"></span>
-              <span class="font-display font-bold text-sm text-white" x-text="layer18SimHome + ' (Distracted Contender)'"></span>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40" x-text="layer18SimTier"></span>
-          </div>
-
-          <div class="space-y-1.5">
-            <div class="flex justify-between text-xs text-slate-300">
-              <span>Calendar Pressure &amp; Rotation Penalty</span>
-              <span class="font-num font-bold text-rose-400" x-text="((layer18SimResult?.homePenalty || 0.12) * 100).toFixed(1) + '%'"></span>
-            </div>
-            <div class="w-full h-3 rounded-full bg-[#080A0F] overflow-hidden p-0.5 border border-[#222E46]">
-              <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-rose-500 transition-all duration-500"
-                   :style="'width: ' + Math.min(100, ((layer18SimResult?.homePenalty || 0.12) * 250)) + '%'"></div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-3 gap-2 text-center text-xs pt-1">
-            <div class="p-2 rounded-xl bg-[#080A0F]/60 border border-[#222E46]">
-              <div class="text-[10px] text-slate-400">Hours to Kickoff</div>
-              <div class="font-num font-bold text-white mt-0.5" x-text="layer18SimHours + 'h'"></div>
-            </div>
-            <div class="p-2 rounded-xl bg-[#080A0F]/60 border border-[#222E46]">
-              <div class="text-[10px] text-slate-400">Flight Distance</div>
-              <div class="font-num font-bold text-white mt-0.5" x-text="layer18SimDist + ' km'"></div>
-            </div>
-            <div class="p-2 rounded-xl bg-[#080A0F]/60 border border-[#222E46]">
-              <div class="text-[10px] text-slate-400">Next Opponent</div>
-              <div class="font-num font-bold text-rose-300 mt-0.5 truncate">FC Bayern</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Team B Card -->
-        <div class="cyber-glass rounded-2xl p-5 border border-emerald-500/30 space-y-3 relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
-              <span class="font-display font-bold text-sm text-white" x-text="layer18SimAway + ' (Rested Opponent)'"></span>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">DOMESTIC RESTED</span>
-          </div>
-
-          <div class="space-y-1.5">
-            <div class="flex justify-between text-xs text-slate-300">
-              <span>Calendar Pressure &amp; Rotation Penalty</span>
-              <span class="font-num font-bold text-emerald-400" x-text="((layer18SimResult?.awayPenalty || 0.0) * 100).toFixed(1) + '%'"></span>
-            </div>
-            <div class="w-full h-3 rounded-full bg-[#080A0F] overflow-hidden p-0.5 border border-[#222E46]">
-              <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500"
-                   :style="'width: ' + Math.min(100, ((layer18SimResult?.awayPenalty || 0.0) * 250)) + '%'"></div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-3 gap-2 text-center text-xs pt-1">
-            <div class="p-2 rounded-xl bg-[#080A0F]/60 border border-[#222E46]">
-              <div class="text-[10px] text-slate-400">Rest Cycle</div>
-              <div class="font-num font-bold text-emerald-300 mt-0.5">6 Days (Clean)</div>
-            </div>
-            <div class="p-2 rounded-xl bg-[#080A0F]/60 border border-[#222E46]">
-              <div class="text-[10px] text-slate-400">Travel Demand</div>
-              <div class="font-num font-bold text-white mt-0.5">Minimal (Domestic)</div>
-            </div>
-            <div class="p-2 rounded-xl bg-[#080A0F]/60 border border-[#222E46]">
-              <div class="text-[10px] text-slate-400">Mid-Week Match</div>
-              <div class="font-num font-bold text-emerald-400 mt-0.5">None (0.0% Pen)</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Result Banner: Prior 17-Model Score vs Post-Layer 18 Shift -->
-      <div class="p-5 rounded-2xl border"
-           :class="layer18SimResult?.isDisqualified ? 'bg-[#1F0A0D]/90 border-rose-500/50 shadow-[0_0_24px_rgba(244,63,94,0.25)]' : 'bg-[#0E1B16]/90 border-emerald-500/50 shadow-[0_0_24px_rgba(16,185,129,0.25)]'">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2">
-              <span class="text-xl" x-text="layer18SimResult?.isDisqualified ? '🛑' : '✅'"></span>
-              <span class="font-display font-black text-base"
-                    :class="layer18SimResult?.isDisqualified ? 'text-rose-300' : 'text-emerald-300'"
-                    x-text="layer18SimResult?.isDisqualified ? 'AUTOMATIC DISQUALIFICATION AUDIT TRIGGERED' : 'VETTED BANKER SELECTION (LAYER 18 APPROVED)'"></span>
-            </div>
-            <div class="text-xs text-slate-300 font-num" x-text="layer18SimResult?.tacticalTag || '[STATUS: Normal Tactical Baseline]'"></div>
-          </div>
-
-          <div class="flex items-center gap-4 shrink-0 font-num">
-            <div class="text-right">
-              <div class="text-[10px] text-slate-400">17-Model Prior</div>
-              <div class="text-base font-bold text-slate-300" x-text="layer18SimProb + '%'"></div>
-            </div>
-            <div class="text-xl text-slate-500">➔</div>
-            <div class="text-right">
-              <div class="text-[10px] text-slate-400">Layer 18 Final</div>
-              <div class="text-2xl font-black"
-                   :class="layer18SimResult?.isDisqualified ? 'text-rose-400' : 'text-emerald-400'"
-                   x-text="(layer18SimResult?.finalProbPct || 78.1) + '%'"></div>
-            </div>
-            <div class="px-3 py-1 rounded-xl text-xs font-black border"
-                 :class="layer18SimResult?.shiftPct < 0 ? 'bg-rose-500/20 text-rose-300 border-rose-500/40' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'"
-                 x-text="(layer18SimResult?.shiftPct || -1.7) + '% Shift'"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Live Disqualification Audit Trail for Current Fixtures -->
-    <div class="cyber-card rounded-2xl p-6 space-y-4">
-      <div class="flex items-center justify-between pb-3 border-b border-[#222E46]">
-        <div class="flex items-center gap-2">
-          <span class="text-xl">📋</span>
-          <h3 class="font-display text-base font-bold text-white">Live Disqualification Audit Trail</h3>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/30">ROTATION RISKS &amp; TRAP LINES</span>
-        </div>
-        <span class="text-xs text-slate-400 font-num">Matches quarantined to prevent banker false positives</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
-        <!-- Audit Item 1 -->
-        <div class="cyber-glass rounded-xl p-4 border border-rose-500/30 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="font-display font-bold text-xs text-white">Arsenal vs Ipswich Town</span>
-            <span class="text-[9px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">DISQUALIFIED</span>
-          </div>
-          <div class="text-xs text-amber-300 font-num">
-            [STRATEGIC_ROTATION_RISK: Distraction due to upcoming UCL fixture vs FC Bayern Munich (68h)]
-          </div>
-          <div class="text-[11px] text-slate-400 leading-relaxed">
-            Consensus prior of 79.8% dropped to 78.07% (&minus;1.73%) under Layer 18 modifier due to 12.0% home distraction penalty. Shifted below strict 78.5% win floor.
-          </div>
-          <div class="flex items-center justify-between text-[10px] text-slate-400 font-num pt-1 border-t border-[#222E46]">
-            <span>Prior: 79.8% ➔ Calibrated: 78.1%</span>
-            <span class="text-rose-400 font-bold">Action: Quarantined</span>
-          </div>
-        </div>
-
-        <!-- Audit Item 2 -->
-        <div class="cyber-glass rounded-xl p-4 border border-amber-500/30 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="font-display font-bold text-xs text-white">Real Madrid vs Espanyol</span>
-            <span class="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">BOOKMAKER TRAP LINE</span>
-          </div>
-          <div class="text-xs text-amber-300 font-num">
-            [BOOKMAKER_TRAP_LINE: Implied Margin Volatility > ±1.5%]
-          </div>
-          <div class="text-[11px] text-slate-400 leading-relaxed">
-            Retail margin drifted by +2.1% in the 2.5 hours preceding kickoff. 64-step Shin numerical solver detected market trap line asymmetry.
-          </div>
-          <div class="flex items-center justify-between text-[10px] text-slate-400 font-num pt-1 border-t border-[#222E46]">
-            <span>64-Step Shin Solver z: 0.024</span>
-            <span class="text-amber-400 font-bold">Action: Disqualified</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </section>
-
   <!-- ===================== VIEW: RIGOROUS VALIDATION & BACKTESTING SUITE ===================== -->
   <section x-show="activeView === 'validation'" class="mx-auto max-w-[1400px] px-4 py-8 space-y-6 relative z-10">
     <!-- Top Executive Header -->
@@ -7168,15 +6727,15 @@ function app(){
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="p-4 rounded-2xl bg-[#0E131F] border border-emerald-500/30 relative overflow-hidden group shadow-lg">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">OOT Brier Hard Ceiling</span>
-          <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">0.141 STRICT CAP</span>
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Walk-Forward Accuracy</span>
+          <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">OOT TESTED</span>
         </div>
-        <div class="font-display font-black text-2xl sm:text-3xl text-emerald-400 mt-2">0.122</div>
+        <div class="font-display font-black text-2xl sm:text-3xl text-emerald-400 mt-2">82.1%</div>
         <div class="text-[10px] text-slate-400 mt-1 flex items-center justify-between">
-          <span>Old Ceiling: 0.158</span>
-          <span class="text-emerald-300 font-bold">Hard Cap: 0.141</span>
+          <span>Train Brier: 0.154</span>
+          <span class="text-slate-300 font-bold">Test Brier: 0.158</span>
         </div>
-        <div class="text-[9px] text-emerald-400/90 font-num mt-1">Instant 0% Weight Masking + 250-Round Recovery Loop</div>
+        <div class="text-[9px] text-emerald-400/90 font-num mt-1">Zero Future-Data Leakage Verified</div>
       </div>
 
       <div class="p-4 rounded-2xl bg-[#0E131F] border border-amber-500/30 relative overflow-hidden group shadow-lg">
@@ -8253,63 +7812,6 @@ function app(){
     </div>
   </div>
 
-  <!-- ===================== GEMINI AI MATCH & BANKER SCOUTING MODAL ===================== -->
-  <div x-show="aiAnalysisModalOpen"
-       x-transition:enter="transition ease-out duration-250"
-       x-transition:enter-start="opacity-0 scale-95"
-       x-transition:enter-end="opacity-100 scale-100"
-       x-transition:leave="transition ease-in duration-200"
-       x-transition:leave-start="opacity-100 scale-100"
-       x-transition:leave-end="opacity-0 scale-95"
-       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
-       @keydown.escape.window="closeAiAnalysis()"
-       style="display: none;">
-    <div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-cyan-500/40 bg-[#0B0F19] shadow-[0_0_50px_rgba(0,229,255,0.25)] p-6 space-y-6">
-      
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between pb-4 border-b border-[#222E46]">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00E5FF] to-[#7C4DFF] flex items-center justify-center text-black font-black text-xl shadow-[0_0_15px_rgba(0,229,255,0.4)]">
-            🤖
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="font-display text-lg font-black text-white">Gemini AI Tactical &amp; Banker Analyst</h3>
-              <span class="px-2 py-0.5 rounded text-[9px] font-black bg-cyan-400 text-black">DEEP SCOUTING</span>
-            </div>
-            <p class="text-xs text-slate-400" x-text="aiAnalysisMatch ? (aiAnalysisMatch.home?.name + ' vs ' + aiAnalysisMatch.away?.name) : 'Match Intelligence'"></p>
-          </div>
-        </div>
-        <button @click="closeAiAnalysis()" class="w-8 h-8 rounded-lg border border-[#222E46] text-slate-400 hover:text-white grid place-items-center">✕</button>
-      </div>
-
-      <!-- Loading State -->
-      <div x-show="aiAnalysisLoading" class="py-12 flex flex-col items-center justify-center gap-4 text-center">
-        <div class="w-12 h-12 rounded-full border-4 border-cyan-400/20 border-t-cyan-400 animate-spin"></div>
-        <div class="space-y-1">
-          <div class="font-display font-bold text-sm text-white">Synthesizing 17-Model Consensus &amp; Layer 18 Metrics...</div>
-          <div class="text-xs text-slate-400">Evaluating calendar congestion, xG distributions, and Shin zero-margin market lines</div>
-        </div>
-      </div>
-
-      <!-- Result View -->
-      <div x-show="!aiAnalysisLoading && aiAnalysisResult" class="space-y-4">
-        <div class="flex items-center justify-between text-xs text-slate-400 border-b border-[#222E46] pb-2">
-          <span>Analysis Engine: <strong class="text-cyan-300" x-text="aiAnalysisResult?.source || 'Gemini 2.5 Flash'"></strong></span>
-          <span class="text-emerald-400 font-num">Zero Target Leak Certified</span>
-        </div>
-        <div class="p-4 rounded-xl bg-[#080A0F] border border-[#222E46] text-slate-200 text-xs sm:text-sm leading-relaxed whitespace-pre-line font-sans"
-             x-text="aiAnalysisResult?.analysis">
-        </div>
-        <div class="flex justify-end pt-2">
-          <button @click="closeAiAnalysis()" class="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-display font-bold text-xs uppercase tracking-wider transition-all">
-            Done
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- ===================== FOOTER (UPDATED OWNERSHIP & COMPLIANCE) ===================== -->
   <footer class="app-foot relative z-10 border-t border-[#222E46] bg-[#0A0D15] mt-12 mb-16 xl:mb-0">
     <div class="mx-auto max-w-[1400px] py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
@@ -8343,12 +7845,6 @@ function app(){
             class="flex flex-col items-center justify-center gap-1 py-2 px-1.5 transition-all min-h-[52px] active:scale-95">
       <span class="text-lg leading-none">⭐</span>
       <span class="text-[10px] tracking-tight">Top 20</span>
-    </button>
-    <button @click="activeView = 'layer18'; haptic()"
-            :class="activeView === 'layer18' ? 'text-cyan-300 font-bold' : 'text-slate-400 font-medium'"
-            class="flex flex-col items-center justify-center gap-1 py-2 px-1.5 transition-all min-h-[52px] active:scale-95">
-      <span class="text-lg leading-none">⚡</span>
-      <span class="text-[10px] tracking-tight">Layer 18</span>
     </button>
     <button @click="activeView = 'beastboard'; haptic()"
             :class="activeView === 'beastboard' ? 'text-amber-300 font-bold' : 'text-slate-400 font-medium'"
