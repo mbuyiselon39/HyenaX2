@@ -28,11 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          npm ci || npm install
 
       - name: Run Scraper & Dixon-Coles Probability Modeler
         env:
