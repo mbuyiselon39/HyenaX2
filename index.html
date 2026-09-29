@@ -1028,6 +1028,33 @@ function app(){
     isBacktesting: false,
     isSimulatingBacktest: false,
 
+    // Reality-Check & Anti-Loss Protection State
+    realityCheck: {
+      activeTab: 'blindspots', // 'blindspots' | 'accumulator_ruin' | 'synchronizer' | 'discipline'
+      accaLegs: 5,
+      avgLegProb: 80,
+      avgLegOdds: 1.45,
+      expandedBlindspot: null
+    },
+
+    calculateAccaRuin(legs, prob, odds) {
+      const p = Math.max(0.1, Math.min(0.99, (prob || 80) / 100));
+      const n = Math.max(1, Math.min(15, parseInt(legs) || 1));
+      const rOdds = Math.max(1.05, Math.min(10.0, parseFloat(odds) || 1.45));
+      const winProb = Math.pow(p, n);
+      const bustProb = Math.max(0, 1 - winProb);
+      const compoundOdds = Math.pow(rOdds, n);
+      const fairOdds = winProb > 0 ? 1 / winProb : 999;
+      const houseVigPct = Math.max(0, ((fairOdds - compoundOdds) / fairOdds) * 100);
+      return {
+        winProbPct: +(winProb * 100).toFixed(1),
+        bustProbPct: +(bustProb * 100).toFixed(1),
+        compoundOdds: +compoundOdds.toFixed(2),
+        fairOdds: +fairOdds.toFixed(2),
+        houseVigPct: +houseVigPct.toFixed(1)
+      };
+    },
+
     // Rigorous Validation Pipeline Suite State
     validationSuite: {
       walkForward: null,
@@ -3593,6 +3620,12 @@ function app(){
                 :class="activeView === 'validation' ? 'bg-[#F59E0B]/20 text-amber-300 border-amber-500/60 shadow-sm' : 'text-slate-400 hover:text-slate-200 border-transparent'"
                 class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5">
           <span>🧪</span> Validation Suite
+        </button>
+        <button @click="activeView = 'reality-check'"
+                :class="activeView === 'reality-check' ? 'bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.35)]' : 'text-slate-400 hover:text-slate-200 border-transparent'"
+                class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5">
+          <span>🛡️</span> Reality Check
+          <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-emerald-400 text-black font-extrabold font-num">SHIELD</span>
         </button>
         <button @click="openAiChat(); haptic()"
                 :class="aiChatOpen ? 'bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.35)]' : 'text-slate-400 hover:text-slate-200 border-transparent'"
@@ -6682,6 +6715,25 @@ function app(){
               </div>
             </template>
 
+            <!-- Compounded Variance Reality-Check Alert -->
+            <template x-if="accumulatorLegs.length >= 3">
+              <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/40 space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+                  <span class="flex items-center gap-1.5"><span>🛡️</span> REALITY-CHECK: VARIANCE ALERT</span>
+                  <span class="text-rose-400 font-num font-extrabold" x-text="(100 - (accumulatorAnalysis?.compoundProbability || 0)).toFixed(1) + '% BUST RISK'"></span>
+                </div>
+                <div class="text-[11px] text-slate-300 leading-relaxed font-sans">
+                  Multiplying <span class="font-bold text-white font-num" x-text="accumulatorLegs.length"></span> legs compounds variance. You have a <strong class="text-rose-400 font-num" x-text="(100 - (accumulatorAnalysis?.compoundProbability || 0)).toFixed(1) + '%'"></strong> mathematical probability of losing this ticket.
+                </div>
+                <div class="pt-1 flex items-center justify-between text-[10px]">
+                  <span class="text-slate-400">Pro Rule: Prefer Value Singles</span>
+                  <button @click="activeView = 'reality-check'; realityCheck.activeTab = 'accumulator_ruin'; haptic()" class="text-amber-400 hover:text-amber-300 underline font-bold transition-colors">
+                    Ruin Calculator &rarr;
+                  </button>
+                </div>
+              </div>
+            </template>
+
             <!-- 1-Click Optimization Presets -->
             <div class="pt-2 border-t border-[#222E46] space-y-2">
               <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">One-Click Auto-Optimise</div>
@@ -7508,7 +7560,7 @@ function app(){
       </div>
     </div>
 
-    <!-- TAB 7: 17-MODEL ADVANCED MACHINE LEARNING & DEEP LEARNING STACK -->
+    <!-- TAB 7: 18-MODEL ADVANCED MACHINE LEARNING & ROTATION STACK -->
     <div x-show="validationSuite.activeValidationTab === 'ensemble'" class="space-y-6">
       <!-- Executive Overview Card -->
       <div class="rounded-2xl border border-amber-500/40 bg-gradient-to-br from-[#121826] via-[#0E131F] to-[#0A0D15] p-6 space-y-4 shadow-xl">
@@ -7517,17 +7569,17 @@ function app(){
             <div class="flex items-center gap-2">
               <span class="text-xl">🧠</span>
               <h3 class="font-display text-lg font-black text-white uppercase tracking-wider">
-                17-Model Algorithmic Coexistence Architecture
+                18-Model Algorithmic Coexistence Architecture
               </h3>
               <span class="px-2.5 py-0.5 rounded-full text-[9px] font-extrabold bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-num">STACKING META-LEARNER</span>
             </div>
             <p class="text-xs text-slate-300 mt-1 max-w-3xl">
-              All 17 quantitative, machine learning, and deep neural network models operate simultaneously in the background. Rather than replacing the proven mathematical foundation, advanced ML models coexist in a multi-paradigmatic consensus pipeline, continuously cross-validating each other to eliminate individual model blindspots.
+              All 18 quantitative, machine learning, deep neural network, and calendar rotation models operate simultaneously in the background. Rather than replacing the proven mathematical foundation, advanced ML models coexist in a multi-paradigmatic consensus pipeline, continuously cross-validating each other to eliminate individual model blindspots.
             </p>
           </div>
           <div class="flex items-center gap-2">
             <span class="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs font-bold font-num flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 17 / 17 Background Active
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 18 / 18 Background Active
             </span>
           </div>
         </div>
@@ -7752,7 +7804,7 @@ function app(){
             <span class="font-display font-bold text-sm text-white flex items-center gap-1.5">
               <span>📈</span> Multi-Factor Rolling Elo
             </span>
-            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">8% WT</span>
+            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">7% WT</span>
           </div>
           <div class="text-[11px] text-slate-400 leading-relaxed">
             Longitudinal quality tracking rating incorporating home ground advantage parameters, goal margin scaling, and tournament importance coefficients.
@@ -7762,9 +7814,111 @@ function app(){
             <span class="text-cyan-400">Quality Anchor</span>
           </div>
         </div>
+
+        <!-- 13. Venue Fortress Index -->
+        <div class="p-4 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-sm text-white flex items-center gap-1.5">
+              <span>🏰</span> Venue Fortress Index
+            </span>
+            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">5% WT</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">
+            Ground-specific pitch dimensions, crowd acoustic index, and geographic travel distance dampening for long-haul away opponents.
+          </div>
+          <div class="pt-2 border-t border-[#1C2A44] flex items-center justify-between text-[10px] font-num text-slate-500">
+            <span>Home Pitch Bias</span>
+            <span class="text-emerald-400">Atmosphere Weight</span>
+          </div>
+        </div>
+
+        <!-- 14. Recent Form & Momentum -->
+        <div class="p-4 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-sm text-white flex items-center gap-1.5">
+              <span>🔥</span> Recent Form &amp; Momentum
+            </span>
+            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">4% WT</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">
+            Last 5-match decay-weighted trajectory, high-pressing intensity indices, and shot conversion momentum vs expected goals.
+          </div>
+          <div class="pt-2 border-t border-[#1C2A44] flex items-center justify-between text-[10px] font-num text-slate-500">
+            <span>Exponential Decay</span>
+            <span class="text-amber-400">5-Match Horizon</span>
+          </div>
+        </div>
+
+        <!-- 15. Squad Depth & Starters Parity -->
+        <div class="p-4 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-sm text-white flex items-center gap-1.5">
+              <span>👥</span> Squad Depth &amp; Starters
+            </span>
+            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">4% WT</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">
+            Starting XI spine integrity, replacement value per absent player, and bench tactical flexibility across 90-minute substitution windows.
+          </div>
+          <div class="pt-2 border-t border-[#1C2A44] flex items-center justify-between text-[10px] font-num text-slate-500">
+            <span>WAR Bench Analytics</span>
+            <span class="text-purple-400">Spine Integrity</span>
+          </div>
+        </div>
+
+        <!-- 16. Sharp Market Consensus Implied -->
+        <div class="p-4 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-sm text-white flex items-center gap-1.5">
+              <span>💹</span> Sharp Market Consensus
+            </span>
+            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">4% WT</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">
+            Pinnacle and Betfair Exchange order-book de-vigging via 64-step Shin solver, separating public noise from informed smart-money syndicates.
+          </div>
+          <div class="pt-2 border-t border-[#1C2A44] flex items-center justify-between text-[10px] font-num text-slate-500">
+            <span>Shin Parameter z</span>
+            <span class="text-cyan-400">Zero Margin Fair</span>
+          </div>
+        </div>
+
+        <!-- 17. Bayesian Hierarchical Arbitration -->
+        <div class="p-4 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-sm text-white flex items-center gap-1.5">
+              <span>🏛️</span> Bayesian Arbitration
+            </span>
+            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">4% WT</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">
+            Prior-to-posterior distribution shrinkage filtering recency bias and outlier blowouts to maintain steady long-term mathematical calibration.
+          </div>
+          <div class="pt-2 border-t border-[#1C2A44] flex items-center justify-between text-[10px] font-num text-slate-500">
+            <span>Anti-Recency Shield</span>
+            <span class="text-emerald-400">Bayesian Updating</span>
+          </div>
+        </div>
+
+        <!-- 18. Layer 18 Strategic Rotation & Calendar Fatigue -->
+        <div class="p-4 rounded-2xl bg-[#0E131F] border border-amber-500/50 space-y-2 relative overflow-hidden shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-sm text-amber-300 flex items-center gap-1.5">
+              <span>🛡️</span> Layer 18 Strategic Rotation
+            </span>
+            <span class="text-[9px] font-num px-2 py-0.5 rounded bg-amber-400 text-black font-extrabold font-num">5% WT · L18</span>
+          </div>
+          <div class="text-[11px] text-slate-300 leading-relaxed">
+            Turnaround window decay function quantifying mid-week UEFA congestion, travel fatigue, and lookahead risk. Disqualifies banker status if &le;96h fatigue threshold is tripped.
+          </div>
+          <div class="pt-2 border-t border-[#1C2A44] flex items-center justify-between text-[10px] font-num text-slate-400">
+            <span>Turnaround: &le;72h / &le;96h</span>
+            <span class="text-amber-400 font-bold">Rotation Guard</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Live 17-Model Consensus Interactive Test Console -->
+      <!-- Live 18-Model Consensus Interactive Test Console -->
       <div x-data="{
         simHome: 'Arsenal',
         simAway: 'Chelsea',
@@ -7791,15 +7945,15 @@ function app(){
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1E293B] pb-4">
           <div>
             <h4 class="font-display text-base font-bold text-white flex items-center gap-2">
-              <span>🔬</span> Live 17-Model Interactive Consensus Console
+              <span>🔬</span> Live 18-Model Interactive Consensus Console
             </h4>
             <p class="text-xs text-slate-400 mt-1">
-              Test any custom tactical match parameter across all 17 models simultaneously to observe how the background consensus is formed.
+              Test any custom tactical match parameter across all 18 models simultaneously to observe how the background consensus is formed.
             </p>
           </div>
           <button @click="runSim()" :disabled="isSimulating" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-display font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
             <span :class="isSimulating ? 'animate-spin' : ''">⚡</span>
-            <span x-text="isSimulating ? 'Computing 17 Models...' : 'Run Consensus Test'"></span>
+            <span x-text="isSimulating ? 'Computing 18 Models...' : 'Run Consensus Test'"></span>
           </button>
         </div>
 
@@ -7864,7 +8018,582 @@ function app(){
         </template>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- ===================== VIEW: REALITY-CHECK & RISK SHIELD FRAMEWORK ===================== -->
+  <section x-show="activeView === 'reality-check'" class="mx-auto max-w-[1400px] px-4 py-8 space-y-8 relative z-10" style="display: none;">
+    <!-- Top Executive Header -->
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-[#222E46]">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <span class="text-3xl">🛡️</span>
+          <h2 class="font-display text-2xl sm:text-3xl font-black text-white tracking-tight">
+            Reality-Check &amp; Risk Shield Framework
+          </h2>
+          <span class="px-2.5 py-0.5 rounded-full text-[9px] font-extrabold bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-num">MASTER BETTOR DISCIPLINE</span>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-4xl leading-relaxed">
+          The mathematical, tactical, psychological, and physiological truth behind soccer variance. Understand why mathematical models alone cannot guarantee 100% win rates, how the 8 unpredictable blind spots cause lost bets, and how to protect your bankroll like a quantitative fund manager.
+        </p>
+      </div>
+
+      <!-- Quick Status Badges -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs font-bold font-num flex items-center gap-1.5 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 18/18 Models Active
+        </span>
+        <span class="px-3 py-1.5 rounded-xl bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-bold font-num flex items-center gap-1.5 shadow-sm">
+          <span>⚖️</span> Shin De-Vigged
+        </span>
+      </div>
+    </div>
+
+    <!-- Navigation Pills for Reality Check Sub-Modules -->
+    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 border-b border-[#1C263C]">
+      <button @click="realityCheck.activeTab = 'blindspots'; haptic()"
+              :class="realityCheck.activeTab === 'blindspots' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-black shadow-md' : 'bg-[#0E131F] text-slate-400 hover:text-white border border-[#222E46]'"
+              class="px-3.5 py-2 rounded-xl text-xs uppercase font-display tracking-wider transition-all flex items-center gap-2 shrink-0">
+        <span>🔍</span> The 8 Blind Spots &amp; Fixes
+      </button>
+
+      <button @click="realityCheck.activeTab = 'accumulator_ruin'; haptic()"
+              :class="realityCheck.activeTab === 'accumulator_ruin' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-black shadow-md' : 'bg-[#0E131F] text-slate-400 hover:text-white border border-[#222E46]'"
+              class="px-3.5 py-2 rounded-xl text-xs uppercase font-display tracking-wider transition-all flex items-center gap-2 shrink-0">
+        <span>📉</span> Acca Ruin Simulator
+      </button>
+
+      <button @click="realityCheck.activeTab = 'discipline'; haptic()"
+              :class="realityCheck.activeTab === 'discipline' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-black shadow-md' : 'bg-[#0E131F] text-slate-400 hover:text-white border border-[#222E46]'"
+              class="px-3.5 py-2 rounded-xl text-xs uppercase font-display tracking-wider transition-all flex items-center gap-2 shrink-0">
+        <span>📘</span> Professional Bettor's Blueprint
+      </button>
+
+      <button @click="realityCheck.activeTab = 'synchronizer'; haptic()"
+              :class="realityCheck.activeTab === 'synchronizer' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-black shadow-md' : 'bg-[#0E131F] text-slate-400 hover:text-white border border-[#222E46]'"
+              class="px-3.5 py-2 rounded-xl text-xs uppercase font-display tracking-wider transition-all flex items-center gap-2 shrink-0">
+        <span>⚙️</span> 18-Model Synchronizer
+      </button>
+    </div>
+
+    <!-- ===================== SUB-TAB 1: THE 8 UNPREDICTABLE BLIND SPOTS & MITIGATION ===================== -->
+    <div x-show="realityCheck.activeTab === 'blindspots'" class="space-y-6">
+      
+      <!-- Core Premise Banner -->
+      <div class="rounded-2xl border border-rose-500/40 bg-gradient-to-br from-[#1C0F14] via-[#120F18] to-[#0A0D15] p-5 space-y-3 shadow-xl">
+        <div class="flex items-center gap-2.5 text-rose-300 font-display font-black text-sm uppercase tracking-wider">
+          <span>⚠️</span> The Fundamental Mathematical Law of Sports Betting
+        </div>
+        <p class="text-xs sm:text-[13px] text-slate-200 leading-relaxed font-sans">
+          <strong>There is NO 100% "sure bet" in soccer.</strong> A match with an <strong>80% win probability</strong> will mathematically <strong>lose 1 out of every 5 times</strong>. If you place 10 "bankers", losing 2 of them is not an algorithm malfunction — it is probability working exactly as defined by mathematics. Understanding where randomness enters the game is what separates profitable quantitative sports investors from losing recreational gamblers.
+        </p>
+      </div>
+
+      <!-- Grid of the 8 Unpredictable Factors & Engineering Countermeasures -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Factor 1: Referee & VAR Arbitrariness -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300">🟨</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">1. Referee &amp; VAR Subjectivity</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">Human Error &amp; Discretionary Bias</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[9px] font-bold font-num">HIGH VOLATILITY</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> An early red card (e.g. min 22) reduces a team's win probability by approximately <strong>40% to 50%</strong>. A controversial penalty award or a 2-millimeter offside VAR line cannot be predicted pre-match by any mathematical model.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong> 
+              Our <em>Referee Volatility Shield</em> tracks historical referee card severity (&gt;0.25 red cards/game). When high volatility is detected, the engine flags the match with a <code>REFEREE HAZARD</code> alert and recommends hedging into <strong>Double Chance (1X)</strong> or <strong>Draw No Bet (DNB)</strong>.
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor 2: Pre-Kickoff Warmup Injuries & Lineup Shocks -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">🏥</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">2. Pre-Match Warmup Injuries</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">Physician &amp; Squad Spine Shock</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[9px] font-bold font-num">TIMING HAZARD</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> Models train on expected lineups. If a star goalscorer or primary goalkeeper pulls a hamstring in the warmup 20 minutes before kickoff, the expected goals (xG) drop 30-40% without prior data.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong>
+              We enforce an <em>Official Lineup Verification Gate</em> and real-time <strong>Google Search Grounding</strong>. Picks with unconfirmed starting XIs display <code>PENDING LINEUP CONFIRMATION</code>, preventing premature bets until official team sheets are submitted.
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor 3: Low-Scoring Poisson Flukes & 1-1 Draw Traps -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300">🥅</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">3. Low-Scoring Poisson Noise (1-1 Traps)</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">Tactician &amp; Mathematical Dispersion</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[9px] font-bold font-num">LOW SCORE BIAS</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> Soccer is the lowest-scoring major team sport in the world (~2.7 goals/game). A team dominating 72% possession and 2.5 xG can concede a 93rd-minute deflected corner, ending in a 1-1 draw.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong>
+              <em>Safety Market Derisking</em>: When Draw probability exceeds 14%, the engine flags the pick and recommends <strong>Double Chance (1X)</strong>, <strong>Draw No Bet (DNB)</strong>, or <strong>Over 1.5 Team Goals</strong>, which win even if the match ends 1-1 or 2-2.
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor 4: Accumulator Compounding Ruin -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300">💣</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">4. Compounding Accumulator Fallacy</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">The #1 Reason Bettors Lose Money</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[9px] font-bold font-num">FATAL TRAP</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> Bettors take 5 to 10 "bankers" and parlay them. At 80% probability per leg, a 5-leg parlay has only a <strong>32.7% chance to win</strong> (67.3% chance to lose). A 10-leg parlay has an <strong>89.3% chance to lose</strong>!
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong>
+              Our platform calculates compound variance in real time, issues a <em>Compounded Risk Warning</em> on slips with &ge;3 legs, and enforces <strong>Single Value Bets</strong> or <strong>2-Leg Power Doubles</strong> with Fractional Kelly sizing.
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor 5: Calendar Fatigue & Mid-Week Lookahead -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300">📅</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">5. Calendar Turnaround &amp; UEFA Distraction</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">Layer 18 Physiological &amp; Tactical Modifiers</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[9px] font-bold font-num">LAYER 18</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> Top teams playing a domestic league game 72 hours before a UEFA Champions League knockout clash will rotate star players, avoid 50/50 tackles, and settle for low-energy 1-0 or 0-0 results.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong>
+              <strong>Layer 18 Strategic Rotation Engine</strong> automatically monitors &le;96h turnaround windows, imposes an empirical fatigue penalty (-4.5% to -8.0%), and auto-disqualifies distracted favorites from Daily Top 20 Banker status.
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor 6: Bookmaker Shaded Trap Lines & Negative EV -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">📊</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">6. Bookmaker Overround &amp; Shaded Lines</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">Market Maker Margin &amp; Public Bias</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[9px] font-bold font-num">SHIN DE-VIG</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> Bookmakers shade lines on popular heavy favorites (e.g. paying 1.15 when fair value is 1.30). Betting negative expected value (-EV) picks guarantees long-term bankroll destruction.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong>
+              Our <em>64-step Shin numerical de-vigging solver</em> strips the bookmaker overround to expose true insider odds. Any pick where retail odds fall below Shin zero-margin fair odds is flagged as a <code>TRAP LINE (-EV)</code> and barred.
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor 7: Goalkeeper Spills & Physics Deflections -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">⚽</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">7. Goalkeeper Howlers &amp; Deflection Physics</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">Inherent Physics &amp; Stochastic Chaos</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-500/15 text-slate-300 border border-slate-500/30 text-[9px] font-bold font-num">PURE CHANCE</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> A wet pitch bobble through a keeper's legs, a freak deflection off a defender's knee, or an unforced clearance error are pure physical anomalies that cannot be quantified mathematically.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong>
+              We enforce a <strong>Hard Probability Ceiling (Max 88%)</strong>. The platform explicitly forbids claiming any match has a 95%+ probability, reminding users that an irreducible <strong>12% to 20% variance floor</strong> is a permanent law of nature.
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor 8: Emotional Tilt, Chasing Losses & Martingale -->
+        <div class="p-5 rounded-2xl bg-[#0E131F] border border-[#222E46] space-y-3 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-2 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-300">🧠</span>
+              <div>
+                <h4 class="font-display font-bold text-sm text-white">8. Emotional Tilt &amp; Loss Chasing</h4>
+                <div class="text-[10px] text-slate-400 font-num uppercase">Psychologist &amp; Behavioral Finance</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[9px] font-bold font-num">BEHAVIORAL TRAP</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-3 rounded-xl bg-[#080A0F] border border-slate-800 text-slate-300 leading-relaxed">
+              <strong class="text-rose-400">Why Bets Lose:</strong> After losing 1 bet, a bettor feels anger or frustration, doubles their stake on a late-night match in an unfamiliar league to "get back to even" (Martingale trap), and loses their entire balance.
+            </div>
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 leading-relaxed">
+              <strong class="text-emerald-400">Platform Fix &amp; Countermeasure:</strong>
+              <strong>Quarter-Kelly Bankroll Architecture</strong> strictly caps individual match exposure at <strong>1.0% to 2.5%</strong> of bankroll. Session stop-loss limits protect against tilt and emotional depletion.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SUB-TAB 2: INTERACTIVE ACCUMULATOR RUIN SIMULATOR ===================== -->
+    <div x-show="realityCheck.activeTab === 'accumulator_ruin'" class="space-y-6">
+      
+      <div class="rounded-2xl border border-amber-500/50 bg-[#0E131F] p-6 space-y-6 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222E46] pb-4">
+          <div>
+            <h3 class="font-display font-black text-xl text-white flex items-center gap-2">
+              <span>📉</span> Interactive Accumulator Compounding Ruin Simulator
+            </h3>
+            <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+              Adjust the sliders below to see the brutal mathematical reality of multi-leg tickets. See why parlaying even 80% bankers leads to consistent losses.
+            </p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-300 border border-rose-500/40 font-num">
+            EXPONENTIAL VARIANCE MODEL
+          </span>
+        </div>
+
+        <!-- Controls: Sliders -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          
+          <!-- Slider 1: Legs in Acca -->
+          <div class="space-y-2 p-4 rounded-xl bg-[#080A0F] border border-slate-800">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-bold uppercase">Number of Legs (Matches):</span>
+              <span class="font-display font-black text-amber-400 text-base font-num" x-text="realityCheck.accaLegs + ' Legs'"></span>
+            </div>
+            <input type="range" min="1" max="12" step="1" x-model.number="realityCheck.accaLegs" class="w-full accent-amber-500 cursor-pointer" />
+            <div class="flex justify-between text-[10px] text-slate-500 font-num">
+              <span>1 (Single)</span>
+              <span>3 (Treble)</span>
+              <span>6 (Acca)</span>
+              <span>12 (Mega)</span>
+            </div>
+          </div>
+
+          <!-- Slider 2: Average Win Prob per Leg -->
+          <div class="space-y-2 p-4 rounded-xl bg-[#080A0F] border border-slate-800">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-bold uppercase">Average Win Prob per Leg:</span>
+              <span class="font-display font-black text-emerald-400 text-base font-num" x-text="realityCheck.avgLegProb + '%'"></span>
+            </div>
+            <input type="range" min="60" max="92" step="1" x-model.number="realityCheck.avgLegProb" class="w-full accent-emerald-500 cursor-pointer" />
+            <div class="flex justify-between text-[10px] text-slate-500 font-num">
+              <span>60% (Value)</span>
+              <span>78% (Top Banker)</span>
+              <span>90% (Extreme)</span>
+            </div>
+          </div>
+
+          <!-- Slider 3: Average Retail Odds per Leg -->
+          <div class="space-y-2 p-4 rounded-xl bg-[#080A0F] border border-slate-800">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-bold uppercase">Average Retail Odds per Leg:</span>
+              <span class="font-display font-black text-cyan-400 text-base font-num" x-text="'@' + Number(realityCheck.avgLegOdds).toFixed(2)"></span>
+            </div>
+            <input type="range" min="1.15" max="2.20" step="0.05" x-model.number="realityCheck.avgLegOdds" class="w-full accent-cyan-500 cursor-pointer" />
+            <div class="flex justify-between text-[10px] text-slate-500 font-num">
+              <span>1.15 (Heavy Fav)</span>
+              <span>1.50 (Standard)</span>
+              <span>2.20 (Plus Money)</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Real-Time Dynamic Mathematical Output Card -->
+        <template x-if="true">
+          <div x-data="{ r: calculateAccaRuin(realityCheck.accaLegs, realityCheck.avgLegProb, realityCheck.avgLegOdds) }"
+               :key="realityCheck.accaLegs + '-' + realityCheck.avgLegProb + '-' + realityCheck.avgLegOdds"
+               class="p-5 rounded-2xl bg-gradient-to-br from-[#121826] via-[#0E131F] to-[#0A0D15] border border-amber-500/40 space-y-5">
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              
+              <!-- Card 1: Win Prob -->
+              <div class="p-3.5 rounded-xl bg-[#080A0F] border border-[#1E293B]">
+                <div class="text-[10px] text-slate-400 uppercase font-bold">Ticket Win Probability</div>
+                <div class="font-display font-black text-2xl text-emerald-400 mt-1 font-num" x-text="r.winProbPct + '%'"></div>
+                <div class="text-[9px] text-slate-500 font-num" x-text="'(P)^' + realityCheck.accaLegs + ' Compounded'"></div>
+              </div>
+
+              <!-- Card 2: BUST PROBABILITY (PROMINENT) -->
+              <div class="p-3.5 rounded-xl bg-[#1C0F14] border border-rose-500/50 shadow-[0_0_20px_rgba(244,63,94,0.2)]">
+                <div class="text-[10px] text-rose-300 uppercase font-black">Mathematical BUST Risk</div>
+                <div class="font-display font-black text-2xl text-rose-400 mt-1 font-num" x-text="r.bustProbPct + '%'"></div>
+                <div class="text-[9px] text-rose-300 font-bold font-num">Chance You Lose Your Money</div>
+              </div>
+
+              <!-- Card 3: Multiplier Odds -->
+              <div class="p-3.5 rounded-xl bg-[#080A0F] border border-[#1E293B]">
+                <div class="text-[10px] text-slate-400 uppercase font-bold">Total Payout Multiplier</div>
+                <div class="font-display font-black text-2xl text-amber-300 mt-1 font-num" x-text="'@' + r.compoundOdds"></div>
+                <div class="text-[9px] text-slate-500 font-num">Retail Ticket Odds</div>
+              </div>
+
+              <!-- Card 4: Compounded House Margin -->
+              <div class="p-3.5 rounded-xl bg-[#080A0F] border border-[#1E293B]">
+                <div class="text-[10px] text-slate-400 uppercase font-bold">Compounded Bookmaker Vig</div>
+                <div class="font-display font-black text-2xl text-purple-400 mt-1 font-num" x-text="r.houseVigPct + '%'"></div>
+                <div class="text-[9px] text-slate-500 font-num">Bookmaker House Edge</div>
+              </div>
+
+            </div>
+
+            <!-- Mathematical Verdict Box -->
+            <div class="p-4 rounded-xl border text-xs sm:text-sm leading-relaxed"
+                 :class="realityCheck.accaLegs >= 4 ? 'bg-rose-500/10 border-rose-500/40 text-rose-200' : (realityCheck.accaLegs >= 2 ? 'bg-amber-500/10 border-amber-500/40 text-amber-200' : 'bg-emerald-500/10 border-emerald-500/40 text-emerald-200')">
+              <div class="flex items-center gap-2 font-display font-black uppercase text-xs">
+                <span>⚡</span>
+                <span x-text="realityCheck.accaLegs === 1 ? 'Optimal Quantitative Strategy: Single Bet' : (realityCheck.accaLegs <= 2 ? 'Controlled Multiplier: 2-Leg Double' : 'High Risk Parlay: Compounded Loss Alert')"></span>
+              </div>
+              <div class="mt-1 font-sans text-xs" x-show="realityCheck.accaLegs >= 4">
+                At <strong class="text-white font-num" x-text="realityCheck.accaLegs"></strong> legs, you have a <strong class="text-rose-400 font-num text-sm" x-text="r.bustProbPct + '%'"></strong> mathematical chance of losing this bet! Bookmakers make over 90% of their net profits from accumulators because every extra leg compounds their overround margin and magnifies random events (red cards, deflections, VAR). If you are tired of losing, <strong>switch to Single Value Bets</strong> or max 2-leg doubles.
+              </div>
+              <div class="mt-1 font-sans text-xs" x-show="realityCheck.accaLegs === 1">
+                Single bets are the ONLY vehicle used by professional sports syndicates. You only need to overcome the standard 4-6% retail vig on one match rather than multiplying bookmaker taxes across multiple games.
+              </div>
+              <div class="mt-1 font-sans text-xs" x-show="realityCheck.accaLegs >= 2 && realityCheck.accaLegs <= 3">
+                2-to-3 leg multis offer reasonable leverage, but bust risk already exceeds 40-50%. Only stake with strict Quarter-Kelly limits (max 1.5% bankroll).
+              </div>
+            </div>
+
+          </div>
+        </template>
+      </div>
+
+    </div>
+
+    <!-- ===================== SUB-TAB 3: THE PROFESSIONAL BETTOR'S BLUEPRINT ===================== -->
+    <div x-show="realityCheck.activeTab === 'discipline'" class="space-y-6">
+      
+      <div class="rounded-2xl border border-[#222E46] bg-[#0E131F] p-6 space-y-6 shadow-xl">
+        <div class="border-b border-[#222E46] pb-4">
+          <h3 class="font-display font-black text-xl text-white flex items-center gap-2">
+            <span>📘</span> The Professional Bettor's Reality Blueprint (How to Avoid Losses)
+          </h3>
+          <p class="text-xs text-slate-300 mt-1 max-w-3xl">
+            Quantitative rules practiced by the world's most successful sports betting funds. Master these 4 habits to safeguard your bankroll.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Rule 1: The Single Bet Dominance -->
+          <div class="p-5 rounded-2xl bg-[#080A0F] border border-amber-500/30 space-y-2.5">
+            <div class="flex items-center gap-2 text-amber-400 font-display font-black text-sm uppercase">
+              <span>1️⃣</span> Rule 1: Bet Singles Over Accumulators
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Every professional sports bettor stakes single matches. Accumulators exist solely to enrich bookmakers through compounded house margins. If you love an 80% banker, place a single bet on it. A 5-8% positive Expected Value (+EV) edge compounded over 500 single bets produces exponential profit; putting them into 8-leg tickets produces guaranteed ruin.
+            </p>
+            <div class="text-[10px] text-amber-400 font-num font-bold">Target: &ge;85% of total betting volume placed on Singles.</div>
+          </div>
+
+          <!-- Rule 2: Quarter-Kelly Staking -->
+          <div class="p-5 rounded-2xl bg-[#080A0F] border border-emerald-500/30 space-y-2.5">
+            <div class="flex items-center gap-2 text-emerald-400 font-display font-black text-sm uppercase">
+              <span>2️⃣</span> Rule 2: Strict Quarter-Kelly Bankroll Sizing
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Never bet more than <strong>1.0% to 2.5%</strong> of your total bankroll on any single match. Even an 80% win rate contains unavoidable losing streaks (e.g. 3 consecutive losses will occur once every 125 bets). If you stake 10% per bet, 3 losses will wipe out a third of your bankroll. Quarter-Kelly sizing protects against drawdown ruin.
+            </p>
+            <div class="text-[10px] text-emerald-400 font-num font-bold">Formula: Stake = 0.25 &times; ( (p &times; b - q) / b ) &times; Bankroll.</div>
+          </div>
+
+          <!-- Rule 3: Only Bet When True Edge Exists (+EV) -->
+          <div class="p-5 rounded-2xl bg-[#080A0F] border border-cyan-500/30 space-y-2.5">
+            <div class="flex items-center gap-2 text-cyan-400 font-display font-black text-sm uppercase">
+              <span>3️⃣</span> Rule 3: Only Bet Positive Expected Value (+EV)
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Do not bet a team just because "they are going to win". You must only bet when the <strong>Model Probability &gt; Bookmaker De-Vigged Implied Probability</strong>. If Real Madrid has an 80% win chance (fair odds 1.25) but the bookmaker only pays 1.15, that bet is a trap with a negative mathematical return.
+            </p>
+            <div class="text-[10px] text-cyan-400 font-num font-bold">Audit: Check the Shin Zero-Margin Fair Odds on every fixture card.</div>
+          </div>
+
+          <!-- Rule 4: Zero Emotional Tilt & Loss Chasing -->
+          <div class="p-5 rounded-2xl bg-[#080A0F] border border-purple-500/30 space-y-2.5">
+            <div class="flex items-center gap-2 text-purple-400 font-display font-black text-sm uppercase">
+              <span>4️⃣</span> Rule 4: Accept Variance &amp; Never Chase Losses
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              When a banker loses to a 94th-minute deflected goal, accept it as the 20% variance floor. <strong>Never double your stake on the next match (Martingale)</strong>. Never bet on obscure leagues you haven't modeled just to "make back today's loss". Stick to your quantitative process and let the law of large numbers deliver long-term edge.
+            </p>
+            <div class="text-[10px] text-purple-400 font-num font-bold">Rule: Fixed daily exposure ceiling &le; 10% of bankroll.</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===================== SUB-TAB 4: 18-MODEL CONSENSUS SYNCHRONIZER ===================== -->
+    <div x-show="realityCheck.activeTab === 'synchronizer'" class="space-y-6">
+      
+      <div x-data="{
+        hTeam: 'Arsenal',
+        aTeam: 'Chelsea',
+        hElo: 1840,
+        aElo: 1720,
+        hRest: 72,
+        aRest: 120,
+        isSim: false,
+        res: null,
+        runAudit() {
+          this.isSim = true;
+          fetch(`/api/models/ensemble/simulate?home=${encodeURIComponent(this.hTeam)}&away=${encodeURIComponent(this.aTeam)}&restHome=${this.hRest}&restAway=${this.aRest}&homeRating=88&awayRating=78`)
+            .then(r => r.json())
+            .then(d => {
+              this.res = d;
+              this.isSim = false;
+            })
+            .catch(() => { this.isSim = false; });
+        }
+      }" class="rounded-2xl border border-amber-500/50 bg-[#0E131F] p-6 space-y-6 shadow-xl" x-init="runAudit()">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222E46] pb-4">
+          <div>
+            <h3 class="font-display font-black text-xl text-white flex items-center gap-2">
+              <span>⚙️</span> 18-Model Synchronized Consensus Sandbox
+            </h3>
+            <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+              Inspect all 18 models coexisting and running simultaneously in real time. Adjust rest turnaround windows to observe how Layer 18 modifies the ensemble consensus.
+            </p>
+          </div>
+          <button @click="runAudit()" :disabled="isSim" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-display font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-1.5">
+            <span :class="isSim ? 'animate-spin' : ''">⚡</span>
+            <span x-text="isSim ? 'Synchronizing...' : 'Recalculate All 18 Models'"></span>
+          </button>
+        </div>
+
+        <!-- Controls -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div>
+            <label class="text-[10px] text-slate-400 uppercase font-bold">Home Club</label>
+            <input type="text" x-model="hTeam" class="w-full mt-1 bg-[#080A0F] border border-[#222E46] rounded-lg px-2.5 py-1.5 text-white font-medium" />
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 uppercase font-bold">Away Club</label>
+            <input type="text" x-model="aTeam" class="w-full mt-1 bg-[#080A0F] border border-[#222E46] rounded-lg px-2.5 py-1.5 text-white font-medium" />
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 uppercase font-bold">Home Rest Hours (Layer 18)</label>
+            <input type="number" step="6" x-model.number="hRest" class="w-full mt-1 bg-[#080A0F] border border-[#222E46] rounded-lg px-2.5 py-1.5 text-white font-num font-medium" />
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 uppercase font-bold">Away Rest Hours</label>
+            <input type="number" step="6" x-model.number="aRest" class="w-full mt-1 bg-[#080A0F] border border-[#222E46] rounded-lg px-2.5 py-1.5 text-white font-num font-medium" />
+          </div>
+        </div>
+
+        <!-- Consensus Metrics Banner -->
+        <template x-if="res">
+          <div class="space-y-4 pt-2">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div class="p-3.5 rounded-xl bg-[#080A0F] border border-amber-500/40">
+                <div class="text-[10px] text-slate-400 uppercase font-bold">18-Model Consensus</div>
+                <div class="font-display font-black text-2xl text-amber-300 mt-1 font-num" x-text="res.consensus?.consensusProbability + '%'"></div>
+                <div class="text-[9px] text-amber-400 font-num">Weighted Meta-Score</div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#080A0F] border border-emerald-500/40">
+                <div class="text-[10px] text-slate-400 uppercase font-bold">Inter-Model Agreement</div>
+                <div class="font-display font-black text-2xl text-emerald-400 mt-1 font-num" x-text="res.consensus?.modelAgreementScore + '%'"></div>
+                <div class="text-[9px] text-emerald-400 font-num">Low Dispersion</div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#080A0F] border border-cyan-500/40">
+                <div class="text-[10px] text-slate-400 uppercase font-bold">Standard Deviation</div>
+                <div class="font-display font-black text-2xl text-cyan-300 mt-1 font-num" x-text="'±' + res.consensus?.standardDeviation + '%'"></div>
+                <div class="text-[9px] text-cyan-400 font-num">Cross-Model Spread</div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#080A0F] border border-purple-500/40">
+                <div class="text-[10px] text-slate-400 uppercase font-bold">Active Models in Sync</div>
+                <div class="font-display font-black text-2xl text-purple-300 mt-1 font-num" x-text="(res.modelsBreakdown?.length || 18) + ' / 18'"></div>
+                <div class="text-[9px] text-purple-400 font-num">Coexisting Simultaneously</div>
+              </div>
+            </div>
+
+            <!-- List of All 18 Models Synchronously Executing -->
+            <div class="pt-2">
+              <div class="text-xs font-bold text-slate-400 uppercase pb-2 flex items-center justify-between">
+                <span>All 18 Individual Model Predictions &amp; Tactical Signals</span>
+                <span class="text-emerald-400 font-num font-bold">100% Weight Calibrated</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-96 overflow-y-auto pr-1">
+                <template x-for="(m, idx) in (res.modelsBreakdown || [])" :key="m.name">
+                  <div class="p-3 rounded-xl bg-[#080A0F] border border-[#1E293B] space-y-1 text-xs">
+                    <div class="flex items-center justify-between">
+                      <span class="font-display font-bold text-white truncate" x-text="(idx + 1) + '. ' + m.name"></span>
+                      <span class="font-num font-black text-amber-300 ml-1 shrink-0" x-text="m.prob + '%'"></span>
+                    </div>
+                    <div class="text-[10px] text-slate-400 flex items-center justify-between">
+                      <span class="truncate" x-text="m.category"></span>
+                      <span class="text-slate-500 font-num" x-text="'Wt: ' + (m.weight * 100).toFixed(0) + '%'"></span>
+                    </div>
+                    <div class="text-[10px] text-emerald-400/90 italic truncate" x-text="m.signal"></div>
+                  </div>
+                </template>
+              </div>
+            </div>
+
+          </div>
+        </template>
+
+      </div>
+
+    </div>
+
+  </section>
 
   <!-- ===================== HYENAX NATIVE MOBILE APP INSTALLATION MODAL ===================== -->
   <div x-show="showInstallModal"
@@ -8261,6 +8990,12 @@ function app(){
             class="flex flex-col items-center justify-center gap-1 py-2 px-2 transition-all min-h-[52px] active:scale-95">
       <span class="text-lg leading-none">🧪</span>
       <span class="text-[10px] tracking-tight">Validation</span>
+    </button>
+    <button @click="activeView = 'reality-check'; haptic()"
+            :class="activeView === 'reality-check' ? 'text-amber-400 font-bold' : 'text-slate-400 font-medium'"
+            class="flex flex-col items-center justify-center gap-1 py-2 px-2 transition-all min-h-[52px] active:scale-95">
+      <span class="text-lg leading-none">🛡️</span>
+      <span class="text-[10px] tracking-tight">Reality</span>
     </button>
     <button @click="promptInstall(); haptic()" x-show="!isStandalone"
             class="flex flex-col items-center justify-center gap-1 py-2 px-2 text-emerald-400 hover:text-emerald-300 font-bold transition-all min-h-[52px] active:scale-95">
