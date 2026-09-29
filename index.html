@@ -981,6 +981,24 @@ function app(){
     strictVettingDirectiveActive: true,
     minProbabilityThreshold: 78.5,
 
+    // Multi-Turn Gemini AI Chatbot Suite with Google Search & Google Maps Grounding
+    aiChatOpen: false,
+    aiChatModel: 'gemini-3.5-flash', // 'gemini-3.5-flash' | 'gemini-3.1-flash-lite' | 'gemini-3.1-pro-preview'
+    aiChatRole: 'quant', // 'quant' | 'fast' | 'math'
+    aiChatEnableSearch: true,
+    aiChatEnableMaps: false,
+    aiChatMessages: [
+      {
+        role: 'model',
+        text: "👋 Welcome to the **HyenaX Beast AI Oracle**. I am your quantitative football strategist grounded with **Google Search** for live breaking team news/lineups and **Google Maps** for stadium locations and travel fatigue analysis.\n\nAsk me about today's Daily Top 20 bankers, tactical match distributions, or stadium travel factors.",
+        grounding: { searchSources: [], mapSources: [] },
+        timestamp: 'Just now'
+      }
+    ],
+    aiChatInput: '',
+    aiChatLoading: false,
+    aiChatLocation: null,
+
     // Accumulator Studio State
     accumulatorLegs: [],
     accumulatorAnalysis: null,
@@ -2689,6 +2707,140 @@ function app(){
       }
     },
 
+    openAiChat(initialQuery = '', matchContext = null) {
+      this.aiChatOpen = true;
+      if (initialQuery && initialQuery.trim().length > 0) {
+        this.aiChatInput = initialQuery;
+        this.$nextTick(() => {
+          this.sendAiChatMessage();
+        });
+      } else if (matchContext) {
+        this.aiChatInput = `Analyze ${matchContext.home?.name || 'Home'} vs ${matchContext.away?.name || 'Away'} (${matchContext.league?.name || 'League'}). Check stadium location, travel fatigue, and 17-model consensus.`;
+        this.aiChatEnableMaps = true;
+      }
+      this.scrollChatToBottom();
+    },
+
+    closeAiChat() {
+      this.aiChatOpen = false;
+    },
+
+    clearAiChat() {
+      this.aiChatMessages = [
+        {
+          role: 'model',
+          text: "Conversation reset. How can I assist your quantitative betting analysis?",
+          grounding: { searchSources: [], mapSources: [] },
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
+      ];
+    },
+
+    setAiChatRole(role) {
+      this.aiChatRole = role;
+      if (role === 'fast') {
+        this.aiChatModel = 'gemini-3.1-flash-lite';
+      } else if (role === 'math') {
+        this.aiChatModel = 'gemini-3.1-pro-preview';
+      } else {
+        this.aiChatModel = 'gemini-3.5-flash';
+      }
+    },
+
+    scrollChatToBottom() {
+      this.$nextTick(() => {
+        const el = document.getElementById('ai-chat-thread');
+        if (el) {
+          el.scrollTop = el.scrollHeight;
+        }
+      });
+    },
+
+    async sendAiChatMessage() {
+      const q = (this.aiChatInput || '').trim();
+      if (!q || this.aiChatLoading) return;
+
+      const userMsg = {
+        role: 'user',
+        text: q,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      this.aiChatMessages.push(userMsg);
+      this.aiChatInput = '';
+      this.aiChatLoading = true;
+      this.scrollChatToBottom();
+
+      // Geolocation check for maps grounding if enabled
+      let userLocation = null;
+      if (this.aiChatEnableMaps && navigator.geolocation) {
+        try {
+          userLocation = await new Promise((resolve) => {
+            navigator.geolocation.getCurrentPosition(
+              pos => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+              () => resolve(null),
+              { timeout: 3000 }
+            );
+          });
+        } catch (_) {}
+      }
+
+      // Prepare system instruction based on role
+      let systemInstruction = '';
+      if (this.aiChatRole === 'fast') {
+        systemInstruction = 'You are the HyenaX Fast Line & Odds Scout. Deliver rapid, concise odds comparisons, line movement checks, and instant pick verification with zero fluff.';
+      } else if (this.aiChatRole === 'math') {
+        systemInstruction = 'You are the HyenaX Senior Mathematical Arbiter. Derive bivariate Poisson distributions, Dixon-Coles parameters, 64-step Shin zero-margin equations, and Kelly fractional formulas with mathematical rigor.';
+      } else {
+        systemInstruction = 'You are the Lead Quantitative Strategist & Risk Officer for HyenaX (The Ndlela Millionaires GoldPack). You provide deep, mathematically sound football breakdowns, Poisson expectations, Layer 18 calendar fatigue assessments, and risk-managed banker recommendations.';
+      }
+
+      try {
+        const payload = {
+          messages: this.aiChatMessages.map(m => ({ role: m.role, text: m.text })),
+          model: this.aiChatModel,
+          systemInstruction,
+          enableSearch: this.aiChatEnableSearch,
+          enableMaps: this.aiChatEnableMaps,
+          userLocation
+        };
+
+        const res = await fetch('/api/ai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          this.aiChatMessages.push({
+            role: 'model',
+            text: data.reply,
+            grounding: data.grounding || { searchSources: [], mapSources: [] },
+            modelUsed: data.modelUsed,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          });
+        } else {
+          this.aiChatMessages.push({
+            role: 'model',
+            text: `⚠️ **Service Alert**: ${data.message || 'Unable to complete AI analysis at this moment.'}`,
+            grounding: { searchSources: [], mapSources: [] },
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          });
+        }
+      } catch (err) {
+        this.aiChatMessages.push({
+          role: 'model',
+          text: `⚠️ Network error communicating with Beast AI Engine: ${err.message}`,
+          grounding: { searchSources: [], mapSources: [] },
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      } finally {
+        this.aiChatLoading = false;
+        this.scrollChatToBottom();
+      }
+    },
+
     syncDaysWithFixtures(){
       if (!Array.isArray(this.fixtures) || !this.fixtures.length) return;
       const today = new Date();
@@ -3441,6 +3593,12 @@ function app(){
                 :class="activeView === 'validation' ? 'bg-[#F59E0B]/20 text-amber-300 border-amber-500/60 shadow-sm' : 'text-slate-400 hover:text-slate-200 border-transparent'"
                 class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5">
           <span>🧪</span> Validation Suite
+        </button>
+        <button @click="openAiChat(); haptic()"
+                :class="aiChatOpen ? 'bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.35)]' : 'text-slate-400 hover:text-slate-200 border-transparent'"
+                class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5">
+          <span>🤖</span> AI Oracle
+          <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-400 text-black font-extrabold font-num">GROUNDED</span>
         </button>
       </nav>
 
@@ -7811,6 +7969,239 @@ function app(){
       </div>
     </div>
   </div>
+
+  <!-- ===================== GEMINI AI CHATBOT DRAWER (SEARCH & MAPS GROUNDED) ===================== -->
+  <div x-show="aiChatOpen"
+       x-transition:enter="transition ease-out duration-300"
+       x-transition:enter-start="opacity-0 translate-x-full"
+       x-transition:enter-end="opacity-100 translate-x-0"
+       x-transition:leave="transition ease-in duration-200"
+       x-transition:leave-start="opacity-100 translate-x-0"
+       x-transition:leave-end="opacity-0 translate-x-full"
+       class="fixed inset-y-0 right-0 z-50 w-full sm:w-[500px] bg-[#0A0D15]/98 backdrop-blur-2xl border-l border-[#222E46] shadow-[0_0_50px_rgba(0,0,0,0.85)] flex flex-col justify-between"
+       style="display: none;"
+       @keydown.escape.window="closeAiChat()">
+
+    <!-- Drawer Header -->
+    <div class="p-4 sm:p-5 border-b border-[#222E46] bg-[#0E131F]/90 flex items-center justify-between gap-3 shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FFE57F] via-[#F59E0B] to-[#78350F] p-0.5 shadow-[0_0_15px_rgba(245,158,11,0.4)] flex items-center justify-center text-xl text-black font-black">
+          🤖
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-display font-black text-white text-base tracking-tight">HyenaX Beast AI Oracle</h3>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-black font-num">MULTI-TURN</span>
+          </div>
+          <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-num text-slate-300" x-text="'Model: ' + aiChatModel">Model: gemini-3.5-flash</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5">
+        <button @click="clearAiChat()" title="Clear conversation history" class="px-2.5 py-1.5 rounded-lg border border-[#222E46] text-slate-400 hover:text-white hover:bg-[#151D2E] text-xs font-semibold transition-all">
+          Clear
+        </button>
+        <button @click="closeAiChat()" class="w-8 h-8 rounded-lg border border-[#222E46] text-slate-400 hover:text-white hover:bg-[#151D2E] grid place-items-center text-sm font-bold transition-all">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Role & Model Selection + Grounding Toggles Toolbar -->
+    <div class="px-4 py-3 bg-[#080A0F] border-b border-[#222E46] space-y-2.5 shrink-0">
+      <!-- Role Pills -->
+      <div class="flex items-center justify-between gap-1 text-[11px]">
+        <span class="text-[10px] uppercase font-bold text-slate-400">Role:</span>
+        <div class="flex items-center gap-1">
+          <button @click="setAiChatRole('quant')"
+                  :class="aiChatRole === 'quant' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
+                  class="px-2 py-1 rounded-md border text-[10px] font-bold transition-all">
+            🧠 Quant (3.5 Flash)
+          </button>
+          <button @click="setAiChatRole('fast')"
+                  :class="aiChatRole === 'fast' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
+                  class="px-2 py-1 rounded-md border text-[10px] font-bold transition-all">
+            ⚡ Fast (3.1 Lite)
+          </button>
+          <button @click="setAiChatRole('math')"
+                  :class="aiChatRole === 'math' ? 'bg-purple-500/20 text-purple-300 border-purple-500/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
+                  class="px-2 py-1 rounded-md border text-[10px] font-bold transition-all">
+            🔬 Math (3.1 Pro)
+          </button>
+        </div>
+      </div>
+
+      <!-- Grounding Toggles (Google Search & Google Maps) -->
+      <div class="flex items-center justify-between pt-2 border-t border-[#1C263C]">
+        <span class="text-[10px] uppercase font-bold text-slate-400">Grounding Tools:</span>
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-1.5 cursor-pointer text-xs select-none"
+                 title="Enables live Google Search for breaking injury news, line moves, and manager quotes">
+            <input type="checkbox" x-model="aiChatEnableSearch" @change="if(aiChatEnableSearch) aiChatEnableMaps=false; aiChatModel='gemini-3.5-flash'"
+                   class="rounded accent-amber-500 w-3.5 h-3.5 cursor-pointer" />
+            <span :class="aiChatEnableSearch ? 'text-amber-300 font-bold' : 'text-slate-400'" class="text-[11px] flex items-center gap-1">
+              <span>🌐</span> Google Search
+            </span>
+          </label>
+
+          <label class="flex items-center gap-1.5 cursor-pointer text-xs select-none"
+                 title="Enables Google Maps for venue coordinates, pitch dimensions, travel fatigue & reviews">
+            <input type="checkbox" x-model="aiChatEnableMaps" @change="if(aiChatEnableMaps) aiChatEnableSearch=false; aiChatModel='gemini-3.5-flash'"
+                   class="rounded accent-cyan-500 w-3.5 h-3.5 cursor-pointer" />
+            <span :class="aiChatEnableMaps ? 'text-cyan-300 font-bold' : 'text-slate-400'" class="text-[11px] flex items-center gap-1">
+              <span>📍</span> Google Maps
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable Multi-Turn Message Thread -->
+    <div id="ai-chat-thread" class="flex-1 overflow-y-auto p-4 space-y-4 text-xs sm:text-sm">
+      <template x-for="(msg, idx) in aiChatMessages" :key="idx">
+        <div class="space-y-2">
+          
+          <!-- User Turn Bubble -->
+          <template x-if="msg.role === 'user'">
+            <div class="flex justify-end">
+              <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-gradient-to-r from-amber-600/30 to-yellow-600/20 border border-amber-500/40 p-3 text-slate-100 shadow-md">
+                <div class="text-[10px] text-amber-300/80 font-num mb-1 flex items-center justify-end gap-1">
+                  <span>You</span> • <span x-text="msg.timestamp"></span>
+                </div>
+                <div class="whitespace-pre-wrap leading-relaxed" x-text="msg.text"></div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Model Turn Bubble -->
+          <template x-if="msg.role === 'model'">
+            <div class="flex justify-start items-start gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 grid place-items-center text-sm shrink-0 mt-0.5">
+                🦁
+              </div>
+              <div class="max-w-[90%] rounded-2xl rounded-tl-sm bg-[#0E131F] border border-[#222E46] p-3.5 text-slate-200 shadow-md space-y-3">
+                <div class="text-[10px] text-slate-400 font-num flex items-center justify-between border-b border-[#1C263C] pb-1.5">
+                  <span class="text-amber-400 font-bold">HyenaX Beast Oracle</span>
+                  <span x-text="msg.modelUsed || aiChatModel" class="text-slate-400 font-num text-[10px]"></span>
+                </div>
+                
+                <div class="whitespace-pre-line leading-relaxed font-sans text-xs sm:text-[13px] text-slate-200" x-text="msg.text"></div>
+
+                <!-- Google Search Grounding Sources Card -->
+                <template x-if="msg.grounding && msg.grounding.searchSources && msg.grounding.searchSources.length > 0">
+                  <div class="pt-2 border-t border-[#1C263C] space-y-1.5">
+                    <div class="text-[10px] font-bold uppercase text-amber-300 flex items-center gap-1">
+                      <span>🌐</span> Grounded with Google Search:
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                      <template x-for="(src, sIdx) in msg.grounding.searchSources" :key="sIdx">
+                        <a :href="src.uri" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-1 px-2 py-1 rounded bg-[#080A0F] border border-amber-500/30 hover:border-amber-400 text-amber-200 text-[10px] transition-colors truncate max-w-full">
+                          <span>🔗</span>
+                          <span class="truncate" x-text="src.title || src.uri"></span>
+                        </a>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+
+                <!-- Google Maps Grounding Sources Card -->
+                <template x-if="msg.grounding && msg.grounding.mapSources && msg.grounding.mapSources.length > 0">
+                  <div class="pt-2 border-t border-[#1C263C] space-y-2">
+                    <div class="text-[10px] font-bold uppercase text-cyan-300 flex items-center gap-1">
+                      <span>📍</span> Grounded with Google Maps (Stadium & Venue Intel):
+                    </div>
+                    <div class="space-y-1.5">
+                      <template x-for="(mSrc, mIdx) in msg.grounding.mapSources" :key="mIdx">
+                        <div class="p-2.5 rounded-xl bg-[#080A0F] border border-cyan-500/30 space-y-1">
+                          <a :href="mSrc.uri" target="_blank" rel="noopener noreferrer"
+                             class="inline-flex items-center gap-1.5 font-bold text-cyan-300 hover:text-cyan-200 text-xs underline">
+                            <span>🗺️</span>
+                            <span x-text="mSrc.title || 'Open Stadium on Google Maps'"></span>
+                          </a>
+                          <template x-if="mSrc.reviewSnippets && mSrc.reviewSnippets.length > 0">
+                            <div class="text-[11px] text-slate-400 italic">
+                              &ldquo;<span x-text="mSrc.reviewSnippets[0]"></span>&rdquo;
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+
+              </div>
+            </div>
+          </template>
+
+        </div>
+      </template>
+
+      <!-- Loading Indicator Turn -->
+      <div x-show="aiChatLoading" class="flex justify-start items-center gap-2.5">
+        <div class="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 grid place-items-center text-sm shrink-0">
+          🦁
+        </div>
+        <div class="rounded-2xl rounded-tl-sm bg-[#0E131F] border border-[#222E46] p-3 text-slate-400 flex items-center gap-2 text-xs">
+          <div class="w-3.5 h-3.5 rounded-full border-2 border-amber-400/30 border-t-amber-400 animate-spin"></div>
+          <span>Synthesizing multi-model consensus &amp; grounding feeds...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Prompt Suggestions Strip -->
+    <div class="px-4 py-2 bg-[#080A0F]/80 border-t border-[#1C263C] flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
+      <button @click="aiChatInput = 'What are today\'s Daily Top 20 surest banker picks with win probability > 78.5%?'; sendAiChatMessage()"
+              class="shrink-0 px-2.5 py-1 rounded-full bg-[#151D2E] hover:bg-amber-500/20 border border-[#222E46] hover:border-amber-500/50 text-[10px] text-slate-300 hover:text-amber-200 transition-all">
+        ⭐ Safest Daily Top 20
+      </button>
+      <button @click="aiChatEnableSearch = true; aiChatEnableMaps = false; aiChatInput = 'Search latest team news and injury reports for Arsenal and Real Madrid'; sendAiChatMessage()"
+              class="shrink-0 px-2.5 py-1 rounded-full bg-[#151D2E] hover:bg-amber-500/20 border border-[#222E46] hover:border-amber-500/50 text-[10px] text-slate-300 hover:text-amber-200 transition-all">
+        🔍 Breaking Injury Search
+      </button>
+      <button @click="aiChatEnableMaps = true; aiChatEnableSearch = false; aiChatInput = 'Map stadium venue, location, and travel fatigue for Manchester City upcoming fixture'; sendAiChatMessage()"
+              class="shrink-0 px-2.5 py-1 rounded-full bg-[#151D2E] hover:bg-cyan-500/20 border border-[#222E46] hover:border-cyan-500/50 text-[10px] text-slate-300 hover:text-cyan-200 transition-all">
+        📍 Stadium Map & Fatigue
+      </button>
+      <button @click="setAiChatRole('math'); aiChatInput = 'Explain the 64-step Shin de-vigging numerical solver and why it detects bookmaker trap lines.'; sendAiChatMessage()"
+              class="shrink-0 px-2.5 py-1 rounded-full bg-[#151D2E] hover:bg-purple-500/20 border border-[#222E46] hover:border-purple-500/50 text-[10px] text-slate-300 hover:text-purple-200 transition-all">
+        🔬 64-Step Shin Solver
+      </button>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="p-3 sm:p-4 bg-[#0E131F] border-t border-[#222E46] shrink-0">
+      <form @submit.prevent="sendAiChatMessage()" class="flex items-center gap-2">
+        <input type="text"
+               x-model="aiChatInput"
+               placeholder="Ask Beast AI Oracle (e.g. fixtures, xG, stadiums, odds)..."
+               :disabled="aiChatLoading"
+               class="flex-1 px-3.5 py-2.5 rounded-xl bg-[#080A0F] border border-[#222E46] text-white text-xs sm:text-sm placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors" />
+        <button type="submit"
+                :disabled="aiChatLoading || !(aiChatInput || '').trim()"
+                class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 disabled:opacity-40 text-black font-display font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-md">
+          <span x-show="!aiChatLoading">Send</span>
+          <span x-show="aiChatLoading" class="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ===================== FLOATING AI ORACLE LAUNCHER BUTTON ===================== -->
+  <button @click="openAiChat(); haptic()"
+          class="fixed bottom-20 xl:bottom-6 right-5 z-40 flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#0E131F]/95 border border-amber-500/60 shadow-[0_0_24px_rgba(245,158,11,0.35)] hover:bg-[#151D2E] hover:border-amber-400 hover:scale-105 active:scale-95 transition-all text-amber-300 font-display font-bold text-xs uppercase tracking-wider backdrop-blur-xl group">
+    <span class="relative flex h-2.5 w-2.5">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+    </span>
+    <span class="text-base group-hover:rotate-12 transition-transform">🤖</span>
+    <span>Beast AI Oracle</span>
+    <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-400 text-black font-extrabold font-num">GROUNDED</span>
+  </button>
 
   <!-- ===================== FOOTER (UPDATED OWNERSHIP & COMPLIANCE) ===================== -->
   <footer class="app-foot relative z-10 border-t border-[#222E46] bg-[#0A0D15] mt-12 mb-16 xl:mb-0">

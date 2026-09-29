@@ -1,0 +1,77 @@
+name: "Build, Test & Deploy to Cloudflare Pages"
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  test_and_build:
+    name: "Validate Layer 18, Build & Package"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Test Layer 18 Motivation Modifier & Validation Suite
+        run: |
+          python3 motivation_modifier.py
+          python3 validation_suite.py
+
+      - name: Set up Node.js runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Build Production Assets
+        run: npm run build
+
+      - name: Validate Production Build
+        run: |
+          test -f dist/index.html || (echo "dist/index.html missing" && exit 1)
+          test -f dist/_headers || (echo "dist/_headers missing" && exit 1)
+          test -f dist/_redirects || (echo "dist/_redirects missing" && exit 1)
+          test -f dist/data/fixtures.json || (echo "dist/data/fixtures.json missing" && exit 1)
+          echo "✓ All production build artifacts verified successfully."
+
+      - name: Deploy to Cloudflare Pages
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'hyenax'
+          directory: 'dist'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
