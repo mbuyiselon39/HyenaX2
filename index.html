@@ -1189,6 +1189,9 @@ function app(){
 
     init(){
       this.buildSeed();
+      // Ensure initial fixtures filter strictly adheres to yesterday & upcoming games
+      this.fixtures = this.filterFixturesToUpcomingAndYesterday(this.fixtures);
+      this.syncDaysWithFixtures();
       this.tickClock();
       setInterval(() => this.tickClock(), 1000);
       window.addEventListener('keydown', e => { if (e.key === 'Escape') { this.closeDrawer(); this.showScraperModal = false; } });
@@ -1208,6 +1211,11 @@ function app(){
           this.loadRemote(true);
         }
       });
+      // Watch selectedDate and auto-shift calendar smoothly without requiring manual scroll
+      this.$watch('selectedDate', val => {
+        this.shiftCalendarToDate(val, true);
+      });
+      setTimeout(() => this.shiftCalendarToDate(this.selectedDate, false), 250);
       this.fetchScraperStatus();
       this.fetchBeastLedger();
       this.runBacktestSimulation();
@@ -1350,14 +1358,18 @@ function app(){
 
     get dailyTop15AvailableDates(){
       if (!Array.isArray(this.fixtures) || !this.fixtures.length) return this.days.slice(0, 7);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+      const pad = n => String(n).padStart(2, '0');
+      const yesterdayKey = `${yesterday.getFullYear()}-${pad(yesterday.getMonth()+1)}-${pad(yesterday.getDate())}`;
+
       const dateCounts = new Map();
       this.fixtures.forEach(m => {
         const d = m.matchDate || this.dateKey(m.kickoff);
-        if (d) dateCounts.set(d, (dateCounts.get(d) || 0) + 1);
+        if (d && d >= yesterdayKey) dateCounts.set(d, (dateCounts.get(d) || 0) + 1);
       });
       const result = [];
-      const today = new Date();
-      today.setHours(0,0,0,0);
       const sortedKeys = Array.from(dateCounts.keys()).sort();
       sortedKeys.forEach(k => {
         const dayObj = this.days.find(d => d.key === k);
@@ -1368,15 +1380,17 @@ function app(){
           const parts = k.split('-');
           const dObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
           const diff = Math.round((dObj.getTime() - today.getTime()) / (24 * 60 * 60 * 1000));
-          result.push({
-            key: k,
-            date: dObj,
-            offset: diff,
-            label: diff === -1 ? 'Yesterday' : diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : dObj.toLocaleDateString('en-GB', { weekday: 'short' }),
-            sub: dObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
-            fullLabel: dObj.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }),
-            fixtureCount: count
-          });
+          if (diff >= -1) {
+            result.push({
+              key: k,
+              date: dObj,
+              offset: diff,
+              label: diff === -1 ? 'Yesterday' : diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : dObj.toLocaleDateString('en-GB', { weekday: 'short' }),
+              sub: dObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+              fullLabel: dObj.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }),
+              fixtureCount: count
+            });
+          }
         }
       });
       return result;
@@ -2361,8 +2375,26 @@ function app(){
       return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
     },
 
+    getYesterdayKey(){
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+      const pad = n => String(n).padStart(2, '0');
+      return `${yesterday.getFullYear()}-${pad(yesterday.getMonth()+1)}-${pad(yesterday.getDate())}`;
+    },
+
+    filterFixturesToUpcomingAndYesterday(fixturesList){
+      if (!Array.isArray(fixturesList)) return [];
+      const yesterdayKey = this.getYesterdayKey();
+      return fixturesList.filter(m => {
+        const k = m.matchDate || this.dateKey(m.kickoff);
+        return !k || k >= yesterdayKey;
+      });
+    },
+
     buildSeed(){
       const today = new Date();
+      today.setHours(0,0,0,0);
       this.days = [];
       for (let i = -1; i <= 13; i++){
         const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
@@ -2378,7 +2410,8 @@ function app(){
       }
       const todayObj = this.days.find(d => d.offset === 0);
       this.selectedDate = todayObj ? todayObj.key : this.dateKey(new Date());
-      this.fixtures = SEED_MATCHES.map((row, n) => this.expand(row, n));
+      const rawSeed = SEED_MATCHES.map((row, n) => this.expand(row, n));
+      this.fixtures = this.filterFixturesToUpcomingAndYesterday(rawSeed);
       const leagueCounts = {};
       for (const m of this.fixtures) leagueCounts[m.league.name] = (leagueCounts[m.league.name] || 0) + 1;
       for (const m of this.fixtures){
@@ -2637,7 +2670,7 @@ function app(){
       };
     },
 
-    async loadRemote(){
+    async loadRemote(isBackground = false){
       try {
         let json = null;
         try {
@@ -2662,7 +2695,9 @@ function app(){
           throw new Error('fixtures payload contained no matches');
         }
 
-        this.fixtures = json.matches.map((m, n) => this.normalizeFixture(m, n));
+        const normalized = json.matches.map((m, n) => this.normalizeFixture(m, n));
+        // Strictly filter out any matches earlier than yesterday:
+        this.fixtures = this.filterFixturesToUpcomingAndYesterday(normalized);
         this.openLeagues = Object.fromEntries(this.fixtures.map(m => [m.league.id, true]));
         if (json.meta) {
           this.fallbackActive = !!json.meta.fallback_active;
@@ -2677,13 +2712,21 @@ function app(){
         this.syncDaysWithFixtures();
 
         const todayKey = this.dateKey(new Date());
-        const hasToday = this.fixtures.some(m => (m.matchDate || this.dateKey(m.kickoff)) === todayKey);
-        if (hasToday) {
-          this.selectedDate = todayKey;
-        } else if (this.fixtures.length) {
-          const nearest = this.fixtures.reduce((a, b) => Math.abs(a.kickoff - Date.now()) < Math.abs(b.kickoff - Date.now()) ? a : b);
-          this.selectedDate = nearest.matchDate || this.dateKey(nearest.kickoff);
+        if (isBackground && this.selectedDate && (this.selectedDate === 'all' || this.days.some(d => d.key === this.selectedDate))) {
+          // Keep current active tab intact during silent background polling
+        } else {
+          const hasToday = this.fixtures.some(m => (m.matchDate || this.dateKey(m.kickoff)) === todayKey);
+          if (hasToday) {
+            this.selectedDate = todayKey;
+          } else if (this.fixtures.length) {
+            const nearest = this.fixtures.reduce((a, b) => Math.abs(a.kickoff - Date.now()) < Math.abs(b.kickoff - Date.now()) ? a : b);
+            this.selectedDate = nearest.matchDate || this.dateKey(nearest.kickoff);
+          }
         }
+
+        // Smoothly auto-shift the calendar strip to the active date
+        this.shiftCalendarToDate(this.selectedDate, !isBackground);
+
         if (!this.selectedMatchId || !this.fixtures.some(m => m.id === this.selectedMatchId)){
           const pick = this.dayMatches(this.selectedDate).find(m => m.isBig) || this.dayMatches(this.selectedDate)[0] || this.fixtures[0];
           this.selectedMatchId = pick ? pick.id : null;
@@ -2873,15 +2916,24 @@ function app(){
       const today = new Date();
       today.setHours(0,0,0,0);
       const todayKey = this.dateKey(today);
+      const yesterdayKey = this.getYesterdayKey();
 
-      // Collect strictly dates that contain confirmed official matches
+      // Collect strictly dates from yesterday onwards
       const dateSet = new Set();
       this.fixtures.forEach(m => {
         const k = m.matchDate || this.dateKey(m.kickoff);
-        if (k) dateSet.add(k);
+        if (k && k >= yesterdayKey) dateSet.add(k);
       });
 
-      const relevantDates = Array.from(dateSet).sort();
+      // Always guarantee at least Yesterday, Today, Tomorrow exist so calendar is reliable
+      dateSet.add(yesterdayKey);
+      dateSet.add(todayKey);
+      const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      const pad = n => String(n).padStart(2, '0');
+      const tomorrowKey = `${tomorrow.getFullYear()}-${pad(tomorrow.getMonth()+1)}-${pad(tomorrow.getDate())}`;
+      dateSet.add(tomorrowKey);
+
+      const relevantDates = Array.from(dateSet).filter(k => k >= yesterdayKey).sort();
       this.days = relevantDates.map(key => {
         const parts = key.split('-');
         const dateObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
@@ -2905,9 +2957,34 @@ function app(){
           this.selectedDate = todayKey;
         } else if (this.days.length) {
           const upcoming = this.days.filter(d => d.offset >= 0);
-          this.selectedDate = (upcoming[0] || this.days[this.days.length - 1]).key;
+          this.selectedDate = (upcoming[0] || this.days[0]).key;
         }
       }
+    },
+
+    scrollCalendar(direction){
+      const strip = this.$refs.calendarStrip;
+      if (!strip) return;
+      const delta = direction === 'left' ? -260 : 260;
+      strip.scrollBy({ left: delta, behavior: 'smooth' });
+    },
+
+    shiftCalendarToDate(key, smooth = true){
+      this.$nextTick(() => {
+        const strip = this.$refs.calendarStrip;
+        if (!strip) return;
+        const selector = key === 'all' ? '[data-chip="all"]' : `[data-chip="${key}"]`;
+        const target = strip.querySelector(selector);
+        if (!target) return;
+        const targetLeft = target.offsetLeft;
+        const targetWidth = target.offsetWidth;
+        const containerWidth = strip.clientWidth;
+        const scrollTarget = targetLeft - (containerWidth / 2) + (targetWidth / 2);
+        strip.scrollTo({
+          left: Math.max(0, scrollTarget),
+          behavior: smooth ? 'smooth' : 'auto'
+        });
+      });
     },
 
     countByDay(key){
@@ -3809,13 +3886,27 @@ function app(){
     </div>
   </div>
 
-  <!-- ===================== CALENDAR STRIP ===================== -->
-  <nav x-show="activeView === 'fixtures'" class="border-b border-[#222E46] bg-[#080A0F]/90 relative z-20">
-    <div class="mx-auto max-w-[1400px]">
-      <div class="strip-in flex gap-2.5 py-3.5 overflow-x-auto no-scrollbar snap-x">
+  <!-- ===================== CALENDAR STRIP (SMOOTH AUTO-SHIFT & CHEVRON CONTROLS) ===================== -->
+  <nav x-show="activeView === 'fixtures'" class="border-b border-[#222E46] bg-[#080A0F]/90 relative z-20 select-none">
+    <div class="mx-auto max-w-[1400px] relative px-2 sm:px-4">
+      <!-- Left scroll chevron button -->
+      <button @click="scrollCalendar('left')" aria-label="Previous dates"
+        class="hidden sm:flex absolute left-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full items-center justify-center bg-[#0E131F]/90 border border-[#222E46] text-slate-300 hover:text-amber-400 hover:border-amber-500/50 hover:bg-[#151D2E] shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-sm transition-all focus:outline-none">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+
+      <!-- Right scroll chevron button -->
+      <button @click="scrollCalendar('right')" aria-label="Next dates"
+        class="hidden sm:flex absolute right-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full items-center justify-center bg-[#0E131F]/90 border border-[#222E46] text-slate-300 hover:text-amber-400 hover:border-amber-500/50 hover:bg-[#151D2E] shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-sm transition-all focus:outline-none">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+
+      <!-- Horizontal scrolling track with auto-shift -->
+      <div x-ref="calendarStrip" class="strip-in flex gap-2.5 py-3.5 px-1 sm:px-8 overflow-x-auto no-scrollbar scroll-smooth snap-x">
         <!-- ALL FIXTURES / ALL ROUNDS CHIP -->
-        <button @click="selectedDate = 'all'"
-          class="day-chip snap-start shrink-0 w-[105px] rounded-xl border px-3.5 py-2.5 text-left relative overflow-hidden transition-all"
+        <button @click="selectedDate = 'all'; shiftCalendarToDate('all')"
+          data-chip="all"
+          class="day-chip snap-start shrink-0 w-[105px] rounded-xl border px-3.5 py-2.5 text-left relative overflow-hidden transition-all cursor-pointer"
           :class="selectedDate === 'all' ? 'active border-[#F59E0B] bg-gradient-to-b from-[#F59E0B]/20 to-[#121826] shadow-[0_0_20px_-4px_rgba(245,158,11,.45)]' : 'border-[#222E46] bg-[#0E131F] hover:bg-[#151D2E] hover:border-slate-600'">
           <div class="font-display text-xs font-bold flex items-center gap-1" :class="selectedDate === 'all' ? 'text-amber-300' : 'text-slate-300'">
             <span>🌐</span> ALL
@@ -3829,11 +3920,15 @@ function app(){
         </button>
 
         <template x-for="d in days" :key="d.key">
-          <button @click="selectedDate = d.key"
-            class="day-chip snap-start shrink-0 w-[100px] rounded-xl border px-3.5 py-2.5 text-left relative overflow-hidden transition-all"
+          <button @click="selectedDate = d.key; shiftCalendarToDate(d.key)"
+            :data-chip="d.key"
+            class="day-chip snap-start shrink-0 w-[100px] rounded-xl border px-3.5 py-2.5 text-left relative overflow-hidden transition-all cursor-pointer"
             :class="selectedDate === d.key ? 'active border-[#F59E0B] bg-gradient-to-b from-[#F59E0B]/20 to-[#121826] shadow-[0_0_20px_-4px_rgba(245,158,11,.45)]' : 'border-[#222E46] bg-[#0E131F] hover:bg-[#151D2E] hover:border-slate-600'"
             :style="'animation-delay:'+(d.offset+1)*40+'ms'">
-            <div class="font-display text-xs font-bold" :class="selectedDate === d.key ? 'text-amber-300' : 'text-slate-300'" x-text="d.label">Today</div>
+            <div class="font-display text-xs font-bold flex items-center justify-between" :class="selectedDate === d.key ? 'text-amber-300' : 'text-slate-300'">
+              <span x-text="d.label">Today</span>
+              <span x-show="d.offset === -1" class="text-[8px] px-1 py-0.2 rounded bg-slate-800 text-slate-400 border border-slate-700">Past</span>
+            </div>
             <div class="font-num text-[10px] text-slate-400 mt-0.5" x-text="d.sub">12 Mar</div>
             <div class="mt-1.5 flex items-center gap-1.5">
               <span class="font-num text-[11px] font-bold" :class="countByDay(d.key) ? (selectedDate === d.key ? 'text-amber-400' : 'text-slate-300') : 'text-slate-600'" x-text="countByDay(d.key)">0</span>

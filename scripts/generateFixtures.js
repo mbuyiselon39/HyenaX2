@@ -4204,6 +4204,21 @@ export function generateAllFixtures(customBaseDate = null) {
   };
 }
 
+function prunePastFixtures(fixturesData) {
+  if (!fixturesData || !Array.isArray(fixturesData.matches)) return fixturesData;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+  const pad = n => String(n).padStart(2, '0');
+  const yesterdayKey = `${yesterday.getFullYear()}-${pad(yesterday.getMonth() + 1)}-${pad(yesterday.getDate())}`;
+
+  fixturesData.matches = fixturesData.matches.filter(m => {
+    const k = m.matchDate || (m.kickoff ? String(m.kickoff).substring(0, 10) : '');
+    return !k || k >= yesterdayKey;
+  });
+  return fixturesData;
+}
+
 export async function saveFixtures(customBaseDate = null) {
   let fixturesData = null;
   try {
@@ -4212,6 +4227,8 @@ export async function saveFixtures(customBaseDate = null) {
     console.error('[FixtureGen] Live feed error, generating schedule:', err.message);
     fixturesData = generateAllFixtures(customBaseDate);
   }
+
+  fixturesData = prunePastFixtures(fixturesData);
 
   const outputPath = path.join(__dirname, '../data/fixtures.json');
   const dir = path.dirname(outputPath);
@@ -4229,7 +4246,8 @@ export async function saveFixtures(customBaseDate = null) {
 }
 
 export function saveFixturesSync(customBaseDate = null) {
-  const fixturesData = generateAllFixtures(customBaseDate);
+  let fixturesData = generateAllFixtures(customBaseDate);
+  fixturesData = prunePastFixtures(fixturesData);
   const outputPath = path.join(__dirname, '../data/fixtures.json');
   const dir = path.dirname(outputPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
