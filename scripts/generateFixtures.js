@@ -4124,7 +4124,7 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
     try {
       const dir = path.dirname(fallbackCachePath);
       if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(fallbackCachePath, JSON.stringify(payload, null, 2), 'utf8');
+      fs.writeFileSync(fallbackCachePath, JSON.stringify(payload), 'utf8');
       console.log(`[FixtureGen] ✓ Updated verified official fallback snapshot (${allMatches.length} matches)`);
     } catch (_) {}
 

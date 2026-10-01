@@ -39,7 +39,6 @@ const filesToCopy = [
 ];
 
 const dirsToCopy = [
-  'data',
   'icons',
   'js',
   'src'
@@ -60,6 +59,36 @@ for (const dir of dirsToCopy) {
   if (fs.existsSync(src)) {
     fs.cpSync(src, dest, { recursive: true });
     console.log(`[Build] Copied directory: ${dir}`);
+  }
+}
+
+// 3b. Copy public web data assets to dist/data (excluding bulky server-only caches to satisfy Cloudflare Pages 25MB limit)
+const dataSrc = path.join(rootDir, 'data');
+const dataDest = path.join(distDir, 'data');
+fs.mkdirSync(dataDest, { recursive: true });
+
+if (fs.existsSync(dataSrc)) {
+  const publicFiles = fs.readdirSync(dataSrc).filter(f => {
+    // Exclude server-only scraper caches & temporary files
+    if (f === 'official_fallback_cache.json') return false;
+    if (f.endsWith('.bak') || f.endsWith('.tmp')) return false;
+    return true;
+  });
+
+  for (const f of publicFiles) {
+    const s = path.join(dataSrc, f);
+    const d = path.join(dataDest, f);
+    if (f === 'fixtures.json') {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(s, 'utf-8'));
+        fs.writeFileSync(d, JSON.stringify(parsed), 'utf-8');
+        const sz = (fs.statSync(d).size / (1024 * 1024)).toFixed(2);
+        console.log(`[Build] Copied & minified: data/${f} (${sz} MB)`);
+        continue;
+      } catch (_) {}
+    }
+    fs.copyFileSync(s, d);
+    console.log(`[Build] Copied file: data/${f}`);
   }
 }
 
