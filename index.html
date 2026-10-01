@@ -2550,10 +2550,34 @@ function app(){
       const seedKey = `${home.name}-${away.name}-${kickoff.getTime()}`;
       const dcPredictions = buildDixonColesPredictions(home, away, seedKey, league.id);
 
+      // Remodel any non-standard cushion lines to standard retail sportsbook lines
+      const remodelRetailLine = (p) => {
+        if (!p || !p.selection) return p;
+        let sel = p.selection;
+        let prob = Number(p.probability) || 70;
+        if (/under\s+6\.5\s+corners/i.test(sel)) {
+          sel = sel.replace(/under\s+6\.5\s+corners/i, 'Under 4.5 Corners');
+          prob = Math.min(84, Math.max(52, +(prob * 0.88).toFixed(1)));
+        } else if (/under\s+16\.5\s+shots/i.test(sel)) {
+          sel = sel.replace(/under\s+16\.5\s+shots/i, 'Under 12.5 Shots');
+          prob = Math.min(84, Math.max(52, +(prob * 0.86).toFixed(1)));
+        } else if (/under\s+5\.5\s+total\s+cards/i.test(sel)) {
+          sel = sel.replace(/under\s+5\.5\s+total\s+cards/i, 'Under 4.5 Total Cards');
+          prob = Math.min(85, Math.max(54, +(prob * 0.90).toFixed(1)));
+        } else if (/1st-half\s+under\s+5\.5\s+corners/i.test(sel)) {
+          sel = sel.replace(/1st-half\s+under\s+5\.5\s+corners/i, '1st-Half Under 4.5 Corners');
+          prob = Math.min(85, Math.max(54, +(prob * 0.88).toFixed(1)));
+        } else if (/2nd-half\s+under\s+5\.5\s+corners/i.test(sel)) {
+          sel = sel.replace(/2nd-half\s+under\s+5\.5\s+corners/i, '2nd-Half Under 4.5 Corners');
+          prob = Math.min(85, Math.max(54, +(prob * 0.88).toFixed(1)));
+        }
+        return { ...p, selection: sel, probability: prob };
+      };
+
       // Preserve backend's intelligent ranking if predictions exist; otherwise use client Dixon-Coles
       let preds;
       if (Array.isArray(m.predictions) && m.predictions.length) {
-        preds = m.predictions.map((p, i) => ({
+        preds = m.predictions.map(p => remodelRetailLine(p)).map((p, i) => ({
           ...p,
           rank: i + 1,
           probability: +Number(p.probability).toFixed(1),
@@ -2568,8 +2592,9 @@ function app(){
         }));
       }
 
-      // Respect backend's selected topPick
-      const backendTopPick = m.topPick && m.topPick.selection ? m.topPick : null;
+      // Respect backend's selected topPick (remodeled to standard retail line if alternate)
+      const rawBackendTopPick = m.topPick && m.topPick.selection ? m.topPick : null;
+      const backendTopPick = rawBackendTopPick ? remodelRetailLine(rawBackendTopPick) : null;
       const top = backendTopPick || preds[0] || { market: '-', selection: '-', probability: 0 };
       const topOddsVal = top.odds ? (top.odds.betway || top.odds.hollywoodbets || top.odds.easybet || (typeof top.odds === 'number' ? top.odds : +(100 / (top.probability || 70) * 1.05).toFixed(2))) : +(100 / (top.probability || 70) * 1.05).toFixed(2);
 
@@ -2611,7 +2636,7 @@ function app(){
         score: m.score || null,
         finalScore: m.finalScore || (m.score ? `${m.score.home} - ${m.score.away}` : ''),
         kickoffRsa: m.kickoffRsa || kickoffTime,
-        rationale: m.rationale || generateRationale(home, away, top, dcPredictions.lambdaHome, dcPredictions.lambdaAway, dcPredictions.dixonColesMeta),
+        rationale: m.rationale ? m.rationale.replace(/under\s+6\.5\s+corners/ig, 'Under 4.5 Corners').replace(/under\s+16\.5\s+shots/ig, 'Under 12.5 Shots').replace(/under\s+5\.5\s+total\s+cards/ig, 'Under 4.5 Total Cards') : generateRationale(home, away, top, dcPredictions.lambdaHome, dcPredictions.lambdaAway, dcPredictions.dixonColesMeta),
         beastMeta: {
           calibratedProbability: cal.calibratedProbability,
           calibrationDelta: cal.calibrationDelta,

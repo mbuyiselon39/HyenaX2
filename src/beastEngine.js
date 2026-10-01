@@ -2418,6 +2418,15 @@ export function evaluateDeepMarketVetting({
     }
   }
 
+  // 3b. Standard Sportsbook Retail Line Alignment Check
+  // Disqualifies alternate cushion non-standard lines (e.g. Under 6.5 Team Corners, Under 16.5 Shots, Under 5.5 Cards)
+  const isAlternateCushionLine = (/under\s+(6\.5|7\.5|8\.5)\s+corners/i.test(selectionName) && !/total\s+corners/i.test(selectionName) && !/match/i.test(marketName))
+    || (/under\s+1[4-9]\.5\s+shots/i.test(selectionName))
+    || (/under\s+5\.5\s+total\s+cards/i.test(selectionName));
+  if (isAlternateCushionLine) {
+    violations.push({ code: 'NON_STANDARD_RETAIL_LINE', message: 'Alternate cushion line is not a standard retail sportsbook benchmark.' });
+  }
+
   // 4. Odds Integrity Check
   const oddsIntegrityApproved = numOdds >= 1.28 && numOdds <= 2.25;
   if (numOdds < 1.28) {
