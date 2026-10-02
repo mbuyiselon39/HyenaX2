@@ -1,6 +1,10 @@
 name: "Build, Test & Deploy to Cloudflare Pages"
 
 on:
+  schedule:
+    # Run every 3.5 hours: 00:00, 03:30, 07:00, 10:30, 14:00, 17:30, 21:00 UTC
+    - cron: "0 0,7,14,21 * * *"
+    - cron: "30 3,10,17 * * *"
   push:
     branches:
       - main
@@ -66,3 +70,11 @@ jobs:
         run: |
           npx wrangler pages deploy dist --project-name=hyenax || echo "Cloudflare Pages direct CLI deployment skipped or completed via Git integration."
         continue-on-error: true
+
+      - name: Trigger Cloudflare Pages Deploy Hook (Optional)
+        if: env.CLOUDFLARE_DEPLOY_HOOK != ''
+        env:
+          CLOUDFLARE_DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          echo "Triggering Cloudflare Pages Deploy Hook..."
+          curl -s -X POST "$CLOUDFLARE_DEPLOY_HOOK" || true

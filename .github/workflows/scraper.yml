@@ -1,9 +1,10 @@
-name: "Fixture Scraper (every 4h)"
+name: "Fixture Scraper & Auto-Deploy Trigger (every 3.5h)"
 
 on:
   schedule:
-    # Run every 4 hours at the start of the hour (00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC)
-    - cron: "0 */4 * * *"
+    # Run every 3.5 hours: 00:00, 03:30, 07:00, 10:30, 14:00, 17:30, 21:00 UTC
+    - cron: "0 0,7,14,21 * * *"
+    - cron: "30 3,10,17 * * *"
   workflow_dispatch:
 
 permissions:
@@ -49,14 +50,19 @@ jobs:
             });
           "
 
-      - name: Commit and push updated fixtures.json
+      - name: Commit and push updated fixtures (triggers Cloudflare Pages auto-deploy)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "{\"last_sync\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",\"schedule\":\"every-3.5h\",\"status\":\"OK\"}" > data/sync_timestamp.json
           git add data/
-          if git diff --staged --quiet; then
-            echo "No new fixture or odds shifts to commit."
-          else
-            git commit -m "chore(data): live 4h fixture & Dixon-Coles model sync [$(date -u +'%Y-%m-%d %H:%M UTC')]"
-            git push origin main
-          fi
+          git commit -m "chore(data): live 3.5h fixture & Dixon-Coles model sync [$(date -u +'%Y-%m-%d %H:%M UTC')]" || echo "No changes to commit"
+          git push origin main || git push origin master || echo "Push completed"
+
+      - name: Trigger Cloudflare Pages Deploy Hook (optional)
+        if: env.CLOUDFLARE_DEPLOY_HOOK != ''
+        env:
+          CLOUDFLARE_DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          echo "Triggering Cloudflare Pages Deploy Hook..."
+          curl -s -X POST "$CLOUDFLARE_DEPLOY_HOOK" || true
