@@ -3894,11 +3894,42 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
   const startD = new Date(Date.UTC(2026, 8, 20, 0, 0, 0)); // 2026-09-20
   const endD = new Date(base.getTime() + 35 * 24 * 60 * 60 * 1000);
 
-  const targetDates = [
-    '20260921', '20260922', '20260923', '20260924', '20260925',
-    '20260926', '20260927', '20260928', '20260929', '20260930', '20261001'
+  // Dynamic rolling date window: 3 days in the past through 10 days in the future
+  const targetDates = [];
+  for (let offset = -3; offset <= 10; offset++) {
+    const d = new Date(base.getTime() + offset * 24 * 60 * 60 * 1000);
+    const y = d.getUTCFullYear();
+    const m = pad(d.getUTCMonth() + 1);
+    const day = pad(d.getUTCDate());
+    targetDates.push(`${y}${m}${day}`);
+  }
+  const dateLeagues = [
+    'uefa.nations',
+    'fifa.friendly',
+    'usa.1',
+    'mex.1',
+    'rsa.1',
+    'eng.1',
+    'esp.1',
+    'ita.1',
+    'ger.1',
+    'fra.1',
+    'ned.1',
+    'por.1',
+    'bra.1',
+    'tur.1',
+    'sco.1',
+    'eng.2',
+    'eng.3',
+    'eng.4',
+    'uefa.champions',
+    'uefa.europa',
+    'uefa.europa.conf',
+    'usa.nwsl',
+    'eng.w.1',
+    'esp.w.1',
+    'uefa.champions.women'
   ];
-  const dateLeagues = ['uefa.nations', 'fifa.friendly', 'usa.1', 'mex.1', 'usa.nwsl', 'eng.w.1', 'esp.w.1', 'uefa.champions.women'];
 
   console.log('[RealFixtures] Ingesting live official schedule from ESPN API with fallback resilience...');
 
