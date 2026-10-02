@@ -113,4 +113,25 @@ const headersContent = `# Cloudflare Pages Headers
 `;
 fs.writeFileSync(path.join(distDir, '_headers'), headersContent, 'utf-8');
 
+// 5. Cloudflare Pages 25MB Asset Ceiling Guardrail
+function validateCloudflareAssetLimits(dir) {
+  const MAX_CLOUDFLARE_BYTES = 24 * 1024 * 1024; // 24 MiB hard safety ceiling (Cloudflare limit is 25 MiB)
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      validateCloudflareAssetLimits(fullPath);
+    } else if (entry.isFile()) {
+      const stats = fs.statSync(fullPath);
+      const sizeMb = (stats.size / (1024 * 1024)).toFixed(2);
+      if (stats.size >= MAX_CLOUDFLARE_BYTES) {
+        throw new Error(`[Cloudflare Guardrail Violation] File "${fullPath}" is ${sizeMb} MB, which exceeds Cloudflare Pages 24MB ceiling!`);
+      }
+    }
+  }
+}
+
+validateCloudflareAssetLimits(distDir);
+console.log('[Build] ✓ Cloudflare 25MB Asset Guardrail verified: all assets strictly under 24MB.');
 console.log('[Build] ✓ Production build successful! Output directory: dist/');

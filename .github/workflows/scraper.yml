@@ -42,11 +42,26 @@ jobs:
           node -e "
             import('fs').then(fs => {
               const data = JSON.parse(fs.readFileSync('data/fixtures.json', 'utf8'));
-              if (!data.matches || !Array.isArray(data.matches) || data.matches.length < 10) {
+              if (!data.matches || !Array.isArray(data.matches) || data.matches.length < 50) {
                 console.error('Fixture validation failed: Insufficient matches in fixtures.json');
                 process.exit(1);
               }
-              console.log('✓ Validation passed: ' + data.matches.length + ' fixtures active across ' + data.meta.league_count + ' leagues.');
+              // 1. Freshness Guardrail: Assert matches contain today or future dates
+              const now = new Date();
+              const nowKey = now.toISOString().slice(0, 10);
+              const upcomingMatches = data.matches.filter(m => (m.matchDate || m.kickoff.slice(0, 10)) >= nowKey);
+              if (upcomingMatches.length < 10) {
+                console.error('Validation failed: No upcoming/future fixtures detected! Date range is expired or stale.');
+                process.exit(1);
+              }
+              // 2. Asset Size Guardrail: Assert data/fixtures.json is strictly under 24MB
+              const stats = fs.statSync('data/fixtures.json');
+              const sizeMb = stats.size / (1024 * 1024);
+              if (sizeMb >= 24) {
+                console.error('Validation failed: fixtures.json is ' + sizeMb.toFixed(2) + 'MB (exceeds Cloudflare 24MB ceiling)');
+                process.exit(1);
+              }
+              console.log('✓ Validation passed: ' + data.matches.length + ' fixtures active (' + upcomingMatches.length + ' upcoming), size: ' + sizeMb.toFixed(2) + 'MB.');
             });
           "
 
@@ -54,8 +69,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Unstage any bulky server cache if generated
+          git rm --cached -f data/official_fallback_cache.json 2>/dev/null || true
           echo "{\"last_sync\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",\"schedule\":\"every-3.5h\",\"status\":\"OK\"}" > data/sync_timestamp.json
-          git add data/
+          git add data/fixtures.json data/sync_timestamp.json
           git commit -m "chore(data): live 3.5h fixture & Dixon-Coles model sync [$(date -u +'%Y-%m-%d %H:%M UTC')]" || echo "No changes to commit"
           git push origin main || git push origin master || echo "Push completed"
 

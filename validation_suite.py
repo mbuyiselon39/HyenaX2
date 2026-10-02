@@ -384,6 +384,29 @@ def main():
     assert "[BOOKMAKER_TRAP_LINE" in trap_eval["audit_tag"]
     print(">>> TEST 3 PASSED: 64-step solver and Bookmaker Trap Line detection verified!")
 
+    # 4. Cloudflare 25MB Asset Guardrail & Dynamic Date Drift Guardrail
+    print("\n--- TEST 4: CLOUDFLARE 25MB ASSET CEILING & DYNAMIC DATE DRIFT GUARDRAIL ---")
+    import os
+    fixtures_path = os.path.join(os.path.dirname(__file__), "data", "fixtures.json")
+    if os.path.exists(fixtures_path):
+        size_bytes = os.path.getsize(fixtures_path)
+        size_mb = size_bytes / (1024 * 1024)
+        print(f"data/fixtures.json asset size: {size_mb:.2f} MB (Hard safety ceiling: 24.00 MB)")
+        assert size_mb < 24.0, f"FATAL: fixtures.json exceeds 24MB ceiling ({size_mb:.2f}MB). Cloudflare 25MB limit threatened!"
+
+        with open(fixtures_path, "r", encoding="utf-8") as f:
+            fixtures_data = json.load(f)
+
+        matches = fixtures_data.get("matches", [])
+        assert len(matches) >= 50, f"Expected at least 50 matches, found {len(matches)}"
+
+        # Check dynamic rolling date coverage
+        now_str = datetime.utcnow().strftime("%Y-%m-%d")
+        upcoming_matches = [m for m in matches if (m.get("matchDate") or m.get("kickoff", "")[:10]) >= now_str]
+        print(f"Upcoming/today matches active: {len(upcoming_matches)}/{len(matches)}")
+        assert len(upcoming_matches) >= 10, "FATAL: Less than 10 upcoming matches found! Scraper dates are stale or expired."
+        print(">>> TEST 4 PASSED: Asset ceiling <24MB and Dynamic Date Drift Guardrails verified!")
+
     print("\n" + "=" * 80)
     print("ALL VALIDATION SUITE MASTER-GRADE TESTS COMPLETED SUCCESSFULLY WITH ZERO ERRORS")
     print("=" * 80)
