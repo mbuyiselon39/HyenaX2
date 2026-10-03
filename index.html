@@ -979,7 +979,7 @@ function app(){
     top15Sort: 'probability', // 'probability' | 'bankerScore' | 'modelAgreement' | 'odds'
     showDisqualifiedAudit: false,
     strictVettingDirectiveActive: true,
-    minProbabilityThreshold: 78.5,
+    minProbabilityThreshold: 80.0,
 
     // Multi-Turn Gemini AI Chatbot Suite with Google Search & Google Maps Grounding
     aiChatOpen: false,
@@ -1504,8 +1504,20 @@ function app(){
           (beastMeta.strictVetting && beastMeta.strictVetting.noGoCodes && beastMeta.strictVetting.noGoCodes.includes('NO_GO_UNSTABLE_ODDS')) ||
           shiftPct > 3.2;
 
+        // 1. Inventory & Multi-Bookmaker Liquidity Filter (Hollywoodbets, Easybet, Betway)
+        const SA_TRADEABLE_LEAGUES = new Set([
+          'psl', 'epl', 'laliga', 'seriea', 'bundesliga', 'ligue1',
+          'ucl', 'uel', 'uecl', 'uefa_nations', 'intl_friendly',
+          'mls', 'saudi', 'eredivisie', 'ligaportugal', 'superlig',
+          'scotprem', 'championship', 'caf_cl', 'caf_cc', 'libertadores', 'sudamericana',
+          'brasileirao', 'argliga', 'ligamx', 'wsl', 'liga_f',
+          'bundesliga2', 'laliga2', 'ligue2', 'serieb', 'j1', 'csl', 'austria', 'greece'
+        ]);
+        const isUntradeableLeague = !SA_TRADEABLE_LEAGUES.has(m.league.id);
+
         const isTrap = oddsVal < 1.28;
-        const isLowProb = rawProb < 78.5;
+        // 2. The 80% Threshold: Strictly filter out any predictions with win probability < 80.0%
+        const isLowProb = rawProb < 80.0 || consensusProb < 79.5;
         const isLowConsensus = modelAgreement < 80;
 
         // Deep-Market Specific Vetting Gatekeepers:
@@ -1524,7 +1536,7 @@ function app(){
         }
 
         // MANDATORY VETTING CRITERIA: Strictly reject if ANY No-Go flag triggered
-        const isDisqualified = isFormVolatile || hasCriticalNews || hasLowMotivation || isDerby || hasUnstableOdds || isTrap || isLowProb || isLowConsensus || isDeepMarketDisqualified;
+        const isDisqualified = isUntradeableLeague || isFormVolatile || hasCriticalNews || hasLowMotivation || isDerby || hasUnstableOdds || isTrap || isLowProb || isLowConsensus || isDeepMarketDisqualified;
 
         if (isDisqualified) {
           return; // Strictly eliminate from Daily Top 20 Surest Wins!
@@ -1554,7 +1566,7 @@ function app(){
 
         const isUltraTier = rawProb >= 85.0;
         const safetyTier = isUltraTier ? 'ULTRA_SUREST_WIN' : 'PRIME_LOCK';
-        const safetyBadge = isUltraTier ? '👑 ULTRA SUREST WIN (85%+)' : '💎 PRIME LOCK (78.5%+)';
+        const safetyBadge = isUltraTier ? '👑 ULTRA SUREST WIN (85%+)' : '💎 PRIME LOCK (80.0%+)';
         const badgeBg = isUltraTier 
           ? 'bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-300 border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.3)]'
           : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
@@ -1582,7 +1594,7 @@ function app(){
         } else if (mktName.includes('draw no bet')) {
           whySafe = `Draw stake is fully refunded; underlying rating gap produces a ${rawProb}% zero-loss probability margin with ${modelAgreement}% consensus.`;
         } else {
-          whySafe = `17-model consensus projects ${rawProb}% win probability with high unanimous agreement (${modelAgreement}%); starting XI and spine intact.`;
+          whySafe = `20-model consensus projects ${rawProb}% win probability with high unanimous agreement (${modelAgreement}%); starting XI and spine intact.`;
         }
 
         // Multi-Layer Verification Checklist Data
@@ -1591,7 +1603,7 @@ function app(){
             status: 'PASSED',
             prob: rawProb,
             agreement: modelAgreement,
-            verdict: isUltraTier ? 'ELITE (>85% WIN PROBABILITY)' : 'VERIFIED (>=78.5% THRESHOLD)'
+            verdict: isUltraTier ? 'ELITE (>85% WIN PROBABILITY)' : 'VERIFIED (>=80.0% THRESHOLD)'
           },
           contextAudit: {
             teamNews: 'KEY SPINE INTACT (GK, Top Scorer & Playmaker Confirmed)',
@@ -1719,13 +1731,24 @@ function app(){
 
         const isTrap = oddsVal < 1.28;
 
+        const SA_TRADEABLE_LEAGUES = new Set([
+          'psl', 'epl', 'laliga', 'seriea', 'bundesliga', 'ligue1',
+          'ucl', 'uel', 'uecl', 'uefa_nations', 'intl_friendly',
+          'mls', 'saudi', 'eredivisie', 'ligaportugal', 'superlig',
+          'scotprem', 'championship', 'caf_cl', 'caf_cc', 'libertadores', 'sudamericana',
+          'brasileirao', 'argliga', 'ligamx', 'wsl', 'liga_f',
+          'bundesliga2', 'laliga2', 'ligue2', 'serieb', 'j1', 'csl', 'austria', 'greece'
+        ]);
+        const isUntradeableLeague = !SA_TRADEABLE_LEAGUES.has(m.league.id);
+
         const redFlags = [];
+        if (isUntradeableLeague) redFlags.push('Missing Multi-Bookmaker Liquidity (Untradeable on Hollywoodbets / Easybet / Betway)');
         if (isFormVolatile) redFlags.push('High Volatile Form');
         if (hasCriticalNews) redFlags.push('Critical Team News (Missing Starters)');
         if (hasLowMotivation) redFlags.push('Low Motivation / Standings Dead-Rubber');
         if (isDerby) redFlags.push('High-Risk Derby / Rivalry');
         if (hasUnstableOdds) redFlags.push('Unstable Odds (Rapid Market Drift)');
-        if (rawProb < 78.5) redFlags.push(`Sub-Threshold Probability (${rawProb.toFixed(1)}% < 78.5%)`);
+        if (rawProb < 80.0) redFlags.push(`Sub-Threshold Probability (${rawProb.toFixed(1)}% < 80.0%)`);
         if (modelAgreement < 80) redFlags.push(`Multi-Model Divergence (${modelAgreement}% < 80%)`);
         if (isTrap) redFlags.push(`Low-Odds Trap (${oddsVal.toFixed(2)} < 1.28)`);
 
@@ -1760,8 +1783,15 @@ function app(){
         isTruncated,
         truncationMessage: isTruncated 
           ? `Safety-First Truncation Rule Applied: Only ${passed} of 20 maximum matches satisfied the strict vetting protocol. The list is intentionally kept at ${passed} matches rather than risk force-filling with uncertain games.`
-          : `Published Full Capacity: 20 verified surest wins meet all 5 No-Go filters & >= 78.5% win probability.`
+          : `Published Full Capacity: 20 verified surest wins meet all 5 No-Go filters & >= 80.0% win probability across Hollywoodbets, Easybet, and Betway.`
       };
+    },
+
+    get dailyTop20AverageWinProbability(){
+      const picks = this.dailyTop15Picks;
+      if (!picks.length) return '0.0';
+      const sum = picks.reduce((acc, p) => acc + (p.probability || 0), 0);
+      return (sum / picks.length).toFixed(1);
     },
 
     get dailyTop20Picks(){
@@ -2677,7 +2707,7 @@ function app(){
           const pFin = den > 0 ? (num / den) : pBase;
           const finalProbPct = +(pFin * 100).toFixed(1);
           const shiftPct = +(finalProbPct - cal.calibratedProbability).toFixed(1);
-          const isDisqualifiedRotation = (cal.calibratedProbability >= 78.5 && finalProbPct < 78.5);
+          const isDisqualifiedRotation = (cal.calibratedProbability >= 80.0 && finalProbPct < 80.0);
           const layer18Tag = hPen >= 0.08 ? `[STRATEGIC_ROTATION_RISK: Distraction due to upcoming UCL fixture]` : null;
           const isTrapLine = (Math.abs(hashCode(home.name + away.name)) % 19 === 0);
           return {
@@ -5977,7 +6007,7 @@ function app(){
           </span>
         </div>
         <p class="text-xs text-slate-400 mt-1.5 max-w-3xl leading-relaxed">
-          Zero-risk tolerance takes absolute precedence over volume quotas. Every fixture is screened against 5 mandatory "No-Go" filters and must achieve at least 78.5% win probability with 80%+ 17-model consensus. If fewer than 20 fixtures qualify, the list remains strictly truncated.
+          Zero-risk tolerance takes absolute precedence over volume quotas. Every fixture is screened against 5 mandatory "No-Go" filters and must achieve at least 80.0% win probability with 80%+ 20-model consensus across Hollywoodbets, Easybet, and Betway. If fewer than 20 fixtures qualify, the list remains strictly truncated.
         </p>
       </div>
 
@@ -6015,7 +6045,7 @@ function app(){
         </div>
         <div class="flex items-center gap-2">
           <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Zero-Risk Protocol</span>
-          <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Min 78.5% Probability</span>
+          <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Min 80.0% Probability</span>
         </div>
       </div>
 
@@ -6123,12 +6153,12 @@ function app(){
       <div class="p-3 rounded-xl bg-[#121826] border border-[#1E293B]">
         <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Avg Win Probability</div>
         <div class="font-num text-lg font-extrabold text-emerald-400 mt-1" x-text="top20AvgProbability + '%'">0%</div>
-        <div class="text-[10px] text-emerald-300/80 font-semibold mt-0.5">&ge; 78.5% Standard</div>
+        <div class="text-[10px] text-emerald-300/80 font-semibold mt-0.5">&ge; 80.0% Standard</div>
       </div>
 
-      <!-- 17-Model Consensus -->
+      <!-- 20-Model Consensus -->
       <div class="p-3 rounded-xl bg-[#121826] border border-[#1E293B]">
-        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400">17-Model Consensus</div>
+        <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400">20-Model Consensus</div>
         <div class="font-num text-lg font-extrabold text-cyan-400 mt-1" x-text="top20AvgAgreement + '%'">0%</div>
         <div class="text-[10px] text-cyan-300/80 font-semibold mt-0.5">&ge; 80% Threshold</div>
       </div>
@@ -6318,12 +6348,12 @@ function app(){
             <!-- Validation Telemetry Grid -->
             <div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#090D16] border border-[#1A2337] text-center mb-3">
               <div>
-                <div class="text-[9px] uppercase font-bold text-slate-400">17-Model Cons.</div>
+                <div class="text-[9px] uppercase font-bold text-slate-400">20-Model Cons.</div>
                 <div class="font-num text-xs font-bold text-cyan-400 mt-0.5" x-text="p.modelAgreement + '%'">88%</div>
               </div>
               <div>
-                <div class="text-[9px] uppercase font-bold text-slate-400">Best Bookie</div>
-                <div class="font-num text-xs font-bold text-amber-300 mt-0.5">Betway / HW</div>
+                <div class="text-[9px] uppercase font-bold text-slate-400">Target Books</div>
+                <div class="font-num text-[11px] font-bold text-amber-300 mt-0.5">HW / EB / BW</div>
               </div>
               <div>
                 <div class="text-[9px] uppercase font-bold text-slate-400">Value Edge</div>
@@ -6343,12 +6373,12 @@ function app(){
                     <span class="text-emerald-400">✓</span>
                     <span>AI Model Probability</span>
                   </span>
-                  <span class="font-num font-bold text-emerald-400" x-text="p.probability + '% (>= 78.5%)'">91.5%</span>
+                  <span class="font-num font-bold text-emerald-400" x-text="p.probability + '% (>= 80.0%)'">91.5%</span>
                 </div>
                 <div class="flex items-center justify-between text-slate-300">
                   <span class="flex items-center gap-1.5">
                     <span class="text-emerald-400">✓</span>
-                    <span>17-Model Agreement</span>
+                    <span>20-Model Agreement</span>
                   </span>
                   <span class="font-num font-bold text-cyan-400" x-text="p.modelAgreement + '% (>= 80%)'">88%</span>
                 </div>

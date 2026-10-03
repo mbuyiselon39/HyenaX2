@@ -197,6 +197,16 @@ export const LEAGUES = [
 
 export const LEAGUE_MAP = Object.fromEntries(LEAGUES.map(l => [l.id, l]));
 
+// Authoritative South African Multi-Bookmaker Tradeability Set (Hollywoodbets, Easybet, Betway)
+export const SA_TRADEABLE_LEAGUES = new Set([
+  'psl', 'epl', 'laliga', 'seriea', 'bundesliga', 'ligue1',
+  'ucl', 'uel', 'uecl', 'uefa_nations', 'intl_friendly',
+  'mls', 'saudi', 'eredivisie', 'ligaportugal', 'superlig',
+  'scotprem', 'championship', 'caf_cl', 'caf_cc', 'libertadores', 'sudamericana',
+  'brasileirao', 'argliga', 'ligamx', 'wsl', 'liga_f',
+  'bundesliga2', 'laliga2', 'ligue2', 'serieb', 'j1', 'csl', 'austria', 'greece'
+]);
+
 // Standings memory cache
 let STANDINGS_CACHE = {};
 
@@ -1841,8 +1851,8 @@ export function generatePredictions(home, away, leagueId) {
     { market: '1st-Half Corner Range', selection: '1st-Half 0-4 Corners', prob: pCorn1st0to4, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corner Range', selection: '1st-Half 5-6 Corners', prob: pCorn1st5to6, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corner Range', selection: '1st-Half 7+ Corners', prob: pCorn1st7Plus, type: 'CORNERS', category: 'CORNERS' },
-    { market: '1st-Half Home-Team Corners', selection: `${home.name} 1st-Half Over 1.5 Corners`, prob: Math.min(0.88, pFirstCornerHome * 1.25), type: 'CORNERS', category: 'CORNERS' },
-    { market: '1st-Half Away-Team Corners', selection: `${away.name} 1st-Half Over 1.5 Corners`, prob: Math.min(0.82, pFirstCornerAway * 1.22), type: 'CORNERS', category: 'CORNERS' },
+    { market: '1st-Half Corners', selection: '1st-Half Under 5.5 Corners', prob: Math.min(0.95, +(pCorn1stUnder45 * 1.14).toFixed(3)), type: 'CORNERS', category: 'CORNERS' },
+    { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: Math.min(0.94, +(pCornOver85 * 1.08).toFixed(3)), type: 'CORNERS', category: 'CORNERS' },
     { market: '2nd-Half Corners', selection: '2nd-Half Over 3.5 Corners', prob: pCorn2ndOver35, type: 'CORNERS', category: 'CORNERS' },
     { market: '2nd-Half Corners', selection: '2nd-Half Under 3.5 Corners', prob: pCorn2ndUnder35, type: 'CORNERS', category: 'CORNERS' },
     { market: '2nd-Half Corners', selection: '2nd-Half Over 4.5 Corners', prob: pCorn2ndOver45, type: 'CORNERS', category: 'CORNERS' },
@@ -4130,6 +4140,8 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
       matchStatus,
       dataQuality: 'OFFICIAL ESPN LIVE FEED & DIXON-COLES ENGINE',
+      isTradeableOnSABooks: SA_TRADEABLE_LEAGUES.has(lg.id),
+      bookmakerLiquidityTier: SA_TRADEABLE_LEAGUES.has(lg.id) ? 'TIER_1_SA_TRADED' : 'TIER_2_NICHE_OR_UNLISTED',
       ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick)
     });
   }
