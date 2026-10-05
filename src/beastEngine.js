@@ -15,8 +15,12 @@ import {
   runGNNModel,
   runLSTMTimeSeriesModel,
   runTransformerAttentionModel,
-  runConsolidatedEnsemble
+  runConsolidatedEnsemble,
+  runHybridPredictionLayer,
+  calculatePlayerPropAnalytics
 } from './advancedMLSuite.js';
+
+export { runHybridPredictionLayer, calculatePlayerPropAnalytics };
 
 // Base Elo Ratings for key global clubs
 export const BASELINE_ELO = {
