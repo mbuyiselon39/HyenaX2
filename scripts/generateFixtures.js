@@ -4180,10 +4180,15 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
 
     // Save pristine verified snapshot for reliable fallback
     try {
+      const prunedPayload = prunePastFixtures({
+        meta: { ...payload.meta },
+        matches: [...allMatches]
+      });
+      prunedPayload.meta.total_fixtures = prunedPayload.matches.length;
       const dir = path.dirname(fallbackCachePath);
       if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(fallbackCachePath, JSON.stringify(payload), 'utf8');
-      console.log(`[FixtureGen] ✓ Updated verified official fallback snapshot (${allMatches.length} matches)`);
+      fs.writeFileSync(fallbackCachePath, JSON.stringify(prunedPayload), 'utf8');
+      console.log(`[FixtureGen] ✓ Updated verified official fallback snapshot (${prunedPayload.matches.length} matches, ${(fs.statSync(fallbackCachePath).size / (1024 * 1024)).toFixed(2)} MB)`);
     } catch (_) {}
 
     return payload;
