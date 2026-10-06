@@ -50,6 +50,7 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
+  if (url.pathname.startsWith('/api/')) return;
 
   /* App navigations: fresh shell when online, cached shell when offline */
   if (req.mode === 'navigate') {

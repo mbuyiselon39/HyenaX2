@@ -34,9 +34,9 @@
 window.fallbackActive = false;
 window.isSyncingFeeds = false;
 
-// Global error boundary to suppress harmless cross-origin CDN masking warnings
+// Global error boundary to suppress harmless cross-origin CDN masking warnings & browser range anomalies
 window.addEventListener('error', function(e) {
-  if (e.message && e.message.includes('Script error')) {
+  if (e.message && (e.message.includes('Script error') || e.message.includes('Invalid string length'))) {
     e.preventDefault();
   }
 });
@@ -966,6 +966,7 @@ function app(){
     fallbackActive: false,
     isSyncingFeeds: false,
     updatedAt: null,
+    lastGeneratedAt: null,
 
     // Navigation View State ('fixtures' | 'daily-top15' | 'beastboard' | 'accumulator' | 'betslip' | 'signals' | 'markets' | 'discovery' | 'performance' | 'bankroll' | 'admin')
     activeView: 'fixtures',
@@ -2759,6 +2760,8 @@ function app(){
         shootingMetricsProfile: m.shootingMetricsProfile || (m.tacticalProfiles && m.tacticalProfiles.shootingMetricsProfile) || null,
         timeSegmentProfile: m.timeSegmentProfile || (m.tacticalProfiles && m.tacticalProfiles.timeSegmentProfile) || null,
         clutchMultiplierProfile: m.clutchMultiplierProfile || (m.tacticalProfiles && m.tacticalProfiles.clutchMultiplierProfile) || null,
+        hybridLayer: m.hybridLayer || null,
+        playerPropAnalytics: m.playerPropAnalytics || null,
         layer18Modifier: (() => {
           const isUclHome = /arsenal|real madrid|manchester city|bayern|barcelona|inter|liverpool|psg/i.test(home.name);
           const isUclAway = /arsenal|real madrid|manchester city|bayern|barcelona|inter|liverpool|psg/i.test(away.name);
@@ -2811,6 +2814,15 @@ function app(){
 
         if (!json || !Array.isArray(json.matches) || !json.matches.length){
           throw new Error('fixtures payload contained no matches');
+        }
+
+        // Avoid expensive DOM re-rendering and large string allocations during silent polling if data has not changed
+        const currentGenAt = json.meta?.generated_at;
+        if (isBackground && currentGenAt && this.lastGeneratedAt === currentGenAt && this.fixtures.length > 0) {
+          return;
+        }
+        if (currentGenAt) {
+          this.lastGeneratedAt = currentGenAt;
         }
 
         const normalized = json.matches.map((m, n) => this.normalizeFixture(m, n));
@@ -3081,7 +3093,7 @@ function app(){
     },
 
     scrollCalendar(direction){
-      const strip = this.$refs.calendarStrip;
+      const strip = this.$refs?.calendarStrip;
       if (!strip) return;
       const delta = direction === 'left' ? -260 : 260;
       strip.scrollBy({ left: delta, behavior: 'smooth' });
@@ -3089,7 +3101,7 @@ function app(){
 
     shiftCalendarToDate(key, smooth = true){
       this.$nextTick(() => {
-        const strip = this.$refs.calendarStrip;
+        const strip = this.$refs?.calendarStrip;
         if (!strip) return;
         const selector = key === 'all' ? '[data-chip="all"]' : `[data-chip="${key}"]`;
         const target = strip.querySelector(selector);
@@ -3624,7 +3636,7 @@ function app(){
 </script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" crossorigin="anonymous"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
 <style>
   :root {
@@ -9179,10 +9191,8 @@ function app(){
         </div>
 
         <!-- Real-Time Dynamic Mathematical Output Card -->
-        <template x-if="true">
-          <div x-data="{ r: calculateAccaRuin(realityCheck.accaLegs, realityCheck.avgLegProb, realityCheck.avgLegOdds) }"
-               :key="realityCheck.accaLegs + '-' + realityCheck.avgLegProb + '-' + realityCheck.avgLegOdds"
-               class="p-5 rounded-2xl bg-gradient-to-br from-[#121826] via-[#0E131F] to-[#0A0D15] border border-amber-500/40 space-y-5">
+        <div x-data="{ get r() { return calculateAccaRuin(realityCheck.accaLegs, realityCheck.avgLegProb, realityCheck.avgLegOdds); } }"
+             class="p-5 rounded-2xl bg-gradient-to-br from-[#121826] via-[#0E131F] to-[#0A0D15] border border-amber-500/40 space-y-5">
             
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
               
@@ -9235,7 +9245,6 @@ function app(){
             </div>
 
           </div>
-        </template>
       </div>
 
     </div>

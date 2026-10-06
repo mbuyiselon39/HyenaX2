@@ -137,7 +137,7 @@ export const LEAGUES = [
   { id: 'peru', espn: 'per.1', name: 'Peruvian Liga 1', country: 'Peru', flag: '🇵🇪', rho: -0.125, avgGoals: 2.76, homeAdv: 1.42, tierBase: 73, minElo: 66, maxElo: 82 },
   { id: 'venezuela', espn: 'ven.1', name: 'Venezuelan Primera División', country: 'Venezuela', flag: '🇻🇪', rho: -0.160, avgGoals: 2.30, homeAdv: 1.30, tierBase: 72, minElo: 65, maxElo: 80 },
   { id: 'guatemala', espn: 'gua.1', name: 'Guatemalan Liga Nacional', country: 'Guatemala', flag: '🇬🇹', rho: -0.160, avgGoals: 2.34, homeAdv: 1.35, tierBase: 71, minElo: 65, maxElo: 79 },
-  { id: 'uefa_nations', espn: 'uefa.nations', name: 'UEFA Nations League', country: 'Europe', flag: '🇪🇺', rho: -0.125, avgGoals: 2.65, homeAdv: 1.16, tierBase: 81, minElo: 72, maxElo: 89 },
+  { id: 'uefa_nations', espn: 'uefa.nations', name: 'UEFA Nations League', country: 'Europe', flag: '🇪🇺', rho: -0.135, avgGoals: 2.24, homeAdv: 1.12, tierBase: 81, minElo: 72, maxElo: 89 },
   { id: 'intl_friendly', espn: 'fifa.friendly', name: 'International Friendlies', country: 'International', flag: '🌐', rho: -0.110, avgGoals: 2.80, homeAdv: 1.05, tierBase: 80, minElo: 65, maxElo: 90 },
   { id: 'afcon', espn: 'caf.nations', name: 'African Cup of Nations', country: 'Africa', flag: '🌍', rho: -0.170, avgGoals: 2.18, homeAdv: 1.10, tierBase: 78, minElo: 68, maxElo: 86 },
   { id: 'kategoria_superiore', espn: null, name: 'Kategoria Superiore', country: 'Albania', flag: '🇦🇱', rho: -0.160, avgGoals: 2.30, homeAdv: 1.30, tierBase: 71, minElo: 64, maxElo: 78 },
@@ -1926,12 +1926,21 @@ export function generatePredictions(home, away, leagueId) {
 
     // Scoring weights: Prioritize high-certainty, high-hit-rate outcomes while suppressing traps
     let reliabilityBonus = 0;
+    const isHighTensionDefensiveGoalTrap = (leagueId === 'uefa_nations' || leagueId.includes('nations') || (lg && lg.avgGoals < 2.35)) && (m.selection.includes('Over 1.5') || m.selection.includes('Over 2.5'));
+    const isDefensiveStructuralMarket = (leagueId === 'uefa_nations' || leagueId.includes('nations') || (lg && lg.avgGoals < 2.35)) && (m.selection.includes('Under 3.5') || m.type === 'DOUBLE_CHANCE');
+
     if (isLowOddsTrap) {
       // CRITICAL: Heavy penalty for < 1.28 odds traps to avoid bankroll ruin on a single upset
       reliabilityBonus = -24.0;
+    } else if (isHighTensionDefensiveGoalTrap) {
+      // CRITICAL: In low-scoring international / defensive leagues, penalize volatile Over goal traps
+      reliabilityBonus = -22.0;
     } else if (isDerbyFavoriteTrap) {
       // CRITICAL: Derbies are high-entropy upset territory; suppress favorite backing
       reliabilityBonus = -22.0;
+    } else if (isDefensiveStructuralMarket) {
+      // Reward structural safety (Under 3.5 / Double Chance) in high-friction leagues
+      reliabilityBonus = +8.0;
     } else if (m.type === 'DOUBLE_CHANCE') {
       reliabilityBonus = probability >= 76 ? +7.0 : +3.0;
     } else if (m.type === 'WIN_EITHER_HALF' || m.market === 'Either-Half Winner') {
