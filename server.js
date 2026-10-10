@@ -6,6 +6,7 @@ import { ScraperPipelineOrchestrator } from './scrapers/pipelineOrchestrator.js'
 import { LEAGUE_REGISTRY, getAllLeagues, getLeagueById } from './src/leagueRegistry.js';
 import {
   saveFixtures,
+  saveFixturesSync,
   generateAllFixtures,
   updateFixtureAndRecalculate,
   updateTeamAndPropagate,
@@ -45,6 +46,11 @@ import {
   applyBankerAsymmetricRiskLoss
 } from './src/beastEngine.js';
 import { runConsolidatedEnsemble } from './src/advancedMLSuite.js';
+import {
+  THIRD_PARTY_PLATFORMS,
+  generateThirdPartyPredictionsForMatch,
+  reanalyseWithThirdPartySyndicate
+} from './src/thirdPartySyndicateEngine.js';
 import { FOOTBALL_DATA_SOURCES, runAutomatedDataSanityChecks } from './scrapers/sourcesRegistry.js';
 import { GoogleGenAI } from '@google/genai';
 
@@ -52,7 +58,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+
+// Resilience error boundaries to prevent dev server crashes on transient async errors
+process.on('uncaughtException', (err) => {
+  console.error('[Process Error Boundary] Uncaught Exception:', err.message, err.stack);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Process Error Boundary] Unhandled Rejection at:', promise, 'reason:', reason);
+});
 
 app.use(express.json());
 
@@ -158,7 +172,11 @@ function computeTacticalFactor(formHome = '4-3-3', formAway = '4-2-3-1') {
   return { lambdaHomeMod: 1.0, lambdaAwayMod: 1.0, cornerMod: 1.0, style: 'Balanced Tactical Clash' };
 }
 
-// Health check endpoint
+// Health check endpoints
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -218,13 +236,14 @@ app.post('/api/scrapers/sync', async (req, res) => {
 });
 
 app.post('/api/scrapers/toggle', (req, res) => {
-  const { scraperKey, enabled } = req.body;
-  if (orchestrator.health[scraperKey]) {
+  const scraperKey = req.body.scraperKey || req.body.scraper;
+  const enabled = req.body.enabled;
+  if (scraperKey && orchestrator.health[scraperKey]) {
     orchestrator.health[scraperKey].enabled = !!enabled;
     orchestrator.health[scraperKey].status = enabled ? 'ONLINE' : 'PAUSED';
     return res.json({ success: true, scraper: scraperKey, enabled, status: orchestrator.health[scraperKey].status });
   }
-  res.status(404).json({ error: 'Scraper not found' });
+  res.status(404).json({ error: 'Scraper not found', availableScrapers: Object.keys(orchestrator.health) });
 });
 
 app.get('/api/conflicts', (req, res) => {
@@ -1045,6 +1064,265 @@ app.post('/api/models/ensemble/simulate', handleEnsembleSimulation);
 app.get('/api/models/ensemble/simulate', handleEnsembleSimulation);
 
 /* ============================================================
+   THIRD-PARTY PREDICTION SYNDICATE & RE-ANALYSIS API ROUTES
+   Covers 12 Authoritative Third-Party Prediction Platforms:
+   Vitibet, PredictZ, Forebet, Tipstrr, OLBG, Betensured,
+   SportyTrader, SoccerVista, MrFixItsTips, FootballWhispers,
+   SportsMole, TNTSports.
+   ============================================================ */
+
+// 1. Third-Party Platforms Metadata Directory
+app.get('/api/predictions/third-party/platforms', (req, res) => {
+  res.json({
+    totalPlatforms: THIRD_PARTY_PLATFORMS.length,
+    platforms: THIRD_PARTY_PLATFORMS,
+    ensembleLayer: 'Layer 21: 12-Site Third-Party Syndicate Consensus Engine',
+    auditStandard: 'Zero-Guessing Strict Certainty Protocol'
+  });
+});
+
+// 2. Comprehensive Third-Party Predictions Feed
+app.get('/api/predictions/third-party', (req, res) => {
+  try {
+    const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
+    if (!fs.existsSync(fixturesPath)) {
+      return res.status(404).json({ error: 'Fixtures database unavailable' });
+    }
+    const data = JSON.parse(fs.readFileSync(fixturesPath, 'utf8'));
+    const matches = data.matches || [];
+
+    const { league, status, limit = 50, q } = req.query;
+    let filtered = matches;
+
+    if (league) {
+      filtered = filtered.filter(m => (m.league?.id === league || m.league?.name?.toLowerCase().includes(league.toLowerCase())));
+    }
+    if (status && (status === 'approved' || status === 'uncertain')) {
+      const target = status.toUpperCase();
+      filtered = filtered.filter(m => (m.approvalStatus === target || (target === 'APPROVED' && m.isVettedApproved)));
+    }
+    if (q) {
+      const query = q.toLowerCase();
+      filtered = filtered.filter(m => m.home?.name?.toLowerCase().includes(query) || m.away?.name?.toLowerCase().includes(query));
+    }
+
+    const maxResults = Math.min(100, Math.max(1, parseInt(limit) || 50));
+    const paginated = filtered.slice(0, maxResults).map(m => {
+      const syndicate = m.thirdPartySyndicate || reanalyseWithThirdPartySyndicate({
+        home: m.home?.name || 'Home',
+        away: m.away?.name || 'Away',
+        leagueId: m.league?.id || 'epl',
+        calibratedProbability: m.probabilityIndex || 78,
+        internalTopPick: m.topPick
+      });
+
+      return {
+        matchId: m.id,
+        match: `${m.home?.name} vs ${m.away?.name}`,
+        league: m.league,
+        kickoff: m.kickoff,
+        topPick: m.topPick,
+        calibratedProbability: m.beastMeta?.calibratedProbability || m.probabilityIndex,
+        approvalStatus: syndicate.status,
+        approvalBadge: syndicate.approvalBadge,
+        isVettedApproved: syndicate.isVettedApproved,
+        certaintyScore: syndicate.certaintyScore,
+        syndicateAgreementPct: syndicate.syndicateAgreementPct,
+        externalAvgConfidence: syndicate.externalAvgConfidence,
+        divergenceDelta: syndicate.divergenceDelta,
+        divergenceType: syndicate.divergenceType,
+        mostFrequentScore: syndicate.mostFrequentScore,
+        unmetCriteria: syndicate.unmetCriteria,
+        platformSummary: (syndicate.predictions || []).map(p => ({
+          sourceId: p.sourceId,
+          sourceName: p.sourceName,
+          pick: p.pick,
+          confidencePct: p.confidencePct,
+          predictedScore: p.predictedScore
+        }))
+      };
+    });
+
+    const approvedCount = filtered.filter(m => m.approvalStatus === 'APPROVED' || m.isVettedApproved).length;
+    const uncertainCount = filtered.length - approvedCount;
+
+    res.json({
+      totalMatches: matches.length,
+      filteredMatches: filtered.length,
+      returnedMatches: paginated.length,
+      stats: {
+        approvedBankers: approvedCount,
+        uncertainFlagged: uncertainCount,
+        approvalRatePct: +((approvedCount / (filtered.length || 1)) * 100).toFixed(1)
+      },
+      matches: paginated
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve third-party predictions', details: err.message });
+  }
+});
+
+// 3. Match-Specific Third-Party Syndicate Breakdown
+app.get('/api/predictions/third-party/:matchId', (req, res) => {
+  try {
+    const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
+    if (!fs.existsSync(fixturesPath)) {
+      return res.status(404).json({ error: 'Fixtures database unavailable' });
+    }
+    const data = JSON.parse(fs.readFileSync(fixturesPath, 'utf8'));
+    const match = (data.matches || []).find(m => m.id === req.params.matchId);
+
+    if (!match) {
+      return res.status(404).json({ error: `Match with ID ${req.params.matchId} not found` });
+    }
+
+    const internalProb = match.beastMeta?.calibratedProbability || match.probabilityIndex || 78;
+    const internalAgreement = match.beastMeta?.ensemble?.modelAgreementScore || 86;
+
+    const syndicate = match.thirdPartySyndicate || reanalyseWithThirdPartySyndicate({
+      home: match.home,
+      away: match.away,
+      leagueId: match.league?.id || 'epl',
+      calibratedProbability: internalProb,
+      internalModelAgreement: internalAgreement,
+      internalTopPick: match.topPick,
+      isDerby: match.topPick?.isDerby || false,
+      isTrapLine: match.strictVetting?.isTrapLine || false,
+      isDisqualified: match.strictVetting?.isDisqualified || false,
+      missingKeyPlayers: match.strictVetting?.multiLayerVerification?.humanContextCheck?.missingKeyPlayers || []
+    });
+
+    res.json({
+      matchId: match.id,
+      fixture: `${match.home?.name} vs ${match.away?.name}`,
+      home: match.home,
+      away: match.away,
+      league: match.league,
+      kickoff: match.kickoff,
+      kickoffRsa: match.kickoffRsa,
+      hyenaxInternalPrediction: {
+        topPick: match.topPick,
+        calibratedProbability: internalProb,
+        fairOdds: match.beastMeta?.fairOdds || +(100 / internalProb).toFixed(2),
+        expectedValuePct: match.beastMeta?.expectedValuePct || 5.2,
+        modelAgreementScore: internalAgreement,
+        totalInternalModels: 20
+      },
+      thirdPartySyndicateReanalysis: syndicate
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Error inspecting third-party match predictions', details: err.message });
+  }
+});
+
+// 4. On-Demand Live Re-Analysis Endpoint
+const handleLiveReanalysis = (req, res) => {
+  try {
+    const params = { ...req.query, ...req.body };
+    const home = params.home || 'Arsenal';
+    const away = params.away || 'Chelsea';
+    const leagueId = params.league || params.leagueId || 'epl';
+    const calibratedProbability = Number(params.calibratedProbability || params.prob || 82.0);
+    const internalModelAgreement = Number(params.modelAgreement || 88.0);
+    const isDerby = params.isDerby === 'true' || params.isDerby === true;
+
+    const analysis = reanalyseWithThirdPartySyndicate({
+      home,
+      away,
+      leagueId,
+      calibratedProbability,
+      internalModelAgreement,
+      isDerby,
+      isTrapLine: params.isTrapLine === 'true' || params.isTrapLine === true,
+      isDisqualified: params.isDisqualified === 'true' || params.isDisqualified === true
+    });
+
+    res.json({
+      success: true,
+      query: { home, away, leagueId, calibratedProbability, internalModelAgreement, isDerby },
+      result: analysis
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Re-analysis execution failed', details: err.message });
+  }
+};
+
+app.post('/api/predictions/third-party/reanalyse', handleLiveReanalysis);
+app.get('/api/predictions/third-party/reanalyse', handleLiveReanalysis);
+
+// 5. System-Wide Syndicate Audit & Platform Reliability Scorecard
+app.get('/api/predictions/syndicate/audit', (req, res) => {
+  try {
+    const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
+    if (!fs.existsSync(fixturesPath)) {
+      return res.status(404).json({ error: 'Fixtures database unavailable' });
+    }
+    const data = JSON.parse(fs.readFileSync(fixturesPath, 'utf8'));
+    const matches = data.matches || [];
+
+    let totalApproved = 0;
+    let totalUncertain = 0;
+    let agreementSum = 0;
+    let divergenceSum = 0;
+    const disqualificationReasons = {};
+
+    matches.forEach(m => {
+      const syndicate = m.thirdPartySyndicate || reanalyseWithThirdPartySyndicate({
+        home: m.home?.name || 'Home',
+        away: m.away?.name || 'Away',
+        leagueId: m.league?.id || 'epl',
+        calibratedProbability: m.probabilityIndex || 78,
+        internalTopPick: m.topPick
+      });
+
+      if (syndicate.isVettedApproved) {
+        totalApproved++;
+      } else {
+        totalUncertain++;
+        (syndicate.unmetCriteria || []).forEach(r => {
+          disqualificationReasons[r] = (disqualificationReasons[r] || 0) + 1;
+        });
+      }
+
+      agreementSum += syndicate.syndicateAgreementPct || 80;
+      divergenceSum += syndicate.divergenceDelta || 4;
+    });
+
+    const total = matches.length || 1;
+    res.json({
+      auditDate: new Date().toISOString(),
+      architectureStack: '21 Coexisting Layers (20 Platform Models + 12-Platform Third-Party Syndicate Engine)',
+      totalFixturesScreened: total,
+      verdictDistribution: {
+        approved100PercentVettedBankers: totalApproved,
+        uncertainCautionFlagged: totalUncertain,
+        approvalRatePct: +((totalApproved / total) * 100).toFixed(1),
+        uncertaintyRatePct: +((totalUncertain / total) * 100).toFixed(1)
+      },
+      averageMetrics: {
+        meanSyndicateAgreementPct: +(agreementSum / total).toFixed(1),
+        meanDivergenceDeltaPct: +(divergenceSum / total).toFixed(1),
+        strictCertaintyStandard: '>= 80.0% Win Prob & >= 75% 12-Site Consensus'
+      },
+      topUncertaintyTriggers: Object.entries(disqualificationReasons)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([reason, count]) => ({ reason, count, pct: +((count / total) * 100).toFixed(1) })),
+      platformReliabilityLeaderboard: THIRD_PARTY_PLATFORMS.map(p => ({
+        platform: p.name,
+        domain: p.domain,
+        reliabilityScore: p.reliabilityScore,
+        historicalWinRate: p.historicalWinRate,
+        weight: p.weightInSyndicate
+      }))
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Audit calculation failed', details: err.message });
+  }
+});
+
+
+/* ============================================================
    QUANTITATIVE RISK & PERFORMANCE ARCHITECTURE API ROUTES
    1. Market Efficiency Arbitrage & Shin's De-Vigging (/api/risk/shin-devig)
    2. System Protection Rule Evaluation (/api/risk/system-protection)
@@ -1324,11 +1602,11 @@ app.post('/api/ai/chat', async (req, res) => {
 
   // Model selection per requirements:
   // - gemini-3.1-pro-preview for particularly complex tasks
-  // - gemini-3.5-flash for general tasks (and Search/Maps grounding)
+  // - gemini-3.8-flash for general tasks (and Search/Maps grounding)
   // - gemini-3.1-flash-lite for tasks that should happen fast
   let selectedModel = model;
-  if (!['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.1-pro-preview'].includes(selectedModel)) {
-    selectedModel = 'gemini-3.5-flash';
+  if (!['gemini-3.8-flash', 'gemini-3.1-flash-lite', 'gemini-3.1-pro-preview'].includes(selectedModel)) {
+    selectedModel = 'gemini-3.8-flash';
   }
 
   // Default system instruction
@@ -1356,9 +1634,9 @@ Provide clear, mathematically sound, actionable football intelligence. Be concis
   // Note from SKILL.md: googleMaps cannot be combined with googleSearch in the same request.
   // When enableMaps is true, prioritize googleMaps.
   // When enableSearch is true and not enableMaps, use googleSearch.
-  // Search and Maps grounding are supported on gemini-3.5-flash.
+  // Search and Maps grounding are supported on gemini-3.8-flash.
   if (enableMaps) {
-    selectedModel = 'gemini-3.5-flash';
+    selectedModel = 'gemini-3.8-flash';
     config.tools = [{ googleMaps: {} }];
     if (userLocation && typeof userLocation.latitude === 'number' && typeof userLocation.longitude === 'number') {
       config.toolConfig = {
@@ -1371,7 +1649,7 @@ Provide clear, mathematically sound, actionable football intelligence. Be concis
       };
     }
   } else if (enableSearch) {
-    selectedModel = 'gemini-3.5-flash';
+    selectedModel = 'gemini-3.8-flash';
     config.tools = [{ googleSearch: {} }];
   }
 
@@ -1530,7 +1808,7 @@ Keep the tone sharp, quantitative, and concise without fluff.
       `.trim();
 
       const aiResponse = await ai.models.generateContent({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         contents: prompt,
         config: {
           systemInstruction: 'You are the HyenaX Senior Quantitative Sports Analyst. Deliver concise, high-density, mathematically rigorous tactical match intelligence reports.',
@@ -1759,17 +2037,16 @@ app.get('/api/fixtures/status', (req, res) => {
   res.json(status);
 });
 
-// Serve static assets (favor dist/ if built, otherwise project root)
-const distPath = path.join(__dirname, 'dist');
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
+// Serve static assets
+if (process.env.NODE_ENV === 'production' && fs.existsSync(path.join(__dirname, 'dist'))) {
+  app.use(express.static(path.join(__dirname, 'dist')));
 }
 app.use(express.static(__dirname));
 
 // Fallback to index.html for SPA routing
 app.get('*', (req, res) => {
   const distIndex = path.join(__dirname, 'dist', 'index.html');
-  if (fs.existsSync(distIndex)) {
+  if (process.env.NODE_ENV === 'production' && fs.existsSync(distIndex)) {
     res.sendFile(distIndex);
   } else {
     res.sendFile(path.join(__dirname, 'index.html'));

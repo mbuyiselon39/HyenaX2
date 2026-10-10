@@ -17,10 +17,19 @@ import {
   runTransformerAttentionModel,
   runConsolidatedEnsemble,
   runHybridPredictionLayer,
-  calculatePlayerPropAnalytics
+  calculatePlayerPropAnalytics,
+  THIRD_PARTY_PLATFORMS,
+  generateThirdPartyPredictionsForMatch,
+  reanalyseWithThirdPartySyndicate
 } from './advancedMLSuite.js';
 
-export { runHybridPredictionLayer, calculatePlayerPropAnalytics };
+export {
+  runHybridPredictionLayer,
+  calculatePlayerPropAnalytics,
+  THIRD_PARTY_PLATFORMS,
+  generateThirdPartyPredictionsForMatch,
+  reanalyseWithThirdPartySyndicate
+};
 
 // Base Elo Ratings for key global clubs
 export const BASELINE_ELO = {
