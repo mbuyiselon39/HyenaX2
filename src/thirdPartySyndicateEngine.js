@@ -475,18 +475,18 @@ export function reanalyseWithThirdPartySyndicate({
   const unmetCriteria = [];
   const uncertaintyWarnings = [];
 
-  // Check 1: Win Probability Strict Standard (>= 80.0%)
-  if (calibratedProbability < 80.0) {
-    unmetCriteria.push(`Calibrated win probability (${calibratedProbability}%) is below strict 80.0% zero-guess threshold.`);
+  // Check 1: Win Probability Strict Standard (>= 77.0%)
+  if (calibratedProbability < 77.0) {
+    unmetCriteria.push(`Calibrated win probability (${calibratedProbability}%) is below 77.0% zero-guess threshold.`);
   }
 
-  // Check 2: 20-Model Consensus Agreement (>= 80.0%)
-  if (internalModelAgreement < 80.0) {
+  // Check 2: 20-Model Consensus Agreement (>= 76.0%)
+  if (internalModelAgreement < 76.0) {
     unmetCriteria.push(`Internal multi-model agreement (${internalModelAgreement}%) has high variance across neural & statistical stack.`);
   }
 
-  // Check 3: Third-Party Syndicate Agreement (>= 75.0% of external sites must concur)
-  if (syndicateAgreementPct < 75.0) {
+  // Check 3: Third-Party Syndicate Agreement (>= 70.0% of external sites must concur)
+  if (syndicateAgreementPct < 70.0) {
     unmetCriteria.push(`Third-party syndicate consensus (${syndicateAgreementPct}%) is fractured across the 12 external sites.`);
     uncertaintyWarnings.push(`Only ${homeOrSafeDcCount} of 12 verified external prediction sites agree with the primary outcome.`);
   }

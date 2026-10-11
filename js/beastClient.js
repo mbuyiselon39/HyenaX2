@@ -1060,9 +1060,9 @@
     const unmetCriteria = [];
     const uncertaintyWarnings = [];
 
-    if (calibratedProbability < 80.0) unmetCriteria.push(`Win probability (${calibratedProbability}%) is below 80.0% zero-guess standard.`);
-    if (internalModelAgreement < 80.0) unmetCriteria.push(`Internal multi-model agreement (${internalModelAgreement}%) has high variance.`);
-    if (syndicateAgreementPct < 75.0) {
+    if (calibratedProbability < 77.0) unmetCriteria.push(`Win probability (${calibratedProbability}%) is below 77.0% zero-guess standard.`);
+    if (internalModelAgreement < 76.0) unmetCriteria.push(`Internal multi-model agreement (${internalModelAgreement}%) has high variance.`);
+    if (syndicateAgreementPct < 70.0) {
       unmetCriteria.push(`Third-party syndicate consensus (${syndicateAgreementPct}%) is fractured across the 12 sites.`);
       uncertaintyWarnings.push(`Only ${homeOrSafeDc} of 12 verified external prediction sites agree with primary outcome.`);
     }
@@ -1236,11 +1236,11 @@
 
       // CHECK 8: Lineup spine and form volatility
       if (hasCriticalAbsence) {
-        verifierPenalty += 25;
+        verifierPenalty += 20;
         disqualifications.push('KEY_SPINE_ABSENCE');
       }
-      if (formVolatilityScore > 35) {
-        verifierPenalty += 20;
+      if (formVolatilityScore > 40 && (mkt === 'Match Winner' || mkt === 'Double Chance')) {
+        verifierPenalty += 15;
         disqualifications.push('FORM_VOLATILITY_BURST');
       }
 
@@ -1260,14 +1260,14 @@
     const bestCandidate = auditedCandidates[0];
 
     const hasFatalDisqualification = bestCandidate.disqualifications.some(d => 
-      d === 'DISQUALIFIED_12_DRAW_TRAP' || d === 'KEY_SPINE_ABSENCE' || d === 'NEGATIVE_UTILITY_LOW_ODDS_TRAP'
+      d === 'DISQUALIFIED_12_DRAW_TRAP' || d === 'NEGATIVE_UTILITY_LOW_ODDS_TRAP' || (d === 'KEY_SPINE_ABSENCE' && bestCandidate.market !== 'Goals Over/Under')
     );
 
     const isVerifiedApproved = !hasFatalDisqualification &&
-      bestCandidate.verifierScore >= 92.0 &&
-      bestCandidate.probability >= 78.0 &&
-      modelAgreementScore >= 80 &&
-      !isDerby;
+      bestCandidate.verifierScore >= 90.0 &&
+      bestCandidate.probability >= 77.0 &&
+      modelAgreementScore >= 76 &&
+      (!isDerby || bestCandidate.probability >= 83.0);
 
     const status = isVerifiedApproved ? 'APPROVED' : 'UNCERTAIN';
     const verificationBadge = isVerifiedApproved

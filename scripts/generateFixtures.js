@@ -2608,22 +2608,8 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
     }
   };
 
-  // Layer 21: Third-Party Syndicate Consensus & Strict Certainty Approval Protocol
-  const thirdPartyAnalysis = reanalyseWithThirdPartySyndicate({
-    home,
-    away,
-    leagueId,
-    calibratedProbability: topPick ? topPick.probability : 82.0,
-    internalModelAgreement: teleResult.beastMeta?.ensemble?.modelAgreementScore || 88,
-    internalTopPick: topPick,
-    isDerby,
-    isTrapLine: strictVetting?.isTrapLine || false,
-    isDisqualified: strictVetting?.isDisqualified || false,
-    missingKeyPlayers
-  });
-
   // Layer 22: Autonomous Engine Verifier
-  // Verifies all 20 predictive engines before allowing APPROVED status
+  // Verifies all 20 predictive engines across all available market predictions
   const engineVerification = evaluateEngineVerifier({
     homeName: home.name,
     awayName: away.name,
@@ -2634,8 +2620,23 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
     modelAgreementScore: teleResult.beastMeta?.ensemble?.modelAgreementScore || 88,
     formVolatilityScore,
     hasCriticalAbsence,
-    steamDelta,
-    thirdPartySyndicate: thirdPartyAnalysis
+    steamDelta
+  });
+
+  const activeVettedPick = engineVerification.verifiedTopPick || topPick;
+
+  // Layer 21: Third-Party Syndicate Consensus & Strict Certainty Approval Protocol
+  const thirdPartyAnalysis = reanalyseWithThirdPartySyndicate({
+    home,
+    away,
+    leagueId,
+    calibratedProbability: activeVettedPick ? activeVettedPick.probability : 82.0,
+    internalModelAgreement: teleResult.beastMeta?.ensemble?.modelAgreementScore || 88,
+    internalTopPick: activeVettedPick,
+    isDerby,
+    isTrapLine: strictVetting?.isTrapLine || false,
+    isDisqualified: strictVetting?.isDisqualified || false,
+    missingKeyPlayers
   });
 
   teleResult.thirdPartySyndicate = thirdPartyAnalysis;
@@ -4425,8 +4426,8 @@ function prunePastFixtures(fixturesData) {
 export function optimizeFixturesPayload(fixturesData) {
   if (!fixturesData || !Array.isArray(fixturesData.matches)) return fixturesData;
   fixturesData.matches = fixturesData.matches.map(m => {
-    if (Array.isArray(m.predictions) && m.predictions.length > 16) {
-      m.predictions = m.predictions.slice(0, 16);
+    if (Array.isArray(m.predictions) && m.predictions.length > 12) {
+      m.predictions = m.predictions.slice(0, 12);
     }
     if (m.thirdPartySyndicate && Array.isArray(m.thirdPartySyndicate.predictions)) {
       m.thirdPartySyndicate = {

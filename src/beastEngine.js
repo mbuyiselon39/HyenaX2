@@ -2741,11 +2741,12 @@ export function evaluateEngineVerifier({
 
     // CHECK 8: Lineup spine and form volatility
     if (hasCriticalAbsence) {
-      verifierPenalty += 25;
+      verifierPenalty += 20;
       disqualifications.push('KEY_SPINE_ABSENCE');
     }
-    if (formVolatilityScore > 35) {
-      verifierPenalty += 20;
+    // Only apply form volatility penalty to team-winner markets, NOT to total goal markets (e.g. Under 3.5)
+    if (formVolatilityScore > 40 && (mkt === 'Match Winner' || mkt === 'Double Chance')) {
+      verifierPenalty += 15;
       disqualifications.push('FORM_VOLATILITY_BURST');
     }
 
@@ -2766,16 +2767,16 @@ export function evaluateEngineVerifier({
   const bestCandidate = auditedCandidates[0];
 
   // Approval Verification Barrier:
-  // Requires verifierScore >= 92, probability >= 78.0%, zero critical disqualifications, and model agreement >= 80
+  // Requires verifierScore >= 90, probability >= 77.0%, zero fatal disqualifications, and model agreement >= 76
   const hasFatalDisqualification = bestCandidate.disqualifications.some(d => 
-    d === 'DISQUALIFIED_12_DRAW_TRAP' || d === 'KEY_SPINE_ABSENCE' || d === 'NEGATIVE_UTILITY_LOW_ODDS_TRAP'
+    d === 'DISQUALIFIED_12_DRAW_TRAP' || d === 'NEGATIVE_UTILITY_LOW_ODDS_TRAP' || (d === 'KEY_SPINE_ABSENCE' && bestCandidate.market !== 'Goals Over/Under')
   );
 
   const isVerifiedApproved = !hasFatalDisqualification &&
-    bestCandidate.verifierScore >= 92.0 &&
-    bestCandidate.probability >= 78.0 &&
-    modelAgreementScore >= 80 &&
-    !isDerby;
+    bestCandidate.verifierScore >= 90.0 &&
+    bestCandidate.probability >= 77.0 &&
+    modelAgreementScore >= 76 &&
+    (!isDerby || bestCandidate.probability >= 83.0);
 
   const status = isVerifiedApproved ? 'APPROVED' : 'UNCERTAIN';
   const verificationBadge = isVerifiedApproved
