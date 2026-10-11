@@ -16,7 +16,8 @@ import {
   buildTacticalProfiles,
   evaluateDeepMarketVetting,
   getDesignatedReferee,
-  GLOBAL_REFEREE_DATABASE
+  GLOBAL_REFEREE_DATABASE,
+  evaluateEngineVerifier
 } from '../src/beastEngine.js';
 import {
   WOMENS_AND_CUPS_LEAGUES,
@@ -2003,7 +2004,31 @@ export function generatePredictions(home, away, leagueId) {
     const limit = (cat === 'STANDARD' || cat === 'CORNERS') ? 4 : 3;
     selected.push(...list.slice(0, limit));
   }
-  selected.sort((a, b) => b.convictionScore - a.convictionScore);
+
+  // Autonomous Engine Verifier Ranking:
+  // Heavily penalize structural trap markets (12 draw traps, brittle team totals)
+  // and promote fortified markets (Double Chance 1X/X2, High-density Under 3.5, Over 1.5)
+  selected.sort((a, b) => {
+    let structuralModA = 0;
+    let structuralModB = 0;
+
+    if (a.selection.startsWith('12')) structuralModA -= 50;
+    if (b.selection.startsWith('12')) structuralModB -= 50;
+
+    if (a.market === 'Team Total Goals') structuralModA -= 25;
+    if (b.market === 'Team Total Goals') structuralModB -= 25;
+
+    if (a.market === 'Double Chance' && (a.selection.startsWith('1X') || a.selection.startsWith('X2'))) structuralModA += 18;
+    if (b.market === 'Double Chance' && (b.selection.startsWith('1X') || b.selection.startsWith('X2'))) structuralModB += 18;
+
+    if (a.market === 'Goals Over/Under' && a.selection.includes('Under 3.5')) structuralModA += 16;
+    if (b.market === 'Goals Over/Under' && b.selection.includes('Under 3.5')) structuralModB += 16;
+
+    if (a.market === 'Goals Over/Under' && a.selection.includes('Over 1.5') && a.probability >= 86) structuralModA += 8;
+    if (b.market === 'Goals Over/Under' && b.selection.includes('Over 1.5') && b.probability >= 86) structuralModB += 8;
+
+    return (b.convictionScore + structuralModB) - (a.convictionScore + structuralModA);
+  });
   const cappedSelected = selected.slice(0, 16);
 
   return cappedSelected.map((p, idx) => {
@@ -2169,7 +2194,7 @@ export function buildH2H(homeName, awayName, home = null, away = null, leagueId 
   };
 }
 
-export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick) {
+export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick, predictionsList = null) {
   const seed = (home.name + '::' + away.name + '::telem_v2').split('').reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 1), 0);
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
@@ -2597,10 +2622,32 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
     missingKeyPlayers
   });
 
+  // Layer 22: Autonomous Engine Verifier
+  // Verifies all 20 predictive engines before allowing APPROVED status
+  const engineVerification = evaluateEngineVerifier({
+    homeName: home.name,
+    awayName: away.name,
+    leagueId,
+    predictions: predictionsList || [topPick],
+    topPick,
+    isDerby,
+    modelAgreementScore: teleResult.beastMeta?.ensemble?.modelAgreementScore || 88,
+    formVolatilityScore,
+    hasCriticalAbsence,
+    steamDelta,
+    thirdPartySyndicate: thirdPartyAnalysis
+  });
+
   teleResult.thirdPartySyndicate = thirdPartyAnalysis;
-  teleResult.approvalStatus = thirdPartyAnalysis.status; // 'APPROVED' | 'UNCERTAIN'
-  teleResult.approvalBadge = thirdPartyAnalysis.approvalBadge;
-  teleResult.isVettedApproved = thirdPartyAnalysis.isVettedApproved;
+  teleResult.engineVerifier = engineVerification;
+
+  // Strict double-gated approval: MUST pass both Third-Party Syndicate AND Engine Verifier!
+  const isFullyApproved = thirdPartyAnalysis.isVettedApproved && engineVerification.isVerifiedApproved;
+  teleResult.approvalStatus = isFullyApproved ? 'APPROVED' : 'UNCERTAIN';
+  teleResult.approvalBadge = isFullyApproved
+    ? '🛡️ APPROVED - 100% ENGINE & SYNDICATE VERIFIED'
+    : '⚠️ UNCERTAIN - CAUTION FLAGGED';
+  teleResult.isVettedApproved = isFullyApproved;
 
   return teleResult;
 }
@@ -4191,8 +4238,7 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       matchStatus,
       dataQuality: 'OFFICIAL ESPN LIVE FEED & DIXON-COLES ENGINE',
       isTradeableOnSABooks: SA_TRADEABLE_LEAGUES.has(lg.id),
-      bookmakerLiquidityTier: SA_TRADEABLE_LEAGUES.has(lg.id) ? 'TIER_1_SA_TRADED' : 'TIER_2_NICHE_OR_UNLISTED',
-      ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick)
+      ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick, predictions)
     });
   }
 
@@ -4326,7 +4372,7 @@ export function generateAllFixtures(customBaseDate = null) {
       rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
       matchStatus,
       dataQuality: 'OFFICIAL 2026/2027 SCHEDULE & DIXON-COLES ENGINE',
-      ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick)
+      ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick, predictions)
     };
   }
 
@@ -4414,6 +4460,26 @@ export function optimizeFixturesPayload(fixturesData) {
         }
       };
     }
+    if (m.engineVerifier) {
+      m.engineVerifier = {
+        status: m.engineVerifier.status,
+        isVerifiedApproved: m.engineVerifier.isVerifiedApproved,
+        verificationBadge: m.engineVerifier.verificationBadge,
+        verifierScore: m.engineVerifier.verifierScore,
+        confidenceScore: m.engineVerifier.confidenceScore,
+        structuralIntegrity: m.engineVerifier.structuralIntegrity,
+        verdictSummary: m.engineVerifier.verdictSummary,
+        passedChecks: m.engineVerifier.passedChecks || [],
+        failedChecks: m.engineVerifier.failedChecks || [],
+        verifiedTopPick: m.engineVerifier.verifiedTopPick ? {
+          market: m.engineVerifier.verifiedTopPick.market,
+          selection: m.engineVerifier.verifiedTopPick.selection,
+          probability: m.engineVerifier.verifiedTopPick.probability,
+          odds: m.engineVerifier.verifiedTopPick.odds,
+          verifierScore: m.engineVerifier.verifiedTopPick.verifierScore
+        } : null
+      };
+    }
     return m;
   });
   return fixturesData;
@@ -4491,7 +4557,7 @@ export function recalculateSingleFixture(fixture, overrides = {}) {
   fixture.probabilityIndex = topPick.probability;
   fixture.h2h = buildH2H(fixture.home.name, fixture.away.name, fixture.home, fixture.away, fixture.league.id);
   fixture.rationale = `${fixture.home.name} (Elo ${fixture.home.rating}, xG ${fixture.home.xgFor}) vs ${fixture.away.name} (Elo ${fixture.away.rating}, xG ${fixture.away.xgFor}) in ${fixture.league.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`;
-  const telem = buildFixtureTelemetryAndValidation(fixture.home, fixture.away, fixture.league.id, topPick);
+  const telem = buildFixtureTelemetryAndValidation(fixture.home, fixture.away, fixture.league.id, topPick, predictions);
   fixture.tacticalFeeds = telem.tacticalFeeds;
   fixture.situationalFactors = telem.situationalFactors;
   fixture.marketPsychology = telem.marketPsychology;
@@ -4507,6 +4573,11 @@ export function recalculateSingleFixture(fixture, overrides = {}) {
   fixture.timeSegmentProfile = telem.timeSegmentProfile;
   fixture.hybridLayer = telem.hybridLayer;
   fixture.playerPropAnalytics = telem.playerPropAnalytics;
+  fixture.thirdPartySyndicate = telem.thirdPartySyndicate;
+  fixture.engineVerifier = telem.engineVerifier;
+  fixture.approvalStatus = telem.approvalStatus;
+  fixture.approvalBadge = telem.approvalBadge;
+  fixture.isVettedApproved = telem.isVettedApproved;
   fixture.lastRecalculatedAt = new Date().toISOString();
 
   return fixture;

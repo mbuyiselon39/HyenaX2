@@ -43,7 +43,8 @@ import {
   getCalibrationScorecard,
   evaluateMarketVolatilityGatekeeper,
   evaluateLayer18MotivationModifier,
-  applyBankerAsymmetricRiskLoss
+  applyBankerAsymmetricRiskLoss,
+  evaluateEngineVerifier
 } from './src/beastEngine.js';
 import { runConsolidatedEnsemble } from './src/advancedMLSuite.js';
 import {
@@ -633,8 +634,53 @@ app.get('/api/beast/predict', (req, res) => {
       recommendation: finalSignal.action,
       rationale: finalSignal.rationale
     },
-    whatWouldChangeOurMind: `A starting striker scratch, unexpected 5-man low block rotation, or sudden steam drift beyond ${fairOddsData.minAcceptableOdds} would prompt an immediate model recalibration.`
+    whatWouldChangeOurMind: `A starting striker scratch, unexpected 5-man low block rotation, or sudden steam drift beyond ${fairOddsData.minAcceptableOdds} would prompt an immediate model recalibration.`,
+    engineVerifier: evaluateEngineVerifier({
+      homeName: home,
+      awayName: away,
+      leagueId: league,
+      topPick: {
+        selection: finalSignal.signal,
+        market: 'Match Winner',
+        probability: calibration.calibratedProbability,
+        odds: fairOddsData.bestAvailableOdds
+      },
+      modelAgreementScore: multiModel.modelAgreementScore,
+      isDerby: volData.isDerby || false,
+      hasCriticalAbsence: false
+    })
   });
+});
+
+// Dedicated Autonomous Engine Verifier Endpoint
+app.post('/api/engine-verifier/audit', (req, res) => {
+  const {
+    homeName = '',
+    awayName = '',
+    leagueId = 'default',
+    predictions = [],
+    topPick = null,
+    isDerby = false,
+    modelAgreementScore = 88,
+    formVolatilityScore = 0,
+    hasCriticalAbsence = false,
+    steamDelta = 0
+  } = req.body || {};
+
+  const verification = evaluateEngineVerifier({
+    homeName,
+    awayName,
+    leagueId,
+    predictions,
+    topPick,
+    isDerby,
+    modelAgreementScore,
+    formVolatilityScore,
+    hasCriticalAbsence,
+    steamDelta
+  });
+
+  res.json(verification);
 });
 
 // 3. Accumulator Analysis API
