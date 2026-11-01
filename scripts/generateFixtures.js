@@ -1748,13 +1748,28 @@ export function generatePredictions(home, away, leagueId) {
 
   const p2ndOver05 = Math.min(0.90, Math.max(0.68, +(1 - Math.exp(-lambda2nd)).toFixed(3)));
   const p2ndOver15 = Math.min(0.72, Math.max(0.35, +(1 - (Math.exp(-lambda2nd) * (1 + lambda2nd))).toFixed(3)));
-  const p2ndUnder25 = Math.min(0.92, Math.max(0.65, +(Math.exp(-lambda2nd) * (1 + lambda2nd + Math.pow(lambda2nd, 2)/2)).toFixed(3)));
-
   const pGoalFirst10 = Math.min(0.35, Math.max(0.18, +(1 - Math.exp(-totalLambda * (10 / 90))).toFixed(3)));
   const pNoGoalFirst10 = +(1 - pGoalFirst10).toFixed(3);
-  const pHighestScoring2nd = 0.56;
-  const pHighestScoring1st = 0.30;
-  const pHighestScoringEqual = 0.14;
+
+  // Dynamic Bivariate Goal Distribution per Half for Highest Scoring Half
+  let calcP2ndHighest = 0;
+  let calcP1stHighest = 0;
+  let calcPEqualHalves = 0;
+  for (let g1 = 0; g1 <= 8; g1++) {
+    const pg1 = poissonPm(lambda1st, g1);
+    for (let g2 = 0; g2 <= 8; g2++) {
+      const pg2 = poissonPm(lambda2nd, g2);
+      const pJointHalf = pg1 * pg2;
+      if (g2 > g1) calcP2ndHighest += pJointHalf;
+      else if (g1 > g2) calcP1stHighest += pJointHalf;
+      else calcPEqualHalves += pJointHalf;
+    }
+  }
+  const sumHalves = calcP2ndHighest + calcP1stHighest + calcPEqualHalves || 1;
+  const pHighestScoring2nd = +(calcP2ndHighest / sumHalves).toFixed(3);
+  const pHighestScoring1st = +(calcP1stHighest / sumHalves).toFixed(3);
+  const pHighestScoringEqual = +(calcPEqualHalves / sumHalves).toFixed(3);
+  const pHighestScoring2ndOrEqual = Math.min(0.92, Math.max(0.68, +(pHighestScoring2nd + pHighestScoringEqual).toFixed(3)));
   const pBothHalvesUnder15 = Math.min(0.68, Math.max(0.35, +(p1stUnder15 * (1 - p2ndOver15 * 0.85)).toFixed(3)));
   const pBothHalvesOver15 = Math.min(0.48, Math.max(0.18, +(p1stOver15 * p2ndOver15).toFixed(3)));
   const pScoreBothHalvesHome = Math.min(0.75, Math.max(0.28, +((1 - Math.exp(-lambdaHome * 0.43)) * (1 - Math.exp(-lambdaHome * 0.57))).toFixed(3)));
@@ -1875,7 +1890,16 @@ export function generatePredictions(home, away, leagueId) {
     { market: 'Double Chance + BTTS', selection: '1X & BTTS · Yes', prob: p1XBttsYes, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
     { market: 'Win to Nil', selection: `${home.name} Win to Nil · Yes`, prob: pHomeWinToNil, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
     { market: 'Clean Sheets', selection: `${home.name} Clean Sheet · Yes`, prob: pHomeCleanSheet, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Clean Sheets', selection: `${away.name} Clean Sheet · Yes`, prob: pAwayCleanSheet, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' }
+    { market: 'Clean Sheets', selection: `${away.name} Clean Sheet · Yes`, prob: pAwayCleanSheet, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
+
+    // 9. HIGHEST SCORING HALF & HALF-SPECIFIC PROBABILITY SUITE
+    { market: 'Highest Scoring Half', selection: '2nd Half', prob: pHighestScoring2nd, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
+    { market: 'Highest Scoring Half', selection: '2nd Half or Equal', prob: pHighestScoring2ndOrEqual, type: 'HIGHEST_SCORING_HALF_SAFE', category: 'HALF_MARKETS' },
+    { market: 'Highest Scoring Half', selection: '1st Half', prob: pHighestScoring1st, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
+    { market: 'Highest Scoring Half', selection: 'Equal / Tie', prob: pHighestScoringEqual, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
+    { market: '1st-Half Totals', selection: '1st-Half Over 0.5 Goals', prob: p1stOver05, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
+    { market: '1st-Half Totals', selection: '1st-Half Under 1.5 Goals', prob: p1stUnder15, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
+    { market: '2nd-Half Totals', selection: '2nd-Half Over 0.5 Goals', prob: p2ndOver05, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' }
   ];
 
   // Professional Syndicate Anti-Trap Market Pricing & Conviction Architecture
@@ -1888,6 +1912,10 @@ export function generatePredictions(home, away, leagueId) {
       marketPricingFactor = 1.042;
     } else if (m.type === 'WIN_EITHER_HALF' && m.prob >= 0.74) {
       marketPricingFactor = 1.045;
+    } else if (m.type === 'HIGHEST_SCORING_HALF_SAFE' && m.prob >= 0.74) {
+      marketPricingFactor = 1.040;
+    } else if (m.category === 'HALF_MARKETS' && m.prob >= 0.52) {
+      marketPricingFactor = 1.032;
     } else if (m.type === 'GOALS_HIGH_PROB' && m.prob >= 0.78) {
       marketPricingFactor = 1.038;
     } else if (m.type === 'DNB' && m.prob >= 0.70) {
@@ -1944,6 +1972,10 @@ export function generatePredictions(home, away, leagueId) {
       reliabilityBonus = +8.0;
     } else if (m.type === 'DOUBLE_CHANCE') {
       reliabilityBonus = probability >= 76 ? +7.0 : +3.0;
+    } else if (m.type === 'HIGHEST_SCORING_HALF_SAFE') {
+      reliabilityBonus = probability >= 74 ? +7.5 : +3.5;
+    } else if (m.type === 'HIGHEST_SCORING_HALF' && m.selection === '2nd Half') {
+      reliabilityBonus = probability >= 52 ? +5.0 : +1.5;
     } else if (m.type === 'WIN_EITHER_HALF' || m.market === 'Either-Half Winner') {
       reliabilityBonus = probability >= 75 ? +6.5 : +2.5;
     } else if (m.type === 'GOALS_HIGH_PROB' || m.market === '1st-Half Totals' || m.market === '2nd-Half Totals') {
@@ -2027,9 +2059,12 @@ export function generatePredictions(home, away, leagueId) {
     if (a.market === 'Goals Over/Under' && a.selection.includes('Over 1.5') && a.probability >= 86) structuralModA += 8;
     if (b.market === 'Goals Over/Under' && b.selection.includes('Over 1.5') && b.probability >= 86) structuralModB += 8;
 
+    if (a.market === 'Highest Scoring Half' && a.selection.includes('2nd Half') && a.probability >= 70) structuralModA += 14;
+    if (b.market === 'Highest Scoring Half' && b.selection.includes('2nd Half') && b.probability >= 70) structuralModB += 14;
+
     return (b.convictionScore + structuralModB) - (a.convictionScore + structuralModA);
   });
-  const cappedSelected = selected.slice(0, 16);
+  const cappedSelected = selected.slice(0, 24);
 
   return cappedSelected.map((p, idx) => {
     const item = {
@@ -4426,8 +4461,15 @@ function prunePastFixtures(fixturesData) {
 export function optimizeFixturesPayload(fixturesData) {
   if (!fixturesData || !Array.isArray(fixturesData.matches)) return fixturesData;
   fixturesData.matches = fixturesData.matches.map(m => {
-    if (Array.isArray(m.predictions) && m.predictions.length > 12) {
-      m.predictions = m.predictions.slice(0, 12);
+    // Ensure every single fixture has a valid, model-vetted predictions slate and topPick
+    if (!Array.isArray(m.predictions) || m.predictions.length === 0) {
+      m.predictions = generatePredictions(m.home, m.away, m.league?.id || 'default');
+    }
+    if (!m.topPick || !m.topPick.selection) {
+      m.topPick = m.predictions[0];
+    }
+    if (Array.isArray(m.predictions) && m.predictions.length > 24) {
+      m.predictions = m.predictions.slice(0, 24);
     }
     if (m.thirdPartySyndicate && Array.isArray(m.thirdPartySyndicate.predictions)) {
       m.thirdPartySyndicate = {

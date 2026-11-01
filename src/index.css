@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg: #080A0F;
+    --card: #0E131F;
+    --border: #222E46;
+    --gold: #F59E0B;
+    --gold-light: #FDE047;
+    --mint: #10B981;
+    --cyan: #06B6D4;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: #E2E8F0;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+.font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-num {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Ambient glow & pitch background */
+.bg-grid {
+  background-image: radial-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.glow {
+  position: fixed;
+  border-radius: 9999px;
+  filter: blur(140px);
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+.glow-gold {
+  top: -100px;
+  right: -50px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #F59E0B, #B45309);
+}
+
+.glow-cyan {
+  top: 35%;
+  left: -150px;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, #06B6D4, #0E7490);
+}
+
+.glow-mint {
+  bottom: -100px;
+  right: 15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #10B981, #047857);
+}
+
+.pitch {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-6deg);
+  width: 1100px;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Gold border card hover */
+.gold-border-card {
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(245, 158, 11, 0.08);
+  transition: all 0.25s ease;
+}
+
+.gold-border-card:hover {
+  border-color: rgba(245, 158, 11, 0.55);
+  box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.8), 0 0 25px -4px rgba(245, 158, 11, 0.2);
+}
+
+/* Animations */
+@keyframes pulseGoldBadge {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.35), inset 0 0 8px rgba(245, 158, 11, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(245, 158, 11, 0.75), inset 0 0 14px rgba(245, 158, 11, 0.28);
+  }
+}
+
+.big-badge {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.6);
+  color: #FDE047;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+  animation: pulseGoldBadge 2.4s ease-in-out infinite;
+}
+
+.live-dot {
+  position: relative;
+}
+
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(8, 10, 15, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222E46;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3B4E75;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}

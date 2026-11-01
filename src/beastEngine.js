@@ -1701,6 +1701,28 @@ export function calculateExpandedMarkets({
   // 5. Goals In Both Halves
   const pBothHalvesGoal = Math.min(86, Math.round((1 - Math.exp(-lambdaHome * 0.5)) * (1 - Math.exp(-lambdaAway * 0.5)) * 120));
 
+  // 6. Highest Scoring Half Distribution (Time-Decay Bivariate Poisson)
+  const lambda1st = totalAttackingPower * 0.43;
+  const lambda2nd = totalAttackingPower * 0.57;
+  let p2ndHalf = 0;
+  let p1stHalf = 0;
+  let pEqualHalf = 0;
+  for (let g1 = 0; g1 <= 8; g1++) {
+    const pg1 = poissonPm(lambda1st, g1);
+    for (let g2 = 0; g2 <= 8; g2++) {
+      const pg2 = poissonPm(lambda2nd, g2);
+      const pJoint = pg1 * pg2;
+      if (g2 > g1) p2ndHalf += pJoint;
+      else if (g1 > g2) p1stHalf += pJoint;
+      else pEqualHalf += pJoint;
+    }
+  }
+  const sumHalves = p2ndHalf + p1stHalf + pEqualHalf || 1;
+  const secondHalfProbPct = +( (p2ndHalf / sumHalves) * 100 ).toFixed(1);
+  const firstHalfProbPct = +( (p1stHalf / sumHalves) * 100 ).toFixed(1);
+  const equalHalfProbPct = +( (pEqualHalf / sumHalves) * 100 ).toFixed(1);
+  const secondHalfOrEqualProbPct = +( ((p2ndHalf + pEqualHalf) / sumHalves) * 100 ).toFixed(1);
+
   return {
     corners: {
       expectedTotal: +cornersLambda.toFixed(1),
@@ -1724,7 +1746,18 @@ export function calculateExpandedMarkets({
       homeWinEitherHalfProbPct: pHomeWinHalf,
       awayWinEitherHalfProbPct: pAwayWinHalf
     },
-    bothHalvesGoalProbPct: Math.min(84, Math.max(52, pBothHalvesGoal))
+    bothHalvesGoalProbPct: Math.min(84, Math.max(52, pBothHalvesGoal)),
+    highestScoringHalf: {
+      secondHalfProbPct,
+      firstHalfProbPct,
+      equalHalfProbPct,
+      secondHalfOrEqualProbPct,
+      projectedHighestHalf: '2ND_HALF',
+      recommendedPick: secondHalfOrEqualProbPct >= 75 ? '2nd Half or Equal' : '2nd Half',
+      fairOdds2ndHalf: +(100 / Math.max(1, secondHalfProbPct)).toFixed(2),
+      fairOdds2ndHalfOrEqual: +(100 / Math.max(1, secondHalfOrEqualProbPct)).toFixed(2),
+      rationale: 'Empirical goal timing distribution models higher goal volume in 2nd half due to fatigue, substitutions, and trailing urgency.'
+    }
   };
 }
 
@@ -2440,6 +2473,17 @@ export function evaluateDeepMarketVetting({
     violations.push({ code: 'NON_STANDARD_RETAIL_LINE', message: 'Alternate cushion line is not a standard retail sportsbook benchmark.' });
   }
 
+  // 3c. Half Markets & Highest Scoring Half Integrity Check
+  const isHalfMarket = marketCategory === 'HALF_MARKETS' || /half/i.test(marketName);
+  let halfMarketApproved = true;
+  if (isHalfMarket) {
+    // Highest Scoring Half is an officially supported standard retail market on SA bookies
+    if (selectionName.includes('2nd Half') && numProb < 48) {
+      halfMarketApproved = false;
+      violations.push({ code: 'HALF_PROBABILITY_BELOW_THRESHOLD', message: 'Second half goal expectancy below mathematical validation threshold.' });
+    }
+  }
+
   // 4. Odds Integrity Check
   const oddsIntegrityApproved = numOdds >= 1.28 && numOdds <= 2.25;
   if (numOdds < 1.28) {
@@ -2458,7 +2502,8 @@ export function evaluateDeepMarketVetting({
   const dv = {
     status,
     refereeClauseApproved,
-    tacticalLineupApproved
+    tacticalLineupApproved,
+    halfMarketApproved: isHalfMarket ? halfMarketApproved : true
   };
   if (isEliteDeepMarketTop20) dv.isEliteDeepMarketTop20 = true;
   if (violations.length > 0) {
