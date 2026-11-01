@@ -357,7 +357,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const calProb = beast.calibratedProbability || prob;
 
       const isDerby = !!(beast.derbyInfo?.isDerby || /derby|clásico|clasico|soweto/i.test(`${m.home.name} ${m.away.name}`));
-      if (isDerby) return; // Strict zero-derby risk rule
+      // Derbies are not discarded; instead their most winnable markets (cards, goals, halves) are evaluated
 
       const bankerScore = Math.min(99, Math.round((prob * 0.5) + (modelAgreement * 0.3) + 18));
 
