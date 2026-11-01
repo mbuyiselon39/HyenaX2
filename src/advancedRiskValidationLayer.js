@@ -324,8 +324,7 @@ export function auditFixturePrediction(fixture) {
   let dnbChoice = 'NO BET';
   let dcChoice = 'NO BET';
   let eitherHalfChoice = 'NO BET';
-  const highestScoringHalfChoice = '2nd Half';
-  const highestScoringHalfSafeChoice = '2nd Half or Equal';
+  const highestScoringHalfChoice = (homeNetXg > 1.6 && awayNetXg > 1.4) ? '1st Half' : '2nd Half';
 
   if (homeNetXg - awayNetXg > 0.45 && homeFormStats.w >= 2) {
     dnbChoice = 'Home DNB';
@@ -344,8 +343,7 @@ export function auditFixturePrediction(fixture) {
     drawNoBet: dnbChoice,
     doubleChance: dcChoice,
     winEitherHalf: eitherHalfChoice,
-    highestScoringHalf: highestScoringHalfChoice,
-    highestScoringHalfSafe: highestScoringHalfSafeChoice
+    highestScoringHalf: highestScoringHalfChoice
   };
 
   // --------------------------------------------------------------------------

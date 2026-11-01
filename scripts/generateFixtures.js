@@ -1739,9 +1739,36 @@ export function generatePredictions(home, away, leagueId) {
   const pAwaySotOver35 = Math.min(0.82, Math.max(0.36, +(0.48 + (awaySotExp - 3.5) * 0.11).toFixed(3)));
   const pAwaySotUnder35 = +(1 - pAwaySotOver35).toFixed(3);
 
-  // 4. TIME-SEGMENT & STATISTICAL GOAL SPLITS
-  const lambda1st = totalLambda * 0.43;
-  const lambda2nd = totalLambda * 0.57;
+  // 4. TIME-SEGMENT & TEAM-SPECIFIC SCORING DETERMINATION ENGINE
+  // Analyzes whether teams can or cannot score in each half based on attacking tempo and defensive structure
+  const homeAttackVsAwayDef = (hAtt / Math.max(0.6, aDef));
+  const awayAttackVsHomeDef = (aAtt / Math.max(0.6, hDef));
+  
+  // Tactical half tempo:
+  // Aggressive front-runners break through in 1st half; grinding defensive battles see goals concentrated late in 2nd half
+  const home1stShare = homeAttackVsAwayDef > 1.4 ? 0.46 : (homeAttackVsAwayDef < 0.85 ? 0.35 : 0.41);
+  const away1stShare = awayAttackVsHomeDef > 1.3 ? 0.43 : (awayAttackVsHomeDef < 0.8 ? 0.30 : 0.37);
+
+  const lambdaHome1st = +(lambdaHome * home1stShare).toFixed(3);
+  const lambdaHome2nd = +(lambdaHome * (1.0 - home1stShare)).toFixed(3);
+
+  const lambdaAway1st = +(lambdaAway * away1stShare).toFixed(3);
+  const lambdaAway2nd = +(lambdaAway * (1.0 - away1stShare)).toFixed(3);
+
+  const lambda1st = +(lambdaHome1st + lambdaAway1st).toFixed(3);
+  const lambda2nd = +(lambdaHome2nd + lambdaAway2nd).toFixed(3);
+
+  // Exact Team-Specific Scoring Probabilities (Can / Cannot score per half)
+  const pHomeScore1st = Math.min(0.88, Math.max(0.18, +(1 - Math.exp(-lambdaHome1st)).toFixed(3)));
+  const pHomeCannotScore1st = +(1 - pHomeScore1st).toFixed(3);
+  const pHomeScore2nd = Math.min(0.92, Math.max(0.24, +(1 - Math.exp(-lambdaHome2nd)).toFixed(3)));
+  const pHomeCannotScore2nd = +(1 - pHomeScore2nd).toFixed(3);
+
+  const pAwayScore1st = Math.min(0.82, Math.max(0.12, +(1 - Math.exp(-lambdaAway1st)).toFixed(3)));
+  const pAwayCannotScore1st = +(1 - pAwayScore1st).toFixed(3);
+  const pAwayScore2nd = Math.min(0.86, Math.max(0.18, +(1 - Math.exp(-lambdaAway2nd)).toFixed(3)));
+  const pAwayCannotScore2nd = +(1 - pAwayScore2nd).toFixed(3);
+
   const p1stOver05 = Math.min(0.85, Math.max(0.55, +(1 - Math.exp(-lambda1st)).toFixed(3)));
   const p1stUnder15 = Math.min(0.88, Math.max(0.60, +(Math.exp(-lambda1st) * (1 + lambda1st)).toFixed(3)));
   const p1stOver15 = Math.min(0.65, Math.max(0.25, +(1 - p1stUnder15).toFixed(3)));
@@ -1751,7 +1778,7 @@ export function generatePredictions(home, away, leagueId) {
   const pGoalFirst10 = Math.min(0.35, Math.max(0.18, +(1 - Math.exp(-totalLambda * (10 / 90))).toFixed(3)));
   const pNoGoalFirst10 = +(1 - pGoalFirst10).toFixed(3);
 
-  // Dynamic Bivariate Goal Distribution per Half for Highest Scoring Half
+  // Dynamic Bivariate Goal Distribution per Half for Highest Scoring Half (Strictly Discrete 1st vs 2nd)
   let calcP2ndHighest = 0;
   let calcP1stHighest = 0;
   let calcPEqualHalves = 0;
@@ -1769,7 +1796,6 @@ export function generatePredictions(home, away, leagueId) {
   const pHighestScoring2nd = +(calcP2ndHighest / sumHalves).toFixed(3);
   const pHighestScoring1st = +(calcP1stHighest / sumHalves).toFixed(3);
   const pHighestScoringEqual = +(calcPEqualHalves / sumHalves).toFixed(3);
-  const pHighestScoring2ndOrEqual = Math.min(0.92, Math.max(0.68, +(pHighestScoring2nd + pHighestScoringEqual).toFixed(3)));
   const pBothHalvesUnder15 = Math.min(0.68, Math.max(0.35, +(p1stUnder15 * (1 - p2ndOver15 * 0.85)).toFixed(3)));
   const pBothHalvesOver15 = Math.min(0.48, Math.max(0.18, +(p1stOver15 * p2ndOver15).toFixed(3)));
   const pScoreBothHalvesHome = Math.min(0.75, Math.max(0.28, +((1 - Math.exp(-lambdaHome * 0.43)) * (1 - Math.exp(-lambdaHome * 0.57))).toFixed(3)));
@@ -1892,14 +1918,16 @@ export function generatePredictions(home, away, leagueId) {
     { market: 'Clean Sheets', selection: `${home.name} Clean Sheet · Yes`, prob: pHomeCleanSheet, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
     { market: 'Clean Sheets', selection: `${away.name} Clean Sheet · Yes`, prob: pAwayCleanSheet, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
 
-    // 9. HIGHEST SCORING HALF & HALF-SPECIFIC PROBABILITY SUITE
+    // 9. HIGHEST SCORING HALF & TEAM-SPECIFIC HALF TIMING SUITE (DISCRETE 1ST / 2ND HALF)
     { market: 'Highest Scoring Half', selection: '2nd Half', prob: pHighestScoring2nd, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
-    { market: 'Highest Scoring Half', selection: '2nd Half or Equal', prob: pHighestScoring2ndOrEqual, type: 'HIGHEST_SCORING_HALF_SAFE', category: 'HALF_MARKETS' },
     { market: 'Highest Scoring Half', selection: '1st Half', prob: pHighestScoring1st, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
-    { market: 'Highest Scoring Half', selection: 'Equal / Tie', prob: pHighestScoringEqual, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
     { market: '1st-Half Totals', selection: '1st-Half Over 0.5 Goals', prob: p1stOver05, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
     { market: '1st-Half Totals', selection: '1st-Half Under 1.5 Goals', prob: p1stUnder15, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
-    { market: '2nd-Half Totals', selection: '2nd-Half Over 0.5 Goals', prob: p2ndOver05, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' }
+    { market: '2nd-Half Totals', selection: '2nd-Half Over 0.5 Goals', prob: p2ndOver05, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
+    { market: 'Team to Score in 2nd Half', selection: `${home.name} to Score in 2nd Half · Yes`, prob: pHomeScore2nd, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
+    { market: 'Team to Score in 2nd Half', selection: `${away.name} to Score in 2nd Half · Yes`, prob: pAwayScore2nd, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
+    { market: 'Team Clean Sheet in 1st Half', selection: `${home.name} Clean Sheet in 1st Half · Yes`, prob: pAwayCannotScore1st, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
+    { market: 'Team Clean Sheet in 1st Half', selection: `${away.name} Clean Sheet in 1st Half · Yes`, prob: pHomeCannotScore1st, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' }
   ];
 
   // Professional Syndicate Anti-Trap Market Pricing & Conviction Architecture
@@ -1912,8 +1940,10 @@ export function generatePredictions(home, away, leagueId) {
       marketPricingFactor = 1.042;
     } else if (m.type === 'WIN_EITHER_HALF' && m.prob >= 0.74) {
       marketPricingFactor = 1.045;
-    } else if (m.type === 'HIGHEST_SCORING_HALF_SAFE' && m.prob >= 0.74) {
+    } else if (m.type === 'HIGHEST_SCORING_HALF' && m.prob >= 0.50) {
       marketPricingFactor = 1.040;
+    } else if (m.type === 'TEAM_HALF_GOALS' && m.prob >= 0.65) {
+      marketPricingFactor = 1.035;
     } else if (m.category === 'HALF_MARKETS' && m.prob >= 0.52) {
       marketPricingFactor = 1.032;
     } else if (m.type === 'GOALS_HIGH_PROB' && m.prob >= 0.78) {
@@ -1972,10 +2002,10 @@ export function generatePredictions(home, away, leagueId) {
       reliabilityBonus = +8.0;
     } else if (m.type === 'DOUBLE_CHANCE') {
       reliabilityBonus = probability >= 76 ? +7.0 : +3.0;
-    } else if (m.type === 'HIGHEST_SCORING_HALF_SAFE') {
-      reliabilityBonus = probability >= 74 ? +7.5 : +3.5;
-    } else if (m.type === 'HIGHEST_SCORING_HALF' && m.selection === '2nd Half') {
-      reliabilityBonus = probability >= 52 ? +5.0 : +1.5;
+    } else if (m.type === 'HIGHEST_SCORING_HALF') {
+      reliabilityBonus = probability >= 52 ? +6.0 : +2.0;
+    } else if (m.type === 'TEAM_HALF_GOALS') {
+      reliabilityBonus = probability >= 72 ? +7.0 : +3.0;
     } else if (m.type === 'WIN_EITHER_HALF' || m.market === 'Either-Half Winner') {
       reliabilityBonus = probability >= 75 ? +6.5 : +2.5;
     } else if (m.type === 'GOALS_HIGH_PROB' || m.market === '1st-Half Totals' || m.market === '2nd-Half Totals') {

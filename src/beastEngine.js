@@ -1751,12 +1751,13 @@ export function calculateExpandedMarkets({
       secondHalfProbPct,
       firstHalfProbPct,
       equalHalfProbPct,
-      secondHalfOrEqualProbPct,
-      projectedHighestHalf: '2ND_HALF',
-      recommendedPick: secondHalfOrEqualProbPct >= 75 ? '2nd Half or Equal' : '2nd Half',
+      projectedHighestHalf: (secondHalfProbPct >= firstHalfProbPct) ? '2ND_HALF' : '1ST_HALF',
+      recommendedPick: (secondHalfProbPct >= firstHalfProbPct) ? '2nd Half' : '1st Half',
       fairOdds2ndHalf: +(100 / Math.max(1, secondHalfProbPct)).toFixed(2),
-      fairOdds2ndHalfOrEqual: +(100 / Math.max(1, secondHalfOrEqualProbPct)).toFixed(2),
-      rationale: 'Empirical goal timing distribution models higher goal volume in 2nd half due to fatigue, substitutions, and trailing urgency.'
+      fairOdds1stHalf: +(100 / Math.max(1, firstHalfProbPct)).toFixed(2),
+      rationale: (secondHalfProbPct >= firstHalfProbPct)
+        ? 'Empirical goal timing distribution models higher goal volume in 2nd half due to fatigue, tactical substitutions, and trailing urgency.'
+        : 'High early pressing intensity and offensive front-loading project higher goal volume in 1st half.'
     }
   };
 }
@@ -2788,14 +2789,11 @@ export function evaluateEngineVerifier({
       disqualifications.push('FORM_VOLATILITY_BURST');
     }
 
-    // CHECK 9: Highest Scoring Half (2nd Half or Equal, 2nd Half)
+    // CHECK 9: Highest Scoring Half (Discrete 2nd Half or 1st Half)
     if (mkt === 'Highest Scoring Half') {
-      if (sel.includes('2nd Half or Equal') && prob >= 70.0) {
-        verifierBonus += 18;
-        safetyChecksPassed.push('HIGH_CONFIDENCE_HALF_SCORING_SAFE');
-      } else if (sel.includes('2nd Half') && prob >= 50.0) {
-        verifierBonus += 12;
-        safetyChecksPassed.push('FAVORED_SECOND_HALF_GOALS');
+      if ((sel === '2nd Half' || sel === '1st Half') && prob >= 50.0) {
+        verifierBonus += 15;
+        safetyChecksPassed.push('CONFIRMED_DISCRETE_HALF_SCORING');
       }
     }
 
