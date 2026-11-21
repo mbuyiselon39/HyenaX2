@@ -3746,122 +3746,231 @@ function app(){
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-  :root {
-    --bg: #080A0F;
-    --panel: #0E131F;
-    --panel2: #121826;
-    --card: #151D2E;
-    --card-hover: #1C263C;
-    --border: #222E46;
-    --border-light: #2E3E5E;
-    --gold: #F59E0B;
-    --gold-light: #FDE047;
-    --gold-dark: #B45309;
-    --mint: #10B981;
-    --cyan: #06B6D4;
-  }
-  html { scroll-behavior:smooth; }
-  body { font-family:'IBM Plex Sans', system-ui, sans-serif; background:var(--bg); }
-  .font-display { font-family:'Space Grotesk', sans-serif; }
-  .font-num { font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums; }
+/* ============================================================
+   FUTURISTIC APP THEME — Mission-Control Neural Aesthetic
+   Deep void background, electric cyan/violet/magenta neon
+   accents, glassmorphism, and ambient particle layers.
+   ============================================================ */
+:root {
+  --bg: #05060A;
+  --bg-elev: #0B0D16;
+  --panel: rgba(12, 18, 34, 0.84);
+  --panel-border: rgba(0, 229, 255, 0.14);
+  --panel-hover: rgba(16, 26, 44, 0.95);
+  --panel-bg-solid: #0D1324;
+  --text: #E2E8F0;
+  --text-dim: #94A3B8;
+  --text-faint: #64748B;
+  --accent: #00E5FF;   /* electric cyan */
+  --accent2: #7B2EFA;  /* deep violet */
+  --accent3: #FF2E9D;  /* magenta */
+  --lime: #C4FF3C;     /* neon lime */
+  --ok: #00E0A1;
+  --warn: #FFB33E;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
 
-  /* Gold and deep obsidian glow layers */
-  .bg-grid {
-    background-image: linear-gradient(rgba(245,158,11,.04) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(245,158,11,.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-    mask-image: radial-gradient(ellipse 95% 75% at 50% 0%, black 40%, transparent 100%);
-  }
-  .glow { position:fixed; border-radius:9999px; filter:blur(110px); pointer-events:none; animation:breathe 12s ease-in-out infinite alternate; }
-  .glow-gold { width:600px; height:600px; left:-180px; top:-160px; background:radial-gradient(circle, rgba(245,158,11,.15) 0%, rgba(217,119,6,.06) 60%, transparent 80%); }
-  .glow-cyan { width:560px; height:560px; right:-180px; top:35%; background:radial-gradient(circle, rgba(6,182,212,.10) 0%, transparent 75%); animation-delay:-6s; }
-  .glow-mint { width:520px; height:520px; left:25%; bottom:-200px; background:radial-gradient(circle, rgba(16,185,129,.09) 0%, transparent 80%); animation-delay:-3s; }
-  @keyframes breathe { from { transform:scale(.94); opacity:.7; } to { transform:scale(1.08); opacity:1; } }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
-  .sweep { position:fixed; left:0; right:0; height:24vh; pointer-events:none;
-    background:linear-gradient(180deg, transparent, rgba(245,158,11,.035), transparent);
-    animation:sweep 14s linear infinite; }
-  @keyframes sweep { from { top:-25vh; } to { top:115vh; } }
+/* ─── Scrollbars (futuristic thin) ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(5, 6, 10, 0.6); }
+::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.22); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.42); }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
 
-  /* Pitch vector ambient */
-  .pitch { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:.035; }
-  .pitch svg { width:min(92vw,1100px); height:auto; }
+/* ─── Ambient: drifting neural grid ─── */
+.bg-grid {
+  background-image:
+    linear-gradient(90deg, rgba(0,229,255,.06) 1px, transparent 1px),
+    linear-gradient(rgba(0,229,255,.045) 1px, transparent 1px),
+    repeating-linear-gradient(90deg, rgba(0,229,255,.02) 0 40px, transparent 40px);
+  background-size: 48px 40px, 200px 60px, 100% 100%;
+  animation: gridDrift 30s linear infinite;
+  -webkit-mask-image: radial-gradient(ellipse 92% 82% at 50% 8%, black 28%, transparent 100%);
+  mask-image: radial-gradient(ellipse 92% 82% at 50% 8%, black 28%, transparent 100%);
+}
+@keyframes gridDrift { to { background-position: 520px 640px; } }
 
-  /* Gold gradients & metallic borders */
-  .gold-gradient-text {
-    background: linear-gradient(135deg, #FFFBEB 0%, #FDE047 30%, #F59E0B 70%, #D97706 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .gold-border-card {
-    border: 1px solid rgba(245, 158, 11, 0.28);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(245, 158, 11, 0.08);
-  }
-  .gold-border-card:hover {
-    border-color: rgba(245, 158, 11, 0.5);
-    box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.8), 0 0 25px -4px rgba(245, 158, 11, 0.18);
-  }
+/* ─── Ambient: floating particle orbs ─── */
+.orb { position: fixed; border-radius: 9999px; filter: blur(66px); pointer-events: none; z-index: 1; }
+.orb-a { top: -160px; left: -120px; width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(0,229,255,.16), rgba(0,229,255,.02) 60%, transparent 76%);
+  animation: orbFloat 8s ease-in-out infinite alternate; }
+.orb-b { top: 22%; left: 93%; width: 460px; height: 460px;
+  background: radial-gradient(circle, rgba(139,62,250,.16), rgba(139,62,250,.02) 60%, transparent 76%);
+  animation: orbFloat 11s ease-in-out infinite alternate 1s; }
+.orb-c { bottom: -120px; right: -80px; width: 540px; height: 540px;
+  background: radial-gradient(circle, rgba(255,46,157,.14), rgba(255,46,157,.02) 60%, transparent 76%);
+  animation: orbFloat 10s ease-in-out infinite alternate 2s; }
+.orb-d { top: 60%; left: -10%; width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(196,255,60,.10), rgba(196,255,60,.02) 60%, transparent 76%);
+  animation: orbFloat 12s ease-in-out infinite alternate 3s; }
+.orb-e { bottom: 14%; left: 42%; width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,229,255,.11), transparent 72%);
+  animation: orbFloat 9s ease-in-out infinite alternate -2s; }
+@keyframes orbFloat { from { transform: translate(0,0) scale(1); } to { transform: translate(32px,-32px) scale(1.06); } }
 
-  /* Motion */
-  @keyframes cardIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
-  .card-in { animation:cardIn .45s cubic-bezier(.2,.8,.2,1) both; }
-  @keyframes fill { to { width:var(--w); } }
-  .pbar > span { display:block; height:100%; width:0; border-radius:9999px; animation:fill .9s cubic-bezier(.2,.8,.2,1) forwards; }
-  @keyframes blink { 50% { opacity:.2; } }
-  .colon { animation:blink 1s steps(1) infinite; }
+/* Slow-drifting neural-dot "data noise" */
+.neural-dot {
+  position: fixed; border-radius: 9999px; background: var(--accent);
+  box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0,229,255,.5); opacity: .3; z-index: 1;
+}
 
-  @keyframes pulseGoldBadge {
-    0%,100% { box-shadow:0 0 8px rgba(245,158,11,.35), inset 0 0 8px rgba(245,158,11,.12); }
-    50% { box-shadow:0 0 18px rgba(245,158,11,.75), inset 0 0 14px rgba(245,158,11,.28); }
-  }
-  .big-badge {
-    background:rgba(245,158,11,.12); border:1px solid rgba(251,191,36,.6); color:#FDE047;
-    text-shadow:0 0 10px rgba(245,158,11,.8); animation:pulseGoldBadge 2.4s ease-in-out infinite;
-  }
-  .live-dot { position:relative; }
-  .live-dot::after { content:''; position:absolute; inset:-3px; border-radius:9999px; border:1px solid rgba(245,158,11,.6); animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
-  @keyframes ping { 75%,100% { transform:scale(2.1); opacity:0; } }
+/* ─── Horizontal mission scan (legacy .sweep) ─── */
+.sweep { position:fixed; left:0; right:0; height:24vh; pointer-events:none;
+  background:linear-gradient(180deg, transparent, rgba(0,229,255,.04), transparent);
+  animation:sweep 22s linear infinite; }
+@keyframes sweep { from { top:-25vh; } to { top:125vh; } }
 
-  /* Ticker redesign: more breathing room, prominent badges */
-  .marquee { display:flex; align-items:center; gap:1.25rem; width:max-content; animation:tick 65s linear infinite; }
-  .marquee:hover { animation-play-state:paused; }
-  @keyframes tick { to { transform:translateX(-50%); } }
-  .marquee-mask { mask-image:linear-gradient(90deg, transparent, black 4%, black 96%, transparent); }
+/* ─── Pitch vector (cyan neon) ─── */
+.pitch { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:.05; z-index:0; }
+.pitch svg { width:min(92vw,1100px); height:auto; filter: drop-shadow(0 0 8px rgba(0,229,255,.5)); }
 
-  /* Scrollbars */
-  ::-webkit-scrollbar { width:8px; height:8px; }
-  ::-webkit-scrollbar-track { background:transparent; }
-  ::-webkit-scrollbar-thumb { background:#222E46; border-radius:9999px; border:2px solid var(--bg); }
-  ::-webkit-scrollbar-thumb:hover { background:#334569; }
-  .no-scrollbar::-webkit-scrollbar { display:none; }
-  .no-scrollbar { scrollbar-width:none; }
+/* ─── Glow wells (legacy .glow-*) ─── */
+.glow { position:fixed; border-radius:9999px; filter:blur(110px); pointer-events:none; }
+.glow-gold { width:600px; height:600px; left:-180px; top:-160px;
+  background:radial-gradient(circle, rgba(0,229,255,.18) 0%, rgba(0,229,255,.06) 60%, transparent 80%);
+  animation:glowBreathe 12s ease-in-out infinite alternate; }
+.glow-violet { width:560px; height:560px; right:-180px; top:35%;
+  background:radial-gradient(circle, rgba(139,62,250,.14) 0%, transparent 75%); }
+.glow-magenta { width:520px; height:520px; left:25%; bottom:-200px;
+  background:radial-gradient(circle, rgba(255,46,157,.13) 0%, transparent 80%); }
+@keyframes glowBreathe { from { transform:scale(.94); opacity:.7; } to { transform:scale(1.08); opacity:1; } }
 
-  .match-card { transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease; }
-  .match-card:hover { transform:translateY(-1.5px); }
-  .chip { transition:all .2s ease; }
-  .chip:hover { transform:translateY(-1px); }
-  .day-chip { transition:all .2s ease; }
-  .day-chip:hover:not(.active) { transform:translateY(-2px); border-color:rgba(245,158,11,.5); }
+/* ─── Typography ─── */
+.font-display { font-family: var(--font-display); }
+.font-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.neon-text { background: linear-gradient(110deg, #00E5FF 0%, #7B2EFA 55%, #FF2E9D 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.neon-text-lime { background: linear-gradient(110deg, #C4FF3C 0%, #00E5FF 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 
-  /* Circular progress indicator */
-  .progress-ring__circle {
-    transition: stroke-dashoffset 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
-  }
+/* Kickers: animated mono labels with pulsing dots */
+.kicker {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.30em; text-transform: uppercase;
+  color: var(--accent); display: inline-flex; align-items: center; gap: 6px;
+}
+.kicker::before {
+  content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 9999px;
+  background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: ping 1.7s cubic-bezier(0,0,.2,1) infinite;
+}
 
-  /* Safe areas */
-  .app-bar { padding: env(safe-area-inset-top) max(1rem, env(safe-area-inset-right)) 0 max(1rem, env(safe-area-inset-left)); }
-  .app-foot { padding: 0 max(1rem, env(safe-area-inset-right)) max(1.5rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); }
-  .app-main, .strip-in { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
-  @media (min-width: 640px) {
-    .app-bar, .app-foot, .app-main, .strip-in { padding-left: max(1.5rem, env(safe-area-inset-left)); padding-right: max(1.5rem, env(safe-area-inset-right)); }
-  }
-  .drawer-inner { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+/* ─── Glassmorphic cards ─── */
+.card { background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--panel-border); border-radius: 14px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.card:hover { border-color: rgba(0,229,255,.35);
+  box-shadow: 0 8px 40px -8px rgba(0,0,0,.6), 0 0 28px -8px rgba(0,229,255,.10); transform: translateY(-2px); }
+.card-glow-cyan:hover { border-color: rgba(0,229,255,.5);
+  box-shadow: 0 10px 48px -6px rgba(0,0,0,.65), 0 0 40px -8px rgba(0,229,255,.2); }
+.card-glow-violet:hover { border-color: rgba(139,62,250,.5);
+  box-shadow: 0 10px 48px -6px rgba(0,0,0,.65), 0 0 40px -8px rgba(139,62,250,.2); }
+.card-glow-lime:hover { border-color: rgba(196,255,60,.5);
+  box-shadow: 0 10px 48px -6px rgba(0,0,0,.65), 0 0 40px -8px rgba(196,255,60,.18); }
 
-  @media (display-mode: standalone) {
-    .standalone-hint { display:none; }
-  }
+/* ─── Buttons ─── */
+.btn-primary { background: linear-gradient(135deg, #00E5FF 0%, #00C4E0 100%); color: #041118; border: none;
+  border-radius: 10px; font-weight: 700; letter-spacing: .06em;
+  box-shadow: 0 0 14px -2px rgba(0,229,255,.6); transition: transform .15s ease, box-shadow .2s ease; }
+.btn-primary:hover { box-shadow: 0 0 22px -2px rgba(0,229,255,.8); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-violet { background: linear-gradient(135deg, #7B2EFA 0%, #4A1CC6 100%); color: #fff; border-radius: 10px;
+  font-weight: 700; box-shadow: 0 0 14px -2px rgba(139,62,250,.6); transition: transform .15s ease, box-shadow .2s ease; }
+.btn-violet:hover { box-shadow: 0 0 22px -2px rgba(139,62,250,.8); transform: translateY(-1px); }
+.btn-ghost { border: 1px solid rgba(0,229,255,.3); background: transparent; border-radius: 10px;
+  color: var(--text-dim); transition: all .16s ease; }
+.btn-ghost:hover { border-color: rgba(0,229,255,.6); color: var(--accent); background: rgba(0,229,255,.06); }
+
+/* ─── Inputs (futuristic glass) ─── */
+.futuristic-input { background: rgba(6, 10, 22, 0.9); border: 1px solid rgba(0,229,255,0.16);
+  border-radius: 10px; color: var(--text); padding: 9px 12px; font-family: var(--font-body); font-size: 13px;
+  outline: none; transition: all .16s ease; }
+.futuristic-input:focus { border-color: rgba(0,229,255,0.5); box-shadow: 0 0 0 3px rgba(0,229,255,.12); }
+
+/* ─── Section chrome ─── */
+.section-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 8px; border-bottom: 1px solid var(--panel-border); padding-bottom: 12px; margin-bottom: 14px; }
+.section-title { font-family: var(--font-display); font-weight: 800; font-size: 17px; color: var(--text); }
+.section-title .accent { color: var(--accent); font-weight: 900; }
+.section-sub { font-size: 11px; color: var(--text-faint); font-family: var(--font-mono); }
+
+/* ─── Futuristic entrance animation ─── */
+.card-in { opacity: 0; transform: translateY(14px) scale(.99); animation: cardIn .5s cubic-bezier(.2,.8,.2,1) forwards; }
+@keyframes cardIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .card-in, .orb, .sweep { animation: none; opacity: 1; transform: none; }
+}
+
+/* ─── Progress fill (animated bar) ─── */
+@keyframes fill { to { width: var(--w); } }
+.pbar > span { display:block; height:100%; width:0; border-radius:9999px;
+  background: linear-gradient(90deg, #00E5FF 0%, #00C4E0 100%);
+  box-shadow: 0 0 12px rgba(0,229,255,.55);
+  animation: fill .9s cubic-bezier(.2,.8,.2,1) forwards; }
+
+/* ─── Marquee (futuristic glow) ─── */
+.marquee { display:flex; align-items:center; gap:1.5rem; width:max-content; animation:tick 70s linear infinite; }
+.marquee:hover { animation-play-state:paused; }
+@keyframes tick { to { transform:translateX(-50%); } }
+.marquee-mask { mask-image:linear-gradient(90deg, transparent, black 4%, black 96%, transparent); }
+.marquee-badge { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+
+/* ─── Live indicator (pulsing ring) ─── */
+.live-dot { position: relative; }
+.live-dot::after { content:''; position:absolute; inset:-3px; border-radius:9999px;
+  border: 1px solid rgba(0,229,255,.6); animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
+
+/* ─── Big badge (neon pulse) ─── */
+.big-badge { background: rgba(0,229,255,.12); border:1px solid rgba(0,229,255,.5); color: var(--accent);
+  text-shadow: 0 0 10px rgba(0,229,255,.8); animation: pulseCyan 2.4s ease-in-out infinite; }
+@keyframes pulseCyan { 0%,100% { box-shadow: 0 0 8px rgba(0,229,255,.35); } 50% { box-shadow: 0 0 18px rgba(0,229,255,.75); } }
+
+/* ─── Match card (glassmorphic, lift on hover) ─── */
+.match-card { border: 1px solid var(--panel-border); background: var(--panel); border-radius: 12px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.match-card:hover { transform: translateY(-2px); border-color: rgba(0,229,255,.35);
+  box-shadow: 0 8px 36px -10px rgba(0,0,0,.55), 0 0 24px -6px rgba(0,229,255,.1); }
+
+/* ─── Chips ─── */
+.chip { border: 1px solid var(--panel-border); background: rgba(8,12,24,.85); color: var(--text-dim);
+  border-radius: 8px; transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+.chip:hover { transform: translateY(-1px); border-color: rgba(0,229,255,.35); color: var(--text); }
+.chip.active { border-color: rgba(0,229,255,.6); background: rgba(0,229,255,.10); color: var(--accent);
+  box-shadow: 0 0 12px rgba(0,229,255,.15); }
+.day-chip { border: 1px solid var(--panel-border); background: var(--panel-bg-solid); border-radius: 8px;
+  transition: all .15s ease; }
+.day-chip.active { border-color: rgba(0,229,255,.6); background: rgba(0,229,255,.12); color: var(--accent);
+  box-shadow: 0 0 12px rgba(0,229,255,.18); }
+.day-chip:hover:not(.active) { transform: translateY(-2px); border-color: rgba(0,229,255,.4); color: var(--text); }
+
+/* ─── Progress ring ─── */
+.progress-ring__circle { transition: stroke-dashoffset 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: rotate(-90deg); transform-origin: 50% 50%; }
+
+/* ─── Misc ─── */
+.gold-border-card { border: 1px solid var(--panel-border); }
+.glow-on-hover:hover { border-color: rgba(0,229,255,.45); box-shadow: 0 0 28px -8px rgba(0,229,255,.25); }
+
+/* ─── Safe areas & app chrome ─── */
+.app-bar { padding: env(safe-area-inset-top) max(1rem, env(safe-area-inset-right)) 0 max(1rem, env(safe-area-inset-left)); }
+.app-foot { padding: 0 max(1rem, env(safe-area-inset-right)) max(1.5rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); }
+.app-main, .strip-in { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+@media (min-width: 640px) {
+  .app-bar, .app-foot, .app-main, .strip-in { padding-left: max(1.5rem, env(safe-area-inset-left)); padding-right: max(1.5rem, env(safe-area-inset-right)); }
+}
+.drawer-inner { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+@media (display-mode: standalone) { .standalone-hint { display:none; } }
 </style>
 </head>
 
@@ -3902,20 +4011,20 @@ function app(){
   </div>
 
   <!-- ===================== TOP NAVIGATION ===================== -->
-  <header class="app-bar sticky top-0 z-30 border-b border-[#222E46] bg-[#080A0F]/95 backdrop-blur-md">
+  <header class="app-bar sticky top-0 z-30 border-b border-[#1D2A45] bg-[#05060A]/95 backdrop-blur-md">
     <div class="mx-auto max-w-[1400px] h-20 flex items-center gap-4">
       
       <!-- HyenaX Gold Logo + Brand -->
       <a href="#" @click.prevent="activeView = 'fixtures'" class="flex items-center gap-3.5 group shrink-0">
-        <div class="relative w-12 h-12 rounded-xl overflow-hidden p-0.5 bg-gradient-to-br from-[#FFE57F] via-[#F59E0B] to-[#78350F] shadow-[0_0_20px_-4px_rgba(245,158,11,0.5)] transition-transform duration-300 group-hover:scale-105">
+        <div class="relative w-12 h-12 rounded-xl overflow-hidden p-0.5 bg-gradient-to-br from-[#00E5FF] via-[#7B2EFA] to-[#FF2E9D] shadow-[0_0_22px_-4px_rgba(0,229,255,0.55)] transition-transform duration-300 group-hover:scale-105">
           <img src="icons/icon.svg" alt="HyenaX Logo" class="w-full h-full object-cover rounded-[10px]" onerror="this.src='icons/icon.svg'" />
         </div>
         <div class="leading-tight">
           <div class="flex items-baseline gap-0.5">
             <span class="font-display font-black text-2xl tracking-tight text-white">Hyena</span>
-            <span class="font-display font-black text-2xl text-[#F59E0B] drop-shadow-[0_0_12px_rgba(245,158,11,0.6)]">X</span>
+            <span class="font-display font-black text-2xl text-[#00E5FF] drop-shadow-[0_0_12px_rgba(0,229,255,0.65)]">X</span>
           </div>
-          <div class="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-300/85">The Ndlela Millionaires GoldPack</div>
+          <div class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#00E5FF]/80">The Ndlela Millionaires GoldPack</div>
         </div>
       </a>
 
@@ -3923,7 +4032,7 @@ function app(){
       <nav class="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-[#0E131F] border border-[#222E46] ml-2 select-none">
         <!-- Primary Fixtures Anchor Button (Always Visible) -->
         <button @click="activeView = 'fixtures'; navDropdownOpen = false; haptic(5)"
-                :class="activeView === 'fixtures' ? 'bg-[#F59E0B]/20 text-amber-300 border-amber-500/60 shadow-sm' : 'text-slate-400 hover:text-slate-200 border-transparent'"
+                :class="activeView === 'fixtures' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50 shadow-[0_0_10px_rgba(0,229,255,.2)]' : 'text-slate-400 hover:text-[#00E5FF] border-transparent'"
                 class="px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5 cursor-pointer">
           <span>⚽</span> <span>Fixtures</span>
         </button>
@@ -3968,7 +4077,7 @@ function app(){
                 <div class="space-y-1 pb-1">
                   <!-- 1. Daily Top 20 -->
                   <button @click="activeView = 'daily-top15'; navDropdownOpen = false; haptic(10)"
-                          :class="activeView === 'daily-top15' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
+                          :class="activeView === 'daily-top15' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
                           class="w-full text-left px-3 py-2 rounded-xl text-xs font-display flex items-center justify-between border transition-all cursor-pointer group">
                     <div class="flex items-center gap-2.5">
                       <span class="text-base group-hover:scale-110 transition-transform">⭐</span>
@@ -3982,7 +4091,7 @@ function app(){
 
                   <!-- 2. Beast Board -->
                   <button @click="activeView = 'beastboard'; navDropdownOpen = false; haptic(10)"
-                          :class="activeView === 'beastboard' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
+                          :class="activeView === 'beastboard' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
                           class="w-full text-left px-3 py-2 rounded-xl text-xs font-display flex items-center justify-between border transition-all cursor-pointer group">
                     <div class="flex items-center gap-2.5">
                       <span class="text-base group-hover:scale-110 transition-transform">🦁</span>
@@ -3996,7 +4105,7 @@ function app(){
 
                   <!-- 3. Acca Studio -->
                   <button @click="activeView = 'accumulator'; navDropdownOpen = false; haptic(10)"
-                          :class="activeView === 'accumulator' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
+                          :class="activeView === 'accumulator' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
                           class="w-full text-left px-3 py-2 rounded-xl text-xs font-display flex items-center justify-between border transition-all cursor-pointer group">
                     <div class="flex items-center gap-2.5">
                       <span class="text-base group-hover:scale-110 transition-transform">📋</span>
@@ -4010,7 +4119,7 @@ function app(){
 
                   <!-- 4. Slip X-Ray -->
                   <button @click="activeView = 'betslip'; navDropdownOpen = false; haptic(10)"
-                          :class="activeView === 'betslip' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
+                          :class="activeView === 'betslip' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
                           class="w-full text-left px-3 py-2 rounded-xl text-xs font-display flex items-center justify-between border transition-all cursor-pointer group">
                     <div class="flex items-center gap-2.5">
                       <span class="text-base group-hover:scale-110 transition-transform">🔬</span>
@@ -4024,7 +4133,7 @@ function app(){
 
                   <!-- 5. Validation Suite -->
                   <button @click="activeView = 'validation'; navDropdownOpen = false; haptic(10)"
-                          :class="activeView === 'validation' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
+                          :class="activeView === 'validation' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
                           class="w-full text-left px-3 py-2 rounded-xl text-xs font-display flex items-center justify-between border transition-all cursor-pointer group">
                     <div class="flex items-center gap-2.5">
                       <span class="text-base group-hover:scale-110 transition-transform">🧪</span>
@@ -4038,7 +4147,7 @@ function app(){
 
                   <!-- 6. Reality Check -->
                   <button @click="activeView = 'reality-check'; navDropdownOpen = false; haptic(10)"
-                          :class="activeView === 'reality-check' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
+                          :class="activeView === 'reality-check' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
                           class="w-full text-left px-3 py-2 rounded-xl text-xs font-display flex items-center justify-between border transition-all cursor-pointer group">
                     <div class="flex items-center gap-2.5">
                       <span class="text-base group-hover:scale-110 transition-transform">🛡️</span>
@@ -4052,7 +4161,7 @@ function app(){
 
                   <!-- 7. AI Oracle -->
                   <button @click="openAiChat(); navDropdownOpen = false; haptic(10)"
-                          :class="aiChatOpen ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
+                          :class="aiChatOpen ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'text-slate-300 hover:bg-[#141C2E] hover:text-white border-transparent'"
                           class="w-full text-left px-3 py-2 rounded-xl text-xs font-display flex items-center justify-between border transition-all cursor-pointer group">
                     <div class="flex items-center gap-2.5">
                       <span class="text-base group-hover:scale-110 transition-transform">🤖</span>
@@ -4178,6 +4287,13 @@ function app(){
             </button>
           </div>
         </div>
+      </div>
+
+      <!-- Futuristic Global Header Search -->
+      <div class="relative hidden sm:block">
+        <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#00E5FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input x-model="query" type="search" placeholder="Search teams &amp; leagues…"
+          class="futuristic-input w-52 pl-8 pr-3" />
       </div>
 
       <!-- Live Date & Clock -->
@@ -4370,6 +4486,15 @@ function app(){
 
   <!-- ===================== MAIN SPLIT VIEW (FIXTURES) ===================== -->
   <main id="fixtures-section" x-show="activeView === 'fixtures'" class="app-main mx-auto max-w-[1400px] flex flex-col lg:flex-row items-start gap-8 py-8 relative z-10">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 -mt-3">
+        <div class="flex items-center gap-3.5">
+          <span class="kicker">LIVE FEED</span>
+          <h1 class="section-title font-display">Live <span class="neon-text">&amp;</span> Upcoming Fixtures</h1>
+        </div>
+        <p class="section-sub sm:text-right max-w-md">
+          Rank by Dixon-Coles Probability Index · 141 global competitions · South African Standard Time (SAST, UTC+2)
+        </p>
+      </div>
 
     <!-- ===== LEFT: MATCH FEED (ELEVATED CARD CONTRAST) ===== -->
     <section class="flex-1 min-w-0 w-full">
@@ -4392,7 +4517,7 @@ function app(){
           <!-- Competition Dropdown Selector -->
           <div class="relative">
             <select :value="selectedLeague" @change="selectLeague($event.target.value)"
-              class="rounded-xl border border-[#222E46] bg-[#0E131F] text-slate-200 text-xs font-semibold px-3 py-2.5 pr-8 outline-none focus:border-[#F59E0B] focus:shadow-[0_0_0_3px_rgba(245,158,11,.2)] transition-all appearance-none cursor-pointer">
+              class="futuristic-input text-xs font-semibold pr-8 appearance-none cursor-pointer">
               <option value="" x-text="'🏆 All ' + (allAvailableLeagues.length || '86') + ' Competitions'"></option>
               <template x-for="lg in allAvailableLeagues" :key="lg.id">
                 <option :value="lg.id" x-text="lg.flag + ' ' + lg.name + ' (' + lg.count + ')'"></option>
@@ -4402,9 +4527,9 @@ function app(){
           </div>
 
           <div class="relative">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00E5FF]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
             <input x-model="query" type="search" placeholder="Search team or league…"
-              class="w-36 sm:w-52 rounded-xl border border-[#222E46] bg-[#0E131F] pl-9 pr-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-[#F59E0B] focus:shadow-[0_0_0_3px_rgba(245,158,11,.2)] transition-all" />
+              class="futuristic-input w-36 sm:w-52 pl-9 pr-3.5" />
           </div>
           <button @click="bigOnly = !bigOnly"
             class="chip rounded-xl border px-3.5 py-2.5 text-xs font-bold font-display tracking-wide flex items-center gap-1.5 transition-all cursor-pointer"
@@ -4878,11 +5003,11 @@ function app(){
 
                 <!-- Category Filter Pills -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10px] font-num scrollbar-none">
-                  <button @click="modelFilter = 'ALL'" :class="modelFilter === 'ALL' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">All (17)</button>
-                  <button @click="modelFilter = 'GBDT'" :class="modelFilter === 'GBDT' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">GBDT &amp; Trees</button>
-                  <button @click="modelFilter = 'DEEP'" :class="modelFilter === 'DEEP' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">Deep &amp; GNN</button>
-                  <button @click="modelFilter = 'STAT'" :class="modelFilter === 'STAT' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">Statistical &amp; Paired</button>
-                  <button @click="modelFilter = 'MARKET'" :class="modelFilter === 'MARKET' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">Market &amp; Bayes</button>
+                  <button @click="modelFilter = 'ALL'" :class="modelFilter === 'ALL' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">All (17)</button>
+                  <button @click="modelFilter = 'GBDT'" :class="modelFilter === 'GBDT' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">GBDT &amp; Trees</button>
+                  <button @click="modelFilter = 'DEEP'" :class="modelFilter === 'DEEP' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">Deep &amp; GNN</button>
+                  <button @click="modelFilter = 'STAT'" :class="modelFilter === 'STAT' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">Statistical &amp; Paired</button>
+                  <button @click="modelFilter = 'MARKET'" :class="modelFilter === 'MARKET' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-[#0A0D15] text-slate-400 border-slate-800'" class="px-2 py-0.5 rounded border whitespace-nowrap transition-colors">Market &amp; Bayes</button>
                 </div>
 
                 <!-- Models List -->
@@ -7112,6 +7237,15 @@ function app(){
 
   <!-- ===================== VIEW: DAILY TOP 20 BANKER PREDICTIONS ===================== -->
   <section id="daily-top15-section" x-show="activeView === 'daily-top15'" class="mx-auto max-w-[1400px] px-4 py-8 space-y-8 relative z-10">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 -mt-3">
+        <div class="flex items-center gap-3.5">
+          <span class="kicker">DAILY BANKERS</span>
+          <h1 class="section-title font-display">Today's 20 Surest Wins</h1>
+        </div>
+        <p class="section-sub sm:text-right max-w-md">
+          Zero-Risk Protocol · 17-Model Consensus · Strict Vetting Directive
+        </p>
+      </div>
     <!-- Top 20 Section Header -->
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-[#222E46]">
       <div>
@@ -7675,6 +7809,15 @@ function app(){
 
   <!-- ===================== VIEW: BEAST BOARD ===================== -->
   <section x-show="activeView === 'beastboard'" class="mx-auto max-w-[1400px] px-4 py-8 space-y-6 relative z-10">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 -mt-3">
+        <div class="flex items-center gap-3.5">
+          <span class="kicker">BEAST MODE</span>
+          <h1 class="section-title font-display">The Beast Board</h1>
+        </div>
+        <p class="section-sub sm:text-right max-w-md">
+          +EV Value Opportunities · Ranked by Beast Score, Trust &amp; Volatility
+        </p>
+      </div>
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-[#222E46]">
       <div>
         <div class="flex items-center gap-2">
@@ -10069,7 +10212,7 @@ function app(){
         <span class="text-[10px] uppercase font-bold text-slate-400">Role:</span>
         <div class="flex items-center gap-1">
           <button @click="setAiChatRole('quant')"
-                  :class="aiChatRole === 'quant' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
+                  :class="aiChatRole === 'quant' ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-[#0E131F] text-slate-400 border-[#222E46]'"
                   class="px-2 py-1 rounded-md border text-[10px] font-bold transition-all">
             🧠 Quant (3.5 Flash)
           </button>

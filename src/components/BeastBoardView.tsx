@@ -81,13 +81,13 @@ export const BeastBoardView: React.FC = () => {
     <div className="space-y-6">
       
       {/* Header Info */}
-      <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-[#17130A] to-[#0E131F] p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="rounded-2xl border border-[#00E5FF]/30 bg-gradient-to-r from-[#17130A] to-[#0E131F] p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-400 text-black">
+            <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#00E5FF] text-[#041118]">
               Beast Engine
             </span>
-            <span className="text-xs text-amber-300 font-semibold">
+            <span className="text-xs text-[#00E5FF] font-semibold">
               Algorithmic +EV & Value Opportunities
             </span>
           </div>
@@ -139,12 +139,12 @@ export const BeastBoardView: React.FC = () => {
                 setSelectedMatchId(pick.matchId);
                 setDrawerOpen(true);
               }}
-              className="gold-border-card rounded-2xl bg-[#0E131F] p-4 flex flex-col justify-between gap-4 cursor-pointer hover:bg-[#121929] transition-all"
+              className="glass-card rounded-2xl bg-[#0E131F] p-4 flex flex-col justify-between gap-4 cursor-pointer hover:bg-[#121929] transition-all"
             >
               {/* Header */}
               <div className="flex items-center justify-between gap-2 border-b border-[#222E46]/60 pb-3">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-display font-black text-xs text-amber-400">
+                  <span className="font-display font-black text-xs text-[#00E5FF]">
                     #{idx + 1}
                   </span>
                   <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 font-bold">
@@ -153,7 +153,7 @@ export const BeastBoardView: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold font-num bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold font-num bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/30">
                     SCORE {pick.beastScore}
                   </span>
                 </div>
@@ -177,7 +177,7 @@ export const BeastBoardView: React.FC = () => {
                 <div className="text-[10px] font-bold text-slate-400 uppercase">
                   {pick.market}
                 </div>
-                <div className="font-display font-black text-xs text-amber-300 truncate">
+                <div className="font-display font-black text-xs text-[#00E5FF] truncate">
                   {pick.selection}
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-num pt-1 border-t border-[#222E46]/50">
@@ -194,7 +194,7 @@ export const BeastBoardView: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-slate-400">Edge (+EV)</div>
-                  <div className={`font-bold font-num ${pick.expectedValuePct > 0 ? 'text-amber-400' : 'text-slate-400'}`}>
+                  <div className={`font-bold font-num ${pick.expectedValuePct > 0 ? 'text-[#00E5FF]' : 'text-slate-400'}`}>
                     {pick.expectedValuePct > 0 ? `+${pick.expectedValuePct}%` : `${pick.expectedValuePct}%`}
                   </div>
                 </div>
@@ -205,8 +205,8 @@ export const BeastBoardView: React.FC = () => {
               </div>
 
               {/* Mind Changer Alert */}
-              <div className="text-[10px] text-slate-400 bg-amber-500/5 border border-amber-500/15 p-2 rounded-xl leading-relaxed">
-                <span className="text-amber-300 font-bold block mb-0.5">⚡ Recalibration Trigger:</span>
+              <div className="text-[10px] text-slate-400 bg-[#00E5FF]/5 border border-[#00E5FF]/15 p-2 rounded-xl leading-relaxed">
+                <span className="text-[#00E5FF] font-bold block mb-0.5">⚡ Recalibration Trigger:</span>
                 {pick.mindChanger}
               </div>
 
@@ -230,7 +230,7 @@ export const BeastBoardView: React.FC = () => {
                 className={`w-full py-2 rounded-xl text-xs font-display font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   isAccaAdded
                     ? 'border border-emerald-500/40 bg-emerald-500/20 text-emerald-300'
-                    : 'border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20'
+                    : 'border border-[#00E5FF]/40 bg-[#00E5FF]/10 text-[#00E5FF] hover:bg-[#00E5FF]/20'
                 }`}
               >
                 {isAccaAdded ? (
