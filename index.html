@@ -3823,7 +3823,7 @@ body {
 
 /* Slow-drifting neural-dot "data noise" */
 .neural-dot {
-  position: fixed; border-radius: 9999px; background: var(--accent);
+  position: fixed; width: 7px; height: 7px; border-radius: 9999px; background: var(--accent);
   box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0,229,255,.5); opacity: .3; z-index: 1;
 }
 
@@ -3846,7 +3846,17 @@ body {
   background:radial-gradient(circle, rgba(139,62,250,.14) 0%, transparent 75%); }
 .glow-magenta { width:520px; height:520px; left:25%; bottom:-200px;
   background:radial-gradient(circle, rgba(255,46,157,.13) 0%, transparent 80%); }
+.glow-cyan { width:560px; height:560px; right:10%; top:20%;
+  background:radial-gradient(circle, rgba(0,229,255,.14) 0%, transparent 75%); animation-delay:-6s; }
+.glow-mint { width:520px; height:520px; left:25%; bottom:12%;
+  background:radial-gradient(circle, rgba(10,185,129,.13) 0%, transparent 80%); animation-delay:-3s; }
 @keyframes glowBreathe { from { transform:scale(.94); opacity:.7; } to { transform:scale(1.08); opacity:1; } }
+
+/* Gold-gradient text → neon mission-control gradient */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FDE047 25%, #00E5FF 75%, #7B2EFA 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
 
 /* ─── Typography ─── */
 .font-display { font-family: var(--font-display); }
@@ -3978,6 +3988,21 @@ body {
 
   <!-- ambient layers -->
   <div class="bg-grid fixed inset-0 pointer-events-none"></div>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+  <div class="orb orb-c" aria-hidden="true"></div>
+  <div class="orb orb-d" aria-hidden="true"></div>
+  <div class="orb orb-e" aria-hidden="true"></div>
+  <span class="neural-dot" style="left:8%;top:15%"></span>
+  <span class="neural-dot" style="left:62%;top:6%"></span>
+  <span class="neural-dot" style="left:15%;top:65%"></span>
+  <span class="neural-dot" style="left:88%;top:58%"></span>
+  <span class="neural-dot" style="left:72%;top:88%"></span>
+  <span class="neural-dot" style="left:34%;top:72%"></span>
+  <span class="neural-dot" style="left:44%;top:8%"></span>
+  <span class="neural-dot" style="left:90%;top:30%"></span>
+  <span class="neural-dot" style="left:6%;top:66%"></span>
+  <span class="neural-dot" style="left:53%;top:52%"></span>
   <div class="glow glow-gold"></div>
   <div class="glow glow-cyan"></div>
   <div class="glow glow-mint"></div>
