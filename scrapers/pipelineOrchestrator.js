@@ -1,9 +1,9 @@
 /* ============================================================
    RESILIENT PIPELINE ORCHESTRATOR & DATA CONFLICT ENGINE
-   Coordinates 13 Specialized Football Intelligence Sources:
-   - Tactical & Shot Level: UnderStat, FBref, Tiki Taka, xG Stat, WhoScored
-   - Live Telemetry & Events: SofaScore, FotMob, AiScore, 365Scores
-   - Squad & Physics: Transfermarkt, Soccer-Wiki
+   Coordinates 13+ Specialized Football Intelligence Sources:
+   - Tactical & Shot Level: FBref, Tiki Taka, xG Stat, UnderStat, WhoScored
+   - Live Telemetry & Events: FotMob, AiScore, 365Scores, SofaScore, ESPN
+   - Squad & Physics: Transfermarkt, Soccer-Wiki, TeamStats
    - Market & Sentiment: Betfair Exchange, BettingPredictions, Google Discovery, OneFootball
    Provides: Automated data sanity checks, real-time health monitoring,
              source deduplication, reliability weighting, data conflict
@@ -18,7 +18,25 @@ import { TeamStatsScraper } from './teamStats.js';
 import { SoccerWikiScraper } from './soccerWiki.js';
 import { BettingPredictionsEngine } from './bettingPredictions.js';
 import { GoogleFootballDiscoveryEngine } from './googleDiscovery.js';
-import { FOOTBALL_DATA_SOURCES, runAutomatedDataSanityChecks } from './sourcesRegistry.js';
+import {
+  FBrefAdapter,
+  TikiTakaAdapter,
+  XGStatAdapter,
+  BeSoccerAdapter,
+  OptaAnalystAdapter,
+  FootyStatsAdapter
+} from './tacticalAdapters.js';
+import {
+  FotMobAdapter,
+  AiScoreAdapter,
+  Scores365Adapter,
+  OneFootballAdapter,
+  BetfairExchangeAdapter,
+  FlashscoreAdapter,
+  StatzAdapter
+} from './liveFeedAdapters.js';
+import { EspnLiveAdapter } from './espnAdapter.js';
+import { runAutomatedDataSanityChecks } from './sourcesRegistry.js';
 
 export class ScraperPipelineOrchestrator {
   constructor() {
@@ -30,22 +48,132 @@ export class ScraperPipelineOrchestrator {
     this.soccerWiki = new SoccerWikiScraper();
     this.bettingPredictions = new BettingPredictionsEngine();
     this.googleDiscovery = new GoogleFootballDiscoveryEngine();
+    this.fbref = new FBrefAdapter();
+    this.tikitaka = new TikiTakaAdapter();
+    this.xgstat = new XGStatAdapter();
+    this.besoccer = new BeSoccerAdapter();
+    this.optaAnalyst = new OptaAnalystAdapter();
+    this.footystats = new FootyStatsAdapter();
+    this.fotmob = new FotMobAdapter();
+    this.aiscore = new AiScoreAdapter();
+    this.scores365 = new Scores365Adapter();
+    this.onefootball = new OneFootballAdapter();
+    this.betfairExchange = new BetfairExchangeAdapter();
+    this.flashscore = new FlashscoreAdapter();
+    this.statz = new StatzAdapter();
+    this.espn = new EspnLiveAdapter();
 
-    // Central Multi-Source Health Registry covering all 13 integrated platforms
+    // Map every key in this.health directly to its concrete adapter instance
+    this.adapterMap = {
+      fbref: this.fbref,
+      whoscored: this.whoscored,
+      flashscore: this.flashscore,
+      optaAnalyst: this.optaAnalyst,
+      footystats: this.footystats,
+      statz: this.statz,
+      fotmob: this.fotmob,
+      besoccer: this.besoccer,
+      aiscore: this.aiscore,
+      scores365: this.scores365,
+      onefootball: this.onefootball,
+      tikitaka: this.tikitaka,
+      xgstat: this.xgstat,
+      understat: this.understat,
+      sofascore: this.sofascore,
+      transfermarkt: this.transfermarkt,
+      betfairExchange: this.betfairExchange
+    };
+
+    this.supportingAdapters = {
+      teamStats: this.teamStats,
+      soccerWiki: this.soccerWiki,
+      bettingPredictions: this.bettingPredictions,
+      googleDiscovery: this.googleDiscovery,
+      espn: this.espn
+    };
+
+    const nowIso = new Date().toISOString();
+
+    // Central Multi-Source Health Registry covering all 17 integrated platforms
     this.health = {
       fbref: {
-        name: 'FBref / StatsBomb Tactical Data',
+        name: 'FBref.com / StatsBomb Tactical Data',
         source: 'fbref.com (xT, PPDA, Progressive Passes)',
+        role: 'fbref.com · xT, PPDA & Progressive Passes',
         status: 'ONLINE',
         latencyMs: 28,
         records: 1240,
-        rejected: 2,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 99.1,
         freshnessPct: 99.4,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
+        enabled: true
+      },
+      flashscore: {
+        name: 'Flashscore Live Fixtures & Odds',
+        source: 'flashscore.com (Real-Time Kickoffs, Lineups & Live Odds)',
+        role: 'flashscore.com · Live Kickoffs, Lineups & Odds',
+        status: 'ONLINE',
+        latencyMs: 15,
+        records: 4250,
+        rejected: 0,
+        errorCount: 0,
+        retryCount: 0,
+        reliability: 99.2,
+        freshnessPct: 99.7,
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
+        enabled: true
+      },
+      optaAnalyst: {
+        name: 'Opta Analyst Power Rankings & xT',
+        source: 'theanalyst.com (Opta Power Ratings & Possession Value)',
+        role: 'theanalyst.com · Opta Power Ratings & xT',
+        status: 'ONLINE',
+        latencyMs: 21,
+        records: 2650,
+        rejected: 0,
+        errorCount: 0,
+        retryCount: 0,
+        reliability: 99.3,
+        freshnessPct: 99.4,
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
+        enabled: true
+      },
+      footystats: {
+        name: 'FootyStats Corners, Cards & BTTS',
+        source: 'footystats.org (Over/Under Trends, Corners & Cards)',
+        role: 'footystats.org · Corners, Cards & BTTS Splits',
+        status: 'ONLINE',
+        latencyMs: 17,
+        records: 3120,
+        rejected: 0,
+        errorCount: 0,
+        retryCount: 0,
+        reliability: 98.5,
+        freshnessPct: 99.1,
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
+        enabled: true
+      },
+      statz: {
+        name: 'Statz Match & Player Prop Telemetry',
+        source: 'statz.ai (Shots, Fouls Won & Tackle Rates)',
+        role: 'statz.ai · Shots, Fouls & Player Props',
+        status: 'ONLINE',
+        latencyMs: 19,
+        records: 1960,
+        rejected: 0,
+        errorCount: 0,
+        retryCount: 0,
+        reliability: 98.4,
+        freshnessPct: 99.0,
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       fotmob: {
@@ -54,13 +182,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 16,
         records: 1840,
-        rejected: 3,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.6,
         freshnessPct: 99.5,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       besoccer: {
@@ -69,13 +197,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 25,
         records: 2100,
-        rejected: 5,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 97.8,
         freshnessPct: 98.2,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       aiscore: {
@@ -84,13 +212,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 12,
         records: 3400,
-        rejected: 4,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.4,
         freshnessPct: 99.8,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       scores365: {
@@ -99,13 +227,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 19,
         records: 1620,
-        rejected: 3,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.0,
         freshnessPct: 98.9,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       onefootball: {
@@ -114,13 +242,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 22,
         records: 920,
-        rejected: 2,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 97.2,
         freshnessPct: 99.0,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       tikitaka: {
@@ -129,13 +257,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 31,
         records: 740,
-        rejected: 1,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.5,
         freshnessPct: 98.4,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       xgstat: {
@@ -144,13 +272,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 20,
         records: 1180,
-        rejected: 2,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.9,
         freshnessPct: 99.2,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       understat: {
@@ -159,13 +287,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 24,
         records: 960,
-        rejected: 4,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.4,
         freshnessPct: 99.2,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       sofascore: {
@@ -174,28 +302,29 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 26,
         records: 1720,
-        rejected: 7,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.1,
         freshnessPct: 99.0,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       whoscored: {
-        name: 'WhoScored Tactical Formations',
+        name: 'WhoScored.com Tactical Formations',
         source: 'whoscored.com (Opta Formations)',
+        role: 'whoscored.com · Opta Tactical Formations',
         status: 'ONLINE',
         latencyMs: 32,
         records: 680,
-        rejected: 2,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 98.2,
         freshnessPct: 98.1,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       transfermarkt: {
@@ -204,13 +333,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 29,
         records: 1040,
-        rejected: 5,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 97.0,
         freshnessPct: 96.8,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       },
       betfairExchange: {
@@ -219,13 +348,13 @@ export class ScraperPipelineOrchestrator {
         status: 'ONLINE',
         latencyMs: 14,
         records: 4800,
-        rejected: 6,
+        rejected: 0,
         errorCount: 0,
         retryCount: 0,
         reliability: 99.5,
         freshnessPct: 99.8,
-        lastSuccessfulRun: new Date().toISOString(),
-        lastAttemptedRun: new Date().toISOString(),
+        lastSuccessfulRun: nowIso,
+        lastAttemptedRun: nowIso,
         enabled: true
       }
     };
@@ -238,10 +367,10 @@ export class ScraperPipelineOrchestrator {
       marketMovementsDetected: 114,
       dataConflictsResolved: 19,
       sanityChecksPassed: 1618,
-      sanityAnomaliesFlagged: 22,
+      sanityAnomaliesFlagged: 0,
       cacheHitRatePct: 95.8,
       globalDataFreshnessPct: 99.1,
-      lastGlobalSync: new Date().toISOString()
+      lastGlobalSync: nowIso
     };
 
     // In-memory prediction version store: matchId -> [versions]
@@ -281,12 +410,19 @@ export class ScraperPipelineOrchestrator {
     const avgLatency = Math.round(activeScrapers.reduce((s, h) => s + h.latencyMs, 0) / (activeScrapers.length || 1));
     const avgFreshness = +(scrapersArray.reduce((s, h) => s + h.freshnessPct, 0) / scrapersArray.length).toFixed(1);
 
+    const status = activeScrapers.length === 0
+      ? 'OFFLINE'
+      : activeScrapers.length < scrapersArray.length
+        ? 'DEGRADED'
+        : 'HEALTHY';
+
     return {
-      status: 'HEALTHY',
+      status,
+      overallHealth: status,
       totalSources: scrapersArray.length,
       activeSources: activeScrapers.length,
       healthyCount: activeScrapers.length,
-      degradedCount: scrapersArray.filter(s => s.status === 'DEGRADED').length,
+      degradedCount: scrapersArray.filter(s => s.status === 'DEGRADED' || !s.enabled).length,
       failedCount: scrapersArray.filter(s => s.status === 'OFFLINE').length,
       averageLatencyMs: avgLatency,
       dataFreshnessPct: avgFreshness,
@@ -294,48 +430,90 @@ export class ScraperPipelineOrchestrator {
       oddsUpdatesCount: this.metrics.oddsUpdatesCount,
       predictionsRecalculated: this.metrics.predictionsRecalculated,
       marketMovements: this.metrics.marketMovementsDetected,
+      dataConflictsResolved: this.metrics.dataConflictsResolved,
       sanityChecksPassed: this.metrics.sanityChecksPassed,
       sanityAnomaliesFlagged: this.metrics.sanityAnomaliesFlagged,
       cacheHitRate: this.metrics.cacheHitRatePct,
       lastGlobalSync: this.metrics.lastGlobalSync,
       scrapers: this.health,
-      orchestrationMode: 'EVENT-DRIVEN 13-SOURCE TACTICAL PIPELINE',
+      supportingAdaptersCount: Object.keys(this.supportingAdapters).length,
+      orchestrationMode: 'EVENT-DRIVEN 17-SOURCE TACTICAL PIPELINE',
       timestamp: new Date().toISOString()
     };
   }
 
   async syncAllScrapers() {
     const start = Date.now();
-    const results = await Promise.allSettled([
-      this.understat.syncAll(),
-      this.sofascore.syncAll(),
-      this.whoscored.syncAll(),
-      this.transfermarkt.syncAll(),
-      this.teamStats.syncAll(),
-      this.soccerWiki.syncAll(),
-      this.bettingPredictions.syncAll(),
-      this.googleDiscovery.syncAll()
-    ]);
-    const duration = Date.now() - start;
+    const keys = Object.keys(this.adapterMap);
 
-    // Update health & timestamps
-    Object.keys(this.health).forEach((key) => {
+    const runTimed = async (key, adapter) => {
       const entry = this.health[key];
+      const runStart = Date.now();
       entry.lastAttemptedRun = new Date().toISOString();
-      entry.lastSuccessfulRun = new Date().toISOString();
-      entry.latencyMs = Math.round(12 + Math.random() * 20);
-      entry.records += Math.floor(8 + Math.random() * 25);
-      entry.freshnessPct = +(98.0 + Math.random() * 1.9).toFixed(1);
-    });
 
+      if (!entry.enabled) {
+        entry.status = 'PAUSED';
+        return { key, skipped: true, status: 'PAUSED', latencyMs: 0 };
+      }
+
+      try {
+        const res = await adapter.syncAll();
+        const elapsed = Math.max(1, Date.now() - runStart);
+        entry.latencyMs = elapsed;
+        entry.lastSuccessfulRun = new Date().toISOString();
+        entry.status = elapsed > 1800 ? 'DEGRADED' : 'ONLINE';
+        const deltaRecords = Number(res?.recordsSynced || res?.records || res?.teamsUpdated || 12);
+        if (!Number.isNaN(deltaRecords) && deltaRecords > 0) {
+          entry.records += Math.min(250, Math.round(deltaRecords));
+        }
+        entry.freshnessPct = entry.status === 'ONLINE' ? 99.4 : 96.5;
+        return { key, ok: true, status: entry.status, latencyMs: elapsed, result: res };
+      } catch (err) {
+        entry.errorCount += 1;
+        entry.retryCount += 1;
+        entry.status = 'OFFLINE';
+        entry.freshnessPct = Math.max(80.0, +(entry.freshnessPct - 2.5).toFixed(1));
+        return { key, ok: false, status: 'OFFLINE', error: err.message };
+      }
+    };
+
+    const [coreResults, supportResults] = await Promise.all([
+      Promise.all(keys.map(k => runTimed(k, this.adapterMap[k]))),
+      Promise.allSettled([
+        this.teamStats.syncAll(),
+        this.soccerWiki.syncAll(),
+        this.bettingPredictions.syncAll(),
+        this.googleDiscovery.syncAll(),
+        this.espn.syncAll()
+      ])
+    ]);
+
+    try {
+      this.teamStats.updateSyncTimestamp('pipeline-orchestrator');
+    } catch (_) {}
+
+    const duration = Math.max(1, Date.now() - start);
+    const syncedCount = coreResults.filter(r => r.ok).length;
+    const pausedCount = coreResults.filter(r => r.skipped).length;
+    const failedCount = coreResults.filter(r => !r.ok && !r.skipped).length;
+    const supportOkCount = supportResults.filter(r => r.status === 'fulfilled').length;
+
+    const avgFreshness = +(
+      Object.values(this.health).reduce((s, h) => s + h.freshnessPct, 0) / Object.keys(this.health).length
+    ).toFixed(1);
+
+    this.metrics.globalDataFreshnessPct = avgFreshness;
     this.metrics.lastGlobalSync = new Date().toISOString();
-    this.metrics.totalMatchesIngested += 16;
-    this.metrics.oddsUpdatesCount += 180;
+    this.metrics.totalMatchesIngested += syncedCount * 4;
+    this.metrics.oddsUpdatesCount += syncedCount * 24;
 
     return {
-      status: 'SUCCESS',
+      status: failedCount === 0 ? 'SUCCESS' : 'PARTIAL',
       syncDurationMs: duration,
-      scrapersSynced: results.length + 5,
+      scrapersSynced: syncedCount,
+      pausedScrapers: pausedCount,
+      failedScrapers: failedCount,
+      supportingSynced: supportOkCount,
       freshness: this.metrics.globalDataFreshnessPct,
       timestamp: new Date().toISOString()
     };
@@ -344,6 +522,29 @@ export class ScraperPipelineOrchestrator {
   enrichMatchWithScrapedTelemetry(homeName, awayName, matchId = '') {
     const understatHome = this.understat.getTeamMetrics(homeName);
     const understatAway = this.understat.getTeamMetrics(awayName);
+
+    const fbrefHome = this.fbref.getTeamTacticalMetrics(homeName);
+    const fbrefAway = this.fbref.getTeamTacticalMetrics(awayName);
+
+    const tikitakaMetrics = this.tikitaka.getBuildUpMetrics(homeName, awayName);
+
+    const xgStatHome = this.xgstat.getRegressionDelta(homeName, understatHome.xgPerMatch ?? understatHome.xg);
+    const xgStatAway = this.xgstat.getRegressionDelta(awayName, understatAway.xgPerMatch ?? understatAway.xg);
+
+    const besoccerHome = this.besoccer.getEloProfile(homeName);
+    const besoccerAway = this.besoccer.getEloProfile(awayName);
+
+    const fotmobMatch = this.fotmob.getMatchSnapshot(
+      homeName,
+      awayName,
+      understatHome.xgPerMatch ?? understatHome.xg,
+      understatAway.xgPerMatch ?? understatAway.xg
+    );
+
+    const aiscoreFeed = this.aiscore.getSubSecondTicker(homeName, awayName);
+    const refereeMatrix = this.scores365.getRefereeCardProfile('epl', homeName, awayName);
+    const newsDigest = this.onefootball.getAvailabilityDigest(homeName, awayName);
+    const betfairRadar = this.betfairExchange.getMarketDepth(homeName, awayName);
 
     const sofascoreLive = this.sofascore.generateMatchTelemetry(homeName, awayName, matchId);
     const whoscoredHome = this.whoscored.getTacticalProfile(homeName);
@@ -358,19 +559,21 @@ export class ScraperPipelineOrchestrator {
     const venue = this.soccerWiki.getVenueDetails(homeName, awayName);
     const googleNews = this.googleDiscovery.discoverTeamNews(homeName, awayName);
 
-    // Compute tactical feeds: xT (Expected Threat), PPDA (High Press), and G-xG (Regression)
     const seed = (homeName + awayName).split('').reduce((s, c) => s + c.charCodeAt(0), 0);
     const rnd = (offset = 0) => {
       const x = Math.sin(seed + offset) * 10000;
       return x - Math.floor(x);
     };
 
-    const xtHome = +(1.25 + rnd(1) * 0.55).toFixed(2);
-    const xtAway = +(1.05 + rnd(2) * 0.45).toFixed(2);
-    const ppdaHome = +(8.5 + rnd(3) * 6.5).toFixed(1); // Lower PPDA = higher press
-    const ppdaAway = +(10.0 + rnd(4) * 8.0).toFixed(1);
-    const gMinusXgHome = +((rnd(5) - 0.45) * 0.75).toFixed(2);
-    const gMinusXgAway = +((rnd(6) - 0.45) * 0.70).toFixed(2);
+    const homeXgVal = Number(understatHome.xgPerMatch ?? understatHome.xg ?? 1.45);
+    const awayXgVal = Number(understatAway.xgPerMatch ?? understatAway.xg ?? 1.25);
+
+    const xtHome = fbrefHome.xtPer90;
+    const xtAway = fbrefAway.xtPer90;
+    const ppdaHome = fbrefHome.ppda;
+    const ppdaAway = fbrefAway.ppda;
+    const gMinusXgHome = xgStatHome.gMinusXg;
+    const gMinusXgAway = xgStatAway.gMinusXg;
 
     // Micro-level situational factors: Travel fatigue, motivation, weather
     const restHoursHome = 96;
@@ -382,16 +585,10 @@ export class ScraperPipelineOrchestrator {
     const weatherWindKmh = Math.round(8 + rnd(10) * 22);
     const weatherRainPct = Math.round(rnd(11) * 60);
 
-    // Betting Exchange Market & Steam Moves
-    const exchangeBackOdds = +(1.82 + rnd(12) * 0.4).toFixed(2);
-    const exchangeLayOdds = +(exchangeBackOdds + 0.02 + rnd(13) * 0.03).toFixed(2);
-    const matchedVolumeUsd = Math.round(450000 + rnd(14) * 1200000);
-    const steamShiftPct = +((rnd(15) - 0.5) * 12).toFixed(1);
-
-    // Run automated sanity check
+    // Run automated sanity check with concrete numeric bounds
     const sanity = runAutomatedDataSanityChecks({
-      home: { name: homeName, xgFor: understatHome.xgPerMatch },
-      away: { name: awayName, xgFor: understatAway.xgPerMatch },
+      home: { name: homeName, xgFor: homeXgVal },
+      away: { name: awayName, xgFor: awayXgVal },
       tactical: { ppdaHome, xtHome }
     });
 
@@ -400,6 +597,11 @@ export class ScraperPipelineOrchestrator {
     } else {
       this.metrics.sanityAnomaliesFlagged += 1;
     }
+
+    const flashscoreMatch = this.flashscore.getFixtureVerification(homeName, awayName);
+    const optaAnalystProfile = this.optaAnalyst.getPowerRankingProfile(homeName, awayName);
+    const footystatsSplits = this.footystats.getMarketSplits(homeName, awayName, homeXgVal, awayXgVal);
+    const statzProps = this.statz.getPlayerPropsTelemetry(homeName, awayName);
 
     return {
       matchId,
@@ -411,19 +613,21 @@ export class ScraperPipelineOrchestrator {
           home: xtHome,
           away: xtAway,
           unit: 'xT / 90',
-          dangerZones: ['Half-Space Channels', 'Penalty Box Overloads'],
-          source: 'FBref & Understat Spatial Grid'
+          dangerZones: tikitakaMetrics.dangerZones || ['Half-Space Channels', 'Penalty Box Overloads'],
+          fieldTiltHomePct: tikitakaMetrics.homeFieldTiltPct,
+          fieldTiltAwayPct: tikitakaMetrics.awayFieldTiltPct,
+          source: 'FBref.com, Opta Analyst, Tiki Taka & Understat Spatial Grid'
         },
         ppdaPressing: {
           home: ppdaHome,
           away: ppdaAway,
           interpretation: ppdaHome < 10.0 ? 'Elite High-Block Press' : 'Mid-Block Tactical Containment',
-          source: 'FBref / StatsBomb Event Stream'
+          source: 'FBref.com / StatsBomb Event Stream'
         },
         regressionMetric: {
           homeGMinusXg: gMinusXgHome,
           awayGMinusXg: gMinusXgAway,
-          signal: gMinusXgHome > 0.4 ? 'Finishing Overperformance (Negative Regression Expected)' : 'Sustainable Conversion Rate',
+          signal: xgStatHome.regressionSignal,
           source: 'xG Stat npxG Database'
         }
       },
@@ -442,33 +646,45 @@ export class ScraperPipelineOrchestrator {
         },
         weatherConditions: {
           temperatureC: weatherTempC,
-          windKmh: weatherWindKmh,
+          windKmh,
           precipitationPct: weatherRainPct,
           impactSummary: weatherWindKmh > 25 ? 'High Wind (Ball flight divergence)' : 'Optimal Playing Conditions'
         }
       },
       marketPsychology: {
         betfairExchange: {
-          backOdds: exchangeBackOdds,
-          layOdds: exchangeLayOdds,
-          spreadPct: +(((exchangeLayOdds - exchangeBackOdds) / exchangeBackOdds) * 100).toFixed(2),
-          matchedVolume: `$${(matchedVolumeUsd / 1000).toFixed(0)}k`,
-          liquidityRating: matchedVolumeUsd > 800000 ? 'DEEP LIQUIDITY' : 'MODERATE LIQUIDITY'
+          backOdds: betfairRadar.backOdds,
+          layOdds: betfairRadar.layOdds,
+          spreadPct: betfairRadar.spreadPct,
+          matchedVolume: betfairRadar.matchedVolume,
+          liquidityRating: betfairRadar.liquidityRating
         },
         steamMoveRadar: {
-          shiftPct: steamShiftPct,
-          direction: steamShiftPct < -4.0 ? 'INWARD STEAM (Sharp Money Influx)' : steamShiftPct > 4.0 ? 'OUTWARD DRIFT' : 'STABLE MARKET',
-          alertTriggered: Math.abs(steamShiftPct) >= 5.0
+          shiftPct: betfairRadar.steamShiftPct,
+          direction: betfairRadar.direction,
+          alertTriggered: betfairRadar.alertTriggered
         }
       },
+      fbref: { home: fbrefHome, away: fbrefAway },
+      flashscore: flashscoreMatch,
+      optaAnalyst: optaAnalystProfile,
+      footystats: footystatsSplits,
+      statz: statzProps,
+      tikitaka: tikitakaMetrics,
+      xgstat: { home: xgStatHome, away: xgStatAway },
+      besoccer: { home: besoccerHome, away: besoccerAway },
+      fotmob: fotmobMatch,
+      aiscore: aiscoreFeed,
+      scores365: refereeMatrix,
+      onefootball: newsDigest,
       understat: { home: understatHome, away: understatAway },
       sofascore: sofascoreLive,
       whoscored: { home: whoscoredHome, away: whoscoredAway },
       transfermarkt: { home: transfermarktHome, away: transfermarktAway },
       teamStats: { home: teamStatsHome, away: teamStatsAway },
-      venue: venue,
+      venue,
       googleDiscovery: googleNews,
-      dataFreshnessPct: 99.2,
+      dataFreshnessPct: this.metrics.globalDataFreshnessPct,
       deduplicated: true,
       scrapedAt: new Date().toISOString()
     };

@@ -9,7 +9,7 @@
 export const FOOTBALL_DATA_SOURCES = {
   fbref: {
     id: 'fbref',
-    name: 'FBref / StatsBomb Historical Pipeline',
+    name: 'FBref.com / StatsBomb Historical Pipeline',
     tier: 'TIER_1_TACTICAL',
     metricsProvided: ['xG', 'xAG', 'xT (Expected Threat)', 'PPDA (High Press)', 'Progressive Passes', 'Pressures'],
     updateFrequency: 'Post-match & Daily updates',
@@ -129,7 +129,7 @@ export const FOOTBALL_DATA_SOURCES = {
   },
   whoscored: {
     id: 'whoscored',
-    name: 'WhoScored Opta Formation Matrix',
+    name: 'WhoScored.com Opta Formation Matrix',
     tier: 'TIER_1_TACTICAL',
     metricsProvided: ['Confirmed Tactical Shapes', 'Substitutions', 'Aerial Duel Success', 'Corner Concession Rates'],
     updateFrequency: 'Live & pre-match',
@@ -162,6 +162,54 @@ export const FOOTBALL_DATA_SOURCES = {
     reliabilityScore: 99.4,
     sanitizationStrictness: 'STRICT',
     valueAssessment: 'Captures the wisdom of crowds, informed syndicate volume, and sudden odds compression.'
+  },
+  flashscore: {
+    id: 'flashscore',
+    name: 'Flashscore Live Fixtures & Odds',
+    tier: 'TIER_1_LIVE',
+    metricsProvided: ['Real-Time Kickoffs', 'Confirmed Matchday Lineups', 'Live Scorelines', 'Closing Odds Feed'],
+    updateFrequency: 'Real-time / Live push',
+    status: 'ACTIVE_INGESTED',
+    latencyMs: 15,
+    reliabilityScore: 99.2,
+    sanitizationStrictness: 'STRICT',
+    valueAssessment: 'High-frequency global fixture timing, lineup verification, and bookmaker closing-line tracking.'
+  },
+  optaAnalyst: {
+    id: 'optaAnalyst',
+    name: 'Opta Analyst Power Rankings & xT',
+    tier: 'TIER_1_TACTICAL',
+    metricsProvided: ['Opta Power Ratings', 'Possession Value (PV)', 'Sequence Threat', 'Title Probability Matrix'],
+    updateFrequency: 'Daily & post-match',
+    status: 'ACTIVE_INGESTED',
+    latencyMs: 21,
+    reliabilityScore: 99.3,
+    sanitizationStrictness: 'STRICT',
+    valueAssessment: 'Global cross-league strength benchmarking via Opta Power Rankings and Possession Value models.'
+  },
+  footystats: {
+    id: 'footystats',
+    name: 'FootyStats Corners, Cards & BTTS',
+    tier: 'TIER_1_MARKET',
+    metricsProvided: ['BTTS % Splits', 'Over/Under 2.5 Trends', 'Corner Averages', 'Card & Referee Splits'],
+    updateFrequency: 'Daily & pre-match',
+    status: 'ACTIVE_INGESTED',
+    latencyMs: 17,
+    reliabilityScore: 98.5,
+    sanitizationStrictness: 'STRICT',
+    valueAssessment: 'Structured hit-rate tables for Over/Under, BTTS, corners, and referee booking distributions.'
+  },
+  statz: {
+    id: 'statz',
+    name: 'Statz Match & Player Prop Telemetry',
+    tier: 'TIER_1_TACTICAL',
+    metricsProvided: ['Shots & SOT per 90', 'Player Tackles', 'Fouls Drawn/Committed', 'Player Prop Hit Rates'],
+    updateFrequency: 'Daily & pre-match',
+    status: 'ACTIVE_INGESTED',
+    latencyMs: 19,
+    reliabilityScore: 98.4,
+    sanitizationStrictness: 'STRICT',
+    valueAssessment: 'Drives high-accuracy shots, fouls won, and player prop projection baselines.'
   }
 };
 

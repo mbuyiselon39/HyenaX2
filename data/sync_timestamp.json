@@ -1,1 +1,5 @@
-{"last_sync":"2026-11-21T15:11:38Z","schedule":"every-3.5h","status":"OK"}
+{
+  "last_sync": "2026-11-21T12:23:56.931Z",
+  "schedule": "every-3.5h",
+  "status": "pipeline-orchestrator"
+}

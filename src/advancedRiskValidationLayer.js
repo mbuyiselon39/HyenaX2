@@ -54,7 +54,7 @@ export function auditFixturePrediction(fixture) {
     originalMarket: topPick.market || 'Match Winner (1X2)',
     originalSelection: topPick.selection || '1',
     originalProbability: Number(topPick.probability) || 75.0,
-    originalOdds: typeof topPick.odds === 'object'
+    originalOdds: (topPick.odds && typeof topPick.odds === 'object')
       ? Number(topPick.odds.betway || topPick.odds.hollywoodbets || topPick.odds.easybet || 1.35)
       : Number(topPick.odds || 1.35),
     supportingStatistics: fixture.rationale || `17-Model ensemble consensus with Bivariate Poisson goal expectation.`
@@ -63,6 +63,7 @@ export function auditFixturePrediction(fixture) {
   // --------------------------------------------------------------------------
   // LAYER 2 — DATA QUALITY CHECK
   // --------------------------------------------------------------------------
+  const predictionsList = Array.isArray(fixture.predictions) ? fixture.predictions : [];
   const dataChecklist = {
     recentForm: Boolean(home.form && away.form && home.form.length >= 3 && away.form.length >= 3),
     homeAwayForm: Boolean(home.rating !== undefined && away.rating !== undefined),
@@ -74,8 +75,8 @@ export function auditFixturePrediction(fixture) {
     injuries: Boolean(fixture.beastMeta?.outlierFilters?.rosterIntegrity || fixture.strictVetting),
     suspensions: Boolean(fixture.beastMeta?.outlierFilters),
     lineups: Boolean(fixture.cornerVolatilityProfile?.lineupValidationStatus || fixture.tacticalProfiles?.cornerVolatilityProfile),
-    corners: Boolean(fixture.cornerVolatilityProfile || (fixture.predictions && fixture.predictions.some(p => p.marketCategory === 'CORNERS'))),
-    cards: Boolean(fixture.refereeReport || (fixture.predictions && fixture.predictions.some(p => p.marketCategory === 'BOOKINGS'))),
+    corners: Boolean(fixture.cornerVolatilityProfile || predictionsList.some(p => p.marketCategory === 'CORNERS')),
+    cards: Boolean(fixture.refereeReport || predictionsList.some(p => p.marketCategory === 'BOOKINGS')),
     refereeInfo: Boolean(fixture.refereeReport && fixture.refereeReport.isConfirmed),
     fixtureCongestion: Boolean(fixture.situationalFactors?.travelFatigue || fixture.beastMeta?.ensemble?.breakdown?.some(b => b.name?.includes('Layer 18'))),
     competitionContext: Boolean(league.name && league.id)
@@ -325,6 +326,7 @@ export function auditFixturePrediction(fixture) {
   let dcChoice = 'NO BET';
   let eitherHalfChoice = 'NO BET';
   const highestScoringHalfChoice = (homeNetXg > 1.6 && awayNetXg > 1.4) ? '1st Half' : '2nd Half';
+  const highestScoringHalfSafeChoice = highestScoringHalfChoice === '1st Half' ? '1st Half or Equal' : '2nd Half or Equal';
 
   if (homeNetXg - awayNetXg > 0.45 && homeFormStats.w >= 2) {
     dnbChoice = 'Home DNB';

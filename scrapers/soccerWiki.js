@@ -6,6 +6,8 @@
             altitude fatigue index for away sides
    ============================================================ */
 
+import { lookupByTeamName } from './teamNormalizer.js';
+
 export const STADIUM_DATABASE = {
   // South Africa (High Altitude / Coastal splits)
   'Mamelodi Sundowns': { stadium: 'Loftus Versfeld Stadium', city: 'Pretoria', altitudeM: 1350, capacity: 51762, surface: 'Natural Grass', fortressFactor: 1.18 },
@@ -27,11 +29,20 @@ export const STADIUM_DATABASE = {
   'Newcastle': { stadium: "St James' Park", city: 'Newcastle', altitudeM: 65, capacity: 52305, surface: 'Hybrid Grass', fortressFactor: 1.20 },
   'Aston Villa': { stadium: 'Villa Park', city: 'Birmingham', altitudeM: 110, capacity: 42640, surface: 'Hybrid Grass', fortressFactor: 1.18 },
 
-  // LaLiga
+  // LaLiga & Europe
   'Real Madrid': { stadium: 'Santiago Bernabéu', city: 'Madrid', altitudeM: 667, capacity: 84744, surface: 'Retractable Hybrid', fortressFactor: 1.24 },
-  'Barcelona': { stadium: 'Estadi Olímpic / Camp Nou', city: 'Barcelona', altitudeM: 48, capacity: 55926, surface: 'Hybrid Grass', fortressFactor: 1.20 },
+  'Barcelona': { stadium: 'Spotify Camp Nou', city: 'Barcelona', altitudeM: 48, capacity: 99354, surface: 'Hybrid Grass', fortressFactor: 1.20 },
   'Atlético Madrid': { stadium: 'Riyadh Air Metropolitano', city: 'Madrid', altitudeM: 640, capacity: 70460, surface: 'Hybrid Grass', fortressFactor: 1.22 },
-  'Athletic Club': { stadium: 'San Mamés', city: 'Bilbao', altitudeM: 19, capacity: 53289, surface: 'Hybrid Grass', fortressFactor: 1.23 }
+  'Athletic Club': { stadium: 'San Mamés', city: 'Bilbao', altitudeM: 19, capacity: 53289, surface: 'Hybrid Grass', fortressFactor: 1.23 },
+  'Bayern Munich': { stadium: 'Allianz Arena', city: 'Munich', altitudeM: 519, capacity: 75024, surface: 'Hybrid Grass', fortressFactor: 1.25 },
+  'Borussia Dortmund': { stadium: 'Signal Iduna Park', city: 'Dortmund', altitudeM: 86, capacity: 81365, surface: 'Hybrid Grass', fortressFactor: 1.24 },
+  'Bayer Leverkusen': { stadium: 'BayArena', city: 'Leverkusen', altitudeM: 60, capacity: 30210, surface: 'Hybrid Grass', fortressFactor: 1.19 },
+  'Inter': { stadium: 'San Siro', city: 'Milan', altitudeM: 122, capacity: 75817, surface: 'Hybrid Grass', fortressFactor: 1.21 },
+  'AC Milan': { stadium: 'San Siro', city: 'Milan', altitudeM: 122, capacity: 75817, surface: 'Hybrid Grass', fortressFactor: 1.19 },
+  'Juventus': { stadium: 'Allianz Stadium', city: 'Turin', altitudeM: 239, capacity: 41507, surface: 'Hybrid Grass', fortressFactor: 1.21 },
+  'Paris Saint-Germain': { stadium: 'Parc des Princes', city: 'Paris', altitudeM: 35, capacity: 47929, surface: 'Hybrid Grass', fortressFactor: 1.22 },
+  'Club América': { stadium: 'Estadio Azteca', city: 'Mexico City', altitudeM: 2200, capacity: 87523, surface: 'Hybrid Grass', fortressFactor: 1.26 },
+  'Bolívar': { stadium: 'Estadio Hernando Siles', city: 'La Paz', altitudeM: 3637, capacity: 41143, surface: 'Natural Grass', fortressFactor: 1.42 }
 };
 
 export class SoccerWikiScraper {
@@ -43,13 +54,15 @@ export class SoccerWikiScraper {
   }
 
   getVenueDetails(homeTeam, awayTeam = '') {
-    if (STADIUM_DATABASE[homeTeam]) {
-      const data = STADIUM_DATABASE[homeTeam];
+    const found = lookupByTeamName(STADIUM_DATABASE, homeTeam);
+    if (found) {
+      const data = found.data;
       // Altitude fatigue penalty for away team if altitude > 800m
       const altitudeStaminaPenalty = data.altitudeM > 1000 ? +((data.altitudeM / 1000) * 0.035).toFixed(3) : 0;
       return {
         source: 'Soccer-Wiki',
         homeTeam,
+        canonicalTeam: found.key,
         ...data,
         altitudeStaminaPenalty,
         pitchDimensions: '105m x 68m (Standard UEFA/FIFA)',
@@ -61,6 +74,7 @@ export class SoccerWikiScraper {
     return {
       source: 'Soccer-Wiki Derived',
       homeTeam,
+      canonicalTeam: homeTeam,
       stadium: `${homeTeam} Arena`,
       city: 'Metropolitan',
       altitudeM: 80,

@@ -24,6 +24,27 @@ import {
   WOMENS_AND_CUPS_TEAMS,
   WOMENS_AND_CUPS_CALENDAR_FIXTURES
 } from '../src/womensLeaguesConfig.js';
+import { TeamStatsScraper } from '../scrapers/teamStats.js';
+import { UnderStatScraper } from '../scrapers/understat.js';
+import { TransfermarktScraper } from '../scrapers/transfermarkt.js';
+import { SoccerWikiScraper } from '../scrapers/soccerWiki.js';
+import { WhoScoredScraper } from '../scrapers/whoscored.js';
+import { FBrefAdapter, TikiTakaAdapter, XGStatAdapter } from '../scrapers/tacticalAdapters.js';
+import { Scores365Adapter, BetfairExchangeAdapter } from '../scrapers/liveFeedAdapters.js';
+import { GoogleFootballDiscoveryEngine } from '../scrapers/googleDiscovery.js';
+import { runAutomatedDataSanityChecks } from '../scrapers/sourcesRegistry.js';
+
+const teamStatsAdapter = new TeamStatsScraper();
+const understatAdapter = new UnderStatScraper();
+const transfermarktAdapter = new TransfermarktScraper();
+const soccerWikiAdapter = new SoccerWikiScraper();
+const whoScoredAdapter = new WhoScoredScraper();
+const fbrefAdapter = new FBrefAdapter();
+const tikiTakaAdapter = new TikiTakaAdapter();
+const xgStatAdapter = new XGStatAdapter();
+const scores365Adapter = new Scores365Adapter();
+const betfairExchangeAdapter = new BetfairExchangeAdapter();
+const googleDiscoveryAdapter = new GoogleFootballDiscoveryEngine();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1370,12 +1391,14 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
   const norm = normalizeTeamName(teamName);
 
   function finalize(obj) {
+    const venueInfo = soccerWikiAdapter.getVenueDetails(idInfo.name || teamName);
     return {
       ...obj,
       domestic: obj.domestic || leagueId,
       name: idInfo.name || teamName,
       short: idInfo.short || teamName.slice(0, 3).toUpperCase(),
-      logo: idInfo.logo || rawLogo || null
+      logo: idInfo.logo || rawLogo || null,
+      altitudeM: obj.altitudeM ?? venueInfo.altitudeM ?? 80
     };
   }
 
@@ -1441,6 +1464,32 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
         });
       }
     }
+  }
+
+  // 2.5 Check Empirical Football-Data.org Cache (data/team_stats.json)
+  const empiricalRec = teamStatsAdapter.findTeamRecord(teamName);
+  if (empiricalRec && empiricalRec.playedGames >= 2) {
+    const gp = empiricalRec.playedGames;
+    const ppg = empiricalRec.points / gp;
+    const gfPerGame = empiricalRec.goalsFor / gp;
+    const gaPerGame = empiricalRec.goalsAgainst / gp;
+    const gdPerGame = (empiricalRec.goalsFor - empiricalRec.goalsAgainst) / gp;
+    const eloSpread = lg.maxElo - lg.minElo;
+    const empRating = Math.min(
+      lg.maxElo,
+      Math.max(lg.minElo, Math.round(lg.minElo + ((ppg / 3) * 0.65 + Math.min(1, Math.max(0, (gdPerGame + 1.2) / 2.4)) * 0.35) * eloSpread))
+    );
+    const usMetrics = understatAdapter.getTeamMetrics(teamName);
+    const xgForEmp = usMetrics.status === 'SYNCED'
+      ? +(usMetrics.xgPerMatch * 0.45 + gfPerGame * 0.55).toFixed(2)
+      : Math.max(0.85, +(gfPerGame * 0.85 + (lg.avgGoals / 2) * 0.15).toFixed(2));
+    return finalize({
+      rating: empRating,
+      form: Array.isArray(empiricalRec.form) && empiricalRec.form.length > 0 ? empiricalRec.form.slice(-5) : ['W', 'D', 'W', 'L', 'W'],
+      xgFor: xgForEmp,
+      xgAgainst: Math.max(0.60, +(gaPerGame * 0.85 + (lg.avgGoals / 2) * 0.15).toFixed(2)),
+      statsSource: 'empirical-team-stats-json'
+    });
   }
 
   // 3. Check Static Catalog
@@ -2271,15 +2320,28 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   const hRating = Number(home.rating || 75);
   const aRating = Number(away.rating || 75);
 
-  // 1. High-Fidelity Tactical Feeds: xT, PPDA, G-xG
-  const xtHome = +(1.15 + (home.xgFor || 1.45) * 0.22 + rng() * 0.25).toFixed(2);
-  const xtAway = +(0.95 + (away.xgFor || 1.25) * 0.20 + rng() * 0.25).toFixed(2);
-  const ppdaHome = +(8.2 + (100 - hRating) * 0.18 + rng() * 2.2).toFixed(1); // Lower PPDA = more intense pressing
-  const ppdaAway = +(9.5 + (100 - aRating) * 0.18 + rng() * 2.5).toFixed(1);
-  const gMinusXgHome = +((rng() - 0.46) * 0.65).toFixed(2);
-  const gMinusXgAway = +((rng() - 0.46) * 0.60).toFixed(2);
+  // 1. High-Fidelity Tactical Feeds from Adapters: FBref, Tiki Taka, xG Stat, WhoScored
+  const fbHome = fbrefAdapter.getTeamTacticalMetrics(home.name, hRating, home.xgFor || 1.45);
+  const fbAway = fbrefAdapter.getTeamTacticalMetrics(away.name, aRating, away.xgFor || 1.25);
+  const ttMetrics = tikiTakaAdapter.getBuildUpMetrics(home.name, away.name, hRating, aRating);
+  const xgRegHome = xgStatAdapter.getRegressionDelta(home.name, home.xgFor || 1.45);
+  const xgRegAway = xgStatAdapter.getRegressionDelta(away.name, away.xgFor || 1.25);
+  const tmHome = transfermarktAdapter.getSquadDetails(home.name);
+  const tmAway = transfermarktAdapter.getSquadDetails(away.name);
+  const venueDetails = soccerWikiAdapter.getVenueDetails(home.name, away.name);
+  const wsHome = whoScoredAdapter.getTacticalProfile(home.name);
+  const wsAway = whoScoredAdapter.getTacticalProfile(away.name);
+  const ref365 = scores365Adapter.getRefereeCardProfile(leagueId, home.name, away.name);
+  const discoveryNews = googleDiscoveryAdapter.discoverTeamNews(home.name, away.name);
 
-  // 2. Situational Factors: Travel Fatigue, Motivation, Weather
+  const xtHome = fbHome.xtPer90;
+  const xtAway = fbAway.xtPer90;
+  const ppdaHome = fbHome.ppda;
+  const ppdaAway = fbAway.ppda;
+  const gMinusXgHome = xgRegHome.gMinusXg;
+  const gMinusXgAway = xgRegAway.gMinusXg;
+
+  // 2. Situational Factors: Travel Fatigue, Altitude, Motivation, Weather
   const restHoursHome = 96;
   const restHoursAway = Math.round(66 + rng() * 32);
   const travelDistKm = Math.round(180 + rng() * 920);
@@ -2290,14 +2352,13 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
 
   // 3. Market Psychology: Betfair Exchange & Steam Move Radar
   const bestDec = topPick ? topPick.odds.betway : 1.85;
-  const backOdds = +(bestDec * 0.99).toFixed(2);
-  const layOdds = +(backOdds + 0.02 + rng() * 0.03).toFixed(2);
-  const volumeUsd = Math.round(350000 + rng() * 1400000);
-  const steamDelta = +((rng() - 0.52) * 9.5).toFixed(1);
+  const bfDepth = betfairExchangeAdapter.getMarketDepth(home.name, away.name, bestDec);
+  const backOdds = bfDepth.backOdds;
+  const layOdds = bfDepth.layOdds;
+  const steamDelta = bfDepth.steamShiftPct;
 
   // 4. Beast Meta & Vig Filter
   const bestOdds = topPick ? Math.max(topPick.odds.hollywoodbets, topPick.odds.betway, topPick.odds.easybet) : 1.85;
-  const vigFreeOdds = +(bestOdds / 1.062).toFixed(2);
   const beastScore = +(Math.min(96, Math.max(72, (topPick ? topPick.probability : 75) * 0.94 + 12 + rng() * 3))).toFixed(1);
 
   const teleResult = {
@@ -2306,8 +2367,12 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         home: xtHome,
         away: xtAway,
         unit: 'xT / 90',
-        dangerZones: ['Central Zone 14', 'Half-Space Cutbacks'],
-        source: 'FBref & Tiki Taka Spatial Feed'
+        dangerZones: ttMetrics.dangerZones || ['Central Zone 14', 'Half-Space Cutbacks'],
+        fieldTiltHomePct: ttMetrics.homeFieldTiltPct,
+        fieldTiltAwayPct: ttMetrics.awayFieldTiltPct,
+        homeFormation: wsHome.formation,
+        awayFormation: wsAway.formation,
+        source: 'FBref, Tiki Taka & WhoScored Spatial Feed'
       },
       ppdaPressing: {
         home: ppdaHome,
@@ -2318,7 +2383,7 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
       regressionMetric: {
         homeGMinusXg: gMinusXgHome,
         awayGMinusXg: gMinusXgAway,
-        signal: gMinusXgHome > 0.35 ? 'Finishing Overperformance (Negative Regression Watch)' : 'Sustainable Shot Quality',
+        signal: xgRegHome.regressionSignal,
         source: 'xG Stat npxG Database'
       }
     },
@@ -2328,33 +2393,44 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         restHoursAway,
         restHoursHome,
         isContinentalMidweek: isMidweekCongested,
+        altitudeMeters: venueDetails.altitudeM,
         fatiguePenaltyPct: isMidweekCongested ? -3.8 : -0.6
       },
       motivationAndContext: {
         homeMotivationIndex: Math.round(82 + rng() * 16),
         awayMotivationIndex: Math.round(76 + rng() * 18),
-        contextTag: isMidweekCongested ? 'Midweek Travel Congestion' : 'Standard League Fixture'
+        contextTag: isMidweekCongested ? 'Midweek Travel Congestion' : 'Standard League Fixture',
+        refereeStrictness: ref365.cardSeverity,
+        lineupStatus: discoveryNews.lineupStatus
       },
       weatherConditions: {
         temperatureC: tempC,
         windKmh,
         precipitationPct: rainPct,
-        impactSummary: windKmh > 22 ? 'Wind divergence may temper long passing accuracy' : 'Optimal playing conditions'
+        impactSummary: windKmh > 22 ? 'Wind divergence may temper long passing accuracy' : discoveryNews.environment?.weather || 'Optimal playing conditions'
       }
     },
     marketPsychology: {
       betfairExchange: {
         backOdds,
         layOdds,
-        spreadPct: +(((layOdds - backOdds) / backOdds) * 100).toFixed(2),
-        matchedVolume: `${(volumeUsd / 1000).toFixed(0)}k`,
-        liquidityRating: volumeUsd > 750000 ? 'DEEP EXCHANGE LIQUIDITY' : 'MODERATE LIQUIDITY'
+        spreadPct: bfDepth.spreadPct,
+        matchedVolume: bfDepth.matchedVolume.replace(/^\$/, ''),
+        liquidityRating: bfDepth.liquidityRating
       },
       steamMoveRadar: {
         shiftPct: steamDelta,
-        direction: steamDelta < -3.5 ? 'INWARD STEAM (Sharp Money Detected)' : steamDelta > 3.5 ? 'OUTWARD DRIFT' : 'MARKET STABLE',
-        alertTriggered: Math.abs(steamDelta) >= 4.5
+        direction: bfDepth.direction,
+        alertTriggered: bfDepth.alertTriggered
       }
+    },
+    adapterEnrichment: {
+      venue: venueDetails.stadium,
+      altitudeM: venueDetails.altitudeM,
+      homeSquadValueM: tmHome.marketValueM,
+      awaySquadValueM: tmAway.marketValueM,
+      homeInjuryPenalty: tmHome.injuryPenalty,
+      awayInjuryPenalty: tmAway.injuryPenalty
     },
     beastMeta: (() => {
       const ens = runConsolidatedEnsemble({
@@ -2538,10 +2614,15 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   const formVolatilityScore = Math.round(homeLossesInLast5 * 18 + rng() * 25);
   const isFormVolatile = homeLossesInLast5 >= 2 || formVolatilityScore > 40;
 
-  // 8. Critical Team News Check (Roster Key Spine)
-  const hasCriticalAbsence = rng() < 0.12; // ~12% realistic injury disruption
-  const missingKeyPlayers = [];
-  if (hasCriticalAbsence) {
+  // 8. Critical Team News Check (Transfermarkt Verified Absences + Empirical Probability)
+  const tmInjuriesHome = tmHome.injuredKeyPlayers || [];
+  const hasCriticalAbsence = tmInjuriesHome.some(p => Math.abs(p.impact || 0) >= 0.05) || rng() < 0.10;
+  const missingKeyPlayers = tmInjuriesHome.map(p => ({
+    name: p.name,
+    role: p.pos || 'STARTER',
+    status: 'RULED_OUT_INJURY'
+  }));
+  if (hasCriticalAbsence && missingKeyPlayers.length === 0) {
     const roles = ['Top Goalscorer', 'Starting Goalkeeper', 'Primary Playmaker'];
     const role = roles[Math.floor(rng() * roles.length)];
     missingKeyPlayers.push({
@@ -2714,6 +2795,15 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
     ? '🛡️ APPROVED - 100% ENGINE & SYNDICATE VERIFIED'
     : '⚠️ UNCERTAIN - CAUTION FLAGGED';
   teleResult.isVettedApproved = isFullyApproved;
+
+  // Automated Sanity Check Verification on assembled telemetry
+  teleResult.sanityCheck = runAutomatedDataSanityChecks({
+    home: { name: home.name, xgFor: home.xgFor },
+    away: { name: away.name, xgFor: away.xgFor },
+    tactical: { ppdaHome, xtHome },
+    predictions: predictionsList || (topPick ? [topPick] : []),
+    topPick
+  });
 
   return teleResult;
 }
@@ -4161,8 +4251,8 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
 
     const kickoffIso = e.date || comp.date;
     const kickoffDate = new Date(kickoffIso);
-    // Strict window: Only official 2026 matches within the valid evaluation window
-    if (isNaN(kickoffDate.getTime()) || kickoffDate.getFullYear() !== 2026 || kickoffDate.getTime() < startD.getTime() || kickoffDate.getTime() > endD.getTime()) {
+    // Strict window: Valid evaluation window (2026+ through next season year)
+    if (isNaN(kickoffDate.getTime()) || kickoffDate.getFullYear() < 2026 || kickoffDate.getFullYear() > base.getUTCFullYear() + 1 || kickoffDate.getTime() < startD.getTime() || kickoffDate.getTime() > endD.getTime()) {
       continue;
     }
 
@@ -4325,16 +4415,14 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       matches: allMatches
     };
 
-    // Save pristine verified snapshot for reliable fallback
+    // Save pristine verified snapshot for reliable fallback atomically
     try {
       const prunedPayload = optimizeFixturesPayload(prunePastFixtures({
         meta: { ...payload.meta },
         matches: [...allMatches]
       }));
       prunedPayload.meta.total_fixtures = prunedPayload.matches.length;
-      const dir = path.dirname(fallbackCachePath);
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(fallbackCachePath, JSON.stringify(prunedPayload), 'utf8');
+      writeJsonAtomic(fallbackCachePath, prunedPayload);
       console.log(`[FixtureGen] ✓ Updated verified official fallback snapshot (${prunedPayload.matches.length} matches, ${(fs.statSync(fallbackCachePath).size / (1024 * 1024)).toFixed(2)} MB)`);
     } catch (_) {}
 
@@ -4558,39 +4646,64 @@ export function optimizeFixturesPayload(fixturesData) {
   return fixturesData;
 }
 
-export async function saveFixtures(customBaseDate = null) {
-  let fixturesData = null;
-  try {
-    fixturesData = await fetchLiveRealFixtures(customBaseDate);
-  } catch (err) {
-    console.error('[FixtureGen] Live feed error, generating schedule:', err.message);
-    fixturesData = generateAllFixtures(customBaseDate);
-  }
-
-  fixturesData = optimizeFixturesPayload(prunePastFixtures(fixturesData));
-
-  const outputPath = path.join(__dirname, '../data/fixtures.json');
-  const dir = path.dirname(outputPath);
+function writeJsonAtomic(targetPath, dataObj) {
+  const dir = path.dirname(targetPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(fixturesData), 'utf-8');
+  const tmpPath = `${targetPath}.${process.pid}.${Date.now()}.tmp`;
+  fs.writeFileSync(tmpPath, JSON.stringify(dataObj), 'utf-8');
+  fs.renameSync(tmpPath, targetPath);
+}
 
-  // Also sync dist/data/fixtures.json if dist directory exists
-  const distOutputPath = path.join(__dirname, '../dist/data/fixtures.json');
-  if (fs.existsSync(path.dirname(distOutputPath))) {
-    fs.writeFileSync(distOutputPath, JSON.stringify(fixturesData), 'utf-8');
+let activeSavePromise = null;
+
+export async function saveFixtures(customBaseDate = null) {
+  if (activeSavePromise && !customBaseDate) {
+    return activeSavePromise;
   }
 
-  console.log(`[FixtureGen] ✓ Saved ${fixturesData.matches.length} fixtures across ${fixturesData.meta.league_count} leagues at ${outputPath}`);
-  return fixturesData;
+  const runSave = async () => {
+    let fixturesData = null;
+    try {
+      fixturesData = await fetchLiveRealFixtures(customBaseDate);
+    } catch (err) {
+      console.error('[FixtureGen] Live feed error, generating schedule:', err.message);
+      fixturesData = generateAllFixtures(customBaseDate);
+    }
+
+    fixturesData = optimizeFixturesPayload(prunePastFixtures(fixturesData));
+    if (fixturesData?.meta) {
+      fixturesData.meta.league_count = fixturesData.meta.league_count || new Set((fixturesData.matches || []).map(m => m.league?.id)).size;
+      fixturesData.meta.match_count = (fixturesData.matches || []).length;
+    }
+
+    const outputPath = path.join(__dirname, '../data/fixtures.json');
+    writeJsonAtomic(outputPath, fixturesData);
+
+    // Also sync dist/data/fixtures.json if dist directory exists
+    const distOutputPath = path.join(__dirname, '../dist/data/fixtures.json');
+    if (fs.existsSync(path.dirname(distOutputPath))) {
+      writeJsonAtomic(distOutputPath, fixturesData);
+    }
+
+    console.log(`[FixtureGen] ✓ Saved ${fixturesData.matches.length} fixtures across ${fixturesData.meta.league_count} leagues at ${outputPath}`);
+    return fixturesData;
+  };
+
+  if (!customBaseDate) {
+    activeSavePromise = runSave().finally(() => {
+      activeSavePromise = null;
+    });
+    return activeSavePromise;
+  }
+
+  return runSave();
 }
 
 export function saveFixturesSync(customBaseDate = null) {
   let fixturesData = generateAllFixtures(customBaseDate);
   fixturesData = optimizeFixturesPayload(prunePastFixtures(fixturesData));
   const outputPath = path.join(__dirname, '../data/fixtures.json');
-  const dir = path.dirname(outputPath);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(fixturesData), 'utf-8');
+  writeJsonAtomic(outputPath, fixturesData);
   return fixturesData;
 }
 
@@ -4683,12 +4796,12 @@ export function updateFixtureAndRecalculate(matchId, updates = {}) {
   if (updates.matchStatus) match.matchStatus = updates.matchStatus;
   if (updates.reason) match.updateReason = updates.reason;
 
-  fs.writeFileSync(filePath, JSON.stringify(data), 'utf8');
+  writeJsonAtomic(filePath, data);
 
   // Sync dist if exists
   const distPath = path.join(__dirname, '../dist/data/fixtures.json');
   if (fs.existsSync(path.dirname(distPath))) {
-    fs.writeFileSync(distPath, JSON.stringify(data), 'utf8');
+    writeJsonAtomic(distPath, data);
   }
 
   return match;
@@ -4754,10 +4867,10 @@ export function updateTeamAndPropagate(teamName, updates = {}) {
     });
 
     if (affectedMatchesCount > 0) {
-      fs.writeFileSync(filePath, JSON.stringify(data), 'utf8');
+      writeJsonAtomic(filePath, data);
       const distPath = path.join(__dirname, '../dist/data/fixtures.json');
       if (fs.existsSync(path.dirname(distPath))) {
-        fs.writeFileSync(distPath, JSON.stringify(data), 'utf8');
+        writeJsonAtomic(distPath, data);
       }
     }
   }
@@ -4868,10 +4981,10 @@ export function applyMatchResultAndAdaptRatings(matchId, homeScore, awayScore) {
     }
   });
 
-  fs.writeFileSync(filePath, JSON.stringify(data), 'utf8');
+  writeJsonAtomic(filePath, data);
   const distPath = path.join(__dirname, '../dist/data/fixtures.json');
   if (fs.existsSync(path.dirname(distPath))) {
-    fs.writeFileSync(distPath, JSON.stringify(data), 'utf8');
+    writeJsonAtomic(distPath, data);
   }
 
   return {

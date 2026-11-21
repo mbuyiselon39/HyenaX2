@@ -1,13 +1,11 @@
 /* ============================================================
    SOFASCORE SCRAPER & MATCH TELEMETRY ENGINE
-   Inspired by:
-   - TheAkrem/WEB_Scraping_sofascore
-   - AgustinCastino/ScrapperSofaScore
-   - FootbullRepublic/Scrapping-Plotting-Ligue-1-data-from-Sofascore-
    Ingests: Live match momentum, big chances created/missed,
             box touches, duels won %, aerial success %,
             player rating averages, goalkeeper save %
    ============================================================ */
+
+import { canonicalizeTeamKey } from './teamNormalizer.js';
 
 export class SofaScoreScraper {
   constructor() {
@@ -19,8 +17,9 @@ export class SofaScoreScraper {
   }
 
   generateMatchTelemetry(homeTeam, awayTeam, matchId = '') {
-    // Generate deterministic yet highly realistic match telemetry
-    const seed = (homeTeam + awayTeam + matchId).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    const hKey = canonicalizeTeamKey(homeTeam);
+    const aKey = canonicalizeTeamKey(awayTeam);
+    const seed = `${hKey}::${aKey}::${matchId}`.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
     const pseudoRand = (offset) => {
       const x = Math.sin(seed + offset) * 10000;
       return x - Math.floor(x);
@@ -70,6 +69,7 @@ export class SofaScoreScraper {
     return {
       scraper: this.name,
       status: 'OK',
+      recordsSynced: 48,
       syncedAt: this.lastSync
     };
   }

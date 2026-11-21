@@ -6,11 +6,7 @@ import {
   Send,
   Search,
   MapPin,
-  Sparkles,
-  ExternalLink,
-  ChevronDown,
-  Layers,
-  HelpCircle
+  ExternalLink
 } from 'lucide-react';
 
 export const GeminiChatModal: React.FC = () => {
@@ -23,17 +19,25 @@ export const GeminiChatModal: React.FC = () => {
   } = useApp();
 
   const [input, setInput] = useState<string>('');
-  const [model, setModel] = useState<string>('gemini-3.8-flash');
+  const [model, setModel] = useState<string>('gemini-4-hydrogen');
   const [enableSearch, setEnableSearch] = useState<boolean>(true);
   const [enableMaps, setEnableMaps] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (aiChatOpen) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (!aiChatOpen) return;
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [aiChatMessages, aiChatOpen]);
+
+  useEffect(() => {
+    if (!aiChatOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setAiChatOpen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [aiChatOpen, setAiChatOpen]);
 
   if (!aiChatOpen) return null;
 
@@ -52,8 +56,17 @@ export const GeminiChatModal: React.FC = () => {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
-      <div className="w-full max-w-2xl bg-[#080A0F] border border-[#222E46] rounded-2xl h-[85vh] max-h-[750px] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+    <div
+      onClick={() => setAiChatOpen(false)}
+      className="fixed inset-0 z-50 overflow-hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="HyenaX Beast AI Oracle"
+        className="w-full max-w-2xl bg-[#080A0F] border border-[#222E46] rounded-2xl h-[85vh] max-h-[750px] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+      >
         
         {/* Header */}
         <div className="p-4 border-b border-[#222E46] bg-[#0E131F] flex items-center justify-between gap-3 shrink-0">
@@ -69,7 +82,7 @@ export const GeminiChatModal: React.FC = () => {
                 </span>
               </div>
               <div className="text-[10px] text-slate-400">
-                Senior Quantitative Strategist & Risk Officer
+                Senior Quantitative Strategist &amp; Risk Officer
               </div>
             </div>
           </div>
@@ -80,7 +93,7 @@ export const GeminiChatModal: React.FC = () => {
               onChange={(e) => setModel(e.target.value)}
               className="hidden sm:block px-2.5 py-1.5 rounded-xl border border-[#222E46] bg-[#080A0F] text-[11px] text-slate-200 focus:outline-none"
             >
-              <option value="gemini-3.8-flash">Gemini 3.8 Flash (Recommended)</option>
+              <option value="gemini-4-hydrogen">Gemini 4 Hydrogen (Recommended)</option>
               <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Fast)</option>
               <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (Deep Math)</option>
             </select>
@@ -158,16 +171,16 @@ export const GeminiChatModal: React.FC = () => {
                 {/* Grounding Citations */}
                 {msg.grounding && (
                   <div className="pt-2 border-t border-[#222E46]/60 space-y-1">
-                    {msg.grounding.searchSources && msg.grounding.searchSources.length > 0 && (
+                    {msg.grounding.searchSources && msg.grounding.searchSources.filter(s => /^https?:\/\//i.test(s.uri)).length > 0 && (
                       <div className="space-y-1">
                         <span className="text-[10px] text-slate-400 font-bold block">Verified Citations:</span>
                         <div className="flex flex-wrap gap-1.5">
-                          {msg.grounding.searchSources.slice(0, 3).map((s, i) => (
+                          {msg.grounding.searchSources.filter(s => /^https?:\/\//i.test(s.uri)).slice(0, 3).map((s, i) => (
                             <a
                               key={i}
                               href={s.uri}
                               target="_blank"
-                              rel="noreferrer"
+                              rel="noopener noreferrer"
                               className="px-2 py-0.5 rounded text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-300 flex items-center gap-1"
                             >
                               <ExternalLink className="w-2.5 h-2.5" />
@@ -178,16 +191,16 @@ export const GeminiChatModal: React.FC = () => {
                       </div>
                     )}
 
-                    {msg.grounding.mapSources && msg.grounding.mapSources.length > 0 && (
+                    {msg.grounding.mapSources && msg.grounding.mapSources.filter(m => /^https?:\/\//i.test(m.uri)).length > 0 && (
                       <div className="space-y-1 pt-1">
                         <span className="text-[10px] text-slate-400 font-bold block">Google Maps Venues:</span>
                         <div className="flex flex-wrap gap-1.5">
-                          {msg.grounding.mapSources.slice(0, 2).map((m, i) => (
+                          {msg.grounding.mapSources.filter(m => /^https?:\/\//i.test(m.uri)).slice(0, 2).map((m, i) => (
                             <a
                               key={i}
                               href={m.uri}
                               target="_blank"
-                              rel="noreferrer"
+                              rel="noopener noreferrer"
                               className="px-2 py-0.5 rounded text-[10px] bg-slate-800 hover:bg-slate-700 text-emerald-300 flex items-center gap-1"
                             >
                               <MapPin className="w-2.5 h-2.5" />
@@ -210,7 +223,7 @@ export const GeminiChatModal: React.FC = () => {
           ))}
 
           {aiChatLoading && (
-            <div className="flex items-center gap-2 text-xs text-amber-300 animate-pulse pl-10">
+            <div className="flex items-center gap-2 text-xs text-amber-300 pl-10">
               <span>Synthesizing Dixon-Coles goal distributions and live press telemetry...</span>
             </div>
           )}

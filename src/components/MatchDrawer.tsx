@@ -1,25 +1,104 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext.tsx';
 import {
   X,
   Bot,
   PlusCircle,
-  CheckCircle2
+  CheckCircle2,
+  ExternalLink
 } from 'lucide-react';
+
+const TeamCrest: React.FC<{ logo?: string; name: string }> = ({ logo, name }) => {
+  const [imgFailed, setImgFailed] = useState(false);
+  useEffect(() => { setImgFailed(false); }, [logo, name]);
+
+  if (logo && !imgFailed) {
+    return (
+      <img
+        src={logo}
+        alt={name}
+        referrerPolicy="no-referrer"
+        onError={() => setImgFailed(true)}
+        className="w-9 h-9 object-contain shrink-0"
+      />
+    );
+  }
+  return (
+    <div className="w-9 h-9 rounded-full bg-slate-800 border border-[#222E46] flex items-center justify-center font-bold text-xs text-slate-200 shrink-0">
+      {name.substring(0, 2).toUpperCase()}
+    </div>
+  );
+};
 
 export const MatchDrawer: React.FC = () => {
   const {
     selectedMatch,
+    selectedMatchId,
     drawerOpen,
     setDrawerOpen,
     addAccaLeg,
-    accumulatorLegs,
-    addToast
+    accumulatorLegs
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'ensemble' | 'layer18' | 'h2h' | 'predictions' | 'syndicate' | 'ai'>('ensemble');
   const [aiReport, setAiReport] = useState<string>('');
+  const [aiSources, setAiSources] = useState<Array<{ title: string; uri: string }>>([]);
+  const [aiError, setAiError] = useState<string>('');
   const [aiLoading, setAiLoading] = useState<boolean>(false);
+  const [fetchedEnsemble, setFetchedEnsemble] = useState<any[]>([]);
+  const [ensembleLoading, setEnsembleLoading] = useState<boolean>(false);
+
+  // Reset per-match state whenever user switches match
+  useEffect(() => {
+    setActiveTab('ensemble');
+    setAiReport('');
+    setAiSources([]);
+    setAiError('');
+    setFetchedEnsemble([]);
+  }, [selectedMatchId]);
+
+  // Escape key dismissal
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDrawerOpen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [drawerOpen, setDrawerOpen]);
+
+  // Fetch live multi-model breakdown from backend only if match fixture lacks embedded breakdown
+  useEffect(() => {
+    if (!drawerOpen || !selectedMatch) return;
+    const embedded = selectedMatch.beastMeta?.ensemble?.breakdown || [];
+    if (embedded.length > 0) return;
+
+    let cancelled = false;
+    setEnsembleLoading(true);
+    const params = new URLSearchParams({
+      home: selectedMatch.home.name,
+      away: selectedMatch.away.name,
+      league: selectedMatch.league.id || 'epl',
+      homeRating: String(selectedMatch.home.rating || 80),
+      awayRating: String(selectedMatch.away.rating || 75),
+      xgHome: String(selectedMatch.home.xgFor || 1.65),
+      xgAway: String(selectedMatch.away.xgFor || 1.15)
+    });
+
+    fetch(`/api/beast/predict?${params.toString()}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!cancelled && data && Array.isArray(data.multiModelBreakdown)) {
+          setFetchedEnsemble(data.multiModelBreakdown);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setEnsembleLoading(false);
+      });
+
+    return () => { cancelled = true; };
+  }, [drawerOpen, selectedMatch]);
 
   if (!drawerOpen || !selectedMatch) return null;
 
@@ -27,13 +106,24 @@ export const MatchDrawer: React.FC = () => {
   const top = m.topPick || (m.predictions && m.predictions[0]);
   const bMeta: any = m.beastMeta || {};
   const ens = bMeta.ensemble || {};
-  const models = ens.breakdown || [];
+  const models = (ens.breakdown && ens.breakdown.length > 0) ? ens.breakdown : fetchedEnsemble;
   const h2h: any = m.h2h || {};
-  const isAccaAdded = top && accumulatorLegs.some(l => l.matchId === m.id);
+  const syndicate = m.thirdPartySyndicate || null;
+  const syndicatePredictions = Array.isArray(syndicate?.predictions) ? syndicate.predictions : [];
+
+  const travel = m.situationalFactors?.travelFatigue || {};
+  const weather = m.situationalFactors?.weatherConditions || {};
+  const bayesian = bMeta.bayesianDynamicUpdate || {};
+  const verifier = m.engineVerifier || {};
+  const layer18Payload = bMeta.layer18 || m.situationalFactors || {};
+
+  const topOdds = top ? (typeof top.odds === 'object' ? Number(top.odds.betway || top.odds.hollywoodbets || top.odds.easybet || 1.35) : Number(top.odds || 1.35)) : 1.35;
+  const isAccaAdded = !!(top && accumulatorLegs.some(l => l.matchId === m.id && l.selection === top.selection));
 
   const fetchAiReport = async () => {
-    if (aiReport) return;
+    if (aiReport || aiLoading) return;
     setAiLoading(true);
+    setAiError('');
     try {
       const res = await fetch('/api/ai/analyze-match', {
         method: 'POST',
@@ -44,40 +134,55 @@ export const MatchDrawer: React.FC = () => {
           league: m.league.name,
           probability: top?.probability || 78,
           market: top?.market || '1X2',
-          odds: typeof top?.odds === 'object' ? (top.odds.betway || 1.35) : (top?.odds || 1.35)
+          odds: topOdds,
+          layer18: layer18Payload
         })
       });
 
-      if (res.ok) {
-        const d = await res.json();
-        setAiReport(d.analysis || 'Analysis delivered.');
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setAiError(d.message || d.error || 'Failed to generate automated tactical scout report.');
+        return;
+      }
+      setAiReport(d.analysis || 'Analysis delivered.');
+      if (Array.isArray(d.sources)) {
+        setAiSources(d.sources.filter((s: any) => s?.uri && /^https?:\/\//i.test(s.uri)));
       }
     } catch (e: any) {
-      setAiReport('Failed to generate automated tactical scout report.');
+      setAiError(e?.message || 'Failed to generate automated tactical scout report.');
     } finally {
       setAiLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/75 backdrop-blur-sm flex justify-end">
-      <div className="w-full max-w-2xl bg-[#080A0F] border-l border-[#222E46] h-full overflow-y-auto flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
-        
+    <div
+      onClick={() => setDrawerOpen(false)}
+      className="fixed inset-0 z-50 overflow-hidden bg-black/75 backdrop-blur-sm flex justify-end"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${m.home.name} vs ${m.away.name} match analysis`}
+        className="w-full max-w-2xl bg-[#080A0F] border-l border-[#222E46] h-full overflow-y-auto flex flex-col shadow-2xl animate-in slide-in-from-right duration-300"
+      >
         {/* Drawer Header */}
         <div className="sticky top-0 z-20 bg-[#080A0F]/95 backdrop-blur-md p-5 border-b border-[#222E46] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">{m.league.flag}</span>
-            <span className="font-display font-bold text-sm text-white">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-lg shrink-0">{m.league.flag}</span>
+            <span className="font-display font-bold text-sm text-white truncate">
               {m.league.name}
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-num bg-slate-800 text-slate-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-num bg-slate-800 text-slate-300 whitespace-nowrap shrink-0">
               {m.kickoffRsa || m.kickoffTime || '15:30 SAST'}
             </span>
           </div>
 
           <button
             onClick={() => setDrawerOpen(false)}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            aria-label="Close match drawer"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -87,48 +192,36 @@ export const MatchDrawer: React.FC = () => {
         <div className="p-5 border-b border-[#222E46] bg-[#0E131F]/50 space-y-4">
           <div className="flex items-center justify-between gap-4">
             {/* Home Team */}
-            <div className="flex items-center gap-3 flex-1">
-              {m.home.logo ? (
-                <img src={m.home.logo} alt="" className="w-9 h-9 object-contain" />
-              ) : (
-                <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs">
-                  {m.home.name.substring(0, 2)}
-                </div>
-              )}
-              <div>
-                <div className="font-display font-black text-base text-white">{m.home.name}</div>
-                <div className="text-[10px] text-slate-400">Rating: {m.home.rating || 80}</div>
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <TeamCrest logo={m.home.logo} name={m.home.name} />
+              <div className="min-w-0">
+                <div className="font-display font-black text-base text-white truncate">{m.home.name}</div>
+                <div className="text-[10px] text-slate-400 font-num">Rating: {m.home.rating || 80}</div>
               </div>
             </div>
 
-            <span className="font-display font-extrabold text-sm text-amber-400">VS</span>
+            <span className="font-display font-extrabold text-sm text-[#00E5FF] shrink-0">VS</span>
 
             {/* Away Team */}
-            <div className="flex items-center gap-3 flex-1 justify-end text-right">
-              <div>
-                <div className="font-display font-black text-base text-white">{m.away.name}</div>
-                <div className="text-[10px] text-slate-400">Rating: {m.away.rating || 76}</div>
+            <div className="flex items-center gap-3 flex-1 justify-end text-right min-w-0">
+              <div className="min-w-0">
+                <div className="font-display font-black text-base text-white truncate">{m.away.name}</div>
+                <div className="text-[10px] text-slate-400 font-num">Rating: {m.away.rating || 76}</div>
               </div>
-              {m.away.logo ? (
-                <img src={m.away.logo} alt="" className="w-9 h-9 object-contain" />
-              ) : (
-                <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs">
-                  {m.away.name.substring(0, 2)}
-                </div>
-              )}
+              <TeamCrest logo={m.away.logo} name={m.away.name} />
             </div>
           </div>
 
           {/* Primary Top Pick Box */}
           {top && (
-            <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-between gap-3">
-              <div>
-                <div className="text-[10px] uppercase font-bold text-amber-400">Consensus Top Pick</div>
-                <div className="font-display font-extrabold text-sm text-white">
+            <div className="p-3.5 rounded-xl border border-[#00E5FF]/30 bg-[#00E5FF]/5 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="text-[10px] uppercase font-bold text-[#00E5FF]">Consensus Top Pick</div>
+                <div className="font-display font-extrabold text-sm text-white truncate">
                   {top.selection} ({top.market})
                 </div>
                 <div className="text-[11px] text-emerald-400 font-num font-bold">
-                  {top.probability}% True Win Expectation
+                  {top.probability}% True Win Expectation · @{topOdds.toFixed(2)}
                 </div>
               </div>
 
@@ -136,21 +229,21 @@ export const MatchDrawer: React.FC = () => {
                 onClick={() => {
                   if (!isAccaAdded) {
                     addAccaLeg({
-                      id: `acca-${m.id}`,
+                      id: `acca-${m.id}-${String(top.selection || 'pick').replace(/\s+/g, '_')}`,
                       matchId: m.id,
                       fixture: `${m.home.name} vs ${m.away.name}`,
                       league: m.league.name,
-                      selection: top.selection,
-                      market: top.market,
+                      selection: String(top.selection || 'Home'),
+                      market: String(top.market || 'Match Winner'),
                       probability: Number(top.probability),
-                      odds: typeof top.odds === 'object' ? Number(top.odds.betway || 1.35) : Number(top.odds)
+                      odds: topOdds
                     });
                   }
                 }}
-                className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
+                className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all whitespace-nowrap shrink-0 ${
                   isAccaAdded
                     ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                    : 'bg-amber-500 hover:bg-amber-400 text-black font-bold'
+                    : 'bg-[#00E5FF] hover:bg-[#33ECFF] text-[#041118] font-bold'
                 }`}
               >
                 {isAccaAdded ? <CheckCircle2 className="w-4 h-4" /> : <PlusCircle className="w-4 h-4" />}
@@ -167,7 +260,7 @@ export const MatchDrawer: React.FC = () => {
             { id: 'layer18', label: 'Layer 18 Fatigue' },
             { id: 'h2h', label: 'H2H & Form' },
             { id: 'predictions', label: `Markets (${m.predictions?.length || 0})` },
-            { id: 'syndicate', label: 'Syndicate (12)' },
+            { id: 'syndicate', label: `Syndicate (${syndicatePredictions.length || 12})` },
             { id: 'ai', label: 'AI Scout' },
           ].map(tab => (
             <button
@@ -176,9 +269,9 @@ export const MatchDrawer: React.FC = () => {
                 setActiveTab(tab.id as any);
                 if (tab.id === 'ai') fetchAiReport();
               }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-display font-bold transition-all shrink-0 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-display font-bold transition-all shrink-0 whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50'
+                  ? 'bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/50'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -195,12 +288,16 @@ export const MatchDrawer: React.FC = () => {
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-400">17-Model Unified Consensus Score</span>
                 <span className="text-emerald-400 font-bold font-num text-sm">
-                  {ens.consensusProbability || top?.probability || 78}%
+                  {ens.consensusProbability ?? bMeta.calibratedProbability ?? top?.probability ?? 0}%
                 </span>
               </div>
 
               <div className="space-y-2">
-                {models.length > 0 ? (
+                {ensembleLoading && models.length === 0 ? (
+                  <div className="p-6 text-center rounded-xl border border-[#222E46] bg-[#0E131F] text-xs text-slate-400">
+                    Evaluating 17-Model Consensus breakdown from Beast Engine...
+                  </div>
+                ) : models.length > 0 ? (
                   models.map((mod: any, idx: number) => (
                     <div
                       key={idx}
@@ -208,28 +305,20 @@ export const MatchDrawer: React.FC = () => {
                     >
                       <div>
                         <div className="font-bold text-white">{mod.name}</div>
-                        <div className="text-[10px] text-slate-400">{mod.category} · {mod.signal}</div>
+                        <div className="text-[10px] text-slate-400">{mod.category || 'Ensemble'}{mod.signal ? ` · ${mod.signal}` : ''}</div>
                       </div>
                       <div className="text-right font-num">
-                        <div className="font-bold text-amber-300">{mod.prob}%</div>
-                        <div className="text-[9px] text-slate-500">Weight: {(mod.weight * 100).toFixed(0)}%</div>
+                        <div className="font-bold text-[#00E5FF]">{mod.prob}%</div>
+                        {mod.weight !== undefined && (
+                          <div className="text-[9px] text-slate-500">Weight: {(Number(mod.weight) * 100).toFixed(0)}%</div>
+                        )}
                       </div>
                     </div>
                   ))
                 ) : (
-                  [
-                    { name: 'XGBoost (2nd Order Taylor)', prob: 82.4, cat: 'GBDT' },
-                    { name: 'LightGBM (Leaf-Wise)', prob: 81.8, cat: 'GBDT' },
-                    { name: 'CatBoost (Oblivious Trees)', prob: 79.5, cat: 'GBDT' },
-                    { name: 'Dixon-Coles Bivariate Poisson', prob: 80.2, cat: 'Statistical' },
-                    { name: 'Graph Neural Network (GNN)', prob: 81.1, cat: 'Neural Net' },
-                    { name: 'LSTM Temporal Time-Series', prob: 83.0, cat: 'Deep Learning' }
-                  ].map((item, i) => (
-                    <div key={i} className="p-2.5 rounded-xl border border-[#222E46] bg-[#0E131F] flex items-center justify-between text-xs font-num">
-                      <span className="text-white font-sans font-medium">{item.name}</span>
-                      <span className="text-emerald-400 font-bold">{item.prob}%</span>
-                    </div>
-                  ))
+                  <div className="p-6 text-center rounded-xl border border-[#222E46] bg-[#0E131F] text-xs text-slate-400">
+                    Detailed per-model breakdown is not available for this fixture.
+                  </div>
                 )}
               </div>
             </div>
@@ -238,21 +327,52 @@ export const MatchDrawer: React.FC = () => {
           {/* 2. Layer 18 Fatigue */}
           {activeTab === 'layer18' && (
             <div className="space-y-3 text-xs leading-relaxed">
-              <div className="p-4 rounded-xl border border-amber-500/30 bg-[#0E131F] space-y-2">
-                <div className="font-bold text-amber-300">Layer 18 Look-Ahead & Strategic Rotation Matrix</div>
+              <div className="p-4 rounded-xl border border-[#00E5FF]/30 bg-[#0E131F] space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="font-bold text-[#00E5FF]">Layer 18 Look-Ahead &amp; Situational Matrix</div>
+                  {verifier.badge && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                      {verifier.badge}
+                    </span>
+                  )}
+                </div>
                 <p className="text-slate-300">
-                  Evaluates upcoming fixtures in the next 96 hours (such as UEFA Champions League or domestic derbies) to detect tactical squad rotation.
+                  Evaluates rest intervals, travel load, pitch altitude, weather resistance, and Bayesian prior weighting before publishing any conviction pick.
                 </p>
-                <div className="grid grid-cols-2 gap-2 pt-2 text-[11px] font-num">
-                  <div className="p-2 rounded bg-[#0A0E17]">
+                <div className="grid grid-cols-2 gap-2 pt-1 text-[11px] font-num">
+                  <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
                     <span className="text-slate-400 block">Home Rest Period:</span>
-                    <strong className="text-white">96 Hours (Nominal)</strong>
+                    <strong className="text-white">
+                      {travel.restHoursHome ?? 96} Hours
+                    </strong>
                   </div>
-                  <div className="p-2 rounded bg-[#0A0E17]">
+                  <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
+                    <span className="text-slate-400 block">Away Rest Period:</span>
+                    <strong className="text-white">
+                      {travel.restHoursAway ?? 96} Hours
+                    </strong>
+                  </div>
+                  <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
                     <span className="text-slate-400 block">Away Travel Distance:</span>
-                    <strong className="text-white">120 km (No Fatigue)</strong>
+                    <strong className="text-white">
+                      {travel.travelDistanceKm ?? 120} km
+                      {travel.fatiguePenaltyPct !== undefined ? ` (-${travel.fatiguePenaltyPct}% load)` : ''}
+                    </strong>
+                  </div>
+                  <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
+                    <span className="text-slate-400 block">Venue Altitude &amp; Weather:</span>
+                    <strong className="text-white">
+                      {travel.altitudeMeters ?? 300}m · {weather.condition || 'Clear'}
+                    </strong>
                   </div>
                 </div>
+
+                {bayesian.posteriorProbabilityPct !== undefined && (
+                  <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46] text-[11px] text-slate-300 font-num flex items-center justify-between">
+                    <span>Bayesian Posterior Prob:</span>
+                    <strong className="text-emerald-400">{bayesian.posteriorProbabilityPct}%</strong>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -262,31 +382,66 @@ export const MatchDrawer: React.FC = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-2 text-center text-xs p-3 rounded-xl bg-[#0E131F] border border-[#222E46]">
                 <div>
-                  <div className="text-slate-400">{m.home.name}</div>
-                  <div className="text-lg font-bold font-num text-emerald-400">{h2h.homeWins || 4} Wins</div>
+                  <div className="text-slate-400 truncate">{m.home.name}</div>
+                  <div className="text-lg font-bold font-num text-emerald-400">{h2h.homeWins ?? 0} Wins</div>
                 </div>
                 <div>
                   <div className="text-slate-400">Draws</div>
-                  <div className="text-lg font-bold font-num text-slate-300">{h2h.draws || 2}</div>
+                  <div className="text-lg font-bold font-num text-slate-300">{h2h.draws ?? 0}</div>
                 </div>
                 <div>
-                  <div className="text-slate-400">{m.away.name}</div>
-                  <div className="text-lg font-bold font-num text-cyan-400">{h2h.awayWins || 2} Wins</div>
+                  <div className="text-slate-400 truncate">{m.away.name}</div>
+                  <div className="text-lg font-bold font-num text-cyan-400">{h2h.awayWins ?? 0} Wins</div>
                 </div>
               </div>
 
-              {h2h.last8Meetings && (
+              {/* Recent Form & xG Strip */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[m.home, m.away].map((team, tIdx) => (
+                  <div key={tIdx} className="p-3 rounded-xl bg-[#0E131F] border border-[#222E46] space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-white truncate">{team.name}</span>
+                      <span className="font-num text-[11px] text-slate-400">
+                        xG: <strong className="text-emerald-400">{Number(team.xgFor ?? 1.4).toFixed(2)}</strong> / xGA: <strong className="text-rose-400">{Number(team.xgAgainst ?? 1.1).toFixed(2)}</strong>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[10px] text-slate-400 mr-1">Form:</span>
+                      {(team.form && team.form.length > 0 ? team.form : ['W', 'D', 'W']).slice(0, 5).map((res, rIdx) => (
+                        <span
+                          key={rIdx}
+                          className={`w-5 h-5 rounded text-[10px] font-black font-num flex items-center justify-center ${
+                            res === 'W'
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                              : res === 'D'
+                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                              : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                          }`}
+                        >
+                          {res}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {h2h.last8Meetings && h2h.last8Meetings.length > 0 ? (
                 <div className="space-y-1.5">
                   <div className="text-[10px] uppercase font-bold text-slate-400">Past Head-to-Head Encounters</div>
                   {h2h.last8Meetings.slice(0, 5).map((mt: any, i: number) => (
-                    <div key={i} className="p-2.5 rounded-lg bg-[#0E131F] flex items-center justify-between text-xs">
-                      <span className="text-slate-400">{mt.date}</span>
+                    <div key={i} className="p-2.5 rounded-lg bg-[#0E131F] border border-[#222E46]/60 flex items-center justify-between text-xs">
+                      <span className="text-slate-400 font-num">{mt.date}</span>
                       <span className="font-bold text-white font-num">{mt.scoreline}</span>
                       <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-slate-300">
                         {mt.outcome === 'H' ? 'Home Win' : mt.outcome === 'A' ? 'Away Win' : 'Draw'}
                       </span>
                     </div>
                   ))}
+                </div>
+              ) : (
+                <div className="p-4 text-center rounded-xl bg-[#0E131F] border border-[#222E46] text-xs text-slate-400">
+                  No recent recorded head-to-head match logs available.
                 </div>
               )}
             </div>
@@ -297,7 +452,7 @@ export const MatchDrawer: React.FC = () => {
             <div className="space-y-2">
               {(m.predictions || []).map((pred, i) => {
                 const isLegAdded = accumulatorLegs.some(l => l.matchId === m.id && l.selection === pred.selection);
-                const predOdds = typeof pred.odds === 'object' ? Number(pred.odds.betway || pred.odds.hollywoodbets || 1.35) : Number(pred.odds || 1.35);
+                const predOdds = typeof pred.odds === 'object' ? Number(pred.odds.betway || pred.odds.hollywoodbets || pred.odds.easybet || 1.35) : Number(pred.odds || 1.35);
 
                 return (
                   <div
@@ -305,7 +460,7 @@ export const MatchDrawer: React.FC = () => {
                     className="p-3 rounded-xl border border-[#222E46] bg-[#0E131F] flex items-center justify-between gap-3 text-xs"
                   >
                     <div>
-                      <div className="text-[10px] text-amber-400 font-semibold">{pred.market}</div>
+                      <div className="text-[10px] text-[#00E5FF] font-semibold">{pred.market}</div>
                       <div className="font-bold text-white">{pred.selection}</div>
                     </div>
 
@@ -321,21 +476,21 @@ export const MatchDrawer: React.FC = () => {
                         onClick={() => {
                           if (!isLegAdded) {
                             addAccaLeg({
-                              id: `acca-${m.id}-${i}`,
+                              id: `acca-${m.id}-${String(pred.selection || 'pick').replace(/\s+/g, '_')}`,
                               matchId: m.id,
                               fixture: `${m.home.name} vs ${m.away.name}`,
                               league: m.league.name,
-                              selection: pred.selection,
-                              market: pred.market,
+                              selection: String(pred.selection || 'Home'),
+                              market: String(pred.market || 'Match Winner'),
                               probability: Number(pred.probability),
                               odds: predOdds
                             });
                           }
                         }}
-                        className={`p-1.5 rounded-lg border text-xs font-semibold transition-all ${
+                        className={`p-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
                           isLegAdded
                             ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300'
-                            : 'border-[#222E46] bg-[#141C2E] text-amber-300 hover:border-amber-500/50'
+                            : 'border-[#222E46] bg-[#141C2E] text-[#00E5FF] hover:border-[#00E5FF]/50'
                         }`}
                         title={isLegAdded ? 'Added to Acca' : 'Add to Acca'}
                       >
@@ -350,44 +505,92 @@ export const MatchDrawer: React.FC = () => {
 
           {/* 5. Third-Party Syndicate */}
           {activeTab === 'syndicate' && (
-            <div className="space-y-2">
-              {[
-                { name: 'Vitibet', pick: '1', prob: '81%', score: '2 - 1' },
-                { name: 'PredictZ', pick: '1', prob: '81%', score: '2 - 1' },
-                { name: 'Forebet', pick: '1', prob: '65%', score: '2 - 1' },
-                { name: 'Tipstrr Pro', pick: '1', prob: '84%', score: '2 - 1' },
-                { name: 'OLBG Tipsters', pick: '1', prob: '83%', score: '2 - 1' },
-                { name: 'Betensured', pick: '1X', prob: '81%', score: '1 - 1' }
-              ].map((syn, i) => (
-                <div key={i} className="p-3 rounded-xl border border-[#222E46] bg-[#0E131F] flex items-center justify-between text-xs">
+            <div className="space-y-3">
+              {syndicate && (
+                <div className="p-3 rounded-xl border border-[#222E46] bg-[#0E131F] grid grid-cols-3 gap-2 text-center text-[11px] font-num">
                   <div>
-                    <div className="font-bold text-white">{syn.name}</div>
-                    <div className="text-[10px] text-slate-400">Score Projection: {syn.score}</div>
+                    <div className="text-slate-400">Agreement</div>
+                    <div className="font-bold text-emerald-400">{syndicate.syndicateAgreementPct ?? 0}%</div>
                   </div>
-                  <div className="text-right font-num">
-                    <div className="font-bold text-amber-300">Pick: {syn.pick}</div>
-                    <div className="text-[10px] text-emerald-400">{syn.prob} Confidence</div>
+                  <div>
+                    <div className="text-slate-400">Certainty</div>
+                    <div className="font-bold text-[#00E5FF]">{syndicate.certaintyScore ?? 0}/100</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-400">Modal Score</div>
+                    <div className="font-bold text-white">{syndicate.mostFrequentScore || '—'}</div>
                   </div>
                 </div>
-              ))}
+              )}
+
+              {syndicatePredictions.length > 0 ? (
+                <div className="space-y-2">
+                  {syndicatePredictions.map((syn: any, i: number) => (
+                    <div key={i} className="p-3 rounded-xl border border-[#222E46] bg-[#0E131F] flex items-center justify-between text-xs">
+                      <div>
+                        <div className="font-bold text-white">{syn.sourceName || syn.name}</div>
+                        <div className="text-[10px] text-slate-400">Score Projection: {syn.predictedScore || '—'}</div>
+                      </div>
+                      <div className="text-right font-num">
+                        <div className="font-bold text-[#00E5FF]">Pick: {syn.pick}</div>
+                        <div className="text-[10px] text-emerald-400">{syn.confidencePct ?? syn.confidence}% Confidence</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-6 text-center rounded-xl border border-[#222E46] bg-[#0E131F] text-xs text-slate-400">
+                  No 12-site syndicate feed cached for this match yet. Force sync to populate.
+                </div>
+              )}
             </div>
           )}
 
           {/* 6. AI Scout Report */}
           {activeTab === 'ai' && (
-            <div className="p-4 rounded-xl border border-amber-500/30 bg-[#0E131F] text-xs space-y-3 leading-relaxed">
-              <div className="flex items-center gap-2 text-amber-300 font-bold">
-                <Bot className="w-4 h-4" />
-                <span>Gemini Quantitative Scouting Report</span>
+            <div className="p-4 rounded-xl border border-[#00E5FF]/30 bg-[#0E131F] text-xs space-y-3 leading-relaxed">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-[#00E5FF] font-bold">
+                  <Bot className="w-4 h-4" />
+                  <span>Gemini Quantitative Scouting Report</span>
+                </div>
               </div>
 
               {aiLoading ? (
-                <div className="py-8 text-center text-slate-400 animate-pulse">
+                <div className="py-8 text-center text-slate-400">
                   Synthesizing Dixon-Coles goal matrices and tactical telemetry...
                 </div>
+              ) : aiError ? (
+                <div className="p-3 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-300 space-y-2">
+                  <div>{aiError}</div>
+                  <button
+                    onClick={fetchAiReport}
+                    className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-white font-semibold cursor-pointer"
+                  >
+                    Retry Report
+                  </button>
+                </div>
               ) : (
-                <div className="whitespace-pre-line text-slate-200">
-                  {aiReport}
+                <div className="space-y-3">
+                  <div className="whitespace-pre-line text-slate-200">
+                    {aiReport}
+                  </div>
+                  {aiSources.length > 0 && (
+                    <div className="pt-2 border-t border-[#222E46] flex flex-wrap gap-1.5">
+                      {aiSources.slice(0, 4).map((s, i) => (
+                        <a
+                          key={i}
+                          href={s.uri}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-2 py-0.5 rounded text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-300 flex items-center gap-1"
+                        >
+                          <ExternalLink className="w-2.5 h-2.5" />
+                          <span className="truncate max-w-[180px]">{s.title}</span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -51,7 +51,7 @@ export const AppContent: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#1D2A45] glass-card py-8 text-xs text-[#64748B] relative z-10">
+      <footer className="border-t border-[#1D2A45] bg-[#070A13]/90 backdrop-blur-md py-8 text-xs text-[#64748B] relative z-10">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <div className="font-display font-bold text-[#00E5FF]">

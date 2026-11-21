@@ -1,34 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useApp } from '../context/AppContext.tsx';
 import {
-  Settings,
-  Server,
   RefreshCw,
   Power,
-  Trash2,
-  CheckCircle,
-  AlertTriangle,
-  Database
+  Trash2
 } from 'lucide-react';
 
 export const AdminCentreView: React.FC = () => {
   const { addToast, refreshFixtures, isSyncing } = useApp();
   const [pipelineStatus, setPipelineStatus] = useState<any>(null);
+  const [statusLoading, setStatusLoading] = useState<boolean>(true);
+  const [statusError, setStatusError] = useState<string | null>(null);
   const [isPurging, setIsPurging] = useState(false);
+  const [isPipelineSyncing, setIsPipelineSyncing] = useState(false);
 
-  const fetchScraperHealth = async () => {
+  const fetchScraperHealth = useCallback(async () => {
+    setStatusError(null);
     try {
       const res = await fetch('/api/scrapers/status');
-      if (res.ok) {
-        const d = await res.json();
-        setPipelineStatus(d);
-      }
-    } catch (e) {}
-  };
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const d = await res.json();
+      setPipelineStatus(d);
+    } catch (e: any) {
+      setStatusError(e?.message || 'Unable to load scraper pipeline status');
+    } finally {
+      setStatusLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchScraperHealth();
-  }, []);
+  }, [fetchScraperHealth]);
 
   const toggleScraper = async (key: string, currentEnabled: boolean) => {
     try {
@@ -40,9 +42,30 @@ export const AdminCentreView: React.FC = () => {
       if (res.ok) {
         addToast('Scraper Toggled', `${key} ${!currentEnabled ? 'Enabled' : 'Paused'}`, 'info');
         fetchScraperHealth();
+      } else {
+        addToast('Toggle Error', `Failed to update ${key}`, 'error');
       }
     } catch (e: any) {
       addToast('Toggle Error', e.message, 'error');
+    }
+  };
+
+  const forcePipelineSync = async () => {
+    setIsPipelineSyncing(true);
+    try {
+      const res = await fetch('/api/scrapers/sync', { method: 'POST' });
+      if (res.ok) {
+        const d = await res.json();
+        await refreshFixtures(true);
+        await fetchScraperHealth();
+        addToast('Pipeline Synchronized', `Regenerated ${d.fixturesGenerated || 0} fixtures across ${d.leaguesCount || 54} leagues`, 'success');
+      } else {
+        await refreshFixtures(true);
+      }
+    } catch (e: any) {
+      addToast('Sync Error', e.message, 'error');
+    } finally {
+      setIsPipelineSyncing(false);
     }
   };
 
@@ -52,6 +75,7 @@ export const AdminCentreView: React.FC = () => {
       const res = await fetch('/api/admin/clear-cache', { method: 'POST' });
       if (res.ok) {
         addToast('Cache Purged', 'Telemetry caches refreshed and re-anchored', 'success');
+        await fetchScraperHealth();
       }
     } catch (e: any) {
       addToast('Error', e.message, 'error');
@@ -60,93 +84,154 @@ export const AdminCentreView: React.FC = () => {
     }
   };
 
-  const scrapers = pipelineStatus?.health ? Object.entries(pipelineStatus.health) : [
-    ['understat', { name: 'UnderStat', status: 'ONLINE', enabled: true, latencyMs: 142 }],
-    ['whoscored', { name: 'WhoScored', status: 'ONLINE', enabled: true, latencyMs: 210 }],
-    ['transfermarkt', { name: 'Transfermarkt', status: 'ONLINE', enabled: true, latencyMs: 180 }],
-    ['sofascore', { name: 'SofaScore', status: 'ONLINE', enabled: true, latencyMs: 110 }],
-    ['soccerWiki', { name: 'SoccerWiki', status: 'ONLINE', enabled: true, latencyMs: 95 }],
-    ['googleDiscovery', { name: 'GoogleDiscovery', status: 'ONLINE', enabled: true, latencyMs: 165 }]
-  ];
+  const scrapers = pipelineStatus?.scrapers ? Object.entries(pipelineStatus.scrapers) : [];
 
   return (
     <div className="space-y-6">
-      
       {/* Banner */}
-      <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-[#17130A] to-[#0E131F] p-5 sm:p-6 shadow-xl">
+      <div className="rounded-2xl border border-[#00E5FF]/30 bg-gradient-to-r from-[#0C1222] to-[#0E131F] p-5 sm:p-6 shadow-xl">
         <div className="flex items-center gap-2 mb-1">
-          <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-400 text-black">
+          <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#00E5FF] text-[#041118]">
             System Orchestrator
           </span>
-          <span className="text-xs text-amber-300 font-semibold">
-            Pipeline Health & Telemetry Controls
+          <span className="text-xs text-[#00E5FF] font-semibold">
+            Pipeline Health &amp; Telemetry Controls
           </span>
         </div>
         <h1 className="text-2xl font-display font-black text-white">
           Admin Control Centre
         </h1>
-        <p className="text-xs text-slate-300 mt-1 max-w-xl">
-          Manage data scrapers, trigger manual fixture regeneration, purge stale caches, and audit system-wide telemetry streams.
+        <p className="text-xs text-slate-300 mt-1 max-w-2xl">
+          Manage all {scrapers.length || 17} data scrapers (including Flashscore, FBref.com, WhoScored.com, Opta Analyst, FootyStats, and Statz), trigger live fixture regeneration, purge stale caches, and audit real-time pipeline latency and sanity checks.
         </p>
       </div>
+
+      {/* Pipeline Summary KPIs */}
+      {pipelineStatus && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="p-4 rounded-2xl border border-[#222E46] bg-[#0E131F] space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400">Active Adapters</span>
+            <div className="text-xl font-black font-num text-emerald-400">
+              {pipelineStatus.activeSources} / {pipelineStatus.totalSources}
+            </div>
+            <span className="text-[10px] text-slate-400 font-num">{pipelineStatus.overallHealth}</span>
+          </div>
+
+          <div className="p-4 rounded-2xl border border-[#222E46] bg-[#0E131F] space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400">Avg Adapter Latency</span>
+            <div className="text-xl font-black font-num text-[#00E5FF]">
+              {pipelineStatus.averageLatencyMs ?? 0}ms
+            </div>
+            <span className="text-[10px] text-slate-400 font-num">Freshness: {pipelineStatus.dataFreshnessPct ?? 100}%</span>
+          </div>
+
+          <div className="p-4 rounded-2xl border border-[#222E46] bg-[#0E131F] space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400">Sanity Checks Passed</span>
+            <div className="text-xl font-black font-num text-emerald-300">
+              {pipelineStatus.sanityChecksPassed ?? 0}
+            </div>
+            <span className="text-[10px] text-slate-400 font-num">
+              Flagged Anomalies: {pipelineStatus.sanityAnomaliesFlagged ?? 0}
+            </span>
+          </div>
+
+          <div className="p-4 rounded-2xl border border-[#222E46] bg-[#0E131F] space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400">Conflicts Resolved</span>
+            <div className="text-xl font-black font-num text-white">
+              {pipelineStatus.dataConflictsResolved ?? 0}
+            </div>
+            <span className="text-[10px] text-slate-400 font-num">
+              Updated: {pipelineStatus.timestamp ? new Date(pipelineStatus.timestamp).toLocaleTimeString() : '—'}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Control Buttons */}
       <div className="flex flex-wrap gap-3">
         <button
-          onClick={() => refreshFixtures(true)}
-          disabled={isSyncing}
-          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-display text-xs font-bold transition-all shadow-[0_0_15px_-3px_rgba(245,158,11,0.4)] flex items-center gap-2 cursor-pointer disabled:opacity-50"
+          onClick={forcePipelineSync}
+          disabled={isSyncing || isPipelineSyncing}
+          className="btn-primary px-4 py-2.5 font-display text-xs font-bold flex items-center gap-2 cursor-pointer disabled:opacity-50"
         >
-          <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-          <span>Force Live Feed Sync</span>
+          <RefreshCw className={`w-4 h-4 ${(isSyncing || isPipelineSyncing) ? 'animate-spin' : ''}`} />
+          <span>{isPipelineSyncing ? 'Syncing Pipeline...' : 'Force Live Feed Sync'}</span>
         </button>
 
         <button
           onClick={clearCache}
           disabled={isPurging}
-          className="px-4 py-2.5 rounded-xl border border-[#222E46] bg-[#0E131F] hover:bg-[#141C2E] text-slate-200 font-display text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
+          className="px-4 py-2.5 rounded-xl border border-[#222E46] bg-[#0E131F] hover:bg-[#141C2E] text-slate-200 font-display text-xs font-bold transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
         >
           <Trash2 className="w-4 h-4 text-rose-400" />
-          <span>Purge & Re-anchor Cache</span>
+          <span>{isPurging ? 'Purging...' : 'Purge & Re-anchor Cache'}</span>
         </button>
       </div>
 
       {/* Scrapers Status Grid */}
       <div className="rounded-2xl border border-[#222E46] bg-[#0E131F] p-5 space-y-4">
-        <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider">
-          Individual Scraper Engine Status
-        </h3>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {scrapers.map(([key, item]: any) => (
-            <div
-              key={key}
-              className="p-4 rounded-xl border border-[#222E46] bg-[#0A0E17] flex items-center justify-between gap-3 text-xs"
-            >
-              <div className="space-y-1">
-                <div className="font-bold text-white uppercase">{item.name || key}</div>
-                <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${item.enabled !== false ? 'bg-emerald-400' : 'bg-slate-500'}`}></span>
-                  <span className="text-[10px] text-slate-400 font-num">
-                    {item.latencyMs ? `${item.latencyMs}ms latency` : 'Active'}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => toggleScraper(key, item.enabled !== false)}
-                className={`p-2 rounded-xl border transition-all cursor-pointer ${
-                  item.enabled !== false
-                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
-                    : 'border-slate-700 bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-                title="Toggle Scraper"
-              >
-                <Power className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+        <div className="flex items-center justify-between">
+          <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider">
+            Individual Scraper Engine Status ({scrapers.length})
+          </h3>
         </div>
+
+        {statusLoading ? (
+          <div className="p-8 text-center text-xs text-slate-400">Querying scraper pipeline telemetry...</div>
+        ) : statusError ? (
+          <div className="p-6 text-center rounded-xl border border-rose-500/40 bg-rose-500/10 text-xs text-rose-300 space-y-2">
+            <div>{statusError}</div>
+            <button onClick={fetchScraperHealth} className="px-3 py-1.5 rounded-lg bg-rose-500/20 text-white font-semibold cursor-pointer">
+              Retry Connection
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {scrapers.map(([key, item]: any) => {
+              const statusColor =
+                item.status === 'ONLINE'
+                  ? 'bg-emerald-400'
+                  : item.status === 'PAUSED'
+                  ? 'bg-slate-500'
+                  : item.status === 'DEGRADED'
+                  ? 'bg-amber-400'
+                  : 'bg-rose-500';
+
+              return (
+                <div
+                  key={key}
+                  className="p-4 rounded-xl border border-[#222E46] bg-[#0A0E17] flex items-center justify-between gap-3 text-xs"
+                >
+                  <div className="space-y-1 min-w-0">
+                    <div className="font-display font-bold text-white truncate">{item.name || key}</div>
+                    <div className="text-[11px] text-slate-400 truncate">
+                      {item.role || item.source || 'Telemetry Adapter'}
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`w-2 h-2 rounded-full shrink-0 ${statusColor}`} />
+                      <span className="text-[10px] text-slate-300 font-num font-bold">{item.status}</span>
+                      <span className="text-[10px] text-slate-400 font-num">
+                        {item.latencyMs ? `${item.latencyMs}ms` : '0ms'} · {item.records ?? 0} rec
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => toggleScraper(key, item.enabled !== false)}
+                    className={`p-2 rounded-xl border transition-all cursor-pointer shrink-0 ${
+                      item.enabled !== false
+                        ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+                        : 'border-slate-700 bg-slate-800 text-slate-400 hover:text-white'
+                    }`}
+                    title={item.enabled !== false ? 'Pause Scraper' : 'Enable Scraper'}
+                  >
+                    <Power className="w-4 h-4" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

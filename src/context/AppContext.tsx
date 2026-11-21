@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Fixture, DayTab, TopBankerPick, AccumulatorLeg, AccumulatorAnalysis, Toast, ChatMessage } from '../types.ts';
 // @ts-ignore
 import { auditFixturePrediction } from '../advancedRiskValidationLayer.js';
@@ -24,6 +24,8 @@ interface AppContextType {
   approvedOnly: boolean;
   setApprovedOnly: (a: boolean) => void;
   isSyncing: boolean;
+  loadError: string | null;
+  lastSyncedAt: string | null;
   dataSource: string;
   sastClock: string;
   utcClock: string;
@@ -52,6 +54,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [days, setDays] = useState<DayTab[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
+  const selectedMatchIdRef = useRef<string | null>(null);
+  useEffect(() => { selectedMatchIdRef.current = selectedMatchId; }, [selectedMatchId]);
+
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<string>('daily-top15');
   const [query, setQuery] = useState<string>('');
@@ -59,6 +64,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [bigOnly, setBigOnly] = useState<boolean>(false);
   const [approvedOnly, setApprovedOnly] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
   const [dataSource, setDataSource] = useState<string>('ESPN LIVE INGESTION');
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [accumulatorLegs, setAccumulatorLegs] = useState<AccumulatorLeg[]>([]);
@@ -152,40 +159,51 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDays(newDays);
     setSelectedDate(prev => {
       if (prev && newDays.some(d => d.key === prev)) return prev;
-      return todayKey;
+      if ((dateCounts.get(todayKey) || 0) > 0) return todayKey;
+      const firstActiveDay = sortedKeys.find(k => (dateCounts.get(k) || 0) > 0);
+      return firstActiveDay || todayKey;
     });
   }, []);
 
   const loadFixtures = useCallback(async (force = false) => {
     setIsSyncing(true);
+    setLoadError(null);
     try {
       const url = force ? '/api/fixtures?force=1&t=' + Date.now() : '/api/fixtures?t=' + Date.now();
       const res = await fetch(url);
-      if (res.ok) {
-        const data = await res.json();
-        if (data && Array.isArray(data.matches) && data.matches.length > 0) {
-          setFixtures(data.matches);
-          setDataSource(data.meta?.dataSource || 'OFFICIAL ESPN LIVE INGESTION');
-          syncDays(data.matches);
-          if (!selectedMatchId && data.matches.length > 0) {
-            setSelectedMatchId(data.matches[0].id);
-          }
-          if (force) {
-            addToast('Synchronized', `Loaded ${data.matches.length} fixtures across ${data.meta?.league_count || 40} leagues`, 'success');
-          }
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status} loading fixture feed`);
+      }
+      const data = await res.json();
+      if (data && Array.isArray(data.matches) && data.matches.length > 0) {
+        setFixtures(data.matches);
+        setDataSource(data.meta?.dataSource || 'OFFICIAL ESPN LIVE INGESTION');
+        setLastSyncedAt(data.meta?.generated_at || data.meta?.generatedAt || new Date().toISOString());
+        syncDays(data.matches);
+        if (!selectedMatchIdRef.current && data.matches.length > 0) {
+          setSelectedMatchId(data.matches[0].id);
         }
+        if (force) {
+          const lc = data.meta?.league_count || new Set(data.matches.map((m: any) => m.league?.id)).size;
+          addToast('Synchronized', `Loaded ${data.matches.length} fixtures across ${lc} leagues`, 'success');
+        }
+      } else {
+        setLoadError('No fixtures returned from ingestion service.');
       }
     } catch (err: any) {
-      console.warn('Error fetching fixtures:', err);
-      addToast('Sync Notice', 'Serving verified local Dixon-Coles model cache', 'info');
+      setLoadError(err?.message || 'Unable to reach fixture ingestion server');
+      addToast('Sync Error', err?.message || 'Failed to sync fixture feed', 'error');
     } finally {
       setIsSyncing(false);
     }
-  }, [addToast, selectedMatchId, syncDays]);
+  }, [addToast, syncDays]);
 
+  const didInitRef = useRef(false);
   useEffect(() => {
+    if (didInitRef.current) return;
+    didInitRef.current = true;
     loadFixtures(false);
-  }, []);
+  }, [loadFixtures]);
 
   // Accumulator analysis
   const recalculateAcca = useCallback(async (legs: AccumulatorLeg[]) => {
@@ -202,29 +220,42 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (res.ok) {
         const data = await res.json();
         setAccumulatorAnalysis(data);
+        return;
       }
     } catch (e) {
-      // Fallback client calculation
-      let compoundOdds = 1.0;
-      let compoundProb = 1.0;
-      legs.forEach(l => {
-        compoundOdds *= l.odds;
-        compoundProb *= (l.probability / 100);
-      });
-      const impliedProb = compoundOdds > 0 ? (1 / compoundOdds) : 0;
-      const vig = Math.max(0, ((impliedProb - compoundProb) / impliedProb) * 100);
-      setAccumulatorAnalysis({
-        legsCount: legs.length,
-        compoundOdds: +compoundOdds.toFixed(2),
-        compoundTrueProbabilityPct: +(compoundProb * 100).toFixed(1),
-        compoundImpliedProbabilityPct: +(impliedProb * 100).toFixed(1),
-        houseVigPct: +vig.toFixed(1),
-        netEdgePct: +((compoundProb * compoundOdds - 1) * 100).toFixed(1),
-        riskRating: compoundProb > 0.4 ? 'SAFE' : compoundProb > 0.2 ? 'MODERATE' : 'HIGH',
-        weakestLink: legs.reduce((min, cur) => cur.probability < min.probability ? cur : min, legs[0]),
-        legs
-      });
+      // Fallback client calculation matching backend shape
     }
+    let compoundOdds = 1.0;
+    let compoundProb = 1.0;
+    legs.forEach(l => {
+      compoundOdds *= (l.odds || 1.25);
+      compoundProb *= ((l.probability || 75) / 100);
+    });
+    const trueProbPct = +(Math.max(0.01, compoundProb * 100)).toFixed(2);
+    const failureProb = +(100 - trueProbPct).toFixed(2);
+    const fairTicketOdds = +(100 / Math.max(0.01, trueProbPct)).toFixed(2);
+    const evPct = +(((trueProbPct / 100) * compoundOdds - 1) * 100).toFixed(2);
+    const impliedProb = compoundOdds > 0 ? (1 / compoundOdds) : 0;
+    const vig = impliedProb > 0 ? Math.max(0, ((impliedProb - compoundProb) / impliedProb) * 100) : 0;
+    const weakest = legs.reduce((min, cur) => cur.probability < min.probability ? cur : min, legs[0]);
+    setAccumulatorAnalysis({
+      count: legs.length,
+      combinedOdds: +compoundOdds.toFixed(2),
+      fairTicketOdds,
+      trueProbability: trueProbPct,
+      failureProbability: failureProb,
+      expectedValuePct: evPct,
+      riskLevel: legs.length > 8 || failureProb > 90 ? 'EXTREME HIGH RISK' : legs.length > 4 || failureProb > 75 ? 'HIGH RISK' : legs.length > 2 ? 'MODERATE' : 'LOW',
+      legsCount: legs.length,
+      compoundOdds: +compoundOdds.toFixed(2),
+      compoundTrueProbabilityPct: trueProbPct,
+      compoundImpliedProbabilityPct: +(impliedProb * 100).toFixed(1),
+      houseVigPct: +vig.toFixed(1),
+      netEdgePct: evPct,
+      riskRating: compoundProb > 0.4 ? 'SAFE' : compoundProb > 0.2 ? 'MODERATE' : 'HIGH',
+      weakestLink: weakest,
+      legs
+    });
   }, []);
 
   const addAccaLeg = useCallback((leg: AccumulatorLeg) => {
@@ -255,7 +286,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [addToast]);
 
   // AI Chat Messenger
-  const sendAiMessage = useCallback(async (text: string, model = 'gemini-3.8-flash', enableSearch = true, enableMaps = false) => {
+  const sendAiMessage = useCallback(async (text: string, model = 'gemini-4-hydrogen', enableSearch = true, enableMaps = false) => {
     if (!text.trim()) return;
     const userMsg: ChatMessage = { role: 'user', text, timestamp: new Date().toLocaleTimeString() };
     setAiChatMessages(prev => [...prev, userMsg]);
@@ -311,14 +342,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const selectedMatch = useMemo(() => {
     const found = fixtures.find(f => f.id === selectedMatchId) || null;
     if (!found) return null;
-    if (!found.advancedRiskValidation) {
-      try {
-        found.advancedRiskValidation = auditFixturePrediction(found);
-      } catch (err) {
-        console.warn('Risk validation error for selectedMatch:', err);
-      }
+    if (found.advancedRiskValidation) return found;
+    try {
+      return {
+        ...found,
+        advancedRiskValidation: auditFixturePrediction(found)
+      };
+    } catch {
+      return found;
     }
-    return found;
   }, [fixtures, selectedMatchId]);
 
   // Daily Top 20 Banker generation with Strict Vetting Directive & 20-Layer Risk Validation
@@ -328,20 +360,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const matchesForDay = fixtures.filter(m => (m.matchDate || (m.kickoff ? m.kickoff.split('T')[0] : '')) === targetDate);
     const dayMatches = matchesForDay.length > 0 ? matchesForDay : fixtures.slice(0, 30);
 
-    const candidates: TopBankerPick[] = [];
+    const extractOdds = (o: any) => {
+      if (typeof o === 'number') return o;
+      if (typeof o === 'object' && o !== null) return Number(o.betway || o.hollywoodbets || o.easybet || 1.25);
+      const parsed = parseFloat(o);
+      return isNaN(parsed) ? 1.25 : parsed;
+    };
+
+    const rawCandidates: Array<{ match: Fixture; pick: TopBankerPick }> = [];
 
     dayMatches.forEach(m => {
       const allMarkets = Array.isArray(m.predictions) && m.predictions.length ? m.predictions : (m.topPick ? [m.topPick] : []);
       if (!allMarkets.length) return;
 
-      const extractOdds = (o: any) => {
-        if (typeof o === 'number') return o;
-        if (typeof o === 'object' && o !== null) return Number(o.betway || o.hollywoodbets || o.easybet || 1.25);
-        const parsed = parseFloat(o);
-        return isNaN(parsed) ? 1.25 : parsed;
-      };
-
-      // Sort markets to prioritize highest probability and safe coverage
       const sorted = allMarkets.slice().sort((a, b) => {
         const probA = Number(a.probability) || 0;
         const probB = Number(b.probability) || 0;
@@ -355,62 +386,64 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const ens = beast.ensemble || {};
       const modelAgreement = ens.modelAgreementScore || 88;
       const calProb = beast.calibratedProbability || prob;
-
-      const isDerby = !!(beast.derbyInfo?.isDerby || /derby|clásico|clasico|soweto/i.test(`${m.home.name} ${m.away.name}`));
-      // Derbies are not discarded; instead their most winnable markets (cards, goals, halves) are evaluated
-
       const bankerScore = Math.min(99, Math.round((prob * 0.5) + (modelAgreement * 0.3) + 18));
 
-      // Layer 1-20 Risk Intelligence Audit
-      let riskAudit: any = null;
-      try {
-        riskAudit = auditFixturePrediction(m);
-      } catch (err) {
-        console.warn('Risk audit failed for match:', m.id, err);
-      }
-
-      candidates.push({
-        id: `TOP-${m.id}`,
-        matchId: m.id,
-        rank: 0,
-        rankLabel: '',
-        match: `${m.home.name} vs ${m.away.name}`,
-        home: m.home,
-        away: m.away,
-        league: m.league,
-        kickoff: m.kickoff,
-        kickoffTime: m.kickoffRsa || m.kickoffTime || '15:30 SAST',
-        matchDate: m.matchDate || (m.kickoff ? m.kickoff.split('T')[0] : targetDate),
-        market: best.market,
-        marketCategory: best.marketCategory || 'WINNERS_DC',
-        selection: best.selection,
-        probability: prob,
-        calibratedProb: calProb,
-        odds: oddsVal,
-        allOdds: typeof best.odds === 'object' ? (best.odds as any) : { hollywoodbets: oddsVal, betway: +(oddsVal * 1.02).toFixed(2), easybet: oddsVal },
-        bankerScore,
-        modelAgreement,
-        modelsActive: ens.totalModelsActive || 17,
-        trustScore: beast.trustScore || 92,
-        safetyTier: prob >= 82 ? 'ULTRA_BANKER' : 'VETTED_BANKER',
-        safetyBadge: prob >= 82 ? '🛡️ ULTRA BANKER LOCK' : '✅ VETTED BANKER',
-        badgeBg: prob >= 82 ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
-        whySafe: `${m.home.name} vs ${m.away.name}: 17-Model Ensemble agreement at ${modelAgreement}% with zero rotation look-ahead penalty.`,
-        isFinished: m.matchStatus === 'FINISHED',
-        finalScore: m.finalScore,
-        settledResult: best.result || 'PENDING',
-        evPct: beast.expectedValuePct || +(((calProb / 100) * oddsVal - 1) * 100).toFixed(1),
-        advancedRiskValidation: riskAudit
+      rawCandidates.push({
+        match: m,
+        pick: {
+          id: `TOP-${m.id}`,
+          matchId: m.id,
+          rank: 0,
+          rankLabel: '',
+          match: `${m.home.name} vs ${m.away.name}`,
+          home: m.home,
+          away: m.away,
+          league: m.league,
+          kickoff: m.kickoff,
+          kickoffTime: m.kickoffRsa || m.kickoffTime || '15:30 SAST',
+          matchDate: m.matchDate || (m.kickoff ? m.kickoff.split('T')[0] : targetDate),
+          market: best.market || 'Match Winner',
+          marketCategory: best.marketCategory || 'WINNERS_DC',
+          selection: String(best.selection || 'Home'),
+          probability: prob,
+          calibratedProb: calProb,
+          odds: oddsVal,
+          allOdds: (best.odds && typeof best.odds === 'object') ? (best.odds as any) : { hollywoodbets: oddsVal, betway: +(oddsVal * 1.02).toFixed(2), easybet: oddsVal },
+          bankerScore,
+          modelAgreement,
+          modelsActive: ens.totalModelsActive || 17,
+          trustScore: beast.trustScore || 92,
+          safetyTier: prob >= 82 ? 'ULTRA_BANKER' : 'VETTED_BANKER',
+          safetyBadge: prob >= 82 ? '🛡️ ULTRA BANKER LOCK' : '✅ VETTED BANKER',
+          badgeBg: prob >= 82 ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
+          whySafe: `${m.home.name} vs ${m.away.name}: 17-Model Ensemble agreement at ${modelAgreement}% with zero rotation look-ahead penalty.`,
+          isFinished: m.matchStatus === 'FINISHED',
+          finalScore: m.finalScore,
+          settledResult: best.result || 'PENDING',
+          evPct: beast.expectedValuePct || +(((calProb / 100) * oddsVal - 1) * 100).toFixed(1),
+          advancedRiskValidation: m.advancedRiskValidation || null
+        }
       });
     });
 
-    candidates.sort((a, b) => b.probability - a.probability);
+    rawCandidates.sort((a, b) => b.pick.probability - a.pick.probability);
 
-    return candidates.slice(0, 20).map((c, idx) => ({
-      ...c,
-      rank: idx + 1,
-      rankLabel: idx === 0 ? '👑 #1 TOP SUREST WIN' : idx === 1 ? '🥈 #2 PRIME LOCK' : idx === 2 ? '🥉 #3 PRIME LOCK' : `🏅 #${idx + 1} SURE LOCK`
-    }));
+    return rawCandidates.slice(0, 20).map(({ match, pick }, idx) => {
+      let riskAudit = pick.advancedRiskValidation;
+      if (!riskAudit) {
+        try {
+          riskAudit = auditFixturePrediction(match);
+        } catch {
+          riskAudit = null;
+        }
+      }
+      return {
+        ...pick,
+        rank: idx + 1,
+        rankLabel: idx === 0 ? '👑 #1 TOP SUREST WIN' : idx === 1 ? '🥈 #2 PRIME LOCK' : idx === 2 ? '🥉 #3 PRIME LOCK' : `🏅 #${idx + 1} SURE LOCK`,
+        advancedRiskValidation: riskAudit
+      };
+    });
   }, [fixtures, selectedDate]);
 
   return (
@@ -436,6 +469,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         approvedOnly,
         setApprovedOnly,
         isSyncing,
+        loadError,
+        lastSyncedAt,
         dataSource,
         sastClock,
         utcClock,

@@ -1,222 +1,339 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext.tsx';
 import {
-  Search, RefreshCw, Bot, PanelLeft, Clock, Menu, ShieldAlert
+  Search, RefreshCw, Bot, ChevronDown, Clock, Menu, X, Check
 } from 'lucide-react';
+
+interface NavItem {
+  id: string;
+  label: string;
+  desc?: string;
+  count?: number;
+}
 
 export const Header: React.FC = () => {
   const {
     activeView, setActiveView,
-    sastClock, utcClock, todayFullStr,
+    sastClock, utcClock,
     isSyncing, refreshFixtures,
     accumulatorLegs, setAiChatOpen,
     query, setQuery, dataSource
   } = useApp();
 
   const [navDropdownOpen, setNavDropdownOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const navItems = useMemo(() => [
-    { id: 'daily-top15', label: 'Daily Top 20', icon: '⭐' },
-    { id: 'fixtures', label: 'Fixtures', icon: '⚽' },
-    { id: 'beastboard', label: 'Beast Board', icon: '🦁', badge: '+EV' },
-    { id: 'accumulator', label: 'Acca Studio', icon: '📋', badge: accumulatorLegs.length > 0 ? `${accumulatorLegs.length}` : null },
-    { id: 'betslip', label: 'Slip X-Ray', icon: '🔬', badge: 'OCR' },
-    { id: 'validation', label: 'Validation Suite', icon: '🧪', badge: 'SHIELD' },
-    { id: 'reality-check', label: 'Reality Check', icon: '🛡️', badge: 'SIM' },
-    { id: 'discovery', label: 'Discovery', icon: '📡', badge: 'LIVE' },
-    { id: 'performance', label: 'Performance', icon: '📈' },
-    { id: 'bankroll', label: 'Bankroll', icon: '💰' },
-    { id: 'admin', label: 'Admin', icon: '⚙️' },
-  ], [accumulatorLegs.length]);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setNavDropdownOpen(false);
+        setMobileMenuOpen(false);
+        setSearchOpen(false);
+      }
+    };
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setNavDropdownOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
-  const activeModule = navItems.find(i => i.id === activeView);
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
 
-  const allViews = [
-    { id: 'daily-top15', label: 'Daily Top 20' },
+  const primaryItems: NavItem[] = useMemo(() => [
+    { id: 'daily-top15', label: 'Top 20 Bankers' },
     { id: 'fixtures', label: 'Fixtures' },
     { id: 'beastboard', label: 'Beast Board' },
-    { id: 'accumulator', label: 'Acca Studio' },
-    { id: 'betslip', label: 'Bet Slip X-Ray' },
-    { id: 'validation', label: 'Validation Suite' },
-    { id: 'reality-check', label: 'Reality Check' },
-    { id: 'discovery', label: 'Discovery' },
-    { id: 'performance', label: 'Performance' },
-    { id: 'bankroll', label: 'Bankroll' },
-    { id: 'admin', label: 'Admin Centre' },
-  ];
+    { id: 'accumulator', label: 'Acca Studio', count: accumulatorLegs.length },
+    { id: 'betslip', label: 'Slip X-Ray' },
+  ], [accumulatorLegs.length]);
 
-  const navNav = (id: string) => {
+  const secondaryItems: NavItem[] = useMemo(() => [
+    { id: 'validation', label: 'Validation Suite', desc: 'Walk-forward, CLV & 17 data sources' },
+    { id: 'reality-check', label: 'Reality Check', desc: 'Probability calibration & trap check' },
+    { id: 'discovery', label: 'Discovery', desc: 'Lineups, weather & steam alerts' },
+    { id: 'performance', label: 'Performance', desc: 'Accuracy ledger & league ROI' },
+    { id: 'bankroll', label: 'Bankroll', desc: 'Fractional Kelly & loss safeguards' },
+    { id: 'admin', label: 'Admin Centre', desc: '17 scraper engines & live cache sync' },
+  ], []);
+
+  const allItems = useMemo(() => [...primaryItems, ...secondaryItems], [primaryItems, secondaryItems]);
+
+  const navigateTo = (id: string) => {
     setActiveView(id);
     setNavDropdownOpen(false);
     setMobileMenuOpen(false);
   };
 
-  return (
-    <header className="sticky top-0 z-30 glass-card border-b border-[#1D2A45] backdrop-blur-md">
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 h-20 flex items-center gap-4">
+  const isSecondaryActive = secondaryItems.some(i => i.id === activeView);
+  const activeSecondaryLabel = secondaryItems.find(i => i.id === activeView)?.label;
 
-        {/* ── Brand: gradient logo + neon X ── */}
+  return (
+    <header className="sticky top-0 z-30 border-b border-[#1D2A45] bg-[#070A13]/95 backdrop-blur-md">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+
+        {/* ── Brand Zone ── */}
         <button
-          onClick={() => navNav('daily-top15')}
-          className="flex items-center gap-3.5 group shrink-0 cursor-pointer transition-transform duration-300 group-hover:scale-105"
+          onClick={() => navigateTo('daily-top15')}
+          className="flex items-center gap-2.5 shrink-0 cursor-pointer group focus:outline-none"
+          title="HyenaX · The Ndlela Millionaires GoldPack"
         >
-          <div className="relative w-12 h-12 rounded-xl overflow-hidden p-0.5 bg-gradient-to-br from-[#00E5FF] via-[#7B2EFA] to-[#FF2E9D] shadow-[0_0_22px_-4px_rgba(0,229,255,0.55)]">
-            <img src="icons/icon.svg" alt="HyenaX" className="w-full h-full object-cover rounded-[10px]"
-                 onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+          <div className="relative w-9 h-9 rounded-lg overflow-hidden p-0.5 bg-gradient-to-br from-[#00E5FF] via-[#7B2EFA] to-[#FF2E9D] shadow-[0_0_16px_-4px_rgba(0,229,255,0.5)]">
+            <img
+              src="/icons/icon.svg"
+              alt="HyenaX"
+              className="w-full h-full object-cover rounded-[6px]"
+              onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+            />
           </div>
-          <div className="leading-tight">
+          <div className="leading-none text-left whitespace-nowrap">
             <div className="flex items-baseline gap-0.5">
-              <span className="font-display font-black text-2xl tracking-tight text-white">Hyena</span>
-              <span className="font-display font-black text-2xl text-[#00E5FF] drop-shadow-[0_0_12px_rgba(0,229,255,0.65)]">X</span>
+              <span className="font-display font-bold text-xl tracking-tight text-white">Hyena</span>
+              <span className="font-display font-extrabold text-xl text-[#00E5FF]">X</span>
             </div>
-            <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#00E5FF]/80">
-              The Ndlela Millionaires GoldPack
+            <div className="hidden 2xl:block text-[9px] font-semibold uppercase tracking-[0.16em] text-[#00E5FF]/75 mt-0.5">
+              GoldPack Engine
             </div>
           </div>
         </button>
 
-        {/* ── Desktop nav: futures pills ── */}
-        <nav className="hidden lg:flex items-center gap-1.5 p-1 rounded-xl border border-[#1D2A45] bg-[#0B0D16]">
-          <button
-            onClick={() => navNav('fixtures')}
-            className={`px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5 cursor-pointer ${
-              activeView === 'fixtures'
-                ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50 shadow-[0_0_10px_rgba(0,229,255,.2)]'
-                : 'text-slate-400 hover:text-[#00E5FF] border-transparent'
-            }`}
-          >
-            <span>⚽</span><span>Fixtures</span>
-          </button>
+        {/* ── Center Desktop Nav Zone (Single-Line, Zero Wrapping) ── */}
+        <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-1 p-1 rounded-xl border border-[#1D2A45] bg-[#0B0F1A] shrink-0">
+          {primaryItems.map(item => {
+            const active = activeView === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => navigateTo(item.id)}
+                className={`px-3 py-1.5 rounded-lg font-display text-[13px] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
+                  active
+                    ? 'bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/40'
+                    : 'text-slate-300 hover:text-white hover:bg-[#131A2C] border border-transparent'
+                }`}
+              >
+                <span>{item.label}</span>
+                {typeof item.count === 'number' && item.count > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] leading-none bg-[#00E5FF] text-[#041118] font-extrabold font-num">
+                    {item.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
 
-          {navItems.slice(1, 5).map(item => (
+          {/* Expanding More Dropdown */}
+          <div className="relative shrink-0" ref={dropdownRef}>
             <button
-              key={item.id}
-              onClick={() => navNav(item.id)}
-              className={`px-3 py-1.5 rounded-lg font-display text-xs font-bold tracking-wider border transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeView === item.id
-                  ? 'bg-[#00E5FF]/12 text-[#00E5FF] border-[#00E5FF]/50'
-                  : 'text-slate-400 hover:text-[#00E5FF] border-transparent'
+              onClick={() => setNavDropdownOpen(prev => !prev)}
+              aria-expanded={navDropdownOpen}
+              aria-haspopup="menu"
+              className={`px-3 py-1.5 rounded-lg font-display text-[13px] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
+                isSecondaryActive || navDropdownOpen
+                  ? 'bg-[#7B2EFA]/20 text-[#00E5FF] border border-[#7B2EFA]/50'
+                  : 'text-slate-300 hover:text-white hover:bg-[#131A2C] border border-transparent'
               }`}
             >
-              <span>{item.icon}</span><span>{item.label}</span>
-              {item.badge && (
-                <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-[#00E5FF]/15 text-[#00E5FF] font-extrabold font-num border border-[#00E5FF]/30">{item.badge}</span>
-              )}
-            </button>
-          ))}
-
-          {/* More dropdown */}
-          <div className="relative" onClick={() => setNavDropdownOpen(!navDropdownOpen)}>
-            <button
-              className={`px-2.5 py-1.5 rounded-lg font-display text-xs font-semibold tracking-wider border transition-all flex items-center gap-1 cursor-pointer ${
-                navItems.slice(5).some(i => i.id === activeView)
-                  ? 'bg-[#7B2EFA]/20 text-[#7B2EFA] border-[#7B2EFA]/50'
-                  : 'text-slate-400 hover:text-white border-transparent'
-              }`}
-            >
-              <PanelLeft className="w-3.5 h-3.5 text-[#7B2EFA]" />
-              <span>More</span>
-              <span className="text-[10px] opacity-60">▼</span>
+              <span>{isSecondaryActive ? activeSecondaryLabel : 'More'}</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${navDropdownOpen ? 'rotate-180 text-[#00E5FF]' : 'text-slate-400'}`}
+              />
             </button>
 
             {navDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 glass-card border-[#1D2A45] p-1.5 z-50 rounded-xl space-y-0.5">
-                {navItems.slice(5).map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => navNav(item.id)}
-                    className={`w-full px-3 py-2 rounded-lg text-left text-xs font-medium flex items-center justify-between transition-colors cursor-pointer ${
-                      activeView === item.id ? 'bg-[#00E5FF]/15 text-[#00E5FF]' : 'text-slate-300 hover:bg-[#1D2A45]'
-                    }`}
-                  >
-                    <span className="flex items-center gap-2"><span>{item.icon}</span><span>{item.label}</span></span>
-                    {item.badge && <span className="px-1.5 py-0.5 rounded text-[9px] bg-[#00E5FF]/15 text-[#00E5FF] font-bold">{item.badge}</span>}
-                  </button>
-                ))}
+              <div
+                role="menu"
+                className="absolute right-0 mt-2 w-72 border border-[#1D2A45] bg-[#0B101D]/98 backdrop-blur-xl p-2 z-50 rounded-xl space-y-1 shadow-2xl"
+              >
+                <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Intelligence &amp; Risk Suite
+                </div>
+                {secondaryItems.map(item => {
+                  const active = activeView === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      role="menuitem"
+                      onClick={() => navigateTo(item.id)}
+                      className={`w-full px-3 py-2 rounded-lg text-left transition-colors flex items-center justify-between gap-2 cursor-pointer ${
+                        active
+                          ? 'bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30'
+                          : 'text-slate-200 hover:bg-[#161F33] border border-transparent'
+                      }`}
+                    >
+                      <div className="min-w-0">
+                        <div className="text-xs font-display font-bold truncate">{item.label}</div>
+                        {item.desc && (
+                          <div className="text-[11px] text-slate-400 truncate">{item.desc}</div>
+                        )}
+                      </div>
+                      {active && <Check className="w-3.5 h-3.5 text-[#00E5FF] shrink-0" />}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
         </nav>
 
-        {/* ── Center: global search (futuristic glass input) ── */}
-        <div className="flex-1 hidden md:block relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#00E5FF]" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search teams & leagues…"
-            className="futuristic-input w-full pl-9"
-          />
-        </div>
+        {/* ── Right Utility Zone ── */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Search Trigger (expands quick search bar cleanly without crowding nav) */}
+          <button
+            onClick={() => setSearchOpen(prev => !prev)}
+            aria-expanded={searchOpen}
+            aria-label="Toggle quick search"
+            title={query ? `Filtering: "${query}"` : 'Search teams & leagues'}
+            className={`relative p-2 rounded-lg border transition-colors cursor-pointer shrink-0 ${
+              searchOpen || query
+                ? 'border-[#00E5FF]/60 bg-[#00E5FF]/15 text-[#00E5FF]'
+                : 'border-[#1D2A45] bg-[#0B0F1A] text-slate-300 hover:text-white hover:border-[#00E5FF]/40'
+            }`}
+          >
+            <Search className="w-4 h-4" />
+            {query && (
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#00E5FF]" />
+            )}
+          </button>
 
-        {/* ── Right: status pill + actions ── */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          {/* Engine status (live) */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg glass-card border-border text-[11px]">
-            <span className="live-dot w-2 h-2 rounded-full" />
-            <span className="font-num text-[11px] font-bold text-[#00E5FF]">
-              {dataSource}
-            </span>
-          </div>
-
-          {/* SAST / UTC clocks */}
-          <div className="hidden sm:flex flex-col items-end text-right">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#00E5FF] font-num">
+          {/* Compact SAST / UTC Clock */}
+          <div
+            className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[#1D2A45] bg-[#0B0F1A] shrink-0"
+            title={`${utcClock} · ${dataSource}`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+            <div className="flex items-center gap-1 text-xs font-bold text-[#00E5FF] font-num whitespace-nowrap">
+              <Clock className="w-3 h-3 text-[#00E5FF]/80" />
               <span>{sastClock}</span>
-              <Clock className="w-3 h-3 text-[#00E5FF]" />
             </div>
-            <div className="text-[10px] text-slate-400 font-num">{utcClock}</div>
           </div>
 
           {/* Sync */}
           <button
             onClick={() => refreshFixtures(true)}
             disabled={isSyncing}
-            className="btn-ghost p-2"
-            title="Force synchronization with live ESPN and Dixon-Coles models"
+            className="p-2 rounded-lg border border-[#1D2A45] bg-[#0B0F1A] text-slate-300 hover:text-[#00E5FF] hover:border-[#00E5FF]/40 transition-colors cursor-pointer shrink-0 disabled:opacity-50"
+            title={`Force sync live ESPN feed (${dataSource})`}
+            aria-label="Synchronize live fixtures"
           >
-            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#00E5FF]' : ''}`} />
           </button>
 
           {/* AI Oracle */}
           <button
             onClick={() => setAiChatOpen(true)}
-            className="btn-primary hidden sm:flex items-center gap-2 px-3.5 py-2"
-            title="Open the quantitative AI Oracle"
+            className="btn-primary hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs whitespace-nowrap shrink-0 cursor-pointer"
+            title="Open the Quantitative AI Oracle"
           >
-            <Bot className="w-4 h-4" />
-            <span className="hidden sm:inline">AI Oracle</span>
-            <span className="px-1.5 py-0.5 rounded-full text-[9px] bg-[#00E5FF] text-[#041118] font-black uppercase">Live</span>
+            <Bot className="w-4 h-4 shrink-0" />
+            <span>AI Oracle</span>
           </button>
 
-          {/* Mobile menu trigger */}
+          {/* Mobile Menu Trigger */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden btn-ghost p-2"
-            aria-label="Open navigation menu"
+            onClick={() => setMobileMenuOpen(prev => !prev)}
+            className="lg:hidden p-2 rounded-lg border border-[#1D2A45] bg-[#0B0F1A] text-slate-200 hover:border-[#00E5FF]/50 cursor-pointer shrink-0"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
           >
-            <Menu className="w-4 h-4" />
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile dropdown: all views */}
+      {/* Expandable Search Drawer Strip */}
+      {searchOpen && (
+        <div className="border-t border-[#1D2A45] bg-[#0A0E19]">
+          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 py-2.5 flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00E5FF]" />
+              <input
+                ref={searchInputRef}
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  if (e.target.value.trim() && activeView !== 'fixtures') {
+                    setActiveView('fixtures');
+                  }
+                }}
+                placeholder="Search club, league, or country across all 141 competitions..."
+                className="futuristic-input w-full pl-9 pr-9 text-xs"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                  aria-label="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+            <button
+              onClick={() => setSearchOpen(false)}
+              className="px-3 py-2 rounded-lg border border-[#1D2A45] text-xs font-medium text-slate-300 hover:text-white cursor-pointer shrink-0"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Expandable Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden glass-card border-t border-[#1D2A45]">
-          <div className="px-4 py-3 space-y-1">
-            {allViews.map(v => (
+        <div className="lg:hidden border-t border-[#1D2A45] bg-[#080B14]/98 backdrop-blur-lg">
+          <div className="px-4 py-3 space-y-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+              {allItems.map(item => {
+                const active = activeView === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => navigateTo(item.id)}
+                    className={`text-left px-3 py-2 rounded-lg text-xs font-display font-semibold flex items-center justify-between gap-2 cursor-pointer ${
+                      active
+                        ? 'bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/40'
+                        : 'text-slate-200 bg-[#0E131F] hover:bg-[#1A2236] border border-transparent'
+                    }`}
+                  >
+                    <span className="truncate">{item.label}</span>
+                    {typeof item.count === 'number' && item.count > 0 && (
+                      <span className="px-1.5 py-0.5 rounded-full text-[9px] bg-[#00E5FF] text-[#041118] font-bold font-num shrink-0">
+                        {item.count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#1D2A45]">
+              <span className="text-[11px] font-num text-slate-400 truncate">
+                {sastClock} · {utcClock}
+              </span>
               <button
-                key={v.id}
-                onClick={() => navNav(v.id)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-display flex items-center justify-between cursor-pointer ${
-                  activeView === v.id ? 'bg-[#00E5FF]/15 text-[#00E5FF]' : 'text-slate-300 hover:bg-[#1D2A45]'
-                }`}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setAiChatOpen(true);
+                }}
+                className="sm:hidden btn-primary px-3 py-2 flex items-center gap-1.5 text-xs cursor-pointer shrink-0"
               >
-                <span className="flex items-center gap-2.5"><span className="font-semibold">{v.label}</span></span>
-                {activeView === v.id && <ShieldAlert className="w-3.5 h-3.5 text-[#00E5FF]" />}
+                <Bot className="w-4 h-4" />
+                <span>AI Oracle</span>
               </button>
-            ))}
+            </div>
           </div>
         </div>
       )}

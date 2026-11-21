@@ -5,6 +5,8 @@
             Injuries, suspensions & squad strength penalty delta
    ============================================================ */
 
+import { lookupByTeamName } from './teamNormalizer.js';
+
 export const SQUAD_VALUATIONS = {
   // Premier League
   'Manchester City': { marketValueM: 1260, avgAge: 26.8, depthIndex: 9.8, injuredKeyPlayers: [] },
@@ -27,6 +29,16 @@ export const SQUAD_VALUATIONS = {
   'Villarreal': { marketValueM: 260, avgAge: 27.4, depthIndex: 7.6, injuredKeyPlayers: [] },
   'Real Betis': { marketValueM: 210, avgAge: 28.2, depthIndex: 7.5, injuredKeyPlayers: [{ name: 'Isco', pos: 'AM', impact: -0.08 }] },
 
+  // Europe
+  'Bayern Munich': { marketValueM: 980, avgAge: 26.5, depthIndex: 9.5, injuredKeyPlayers: [] },
+  'Bayer Leverkusen': { marketValueM: 640, avgAge: 25.2, depthIndex: 8.9, injuredKeyPlayers: [] },
+  'Borussia Dortmund': { marketValueM: 495, avgAge: 25.8, depthIndex: 8.5, injuredKeyPlayers: [] },
+  'Inter': { marketValueM: 685, avgAge: 27.9, depthIndex: 9.1, injuredKeyPlayers: [] },
+  'AC Milan': { marketValueM: 575, avgAge: 25.6, depthIndex: 8.7, injuredKeyPlayers: [] },
+  'Juventus': { marketValueM: 590, avgAge: 25.3, depthIndex: 8.8, injuredKeyPlayers: [] },
+  'Napoli': { marketValueM: 460, avgAge: 26.4, depthIndex: 8.4, injuredKeyPlayers: [] },
+  'Paris Saint-Germain': { marketValueM: 920, avgAge: 24.4, depthIndex: 9.4, injuredKeyPlayers: [] },
+
   // PSL (Betway Premiership)
   'Mamelodi Sundowns': { marketValueM: 34.5, avgAge: 27.5, depthIndex: 9.6, injuredKeyPlayers: [] },
   'Orlando Pirates': { marketValueM: 22.8, avgAge: 26.8, depthIndex: 8.9, injuredKeyPlayers: [] },
@@ -47,12 +59,14 @@ export class TransfermarktScraper {
   }
 
   getSquadDetails(teamName) {
-    if (SQUAD_VALUATIONS[teamName]) {
-      const data = SQUAD_VALUATIONS[teamName];
+    const found = lookupByTeamName(SQUAD_VALUATIONS, teamName);
+    if (found) {
+      const data = found.data;
       const injuryPenalty = data.injuredKeyPlayers.reduce((acc, p) => acc + (p.impact || 0), 0);
       return {
         source: 'Transfermarkt',
         team: teamName,
+        canonicalTeam: found.key,
         ...data,
         injuryPenalty: +injuryPenalty.toFixed(3),
         netStrengthFactor: +(1.0 + injuryPenalty).toFixed(3),
@@ -64,6 +78,7 @@ export class TransfermarktScraper {
     return {
       source: 'Transfermarkt Derived',
       team: teamName,
+      canonicalTeam: teamName,
       marketValueM: 45.0,
       avgAge: 26.5,
       depthIndex: 7.0,

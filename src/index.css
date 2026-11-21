@@ -100,9 +100,8 @@
   display: inline-flex; align-items: center; gap: 6px;
 }
 .kicker::before {
-  content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 9999px;
-  background: var(--accent); box-shadow: 0 0 8px var(--accent);
-  animation: ping 1.7s cubic-bezier(0,0,.2,1) infinite;
+  content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 9999px;
+  background: var(--accent);
 }
 
 /* ─── Glassmorphic cards ─── */
@@ -172,19 +171,17 @@
   animation: fill .9s cubic-bezier(.2,.8,.2,1) forwards;
 }
 
-/* ─── Live indicator (pulsing ring) ─── */
-.live-dot { position: relative; }
-.live-dot::after {
-  content:''; position:absolute; inset:-3px; border-radius:9999px;
-  border: 1px solid rgba(0,229,255,.6); animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite;
+/* ─── Live indicator (crisp static dot) ─── */
+.live-dot {
+  position: relative;
+  background: var(--ok);
 }
 
-/* ─── Big badge (neon pulse) ─── */
+/* ─── Big badge ─── */
 .big-badge {
   background: rgba(0,229,255,.12); border:1px solid rgba(0,229,255,.5); color: var(--accent);
-  text-shadow: 0 0 10px rgba(0,229,255,.8); animation: pulseCyan 2.4s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(0,229,255,.25);
 }
-@keyframes pulseCyan { 0%,100% { box-shadow: 0 0 8px rgba(0,229,255,.35); } 50% { box-shadow: 0 0 18px rgba(0,229,255,.75); } }
 
 /* ─── Match card ─── */
 .match-card { border: 1px solid var(--panel-border); background: var(--panel); border-radius: 12px;
@@ -210,7 +207,7 @@
 /* ─── Misc (legacy compat) ─── */
 .gold-border-card { border: 1px solid var(--panel-border); }
 
-/* ─── Responsive: reduceorb motion on small screens ─── */
+/* ─── Responsive: reduce orb motion on small screens ─── */
 @media (max-width: 639px) {
   .orb-a, .orb-b, .orb-c, .orb-d { display: none; }
 }

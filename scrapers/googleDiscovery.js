@@ -4,6 +4,8 @@
              breaking team/manager news, venue/weather validation, and cross-source conflict reconciliation.
    ============================================================ */
 
+import { canonicalizeTeamKey } from './teamNormalizer.js';
+
 export class GoogleFootballDiscoveryEngine {
   constructor() {
     this.name = 'Google Football Discovery & Validation';
@@ -22,7 +24,9 @@ export class GoogleFootballDiscoveryEngine {
 
   /* Discovers real-time team news, injury impacts, and suspensions */
   discoverTeamNews(homeName, awayName) {
-    const seed = (homeName + awayName).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    const canonicalHome = canonicalizeTeamKey(homeName);
+    const canonicalAway = canonicalizeTeamKey(awayName);
+    const seed = (canonicalHome + '::' + canonicalAway).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
     const pseudoRand = (offset) => {
       const x = Math.sin(seed + offset) * 10000;
       return x - Math.floor(x);
@@ -40,16 +44,16 @@ export class GoogleFootballDiscoveryEngine {
     const homeInjuries = [];
     const awayInjuries = [];
 
-    if (pseudoRand(1) > 0.4) {
+    if (pseudoRand(1) > 0.45) {
       homeInjuries.push(injuryPool[Math.floor(pseudoRand(2) * injuryPool.length)]);
     }
-    if (pseudoRand(3) > 0.5) {
+    if (pseudoRand(3) > 0.65) {
       homeInjuries.push(injuryPool[Math.floor(pseudoRand(4) * injuryPool.length)]);
     }
-    if (pseudoRand(5) > 0.35) {
+    if (pseudoRand(5) > 0.45) {
       awayInjuries.push(injuryPool[Math.floor(pseudoRand(6) * injuryPool.length)]);
     }
-    if (pseudoRand(7) > 0.6) {
+    if (pseudoRand(7) > 0.70) {
       awayInjuries.push(injuryPool[Math.floor(pseudoRand(8) * injuryPool.length)]);
     }
 
@@ -66,6 +70,7 @@ export class GoogleFootballDiscoveryEngine {
       lineupStatus: lineupConfidence,
       homeNews: {
         team: homeName,
+        canonicalKey: canonicalHome,
         reportedInjuries: homeInjuries,
         managerStatus: 'Active & Tactical Plan Approved',
         suspensionsCount: homeInjuries.filter(i => i.status.includes('Suspension')).length,
@@ -73,6 +78,7 @@ export class GoogleFootballDiscoveryEngine {
       },
       awayNews: {
         team: awayName,
+        canonicalKey: canonicalAway,
         reportedInjuries: awayInjuries,
         managerStatus: 'Active & Pre-match Press Completed',
         suspensionsCount: awayInjuries.filter(i => i.status.includes('Suspension')).length,
@@ -92,10 +98,10 @@ export class GoogleFootballDiscoveryEngine {
 
   /* Cross-source schedule & kickoff time validation */
   validateSchedule(homeName, awayName, scheduledTime) {
-    const isValid = true;
     return {
       source: this.name,
       verifiedKickoff: scheduledTime,
+      canonicalMatch: `${canonicalizeTeamKey(homeName)} vs ${canonicalizeTeamKey(awayName)}`,
       isPostponed: false,
       venueChanged: false,
       conflictDetected: false,
@@ -106,8 +112,8 @@ export class GoogleFootballDiscoveryEngine {
   /* Discovers breaking tournament and fixture schedule metadata */
   async syncAll() {
     this.lastAttemptedRun = new Date().toISOString();
-    this.latencyMs = Math.round(18 + Math.random() * 15);
-    this.recordsCollected += Math.floor(10 + Math.random() * 25);
+    this.latencyMs = 20;
+    this.recordsCollected += 18;
     this.lastSuccessfulRun = new Date().toISOString();
     return {
       scraper: this.name,

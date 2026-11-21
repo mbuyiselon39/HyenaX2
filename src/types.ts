@@ -215,13 +215,21 @@ export interface AccumulatorLeg {
 }
 
 export interface AccumulatorAnalysis {
-  legsCount: number;
-  compoundOdds: number;
-  compoundTrueProbabilityPct: number;
-  compoundImpliedProbabilityPct: number;
-  houseVigPct: number;
-  netEdgePct: number;
-  riskRating: 'EXTREME' | 'HIGH' | 'MODERATE' | 'SAFE';
+  count?: number;
+  combinedOdds: number;
+  fairTicketOdds?: number;
+  trueProbability: number;
+  failureProbability: number;
+  expectedValuePct: number;
+  riskLevel?: string;
+  // Legacy / alias compatibility fields
+  legsCount?: number;
+  compoundOdds?: number;
+  compoundTrueProbabilityPct?: number;
+  compoundImpliedProbabilityPct?: number;
+  houseVigPct?: number;
+  netEdgePct?: number;
+  riskRating?: 'EXTREME' | 'HIGH' | 'MODERATE' | 'SAFE';
   weakestLink: any;
   legs: any[];
 }

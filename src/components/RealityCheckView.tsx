@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
 import {
-  ShieldAlert,
-  AlertTriangle,
-  Flame,
   ChevronDown,
   ChevronUp,
-  Sliders,
-  DollarSign,
-  Info
+  Sliders
 } from 'lucide-react';
 
 export const RealityCheckView: React.FC = () => {
@@ -24,7 +19,7 @@ export const RealityCheckView: React.FC = () => {
   const bustProb = Math.max(0, 1 - winProb);
   const compoundOdds = Math.pow(rOdds, n);
   const fairOdds = winProb > 0 ? 1 / winProb : 999;
-  const houseVigPct = Math.max(0, ((fairOdds - compoundOdds) / fairOdds) * 100);
+  const houseVigPct = fairOdds > 0 ? Math.max(0, ((fairOdds - compoundOdds) / fairOdds) * 100) : 0;
 
   const blindspots = [
     {
@@ -56,29 +51,28 @@ export const RealityCheckView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      
       {/* Banner */}
-      <div className="rounded-2xl border border-rose-500/30 bg-gradient-to-r from-[#1F0A0D] to-[#0E131F] p-5 sm:p-6 shadow-xl">
+      <div className="rounded-2xl border border-rose-500/30 bg-gradient-to-r from-[#190B12] via-[#0C1222] to-[#0E131F] p-5 sm:p-6 shadow-xl">
         <div className="flex items-center gap-2 mb-1">
           <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-500 text-white">
             Anti-Loss Shield
           </span>
           <span className="text-xs text-rose-300 font-semibold">
-            Responsible Quantitative Staking & Ruin Prevention
+            Responsible Quantitative Staking &amp; Ruin Prevention
           </span>
         </div>
         <h1 className="text-2xl font-display font-black text-white">
-          Reality Check & Ruin Calculator
+          Reality Check &amp; Ruin Calculator
         </h1>
         <p className="text-xs text-slate-300 mt-1 max-w-xl">
-          Expose the hidden mathematical traps that bookmakers use to wipe out casual accumulators, and simulate your true bankruptcy probabilities.
+          Expose the hidden mathematical traps that bookmakers use to wipe out casual accumulators, and simulate your true survival and failure probabilities.
         </p>
       </div>
 
       {/* Ruin Simulator Card */}
       <div className="rounded-2xl border border-[#222E46] bg-[#0E131F] p-5 space-y-5">
         <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider flex items-center gap-2">
-          <Sliders className="w-4 h-4 text-amber-400" />
+          <Sliders className="w-4 h-4 text-[#00E5FF]" />
           <span>Interactive Accumulator Ruin Simulator</span>
         </h3>
 
@@ -87,7 +81,7 @@ export const RealityCheckView: React.FC = () => {
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-slate-300">
               <span>Ticket Legs:</span>
-              <span className="font-bold font-num text-amber-300">{legs} Legs</span>
+              <span className="font-bold font-num text-[#00E5FF]">{legs} Legs</span>
             </div>
             <input
               type="range"
@@ -95,7 +89,7 @@ export const RealityCheckView: React.FC = () => {
               max="12"
               value={legs}
               onChange={(e) => setLegs(Number(e.target.value))}
-              className="w-full accent-amber-500 cursor-pointer"
+              className="w-full accent-[#00E5FF] cursor-pointer"
             />
           </div>
 
@@ -103,7 +97,7 @@ export const RealityCheckView: React.FC = () => {
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-slate-300">
               <span>Avg Leg Win Probability:</span>
-              <span className="font-bold font-num text-amber-300">{avgProb}%</span>
+              <span className="font-bold font-num text-[#00E5FF]">{avgProb}%</span>
             </div>
             <input
               type="range"
@@ -111,7 +105,7 @@ export const RealityCheckView: React.FC = () => {
               max="95"
               value={avgProb}
               onChange={(e) => setAvgProb(Number(e.target.value))}
-              className="w-full accent-amber-500 cursor-pointer"
+              className="w-full accent-[#00E5FF] cursor-pointer"
             />
           </div>
 
@@ -119,7 +113,7 @@ export const RealityCheckView: React.FC = () => {
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-slate-300">
               <span>Avg Leg Retail Odds:</span>
-              <span className="font-bold font-num text-amber-300">@{avgOdds.toFixed(2)}</span>
+              <span className="font-bold font-num text-[#00E5FF]">@{avgOdds.toFixed(2)}</span>
             </div>
             <input
               type="range"
@@ -128,7 +122,7 @@ export const RealityCheckView: React.FC = () => {
               step="0.05"
               value={avgOdds}
               onChange={(e) => setAvgOdds(Number(e.target.value))}
-              className="w-full accent-amber-500 cursor-pointer"
+              className="w-full accent-[#00E5FF] cursor-pointer"
             />
           </div>
         </div>
@@ -172,6 +166,7 @@ export const RealityCheckView: React.FC = () => {
             >
               <button
                 onClick={() => setOpenBlindspot(isOpen ? null : index)}
+                aria-expanded={isOpen}
                 className="w-full p-4 text-left flex items-center justify-between gap-3 hover:bg-[#121929] transition-colors cursor-pointer"
               >
                 <div>

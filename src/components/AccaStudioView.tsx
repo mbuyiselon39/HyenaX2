@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext.tsx';
 import {
   Trash2,
   AlertTriangle,
-  CheckCircle2,
-  Shield,
   Layers,
-  Sparkles,
-  Calculator,
-  ArrowRight,
-  TrendingDown,
-  Info
+  Calculator
 } from 'lucide-react';
 
 export const AccaStudioView: React.FC = () => {
@@ -24,33 +18,77 @@ export const AccaStudioView: React.FC = () => {
 
   const [stakeZAR, setStakeZAR] = useState<number>(100);
   const [activePreset, setActivePreset] = useState<'full' | 'best3' | 'best5'>('full');
+  const [optimizedResult, setOptimizedResult] = useState<any>(null);
 
-  // Compute ticket metrics
+  // Reset preset when ticket changes
+  useEffect(() => {
+    setOptimizedResult(null);
+    setActivePreset('full');
+  }, [accumulatorLegs.length]);
+
+  const handlePreset = async (preset: 'full' | 'best3' | 'best5') => {
+    setActivePreset(preset);
+    if (preset === 'full' || accumulatorLegs.length <= 1) {
+      setOptimizedResult(null);
+      return;
+    }
+    try {
+      const res = await fetch('/api/beast/accumulator/optimize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selections: accumulatorLegs })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const chosen = preset === 'best3'
+          ? data.optimizations?.best3CorePicks
+          : data.optimizations?.best5CorePicks;
+        if (chosen) {
+          setOptimizedResult(chosen);
+          addToast(
+            'Optimizer Active',
+            `Isolated top ${chosen.count || (preset === 'best3' ? 3 : 5)} highest-EV legs (${chosen.trueProbability}% survival)`,
+            'info'
+          );
+        }
+      }
+    } catch (e: any) {
+      addToast('Optimization Error', e.message, 'error');
+    }
+  };
+
+  // Compute ticket metrics preferring server-side calibrated analysis
   const legs = accumulatorLegs;
-  let compoundOdds = 1.0;
-  let compoundTrueProb = 1.0;
+  const activeAnalysis = optimizedResult || accumulatorAnalysis;
 
+  let localCompoundOdds = 1.0;
+  let localCompoundProb = 1.0;
   legs.forEach(l => {
-    compoundOdds *= (l.odds || 1.25);
-    compoundTrueProb *= ((l.probability || 75) / 100);
+    localCompoundOdds *= (l.odds || 1.25);
+    localCompoundProb *= ((l.probability || 75) / 100);
   });
 
-  const impliedProb = compoundOdds > 1 ? (1 / compoundOdds) : 1;
-  const houseVigPct = Math.max(0, ((impliedProb - compoundTrueProb) / impliedProb) * 100);
-  const trueProbPct = +(compoundTrueProb * 100).toFixed(1);
+  const compoundOdds = Number(activeAnalysis?.combinedOdds ?? activeAnalysis?.compoundOdds ?? localCompoundOdds);
+  const trueProbPct = Number(activeAnalysis?.trueProbability ?? activeAnalysis?.compoundTrueProbabilityPct ?? +(localCompoundProb * 100).toFixed(1));
+  const failureProbPct = Number(activeAnalysis?.failureProbability ?? +(100 - trueProbPct).toFixed(1));
+  const impliedProbPct = compoundOdds > 1 ? +((1 / compoundOdds) * 100).toFixed(1) : 100;
+  const houseVigPct = Math.max(0, +(impliedProbPct - trueProbPct).toFixed(1));
+  const evPct = activeAnalysis?.expectedValuePct ?? +(((trueProbPct / 100) * compoundOdds - 1) * 100).toFixed(1);
   const payoutZAR = +(stakeZAR * compoundOdds).toFixed(2);
   const profitZAR = +(payoutZAR - stakeZAR).toFixed(2);
 
-  // Weakest link
-  const weakestLink = legs.length > 0
+  // Weakest link from server or fallback
+  const localWeakest = legs.length > 0
     ? legs.reduce((min, cur) => cur.probability < min.probability ? cur : min, legs[0])
     : null;
+  const weakestLink = activeAnalysis?.weakestLink || localWeakest;
+  const weakestSelection = weakestLink?.selection;
+  const weakestProb = Number(weakestLink?.calibratedProbability ?? weakestLink?.probability ?? localWeakest?.probability ?? 75);
 
   return (
     <div className="space-y-6">
-      
       {/* Top Banner */}
-      <div className="rounded-2xl border border-[#00E5FF]/30 bg-gradient-to-r from-[#17130A] via-[#0E131F] to-[#0D1829] p-5 sm:p-6 shadow-xl">
+      <div className="rounded-2xl border border-[#00E5FF]/30 bg-gradient-to-r from-[#0C1222] via-[#0E131F] to-[#0D1829] p-5 sm:p-6 shadow-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -58,21 +96,21 @@ export const AccaStudioView: React.FC = () => {
                 Survival Engine
               </span>
               <span className="text-xs text-[#00E5FF] font-semibold">
-                True Independent Probability & Vig Breakdown
+                True Independent Probability &amp; Vig Breakdown
               </span>
             </div>
             <h1 className="text-2xl font-display font-black text-white">
-              Accumulator Studio & Optimizer
+              Accumulator Studio &amp; Optimizer
             </h1>
             <p className="text-xs text-slate-300 mt-1 max-w-xl">
-              Unlike bookmakers who multiply odds without showing true compound survival rates, HyenaX calculates the actual mathematical survival probability and isolates your weakest link.
+              Unlike bookmakers who multiply odds without showing true compound survival rates, HyenaX calculates calibrated survival probability and isolates your weakest link.
             </p>
           </div>
 
           {legs.length > 0 && (
             <button
               onClick={clearAccaLegs}
-              className="px-3 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold flex items-center gap-1.5 self-start cursor-pointer transition-all"
+              className="px-3 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold flex items-center gap-1.5 self-start cursor-pointer transition-all whitespace-nowrap shrink-0"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear Ticket ({legs.length})</span>
@@ -86,15 +124,14 @@ export const AccaStudioView: React.FC = () => {
           <Layers className="w-12 h-12 text-[#00E5FF] mx-auto opacity-70" />
           <h3 className="text-lg font-bold text-white">Your Accumulator Ticket is Empty</h3>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Browse Daily Top 20, Beast Board, or Fixtures and click "Add Acca" to test any combinations with true mathematical failure-rate modeling.
+            Browse Daily Top 20, Beast Board, or Fixtures and click &quot;Add Acca&quot; to test any combinations with true mathematical failure-rate modeling.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
           {/* Left 2 Cols: Ticket Legs List */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
                 <span>Selected Match Legs</span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] bg-[#00E5FF] text-[#041118] font-extrabold font-num">
@@ -102,21 +139,39 @@ export const AccaStudioView: React.FC = () => {
                 </span>
               </h2>
 
-              <span className="text-xs text-slate-400">
-                Click trash icon to remove any leg
-              </span>
+              <div className="flex items-center gap-1.5">
+                {[
+                  { id: 'full', label: `Full (${legs.length})` },
+                  { id: 'best3', label: 'Best 3 EV' },
+                  { id: 'best5', label: 'Best 5 EV' },
+                ].map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => handlePreset(p.id as any)}
+                    className={`px-2.5 py-1 rounded-lg border text-[11px] font-display font-bold transition-all cursor-pointer whitespace-nowrap ${
+                      activePreset === p.id
+                        ? 'border-[#00E5FF] bg-[#00E5FF]/20 text-[#00E5FF]'
+                        : 'border-[#222E46] bg-[#0E131F] text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="space-y-3">
               {legs.map((leg, index) => {
-                const isWeakest = weakestLink?.id === leg.id && legs.length > 2;
+                const isWeakest = weakestSelection === leg.selection && legs.length > 2;
+                const serverLeg = (activeAnalysis?.legs || []).find((sl: any) => sl.selection === leg.selection);
+                const statusBadge = serverLeg?.status;
 
                 return (
                   <div
                     key={leg.id}
                     className={`rounded-2xl border p-4 flex items-center justify-between gap-4 transition-all ${
                       isWeakest
-                        ? 'border-rose-500/60 bg-rose-950/20 shadow-rose-950/20'
+                        ? 'border-rose-500/60 bg-rose-950/20'
                         : 'border-[#222E46] bg-[#0E131F] hover:border-slate-600'
                     }`}
                   >
@@ -126,13 +181,22 @@ export const AccaStudioView: React.FC = () => {
                       </span>
 
                       <div className="space-y-0.5 min-w-0">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-display font-bold text-sm text-white truncate">
                             {leg.fixture}
                           </span>
                           {isWeakest && (
-                            <span className="px-2 py-0.5 rounded text-[9px] font-black uppercase bg-rose-500 text-white shrink-0 animate-pulse">
+                            <span className="px-2 py-0.5 rounded text-[9px] font-black uppercase bg-rose-500 text-white shrink-0">
                               Weakest Link
+                            </span>
+                          )}
+                          {statusBadge && !isWeakest && (
+                            <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase shrink-0 ${
+                              statusBadge === 'REMOVE' ? 'bg-rose-500/20 text-rose-300' :
+                              statusBadge === 'REPLACE' ? 'bg-amber-500/20 text-amber-300' :
+                              'bg-emerald-500/20 text-emerald-300'
+                            }`}>
+                              {statusBadge}
                             </span>
                           )}
                         </div>
@@ -154,7 +218,7 @@ export const AccaStudioView: React.FC = () => {
                           @{leg.odds.toFixed(2)}
                         </div>
                         <div className="text-[10px] font-num text-emerald-400 font-bold">
-                          {leg.probability.toFixed(1)}% True Prob
+                          {Number(serverLeg?.calibratedProbability ?? leg.probability).toFixed(1)}% True Prob
                         </div>
                       </div>
 
@@ -180,7 +244,7 @@ export const AccaStudioView: React.FC = () => {
                     Weakest Link Optimization Alert
                   </div>
                   <div className="text-slate-300 leading-relaxed">
-                    Leg #{legs.findIndex(l => l.id === weakestLink.id) + 1} (<strong>{weakestLink.fixture} - {weakestLink.selection}</strong>) carries the lowest single survival probability ({weakestLink.probability}%). Removing this single leg increases whole-ticket survival from <strong>{trueProbPct}%</strong> to <strong>{+(compoundTrueProb / (weakestLink.probability / 100) * 100).toFixed(1)}%</strong>.
+                    <strong>{weakestLink.match || weakestLink.fixture} — {weakestSelection}</strong> carries the lowest survival expectation ({weakestProb.toFixed(1)}%). Trimming the weakest leg boosts whole-ticket survival from <strong>{trueProbPct.toFixed(1)}%</strong> to <strong>{Math.min(99, +(trueProbPct / Math.max(0.01, weakestProb / 100)).toFixed(1))}%</strong>.
                   </div>
                 </div>
               </div>
@@ -197,7 +261,7 @@ export const AccaStudioView: React.FC = () => {
                 </h3>
 
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#00E5FF]/20 text-[#00E5FF] font-num">
-                  {legs.length} SELECTIONS
+                  {activeAnalysis?.count ?? legs.length} SELECTIONS
                 </span>
               </div>
 
@@ -213,21 +277,28 @@ export const AccaStudioView: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-400">True Survival Probability</span>
                   <span className={`font-num font-bold text-sm ${trueProbPct > 50 ? 'text-emerald-400' : trueProbPct > 25 ? 'text-[#00E5FF]' : 'text-rose-400'}`}>
-                    {trueProbPct}%
+                    {trueProbPct.toFixed(1)}%
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Bookmaker Implied Odds</span>
+                  <span className="text-xs text-slate-400">Ticket Failure Risk</span>
+                  <span className="font-num text-xs font-bold text-rose-400">
+                    {failureProbPct.toFixed(1)}%
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Net Ticket Edge (+EV)</span>
+                  <span className={`font-num font-bold text-xs ${Number(evPct) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {Number(evPct) >= 0 ? `+${evPct}%` : `${evPct}%`}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Implied vs Model Spread</span>
                   <span className="font-num text-xs text-slate-300">
-                    {+(impliedProb * 100).toFixed(1)}%
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Hidden Compound Vig</span>
-                  <span className="font-num font-bold text-xs text-rose-400">
-                    +{houseVigPct.toFixed(1)}% Margin
+                    {impliedProbPct}% imp · +{houseVigPct.toFixed(1)}% gap
                   </span>
                 </div>
               </div>
@@ -248,7 +319,7 @@ export const AccaStudioView: React.FC = () => {
                   step="10"
                   value={stakeZAR}
                   onChange={(e) => setStakeZAR(Number(e.target.value))}
-                  className="w-full accent-amber-500 cursor-pointer"
+                  className="w-full accent-[#00E5FF] cursor-pointer"
                 />
 
                 <div className="flex justify-between text-[10px] text-slate-500 font-num">

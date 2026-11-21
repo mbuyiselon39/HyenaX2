@@ -901,12 +901,7 @@ export class BetSlipXRayEngine {
       return this.parseHollywoodbetsCode('SAMPLE-RAW-TEXT');
     }
 
-    return {
-      bookmaker: 'Generic / User Text Input',
-      ticketCode: 'CUSTOM_TEXT_IMPORT',
-      parsedAt: new Date().toISOString(),
-      analysis: analyzeAccumulator(parsed)
-    };
+    return this.formatOutput('Generic / User Text Input', 'CUSTOM_TEXT_IMPORT', analyzeAccumulator(parsed));
   }
 }
 

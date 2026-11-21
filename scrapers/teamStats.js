@@ -9,6 +9,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { normalizeTeamKey, lookupByTeamName } from './teamNormalizer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,8 +23,11 @@ export class TeamStatsScraper {
     this.token = process.env.FOOTBALL_DATA_TOKEN || process.env.FOOTBALL_DATA_API_KEY || '';
     this.statsFilePath = path.join(__dirname, '../data/team_stats.json');
     this.baselinesFilePath = path.join(__dirname, '../data/league_baselines.json');
+    this.leagueMapFilePath = path.join(__dirname, '../data/api_football_league_map.json');
+    this.syncTimestampPath = path.join(__dirname, '../data/sync_timestamp.json');
     this.teamStatsCache = {};
     this.baselinesCache = {};
+    this.apiFootballLeagueMap = {};
     this.loadLocalData();
   }
 
@@ -35,54 +39,63 @@ export class TeamStatsScraper {
       if (fs.existsSync(this.baselinesFilePath)) {
         this.baselinesCache = JSON.parse(fs.readFileSync(this.baselinesFilePath, 'utf-8'));
       }
+      if (fs.existsSync(this.leagueMapFilePath)) {
+        this.apiFootballLeagueMap = JSON.parse(fs.readFileSync(this.leagueMapFilePath, 'utf-8'));
+      }
     } catch (err) {
       console.warn('[TeamStatsScraper] Local data load warning:', err.message);
     }
   }
 
   normalizeTeamName(name) {
-    if (!name) return '';
-    return name
-      .toLowerCase()
-      .replace(/\bfc\b|\bcf\b|\bsc\b|\bac\b|\bafc\b|\bssc\b|\bca\b|\brc\b|\bvfb\b|\brb\b|\btsg\b|\bfsv\b|\bvfl\b|\bas\b|\bogc\b|\bsv\b|\bfk\b|\bbv\b|\bfsa\b/gi, '')
-      .replace(/[^a-z0-9]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+    return normalizeTeamKey(name);
+  }
+
+  getLeagueBaseline(fdOrLeagueId) {
+    const rec = this.baselinesCache?.[String(fdOrLeagueId)];
+    if (rec && typeof rec.avgGoals === 'number') {
+      return rec;
+    }
+    return null;
+  }
+
+  getApiFootballId(fdOrLeagueId) {
+    return this.apiFootballLeagueMap?.[String(fdOrLeagueId)] || null;
+  }
+
+  updateSyncTimestamp(status = 'OK') {
+    try {
+      const payload = {
+        last_sync: new Date().toISOString(),
+        schedule: 'every-3.5h',
+        status
+      };
+      fs.writeFileSync(this.syncTimestampPath, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
+    } catch (_) {}
   }
 
   findTeamRecord(teamName) {
     if (!teamName) return null;
-    // Exact match
-    if (this.teamStatsCache[teamName]) {
-      return { key: teamName, ...this.teamStatsCache[teamName] };
-    }
-
-    const normQuery = this.normalizeTeamName(teamName);
-    for (const [key, data] of Object.entries(this.teamStatsCache)) {
-      if (key === '_meta') continue;
-      const normKey = this.normalizeTeamName(key);
-      if (normKey === normQuery || normKey.includes(normQuery) || normQuery.includes(normKey)) {
-        return { key, ...data };
-      }
-    }
-    return null;
+    const found = lookupByTeamName(this.teamStatsCache, teamName);
+    if (!found) return null;
+    return { key: found.key, ...found.data };
   }
 
   getTeamStats(teamName, isHome = true) {
     const record = this.findTeamRecord(teamName);
 
-    let playedGames = (record && record.playedGames) || 10;
-    let points = (record && record.points) || 15;
-    let goalsFor = (record && record.goalsFor) || 15;
-    let goalsAgainst = (record && record.goalsAgainst) || 12;
-    let form = (record && Array.isArray(record.form)) ? record.form : ['W', 'D', 'W', 'L', 'W'];
+    const playedGames = (record && record.playedGames) || 10;
+    const points = (record && record.points) || 15;
+    const goalsFor = (record && record.goalsFor) || 15;
+    const goalsAgainst = (record && record.goalsAgainst) || 12;
+    const form = (record && Array.isArray(record.form)) ? record.form : ['W', 'D', 'W', 'L', 'W'];
 
     const avgScored = playedGames > 0 ? +(goalsFor / playedGames).toFixed(2) : 1.45;
     const avgConceded = playedGames > 0 ? +(goalsAgainst / playedGames).toFixed(2) : 1.15;
     const winRate = playedGames > 0 ? Math.min(95, Math.max(10, Math.round((points / (playedGames * 3)) * 100))) : (isHome ? 55 : 42);
 
     // Goal distribution across 6 15-minute periods
-    const seed = teamName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    const seed = String(teamName || 'team').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
     const p1 = Math.round(10 + ((seed % 7) * 1.2));
     const p2 = Math.round(13 + (((seed >> 2) % 6) * 1.1));
     const p3 = Math.round(16 + (((seed >> 3) % 8) * 1.3));
@@ -104,8 +117,9 @@ export class TeamStatsScraper {
     const bttsRate = Math.min(90, Math.max(20, Math.round(((avgScored + avgConceded) / 3.2) * 55)));
 
     return {
-      source: record ? 'football-data.org Live Data' : 'TeamStats Empirical Aggregator',
+      source: record ? (record.source || 'football-data.org Live Data') : 'TeamStats Empirical Aggregator',
       team: teamName,
+      canonicalTeam: record ? record.key : teamName,
       isHome,
       split: isHome ? 'Home Records' : 'Away Records',
       playedGames,
@@ -133,7 +147,8 @@ export class TeamStatsScraper {
       for (const comp of competitions) {
         try {
           const res = await fetch(`${this.sourceUrl}/competitions/${comp}/standings`, {
-            headers: { 'X-Auth-Token': this.token }
+            headers: { 'X-Auth-Token': this.token },
+            signal: AbortSignal.timeout(6500)
           });
           if (res.ok) {
             const data = await res.json();
@@ -145,7 +160,7 @@ export class TeamStatsScraper {
                   playedGames: row.playedGames,
                   goalsFor: row.goalsFor,
                   goalsAgainst: row.goalsAgainst,
-                  form: row.form ? row.form.split(',').map(f => f.trim()) : ['W', 'D', 'W', 'L', 'W'],
+                  form: row.form ? row.form.split(',').map(f => f.trim()).filter(Boolean) : ['W', 'D', 'W', 'L', 'W'],
                   source: 'football-data.org',
                   league: data.competition.name
                 };
@@ -167,10 +182,12 @@ export class TeamStatsScraper {
       }
     }
 
+    this.updateSyncTimestamp('OK');
+
     return {
       scraper: this.name,
       status: 'OK',
-      recordsIngested: Object.keys(this.teamStatsCache).length,
+      recordsIngested: Object.keys(this.teamStatsCache).filter(k => k !== '_meta').length,
       recordsUpdatedLive: recordsUpdated,
       syncedAt: this.lastSync
     };

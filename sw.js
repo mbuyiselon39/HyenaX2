@@ -9,7 +9,7 @@
    - CDN assets .......... stale-while-revalidate (Tailwind, Alpine, Google Fonts)
    ============================================================ */
 
-const VERSION = 'hyenax-v5';
+const VERSION = 'hyenax-v6';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 const APP_SHELL = [
@@ -50,18 +50,32 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
-  if (url.pathname.startsWith('/api/')) return;
+  if (
+    url.pathname.startsWith('/api/') ||
+    url.pathname.startsWith('/src/') ||
+    url.pathname.startsWith('/@') ||
+    url.pathname.startsWith('/node_modules/')
+  ) {
+    return;
+  }
 
-  /* App navigations: fresh shell when online, cached shell when offline */
-  if (req.mode === 'navigate') {
+  /* App navigations & shell HTML/manifest: fresh shell when online, cached shell when offline */
+  if (
+    req.mode === 'navigate' ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('/index.html') ||
+    url.pathname.endsWith('/manifest.webmanifest')
+  ) {
     event.respondWith(
-      fetch(req)
+      fetch(req, { cache: 'no-store' })
         .then((res) => {
-          const copy = res.clone();
-          caches.open(SHELL_CACHE).then((cache) => cache.put('./index.html', copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(SHELL_CACHE).then((cache) => cache.put(req, copy));
+          }
           return res;
         })
-        .catch(() => caches.match('./index.html'))
+        .catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')))
     );
     return;
   }
@@ -89,13 +103,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  /* Same-origin static assets: cache-first */
+  /* Same-origin static assets (icons, scripts): cache-first */
   if (url.origin === location.origin) {
     event.respondWith(
       caches.match(req).then((hit) =>
         hit || fetch(req).then((res) => {
-          const copy = res.clone();
-          caches.open(SHELL_CACHE).then((cache) => cache.put(req, copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(SHELL_CACHE).then((cache) => cache.put(req, copy));
+          }
           return res;
         })
       )

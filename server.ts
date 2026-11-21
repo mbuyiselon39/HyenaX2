@@ -977,10 +977,21 @@ app.get('/api/risk/shin-devig', handleShinDevig);
 app.post('/api/risk/shin-devig', handleShinDevig);
 
 // Gemini Chat & Analysis Endpoints
+function createGeminiClient(apiKey: string) {
+  return new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'aistudio-build'
+      }
+    }
+  });
+}
+
 app.post('/api/ai/chat', async (req: Request, res: Response) => {
   const {
     messages = [],
-    model = 'gemini-3.8-flash',
+    model = 'gemini-4-hydrogen',
     systemInstruction,
     enableSearch = false,
     enableMaps = false,
@@ -989,15 +1000,15 @@ app.post('/api/ai/chat', async (req: Request, res: Response) => {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({
+    return res.status(503).json({
       status: 'error',
-      message: 'GEMINI_API_KEY is not configured on the server.'
+      message: 'GEMINI_API_KEY is not configured on the server. Configure it in Settings > Secrets to enable live AI analysis.'
     });
   }
 
   let selectedModel = model;
-  if (!['gemini-3.8-flash', 'gemini-3.1-flash-lite', 'gemini-3.1-pro-preview'].includes(selectedModel)) {
-    selectedModel = 'gemini-3.8-flash';
+  if (!['gemini-4-hydrogen', 'gemini-3.1-flash-lite', 'gemini-3.1-pro-preview', 'gemini-4-neon'].includes(selectedModel)) {
+    selectedModel = 'gemini-4-hydrogen';
   }
 
   const defaultSysInstruction = `You are the Lead Quantitative Strategist & Risk Officer for HyenaX (The Ndlela Millionaires GoldPack football intelligence engine).
@@ -1018,7 +1029,7 @@ Provide clear, mathematically sound, actionable football intelligence. Be concis
   };
 
   if (enableMaps) {
-    selectedModel = 'gemini-3.8-flash';
+    selectedModel = 'gemini-4-hydrogen';
     config.tools = [{ googleMaps: {} }];
     if (userLocation && typeof userLocation.latitude === 'number' && typeof userLocation.longitude === 'number') {
       config.toolConfig = {
@@ -1031,11 +1042,11 @@ Provide clear, mathematically sound, actionable football intelligence. Be concis
       };
     }
   } else if (enableSearch) {
-    selectedModel = 'gemini-3.8-flash';
+    selectedModel = 'gemini-4-hydrogen';
     config.tools = [{ googleSearch: {} }];
   }
 
-  const ai = new GoogleGenAI({});
+  const ai = createGeminiClient(apiKey);
 
   try {
     const response = await ai.models.generateContent({
@@ -1050,7 +1061,7 @@ Provide clear, mathematically sound, actionable football intelligence. Be concis
 
     const searchSources: any[] = [];
     groundingChunks.forEach((chunk: any) => {
-      if (chunk.web && chunk.web.uri) {
+      if (chunk.web && chunk.web.uri && /^https?:\/\//i.test(chunk.web.uri)) {
         searchSources.push({
           title: chunk.web.title || chunk.web.uri,
           uri: chunk.web.uri
@@ -1060,7 +1071,7 @@ Provide clear, mathematically sound, actionable football intelligence. Be concis
 
     const mapSources: any[] = [];
     groundingChunks.forEach((chunk: any) => {
-      if (chunk.maps && chunk.maps.uri) {
+      if (chunk.maps && chunk.maps.uri && /^https?:\/\//i.test(chunk.maps.uri)) {
         mapSources.push({
           title: chunk.maps.title || 'View Stadium / Location on Google Maps',
           uri: chunk.maps.uri,
@@ -1080,51 +1091,16 @@ Provide clear, mathematically sound, actionable football intelligence. Be concis
       }
     });
   } catch (err: any) {
-    console.warn(`[Gemini Chat] Error with model ${selectedModel}:`, err.message);
-
-    const lastUserMsg = (messages[messages.length - 1]?.text || '').toLowerCase();
-    let intelligentReply = `**[HyenaX Beast AI Oracle]** Analysis for: "${messages[messages.length - 1]?.text || ''}"\n\n`;
-    
-    if (lastUserMsg.includes('stadium') || lastUserMsg.includes('map') || lastUserMsg.includes('travel') || enableMaps) {
-      intelligentReply += `📍 **Stadium & Venue Intelligence**:\n- **Home Advantage Factor**: Domestic home grounds average +0.28 goals in expected output (xG), while inter-continental / UEFA away travel (>800km) induces a -1.4% Poisson scoring compression.\n- **Turf & Pitch Parameters**: Standard UEFA/FIFA 105m x 68m hybrid grass pitch.\n- **Google Maps Integration**: You can view the stadium directly on Google Maps below.`;
-      
-      const fallbackMaps = [
-        {
-          title: "Emirates Stadium (London, UK)",
-          uri: "https://www.google.com/maps/search/?api=1&query=Emirates+Stadium+London",
-          reviewSnippets: ["Modern 60,704-seat stadium in Islington, home of Arsenal FC."]
-        },
-        {
-          title: "Santiago Bernabéu (Madrid, Spain)",
-          uri: "https://www.google.com/maps/search/?api=1&query=Santiago+Bernabeu+Madrid",
-          reviewSnippets: ["State-of-the-art 84,000-seat stadium with retractable roof and pitch."]
-        }
-      ];
-
-      return res.json({
-        status: 'success',
-        modelUsed: 'deterministic-intel-engine',
-        reply: intelligentReply,
-        grounding: {
-          searchSources: [],
-          mapSources: fallbackMaps
-        }
-      });
-    }
-
-    intelligentReply += `⚡ **17-Model Quantitative Consensus Insight**:\n- **Stacking Architecture**: Evaluated across CatBoost, LightGBM, Graph Neural Networks, and Bivariate Poisson distributions.\n- **Layer 18 Calibration**: Evaluated schedule turnarounds under 96 hours for UEFA distraction risk.\n- **Disqualification Check**: Selections falling below the strict 78.5% win floor are immediately quarantined to preserve bankroll security.\n- **Recommendation**: Maintain strict quarter-Kelly fractional staking to control drawdowns.`;
-
-    return res.json({
-      status: 'success',
-      modelUsed: 'deterministic-intel-engine',
-      reply: intelligentReply,
-      grounding: {
-        searchSources: [
-          { title: "Ndlela Millionaires Quantitative Ledger", uri: "https://vertexsg.co.za" },
-          { title: "Dixon-Coles Poisson Modeling Standards", uri: "https://en.wikipedia.org/wiki/Dixon_and_Coles_model" }
-        ],
-        mapSources: []
-      }
+    let readableMsg = err?.message || 'Upstream Gemini request failed.';
+    try {
+      const parsed = JSON.parse(readableMsg);
+      if (parsed?.error?.message) readableMsg = parsed.error.message;
+    } catch {}
+    console.warn(`[Gemini Chat] Error with model ${selectedModel}:`, readableMsg);
+    return res.status(502).json({
+      status: 'error',
+      modelUsed: selectedModel,
+      message: readableMsg
     });
   }
 });
@@ -1140,13 +1116,44 @@ app.post('/api/ai/analyze-match', async (req: Request, res: Response) => {
   const layer18 = b.layer18 || {};
 
   const apiKey = process.env.GEMINI_API_KEY;
-  if (apiKey) {
-    try {
-      const ai = new GoogleGenAI({});
-      const prompt = `
+  if (!apiKey) {
+    const quantitativeSummary = `
+### HYENAX QUANTITATIVE SCOUTING REPORT: ${String(home).toUpperCase()} vs ${String(away).toUpperCase()}
+
+**1. TACTICAL ASYMMETRY & LAYER 18 CONGESTION MATRIX**
+- **Home Congestion Profile**: ${layer18.homePenalty > 0.05 ? `High rotation exposure (${((layer18.homePenalty || 0) * 100).toFixed(1)}% penalty). ${layer18.tacticalTag || ''}` : 'Optimal rest cycle. Full tactical baseline preserved.'}
+- **Away Congestion Profile**: ${layer18.awayPenalty > 0.05 ? `Congested schedule (${((layer18.awayPenalty || 0) * 100).toFixed(1)}% penalty).` : 'Standard domestic turnaround.'}
+- **Structural Delta**: ${layer18.shiftPct < 0 ? `Consensus adjusted downward by ${Math.abs(layer18.shiftPct)}% due to calendar look-ahead threat.` : 'Neutral calendar alignment.'}
+
+**2. 17-MODEL ENSEMBLE SYNTHESIS**
+- **Prior Stacking Score**: ${prob}% (GBDT + GNN + LSTM + Bivariate Poisson)
+- **Calibrated True Probability**: ${layer18.finalProbPct || prob}%
+- **Empirical Brier Reference**: 0.141 OOT ceiling respected.
+
+**3. SHARP MARKET INTEGRITY & 64-STEP SHIN DE-VIG**
+- **De-Vigged Fair Odds**: ${(100 / Math.max(1, Number(layer18.finalProbPct || prob))).toFixed(2)} vs Retail ${odds}
+- **Market Volatility Gatekeeper**: Margin stability check complete.
+
+**4. FINAL VERDICT**
+- **Status**: ${layer18.isDisqualified ? 'CAUTION — Auto-routed due to calendar rotation threshold.' : 'VETTED SELECTION — Quantitative edge verified.'}
+- **Note**: Showing deterministic quantitative engine breakdown (GEMINI_API_KEY not configured on server).
+`.trim();
+
+    return res.json({
+      status: 'success',
+      source: 'deterministic-quantitative-engine',
+      match: `${home} vs ${away}`,
+      analysis: quantitativeSummary,
+      sources: []
+    });
+  }
+
+  try {
+    const ai = createGeminiClient(apiKey);
+    const prompt = `
 Match: ${home} vs ${away} (${league})
 Predicted Market: ${market}
-Platform Consensus Probability: ${prob}% (Fair Odds: ${(100/prob).toFixed(2)}, Retail Odds: ${odds})
+Platform Consensus Probability: ${prob}% (Fair Odds: ${(100 / Math.max(1, Number(prob))).toFixed(2)}, Retail Odds: ${odds})
 Layer 18 Strategic Rotation Penalty: Home = ${((layer18.homePenalty || 0) * 100).toFixed(1)}%, Away = ${((layer18.awayPenalty || 0) * 100).toFixed(1)}%
 Layer 18 Tactical Tag: ${layer18.tacticalTag || 'None'}
 Disqualification Status: ${layer18.isDisqualified ? 'DISQUALIFIED (Rotation Risk)' : 'APPROVED FOR BANKER SELECTION'}
@@ -1157,100 +1164,101 @@ Provide an elite, professional quantitative scouting breakdown:
 3. Sharp Market Microstructure & Line Integrity
 4. Final Beast Mode Verdict (Include risk disclaimer & confidence rating)
 Keep the tone sharp, quantitative, and concise without fluff.
-      `.trim();
+    `.trim();
 
-      const aiResponse = await ai.models.generateContent({
-        model: 'gemini-3.8-flash',
-        contents: prompt,
-        config: {
-          systemInstruction: 'You are the HyenaX Senior Quantitative Sports Analyst. Deliver concise, high-density, mathematically rigorous tactical match intelligence reports.',
-          tools: [{ googleSearch: {} }]
-        }
-      });
+    const aiResponse = await ai.models.generateContent({
+      model: 'gemini-4-hydrogen',
+      contents: prompt,
+      config: {
+        systemInstruction: 'You are the HyenaX Senior Quantitative Sports Analyst. Deliver concise, high-density, mathematically rigorous tactical match intelligence reports.',
+        tools: [{ googleSearch: {} }]
+      }
+    });
 
-      const groundingChunks = (aiResponse.candidates?.[0] as any)?.groundingMetadata?.groundingChunks || [];
-      const searchSources: any[] = [];
-      groundingChunks.forEach((chunk: any) => {
-        if (chunk.web && chunk.web.uri) {
-          searchSources.push({
-            title: chunk.web.title || chunk.web.uri,
-            uri: chunk.web.uri
-          });
-        }
-      });
+    const groundingChunks = (aiResponse.candidates?.[0] as any)?.groundingMetadata?.groundingChunks || [];
+    const searchSources: any[] = [];
+    groundingChunks.forEach((chunk: any) => {
+      if (chunk.web && chunk.web.uri && /^https?:\/\//i.test(chunk.web.uri)) {
+        searchSources.push({
+          title: chunk.web.title || chunk.web.uri,
+          uri: chunk.web.uri
+        });
+      }
+    });
 
-      return res.json({
-        status: 'success',
-        source: 'gemini-3.8-flash',
-        match: `${home} vs ${away}`,
-        analysis: aiResponse.text,
-        sources: searchSources
-      });
-    } catch (err: any) {
-      console.warn('[Gemini AI] API call error, falling back to deterministic engine:', err.message);
-    }
+    return res.json({
+      status: 'success',
+      source: 'gemini-4-hydrogen',
+      match: `${home} vs ${away}`,
+      analysis: aiResponse.text || '',
+      sources: searchSources
+    });
+  } catch (err: any) {
+    let readableMsg = err?.message || 'Gemini match analysis failed. Please check GEMINI_API_KEY and network connectivity.';
+    try {
+      const parsed = JSON.parse(readableMsg);
+      if (parsed?.error?.message) readableMsg = parsed.error.message;
+    } catch {}
+    console.warn('[Gemini AI] API call error:', readableMsg);
+    return res.status(502).json({
+      status: 'error',
+      source: 'gemini-4-hydrogen',
+      match: `${home} vs ${away}`,
+      message: readableMsg
+    });
   }
-
-  const fallbackAnalysis = `
-### ⚡ HYENAX QUANTITATIVE SCOUTING REPORT: ${home.toUpperCase()} vs ${away.toUpperCase()}
-
-**1. TACTICAL ASYMMETRY & LAYER 18 CONGESTION MATRIX**
-- **Home Congestion Profile**: ${layer18.homePenalty > 0.05 ? `High rotation exposure (${((layer18.homePenalty||0)*100).toFixed(1)}% penalty). ${layer18.tacticalTag || ''}` : 'Optimal 6-day rest cycle. Full tactical baseline preserved.'}
-- **Away Congestion Profile**: ${layer18.awayPenalty > 0.05 ? `Congested schedule (${((layer18.awayPenalty||0)*100).toFixed(1)}% penalty).` : 'Domestic focus with zero mid-week European commitments.'}
-- **Structural Delta**: ${layer18.shiftPct < 0 ? `Consensus adjusted downward by ${Math.abs(layer18.shiftPct)}% due to calendar look-ahead threat.` : 'Neutral calendar alignment.'}
-
-**2. 17-MODEL ENSEMBLE SYNTHESIS**
-- **Prior Stacking Score**: ${prob}% (GBDT + GNN + LSTM + Bivariate Poisson)
-- **Calibrated True Probability**: ${layer18.finalProbPct || prob}%
-- **Rolling Brier Rating**: 0.122 (Strictly adhering to OOT ≤ 0.141 ceiling)
-
-**3. SHARP MARKET INTEGRITY & 64-STEP SHIN DE-VIG**
-- **De-Vigged Fair Odds**: ${(100 / (layer18.finalProbPct || prob)).toFixed(2)} vs Retail ${odds}
-- **Market Volatility Gatekeeper**: Verified margin stability (Drift < ±1.5% in 4h window). No trap lines detected.
-
-**4. FINAL BEAST MODE VERDICT**
-- **Status**: ${layer18.isDisqualified ? '⚠️ CAUTION - Auto-routed to Disqualification Audit Trail due to calendar rotation threshold.' : '✅ VETTED BANKER SELECTION - High Conviction Value Edge.'}
-`.trim();
-
-  res.json({
-    status: 'success',
-    source: 'deterministic-quantitative-engine',
-    match: `${home} vs ${away}`,
-    analysis: fallbackAnalysis
-  });
 });
 
-// Fixtures Database Endpoint
+let inFlightFixturesPromise: Promise<any> | null = null;
+let lastBackgroundRefreshAttemptMs = 0;
+
+function triggerLiveFixturesRefresh(): Promise<any> {
+  if (!inFlightFixturesPromise) {
+    lastBackgroundRefreshAttemptMs = Date.now();
+    inFlightFixturesPromise = saveFixtures()
+      .catch((err) => {
+        console.error('[Fixtures API] Refresh error:', err);
+        return null;
+      })
+      .finally(() => {
+        inFlightFixturesPromise = null;
+      });
+  }
+  return inFlightFixturesPromise;
+}
+
+// Fixtures Database Endpoint (Stale-While-Revalidate + Single-Flight Locking)
 app.get('/api/fixtures', async (req: Request, res: Response) => {
   const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
   const fallbackCachePath = path.join(__dirname, 'data', 'official_fallback_cache.json');
   const force = req.query.force === '1' || req.query.refresh === '1' || req.query.force === 'true';
-  let shouldRegenerate = force || !fs.existsSync(fixturesPath);
 
-  if (!shouldRegenerate && fs.existsSync(fixturesPath)) {
+  if (force) {
+    await triggerLiveFixturesRefresh();
+  }
+
+  if (fs.existsSync(fixturesPath)) {
     try {
       const stats = fs.statSync(fixturesPath);
       const ageMs = Date.now() - stats.mtimeMs;
-      if (ageMs > 30 * 60 * 1000) {
-        shouldRegenerate = true;
-      } else {
-        const data = JSON.parse(fs.readFileSync(fixturesPath, 'utf8'));
-        if (!data.matches || !Array.isArray(data.matches) || data.matches.length < 10) {
-          shouldRegenerate = true;
+      const content = fs.readFileSync(fixturesPath, 'utf8');
+      const parsed = JSON.parse(content);
+
+      if (parsed && Array.isArray(parsed.matches) && parsed.matches.length >= 10) {
+        const isFallback = Boolean(parsed.meta?.fallback_active);
+        const cooldownElapsed = Date.now() - lastBackgroundRefreshAttemptMs > 2 * 60 * 1000;
+        if (!force && ((ageMs > 30 * 60 * 1000) || (isFallback && cooldownElapsed))) {
+          // Serve immediately and refresh asynchronously in the background
+          triggerLiveFixturesRefresh();
         }
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        return res.json(parsed);
       }
-    } catch (e) {
-      shouldRegenerate = true;
-    }
+    } catch (_) {}
   }
 
-  if (shouldRegenerate) {
-    try {
-      await saveFixtures();
-    } catch (err) {
-      console.error('[Fixtures API] Auto-generation error:', err);
-    }
-  }
+  // No valid cached file on disk — run single-flight live scrape synchronously before returning
+  await triggerLiveFixturesRefresh();
 
   if (fs.existsSync(fixturesPath)) {
     try {
@@ -1288,7 +1296,7 @@ app.get('/api/fixtures', async (req: Request, res: Response) => {
 
 app.all(['/api/fixtures/sync', '/api/fixtures/refresh'], async (req: Request, res: Response) => {
   try {
-    const result: any = await saveFixtures();
+    const result: any = await triggerLiveFixturesRefresh() || await saveFixtures();
     res.json({
       success: true,
       timestamp: new Date().toISOString(),
@@ -1302,13 +1310,22 @@ app.all(['/api/fixtures/sync', '/api/fixtures/refresh'], async (req: Request, re
   }
 });
 
-// Ensure initial fixtures exist immediately on startup
+// Ensure initial fixtures exist immediately on startup and refresh stale fallback snapshots in background
 (async () => {
   try {
     const fixturesPath = path.join(__dirname, 'data', 'fixtures.json');
     if (!fs.existsSync(fixturesPath)) {
       console.log('[Startup] Generating initial official fixtures...');
-      await saveFixtures();
+      await triggerLiveFixturesRefresh();
+    } else {
+      try {
+        const current = JSON.parse(fs.readFileSync(fixturesPath, 'utf8'));
+        const stats = fs.statSync(fixturesPath);
+        if (current?.meta?.fallback_active || Date.now() - stats.mtimeMs > 30 * 60 * 1000) {
+          console.log('[Startup] Refreshing stale/standby fixtures snapshot in background...');
+          triggerLiveFixturesRefresh();
+        }
+      } catch (_) {}
     }
   } catch (e: any) {
     console.warn('[Startup] Initial fixtures generation fallback:', e.message);
@@ -1318,12 +1335,22 @@ app.all(['/api/fixtures/sync', '/api/fixtures/refresh'], async (req: Request, re
   }
 })();
 
+// Static PWA manifest, favicon & icons (dev + prod)
+app.use('/icons', express.static(path.join(__dirname, 'icons')));
+app.get('/favicon.ico', (_req: Request, res: Response) => {
+  res.type('image/png');
+  res.sendFile(path.join(__dirname, 'icons', 'pwa-192x192.png'));
+});
+app.get('/manifest.webmanifest', (_req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, 'manifest.webmanifest'));
+});
+
 // Vite Dev Server Integration or Static Production Serving
 const isProduction = process.env.NODE_ENV === 'production';
 
 if (!isProduction) {
   const vite = await createViteServer({
-    server: { middlewareMode: true },
+    server: { middlewareMode: true, hmr: false },
     appType: 'spa'
   });
   app.use(vite.middlewares);

@@ -5,6 +5,8 @@
             team strengths & weaknesses, referee card severity
    ============================================================ */
 
+import { lookupByTeamName } from './teamNormalizer.js';
+
 export const TEAM_TACTICAL_PROFILES = {
   'Manchester City': {
     formation: '4-3-3 Attacking',
@@ -43,10 +45,31 @@ export const TEAM_TACTICAL_PROFILES = {
   },
   'Barcelona': {
     formation: '4-2-3-1 Extreme High Line',
-    style: ['Offside Trap Trap Line', 'Vertical Positional Play', 'Extreme Gegenpressing', 'Rapid Ball Circulation'],
+    style: ['Offside Trap Line', 'Vertical Positional Play', 'Extreme Gegenpressing', 'Rapid Ball Circulation'],
     strengths: ['Creating big scoring opportunities (Very Strong)', 'Catching opponents offside (Very Strong)'],
     weaknesses: ['Conceding counter attacks behind high defensive line (Weak)'],
     aggressionIndex: 3.9
+  },
+  'Bayern Munich': {
+    formation: '4-2-3-1 Aggressive Kompany Press',
+    style: ['High Counter-Pressing', 'Half-Space Overloads', 'Direct Wing Isolation'],
+    strengths: ['Shot volume creation (Very Strong)', 'Attacking wings (Very Strong)'],
+    weaknesses: ['Vulnerability to direct balls behind high line (Moderate)'],
+    aggressionIndex: 3.7
+  },
+  'Inter': {
+    formation: '3-5-2 Wingback Fluidity',
+    style: ['Midfield Rotations', 'Overloading Half-Spaces', 'Rapid Vertical Links'],
+    strengths: ['Set-piece organization (Very Strong)', 'Defensive compactness (Very Strong)'],
+    weaknesses: ['Transition exposure vs pacey wingers (Moderate)'],
+    aggressionIndex: 4.0
+  },
+  'Paris Saint-Germain': {
+    formation: '4-3-3 Ball Dominance',
+    style: ['High Possession Control', 'Explosive Wide Isolations', 'Fluid False Nine'],
+    strengths: ['Final third dribbling (Very Strong)', 'Through balls (Very Strong)'],
+    weaknesses: ['Defensive aerial transitions (Moderate)'],
+    aggressionIndex: 3.5
   },
   'Mamelodi Sundowns': {
     formation: '4-3-3 Brazilian Style ("Shoeshine & Piano")',
@@ -87,11 +110,13 @@ export class WhoScoredScraper {
   }
 
   getTacticalProfile(teamName) {
-    if (TEAM_TACTICAL_PROFILES[teamName]) {
+    const found = lookupByTeamName(TEAM_TACTICAL_PROFILES, teamName);
+    if (found) {
       return {
         source: 'WhoScored Tactical Matrix',
         team: teamName,
-        ...TEAM_TACTICAL_PROFILES[teamName],
+        canonicalTeam: found.key,
+        ...found.data,
         status: 'SYNCED',
         syncedAt: this.lastSync
       };
@@ -101,6 +126,7 @@ export class WhoScoredScraper {
     return {
       source: 'WhoScored Derived',
       team: teamName,
+      canonicalTeam: teamName,
       formation: '4-2-3-1 Standard',
       style: ['Balanced Play', 'Mid-Block Organization', 'Standard Wing Delivery'],
       strengths: ['Work rate and team discipline (Strong)'],
