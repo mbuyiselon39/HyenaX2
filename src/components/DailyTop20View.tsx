@@ -133,7 +133,7 @@ export const DailyTop20View: React.FC = () => {
         trustScore: beast.trustScore || 92,
         safetyTier: prob >= 82 ? 'ULTRA_BANKER' : 'VETTED_BANKER',
         safetyBadge: prob >= 82 ? '🛡️ ULTRA BANKER LOCK' : '✅ VETTED BANKER',
-        badgeBg: prob >= 82 ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
+        badgeBg: prob >= 82 ? 'bg-[#00E5FF]/20 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
         whySafe: `${m.home.name} vs ${m.away.name}: 17-Model Consensus agreement at ${modelAgreement}% with ${best.market} (${best.selection}).`,
         isFinished: m.matchStatus === 'FINISHED',
         finalScore: m.finalScore,
@@ -164,16 +164,16 @@ export const DailyTop20View: React.FC = () => {
     <div className="space-y-6">
       
       {/* Top Hero Banner - Restored to Clean GoldPack Look */}
-      <div className="relative rounded-2xl border border-amber-500/40 bg-gradient-to-r from-[#17130A] via-[#0E131F] to-[#0A121A] p-5 sm:p-6 shadow-2xl overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="relative rounded-2xl border border-[#00E5FF]/40 bg-gradient-to-r from-[#17130A] via-[#0E131F] to-[#0A121A] p-5 sm:p-6 shadow-2xl overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#00E5FF]/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-black">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#00E5FF] text-[#041118]">
                 Ndlela GoldPack
               </span>
-              <span className="text-xs text-amber-300/80 font-medium flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Multi-Market Predictive Intelligence Engine
+              <span className="text-xs text-[#00E5FF]/80 font-medium flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5 text-[#00E5FF]" /> Multi-Market Predictive Intelligence Engine
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
@@ -187,7 +187,7 @@ export const DailyTop20View: React.FC = () => {
           <div className="flex sm:flex-col gap-2 shrink-0">
             <div className="px-4 py-2.5 rounded-xl border border-[#222E46] bg-[#0A0E17]/80 flex flex-col items-center sm:items-end">
               <span className="text-[10px] uppercase font-bold text-slate-400">Banker Picks</span>
-              <span className="text-xl font-bold font-num text-amber-400">{filteredPicks.length} Qualified</span>
+              <span className="text-xl font-bold font-num text-[#00E5FF]">{filteredPicks.length} Qualified</span>
             </div>
             <div className="px-4 py-2.5 rounded-xl border border-emerald-500/30 bg-emerald-950/20 flex flex-col items-center sm:items-end">
               <span className="text-[10px] uppercase font-bold text-emerald-400">Target Accuracy</span>
@@ -210,7 +210,7 @@ export const DailyTop20View: React.FC = () => {
                 onClick={() => setSelectedDate(day.key)}
                 className={`shrink-0 px-3 py-2 rounded-xl border text-xs transition-all flex flex-col items-center min-w-[76px] cursor-pointer ${
                   isSelected
-                    ? 'border-amber-500 bg-amber-500/20 text-amber-200 shadow-[0_0_12px_rgba(245,158,11,0.3)] font-bold'
+                    ? 'border-[#00E5FF] bg-[#00E5FF]/20 text-[#00E5FF] shadow-[0_0_12px_rgba(245,158,11,0.3)] font-bold'
                     : 'border-[#222E46] bg-[#0E131F] text-slate-400 hover:text-slate-200 hover:border-slate-600'
                 }`}
               >
@@ -226,7 +226,7 @@ export const DailyTop20View: React.FC = () => {
           <select
             value={marketFilter}
             onChange={(e) => setMarketFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-[#222E46] bg-[#0E131F] text-xs text-slate-200 font-medium focus:outline-none focus:border-amber-500/50"
+            className="px-3 py-2 rounded-xl border border-[#222E46] bg-[#0E131F] text-xs text-slate-200 font-medium focus:outline-none focus:border-[#00E5FF]/50"
           >
             {marketOptions.map(m => (
               <option key={m.id} value={m.id}>{m.label}</option>
@@ -236,7 +236,7 @@ export const DailyTop20View: React.FC = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-[#222E46] bg-[#0E131F] text-xs text-slate-200 font-medium focus:outline-none focus:border-amber-500/50"
+            className="px-3 py-2 rounded-xl border border-[#222E46] bg-[#0E131F] text-xs text-slate-200 font-medium focus:outline-none focus:border-[#00E5FF]/50"
           >
             <option value="probability">Sort by Probability</option>
             <option value="bankerScore">Sort by Banker Score</option>
@@ -249,7 +249,7 @@ export const DailyTop20View: React.FC = () => {
       {/* Bankers Cards Grid */}
       {filteredPicks.length === 0 ? (
         <div className="p-12 text-center rounded-2xl border border-[#222E46] bg-[#0E131F] space-y-3">
-          <Calendar className="w-10 h-10 text-amber-400 mx-auto" />
+          <Calendar className="w-10 h-10 text-[#00E5FF] mx-auto" />
           <h3 className="text-lg font-bold text-white">No Fixtures Scheduled</h3>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
             Select another date or switch the market filter to view available banker predictions.
@@ -267,12 +267,12 @@ export const DailyTop20View: React.FC = () => {
                   setSelectedMatchId(pick.matchId);
                   setDrawerOpen(true);
                 }}
-                className="group relative rounded-2xl border border-[#222E46] bg-[#0E131F] hover:border-amber-500/50 hover:bg-[#121929] transition-all p-4 sm:p-5 flex flex-col justify-between gap-4 cursor-pointer shadow-lg"
+                className="group relative rounded-2xl border border-[#222E46] bg-[#0E131F] hover:border-[#00E5FF]/50 hover:bg-[#121929] transition-all p-4 sm:p-5 flex flex-col justify-between gap-4 cursor-pointer shadow-lg"
               >
                 {/* Header: Rank + League + Time */}
                 <div className="flex items-center justify-between gap-2 border-b border-[#222E46]/60 pb-3">
                   <div className="flex items-center gap-2">
-                    <span className="font-display font-extrabold text-xs text-amber-400 tracking-wide">
+                    <span className="font-display font-extrabold text-xs text-[#00E5FF] tracking-wide">
                       {pick.rankLabel}
                     </span>
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold border border-[#222E46] bg-[#0A0E17] text-slate-300">
@@ -327,12 +327,12 @@ export const DailyTop20View: React.FC = () => {
                 </div>
 
                 {/* Selection & Market Pill */}
-                <div className="p-3 rounded-xl border border-amber-500/25 bg-amber-500/5 flex items-center justify-between gap-2">
+                <div className="p-3 rounded-xl border border-[#00E5FF]/25 bg-[#00E5FF]/5 flex items-center justify-between gap-2">
                   <div className="min-w-0">
-                    <div className="text-[10px] uppercase font-bold text-amber-400/80">
+                    <div className="text-[10px] uppercase font-bold text-[#00E5FF]/80">
                       {pick.market}
                     </div>
-                    <div className="font-display font-black text-sm text-amber-200 truncate">
+                    <div className="font-display font-black text-sm text-[#00E5FF] truncate">
                       {pick.selection}
                     </div>
                   </div>
@@ -375,7 +375,7 @@ export const DailyTop20View: React.FC = () => {
                       className={`px-2.5 py-1 rounded-lg text-xs font-display font-semibold transition-all flex items-center gap-1 cursor-pointer ${
                         isAlreadyInAcca
                           ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                          : 'bg-[#1A2234] text-amber-300 border border-amber-500/40 hover:bg-amber-500/20'
+                          : 'bg-[#1A2234] text-[#00E5FF] border border-[#00E5FF]/40 hover:bg-[#00E5FF]/20'
                       }`}
                     >
                       {isAlreadyInAcca ? (

@@ -50,14 +50,14 @@ export const AccaStudioView: React.FC = () => {
     <div className="space-y-6">
       
       {/* Top Banner */}
-      <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-[#17130A] via-[#0E131F] to-[#0D1829] p-5 sm:p-6 shadow-xl">
+      <div className="rounded-2xl border border-[#00E5FF]/30 bg-gradient-to-r from-[#17130A] via-[#0E131F] to-[#0D1829] p-5 sm:p-6 shadow-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-400 text-black">
+              <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#00E5FF] text-[#041118]">
                 Survival Engine
               </span>
-              <span className="text-xs text-amber-300 font-semibold">
+              <span className="text-xs text-[#00E5FF] font-semibold">
                 True Independent Probability & Vig Breakdown
               </span>
             </div>
@@ -83,7 +83,7 @@ export const AccaStudioView: React.FC = () => {
 
       {legs.length === 0 ? (
         <div className="p-12 text-center rounded-2xl border border-[#222E46] bg-[#0E131F] space-y-3">
-          <Layers className="w-12 h-12 text-amber-400 mx-auto opacity-70" />
+          <Layers className="w-12 h-12 text-[#00E5FF] mx-auto opacity-70" />
           <h3 className="text-lg font-bold text-white">Your Accumulator Ticket is Empty</h3>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
             Browse Daily Top 20, Beast Board, or Fixtures and click "Add Acca" to test any combinations with true mathematical failure-rate modeling.
@@ -97,7 +97,7 @@ export const AccaStudioView: React.FC = () => {
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
                 <span>Selected Match Legs</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] bg-amber-400 text-black font-extrabold font-num">
+                <span className="px-2 py-0.5 rounded-full text-[10px] bg-[#00E5FF] text-[#041118] font-extrabold font-num">
                   {legs.length}
                 </span>
               </h2>
@@ -138,7 +138,7 @@ export const AccaStudioView: React.FC = () => {
                         </div>
 
                         <div className="flex items-center gap-2 text-xs">
-                          <span className="text-amber-400 font-semibold">{leg.market}:</span>
+                          <span className="text-[#00E5FF] font-semibold">{leg.market}:</span>
                           <span className="text-slate-200 font-bold">{leg.selection}</span>
                         </div>
 
@@ -189,14 +189,14 @@ export const AccaStudioView: React.FC = () => {
 
           {/* Right Col: Mathematical Ticket Summary */}
           <div className="space-y-4">
-            <div className="rounded-2xl border border-amber-500/40 bg-[#0E131F] p-5 space-y-4 shadow-xl">
+            <div className="rounded-2xl border border-[#00E5FF]/40 bg-[#0E131F] p-5 space-y-4 shadow-xl">
               <div className="flex items-center justify-between border-b border-[#222E46] pb-3">
                 <h3 className="font-display font-extrabold text-sm text-white uppercase tracking-wider flex items-center gap-2">
-                  <Calculator className="w-4 h-4 text-amber-400" />
+                  <Calculator className="w-4 h-4 text-[#00E5FF]" />
                   <span>Ticket Intelligence</span>
                 </h3>
 
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 font-num">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#00E5FF]/20 text-[#00E5FF] font-num">
                   {legs.length} SELECTIONS
                 </span>
               </div>
@@ -205,14 +205,14 @@ export const AccaStudioView: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-400">Total Combined Odds</span>
-                  <span className="font-display font-black text-xl text-amber-300 font-num">
+                  <span className="font-display font-black text-xl text-[#00E5FF] font-num">
                     @{compoundOdds.toFixed(2)}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-400">True Survival Probability</span>
-                  <span className={`font-num font-bold text-sm ${trueProbPct > 50 ? 'text-emerald-400' : trueProbPct > 25 ? 'text-amber-400' : 'text-rose-400'}`}>
+                  <span className={`font-num font-bold text-sm ${trueProbPct > 50 ? 'text-emerald-400' : trueProbPct > 25 ? 'text-[#00E5FF]' : 'text-rose-400'}`}>
                     {trueProbPct}%
                   </span>
                 </div>
@@ -274,7 +274,7 @@ export const AccaStudioView: React.FC = () => {
 
               {/* Fractional Kelly Recommendation */}
               <div className="text-[11px] text-slate-400 bg-[#080A0F] p-3 rounded-xl border border-[#222E46] space-y-1">
-                <span className="font-bold text-amber-300 block">🛡️ Risk Protocol Stake Limit:</span>
+                <span className="font-bold text-[#00E5FF] block">🛡️ Risk Protocol Stake Limit:</span>
                 Never stake more than 3% of your active bankroll on multi-leg tickets with survival probabilities below 40%.
               </div>
             </div>
