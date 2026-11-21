@@ -3777,7 +3777,8 @@ body {
   font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
-  overflow-x: hidden;
+  direction: ltr;
+  text-align: start;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -3832,6 +3833,11 @@ body {
   background:linear-gradient(180deg, transparent, rgba(0,229,255,.04), transparent);
   animation:sweep 22s linear infinite; }
 @keyframes sweep { from { top:-25vh; } to { top:125vh; } }
+
+/* Production readiness: compact header search on narrow screens (prevents header cramping) */
+@media (max-width: 639px) {
+  header .futuristic-input { width: 11rem; }
+}
 
 /* ─── Pitch vector (cyan neon) ─── */
 .pitch { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:.05; z-index:0; }
