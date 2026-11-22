@@ -80,6 +80,9 @@ if (!fs.existsSync(fixturesFile)) {
 
   let withFirst15 = 0;
   let withTeamCorners = 0;
+  let withOver15Corners = 0;
+  let withFirstHalf3545 = 0;
+  let withInvalidAwayHigh = 0;
   let withPhysics = 0;
   let with24Models = 0;
   for (const m of matches) {
@@ -89,6 +92,15 @@ if (!fs.existsSync(fixturesFile)) {
     }
     if (preds.some(p => p.marketCategory === 'TEAM_CORNERS') && m.cornerVolatilityProfile?.teamCornerProjections) {
       withTeamCorners++;
+    }
+    if (preds.some(p => p.marketCategory === 'TEAM_CORNERS' && /over\s+1\.5\s+corners/i.test(p.selection || ''))) {
+      withOver15Corners++;
+    }
+    if (preds.some(p => p.market === '1st-Half Corners' && /(3\.5|4\.5)/.test(p.selection || ''))) {
+      withFirstHalf3545++;
+    }
+    if (preds.some(p => p.market === 'Away Team Total Corners' && /7\+|8\+|over\s+(6\.5|7\.5)/i.test(p.selection || ''))) {
+      withInvalidAwayHigh++;
     }
     if (m.situationalFactors?.physicsMetrics?.airDensityKgM3 !== undefined) {
       withPhysics++;
@@ -103,11 +115,17 @@ if (!fs.existsSync(fixturesFile)) {
   } else {
     console.log(`✓ First 15 Min Draw (Weibull) markets verified on ${withFirst15}/${matches.length} fixtures.`);
   }
-  if (withTeamCorners === 0) {
-    console.error('❌ FAIL: No fixtures contain TEAM_CORNERS (Each Team Total Corners) markets!');
+  if (withTeamCorners === 0 || withOver15Corners === 0 || withFirstHalf3545 === 0) {
+    console.error('❌ FAIL: Missing Hollywoodbets corner markets (Over 1.5 Team Corners or 1st-Half 3.5/4.5)!');
     errors++;
   } else {
-    console.log(`✓ Each Team Total Corners (Negative Binomial) markets verified on ${withTeamCorners}/${matches.length} fixtures.`);
+    console.log(`✓ Hollywoodbets Corners verified: Over 1.5 Corners (${withOver15Corners}/${matches.length}), 1st-Half 3.5/4.5 (${withFirstHalf3545}/${matches.length}), Team Corners (${withTeamCorners}/${matches.length}).`);
+  }
+  if (withInvalidAwayHigh > 0) {
+    console.error(`❌ FAIL: Found ${withInvalidAwayHigh} matches with disallowed 7+/8+ corners on Away Team!`);
+    errors++;
+  } else {
+    console.log('✓ Verified 7+/8+ corner milestones restricted strictly to Home Team only.');
   }
   if (withPhysics === 0) {
     console.error('❌ FAIL: No fixtures contain atmospheric physics metrics!');

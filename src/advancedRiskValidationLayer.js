@@ -306,34 +306,49 @@ export function auditFixturePrediction(fixture) {
     isDerby,
     physicsMetrics: physRaw
   });
+  const firstHalfPick = nbCornersEval.firstHalf.over35 >= 0.65
+    ? `1st-Half Over 3.5 (${(nbCornersEval.firstHalf.over35 * 100).toFixed(1)}%)`
+    : nbCornersEval.firstHalf.under45 >= 0.62
+      ? `1st-Half Under 4.5 (${(nbCornersEval.firstHalf.under45 * 100).toFixed(1)}%)`
+      : `1st-Half Under 3.5 (${(nbCornersEval.firstHalf.under35 * 100).toFixed(1)}%)`;
+
   if (cornerProfile) {
     const homeWing = cornerProfile.homeWingPlayFreq || 70;
     const awayWing = cornerProfile.awayWingPlayFreq || 65;
-    if (homeWing > 75 && awayWing > 75) {
-      cornerAssessment = `Over 8.5 Total Corners (${home.name} λ=${nbCornersEval.lambdaHomeCorners}, ${away.name} λ=${nbCornersEval.lambdaAwayCorners})`;
-    } else if (homeWing < 60 && awayWing < 60) {
-      cornerAssessment = `Under 10.5 Total Corners (${home.name} λ=${nbCornersEval.lambdaHomeCorners}, ${away.name} λ=${nbCornersEval.lambdaAwayCorners})`;
+    if (nbCornersEval.match.over85 >= 0.72 || (homeWing > 75 && awayWing > 75)) {
+      cornerAssessment = `Over 8.5 Total Corners (${(nbCornersEval.match.over85 * 100).toFixed(1)}%) · ${firstHalfPick}`;
+    } else if (nbCornersEval.match.over75 >= 0.74) {
+      cornerAssessment = `Over 7.5 Total Corners (${(nbCornersEval.match.over75 * 100).toFixed(1)}%) · ${firstHalfPick}`;
     } else {
-      cornerAssessment = `Under 10.5 Total Corners · ${home.name} Over 3.5 (${(nbCornersEval.home.over35 * 100).toFixed(1)}%)`;
+      cornerAssessment = `Under 10.5 Total Corners (${(nbCornersEval.match.under105 * 100).toFixed(1)}%) · ${firstHalfPick}`;
     }
   }
 
-  const homeTeamCornerChoice = nbCornersEval.home.over35 >= 0.72
-    ? `${home.name} Over 3.5 Corners (${(nbCornersEval.home.over35 * 100).toFixed(1)}%)`
-    : `${home.name} Under 5.5 Corners (${(nbCornersEval.home.under55 * 100).toFixed(1)}%)`;
-  const awayTeamCornerChoice = nbCornersEval.away.over25 >= 0.70
-    ? `${away.name} Over 2.5 Corners (${(nbCornersEval.away.over25 * 100).toFixed(1)}%)`
+  const homeTeamCornerChoice = nbCornersEval.home.over65 >= 0.54
+    ? `${home.name} 7+ Corners / Over 6.5 (${(nbCornersEval.home.over65 * 100).toFixed(1)}%) · Over 1.5 (${(nbCornersEval.home.over15 * 100).toFixed(1)}%)`
+    : nbCornersEval.home.over15 >= 0.80
+      ? `${home.name} Over 1.5 (${(nbCornersEval.home.over15 * 100).toFixed(1)}%) · Under 6.5 (${(nbCornersEval.home.under65 * 100).toFixed(1)}%)`
+      : `${home.name} Under 6.5 Corners (${(nbCornersEval.home.under65 * 100).toFixed(1)}%)`;
+
+  const awayTeamCornerChoice = nbCornersEval.away.over15 >= 0.78
+    ? `${away.name} Over 1.5 Corners (${(nbCornersEval.away.over15 * 100).toFixed(1)}%) · Under 4.5 (${(nbCornersEval.away.under45 * 100).toFixed(1)}%)`
     : `${away.name} Under 4.5 Corners (${(nbCornersEval.away.under45 * 100).toFixed(1)}%)`;
 
   const layer9 = {
     dataAvailable: Boolean(cornerProfile),
     cornerVerdict: cornerAssessment,
+    firstHalfCorners: firstHalfPick,
     homeTeamCorners: homeTeamCornerChoice,
     awayTeamCorners: awayTeamCornerChoice,
     expectedCorners: {
       home: nbCornersEval.lambdaHomeCorners,
       away: nbCornersEval.lambdaAwayCorners,
-      total: nbCornersEval.totalCornersExp
+      firstHalf: nbCornersEval.lambdaFirstHalfCorners,
+      total: nbCornersEval.totalCornersExp,
+      homeOver15Pct: +(nbCornersEval.home.over15 * 100).toFixed(1),
+      awayOver15Pct: +(nbCornersEval.away.over15 * 100).toFixed(1),
+      home7PlusPct: +(nbCornersEval.home.over65 * 100).toFixed(1),
+      home8PlusPct: +(nbCornersEval.home.over75 * 100).toFixed(1)
     }
   };
 

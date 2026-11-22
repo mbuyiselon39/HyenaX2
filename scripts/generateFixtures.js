@@ -1739,42 +1739,36 @@ export function generatePredictions(home, away, leagueId) {
   const lambdaHomeCorners = nbCorners.lambdaHomeCorners;
   const lambdaAwayCorners = nbCorners.lambdaAwayCorners;
 
-  const pCornUnder105 = nbCorners.match.under105;
-  const pCornUnder95 = nbCorners.match.under95;
+  const pCornOver75 = nbCorners.match.over75;
+  const pCornUnder75 = nbCorners.match.under75;
   const pCornOver85 = nbCorners.match.over85;
   const pCornUnder85 = nbCorners.match.under85;
   const pCornOver95 = nbCorners.match.over95;
+  const pCornUnder95 = nbCorners.match.under95;
   const pCornOver105 = nbCorners.match.over105;
+  const pCornUnder105 = nbCorners.match.under105;
+  const pCornOver115 = nbCorners.match.over115;
+  const pCornUnder115 = nbCorners.match.under115;
 
-  // 1st-Half Corners (Strictly standard retail lines: 3.5 & 4.5)
-  let pCorn1stOver35 = 0, pCorn1stUnder35 = 0, pCorn1stOver45 = 0, pCorn1stUnder45 = 0;
-  let pCorn1st0to4 = 0, pCorn1st5to6 = 0, pCorn1st7Plus = 0;
-  for (let c = 0; c <= 15; c++) {
-    const pc = poissonPm(lambda1stCorners, c);
-    if (c >= 4) pCorn1stOver35 += pc;
-    if (c <= 3) pCorn1stUnder35 += pc;
-    if (c >= 5) pCorn1stOver45 += pc;
-    if (c <= 4) pCorn1stUnder45 += pc;
-    if (c <= 4) pCorn1st0to4 += pc;
-    if (c === 5 || c === 6) pCorn1st5to6 += pc;
-    if (c >= 7) pCorn1st7Plus += pc;
-  }
+  // 1st-Half ("First") Corners via Negative Binomial Blend (Strictly Hollywoodbets 3.5 & 4.5 Over/Under)
+  const pCorn1stOver35 = nbCorners.firstHalf.over35;
+  const pCorn1stUnder35 = nbCorners.firstHalf.under35;
+  const pCorn1stOver45 = nbCorners.firstHalf.over45;
+  const pCorn1stUnder45 = nbCorners.firstHalf.under45;
 
-  // 2nd-Half Corners (Strictly standard retail lines: 3.5 & 4.5)
+  // 2nd-Half Corners (Standard retail lines: 3.5 & 4.5)
   let pCorn2ndOver35 = 0, pCorn2ndUnder35 = 0, pCorn2ndOver45 = 0, pCorn2ndUnder45 = 0;
-  let pCorn2nd0to4 = 0, pCorn2nd5to6 = 0, pCorn2nd7Plus = 0;
   for (let c = 0; c <= 15; c++) {
     const pc = poissonPm(lambda2ndCorners, c);
     if (c >= 4) pCorn2ndOver35 += pc;
     if (c <= 3) pCorn2ndUnder35 += pc;
     if (c >= 5) pCorn2ndOver45 += pc;
     if (c <= 4) pCorn2ndUnder45 += pc;
-    if (c <= 4) pCorn2nd0to4 += pc;
-    if (c === 5 || c === 6) pCorn2nd5to6 += pc;
-    if (c >= 7) pCorn2nd7Plus += pc;
   }
 
-  // Each Team Total Corners (Negative Binomial + Poisson Retail Lines: 1.5, 2.5, 3.5, 4.5, 5.5)
+  // Each Team Total Corners (Negative Binomial + Poisson Blend, Hollywoodbets Lines)
+  const pHomeCornOver15 = nbCorners.home.over15;
+  const pHomeCornUnder15 = nbCorners.home.under15;
   const pHomeCornOver25 = nbCorners.home.over25;
   const pHomeCornOver35 = nbCorners.home.over35;
   const pHomeCornUnder35 = nbCorners.home.under35;
@@ -1782,8 +1776,15 @@ export function generatePredictions(home, away, leagueId) {
   const pHomeCornUnder45 = nbCorners.home.under45;
   const pHomeCornOver55 = nbCorners.home.over55;
   const pHomeCornUnder55 = nbCorners.home.under55;
+  // Home-Only 7+ (Over 6.5) / 8+ (Over 7.5) & Unders
+  const pHomeCornOver65 = nbCorners.home.over65;
+  const pHomeCornUnder65 = nbCorners.home.under65;
+  const pHomeCornOver75 = nbCorners.home.over75;
+  const pHomeCornUnder75 = nbCorners.home.under75;
 
+  // Away Team capped at 1.5 - 4.5 (no 7+ / 8+ away lines)
   const pAwayCornOver15 = nbCorners.away.over15;
+  const pAwayCornUnder15 = nbCorners.away.under15;
   const pAwayCornOver25 = nbCorners.away.over25;
   const pAwayCornUnder25 = nbCorners.away.under25;
   const pAwayCornOver35 = nbCorners.away.over35;
@@ -1954,30 +1955,41 @@ export function generatePredictions(home, away, leagueId) {
     { market: 'Goals Over/Under', selection: 'Over 3.5 Goals', prob: +(1 - pUnder35).toFixed(3), type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
     { market: 'Goals Over/Under', selection: 'Under 3.5 Goals', prob: pUnder35, type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
 
-    // 3. MATCH CORNER OVERS/UNDERS & 1ST HALF CORNER OVERS/UNDERS
-    { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: nbCorners.match.over75, type: 'CORNERS', category: 'CORNERS' },
+    // 3. MATCH TOTAL CORNERS (7.5 - 11.5 OVER/UNDER) & 1ST-HALF ("FIRST") CORNERS (STRICTLY 3.5 OR 4.5 OVER/UNDER)
+    { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: pCornOver75, type: 'CORNERS', category: 'CORNERS' },
+    { market: 'Match Total Corners', selection: 'Under 7.5 Total Corners', prob: pCornUnder75, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Over 8.5 Total Corners', prob: pCornOver85, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Under 8.5 Total Corners', prob: pCornUnder85, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Over 9.5 Total Corners', prob: pCornOver95, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Under 9.5 Total Corners', prob: pCornUnder95, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Over 10.5 Total Corners', prob: pCornOver105, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Under 10.5 Total Corners', prob: pCornUnder105, type: 'CORNERS', category: 'CORNERS' },
+    { market: 'Match Total Corners', selection: 'Over 11.5 Total Corners', prob: pCornOver115, type: 'CORNERS', category: 'CORNERS' },
+    { market: 'Match Total Corners', selection: 'Under 11.5 Total Corners', prob: pCornUnder115, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corners', selection: '1st-Half Over 3.5 Corners', prob: pCorn1stOver35, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corners', selection: '1st-Half Under 3.5 Corners', prob: pCorn1stUnder35, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corners', selection: '1st-Half Over 4.5 Corners', prob: pCorn1stOver45, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corners', selection: '1st-Half Under 4.5 Corners', prob: pCorn1stUnder45, type: 'CORNERS', category: 'CORNERS' },
-    { market: '1st-Half Corners', selection: '1st-Half Under 5.5 Corners', prob: Math.min(0.95, +(pCorn1stUnder45 * 1.14).toFixed(3)), type: 'CORNERS', category: 'CORNERS' },
 
-    // 3b. EACH TEAM TOTAL CORNERS (NEGATIVE BINOMIAL + POISSON BLEND)
+    // 3b. EACH TEAM TOTAL CORNERS (OVER 1.5 COUNTED + HOME-ONLY 7+ / 8+ / UNDERS PER HOLLYWOODBETS)
+    { market: 'Home Team Total Corners', selection: `${home.name} Over 1.5 Corners`, prob: pHomeCornOver15, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Home Team Total Corners', selection: `${home.name} Over 2.5 Corners`, prob: pHomeCornOver25, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Home Team Total Corners', selection: `${home.name} Over 3.5 Corners`, prob: pHomeCornOver35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Home Team Total Corners', selection: `${home.name} Under 4.5 Corners`, prob: pHomeCornUnder45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Under 3.5 Corners`, prob: pHomeCornUnder35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Home Team Total Corners', selection: `${home.name} Over 4.5 Corners`, prob: pHomeCornOver45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Under 4.5 Corners`, prob: pHomeCornUnder45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Over 5.5 Corners`, prob: pHomeCornOver55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Home Team Total Corners', selection: `${home.name} Under 5.5 Corners`, prob: pHomeCornUnder55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} 7+ Corners (Over 6.5)`, prob: pHomeCornOver65, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Under 6.5 Corners`, prob: pHomeCornUnder65, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} 8+ Corners (Over 7.5)`, prob: pHomeCornOver75, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Under 7.5 Corners`, prob: pHomeCornUnder75, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Away Team Total Corners', selection: `${away.name} Over 1.5 Corners`, prob: pAwayCornOver15, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Away Team Total Corners', selection: `${away.name} Over 2.5 Corners`, prob: pAwayCornOver25, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Away Team Total Corners', selection: `${away.name} Under 3.5 Corners`, prob: pAwayCornUnder35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Under 2.5 Corners`, prob: pAwayCornUnder25, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Away Team Total Corners', selection: `${away.name} Over 3.5 Corners`, prob: pAwayCornOver35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Under 3.5 Corners`, prob: pAwayCornUnder35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Over 4.5 Corners`, prob: pAwayCornOver45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
     { market: 'Away Team Total Corners', selection: `${away.name} Under 4.5 Corners`, prob: pAwayCornUnder45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
 
     // 4. BOOKINGS (CARDS PER MATCH)
@@ -2091,8 +2103,9 @@ export function generatePredictions(home, away, leagueId) {
     const bestOdds = Math.max(hwOdds, bwOdds, ebOdds);
     const ev = +(((m.prob * bestOdds) - 1) * 100).toFixed(1);
 
-    // ANTI-TRAP GATEKEEPER EVALUATION
-    const isLowOddsTrap = bestOdds < 1.28;
+    // ANTI-TRAP GATEKEEPER EVALUATION (Exempt Over 1.5 Team Corners so it explicitly counts in this model)
+    const isOver15CornerPick = m.category === 'TEAM_CORNERS' && /over\s+1\.5\s+corners/i.test(m.selection) && probability >= 78;
+    const isLowOddsTrap = !isOver15CornerPick && bestOdds < 1.28;
     const isDerbyFavoriteTrap = derbyInfo.isDerby && (m.type === 'DOUBLE_CHANCE' || m.type === '1X2');
 
     // Deep-Market Strict Vetting Protocol Check
@@ -2109,12 +2122,15 @@ export function generatePredictions(home, away, leagueId) {
 
     // Scoring weights: Prioritize high-certainty, high-hit-rate outcomes while suppressing traps
     let reliabilityBonus = 0;
-    const isHighTensionDefensiveGoalTrap = (leagueId === 'uefa_nations' || leagueId.includes('nations') || (lg && lg.avgGoals < 2.35)) && (m.selection.includes('Over 1.5') || m.selection.includes('Over 2.5'));
+    const isHighTensionDefensiveGoalTrap = (leagueId === 'uefa_nations' || leagueId.includes('nations') || (lg && lg.avgGoals < 2.35)) && (m.selection.includes('Over 1.5') || m.selection.includes('Over 2.5')) && m.category !== 'TEAM_CORNERS';
     const isDefensiveStructuralMarket = (leagueId === 'uefa_nations' || leagueId.includes('nations') || (lg && lg.avgGoals < 2.35)) && (m.selection.includes('Under 3.5') || m.type === 'DOUBLE_CHANCE');
 
     if (isLowOddsTrap) {
       // CRITICAL: Heavy penalty for < 1.28 odds traps to avoid bankroll ruin on a single upset
       reliabilityBonus = -24.0;
+    } else if (isOver15CornerPick) {
+      // Count Over 1.5 Team Corners cleanly in this model per Hollywoodbets logic
+      reliabilityBonus = +6.2;
     } else if (isHighTensionDefensiveGoalTrap) {
       // CRITICAL: In low-scoring international / defensive leagues, penalize volatile Over goal traps
       reliabilityBonus = -22.0;
@@ -2136,10 +2152,10 @@ export function generatePredictions(home, away, leagueId) {
       reliabilityBonus = probability >= 78 ? +7.0 : +3.0;
     } else if (m.market === '1X2 (2UP) Early Payout' && probability >= 75) {
       reliabilityBonus = +6.0;
-    } else if (m.category === 'CORNERS' && probability >= 78) {
-      reliabilityBonus = +5.5;
-    } else if (m.category === 'TEAM_CORNERS' && probability >= 72) {
-      reliabilityBonus = +4.8;
+    } else if (m.category === 'CORNERS' && probability >= 70) {
+      reliabilityBonus = +5.8;
+    } else if (m.category === 'TEAM_CORNERS' && probability >= 64) {
+      reliabilityBonus = +5.2;
     } else if (m.category === 'FIRST_15_MIN' && m.selection.includes('15 Min Draw') && probability >= 70) {
       reliabilityBonus = +5.0;
     } else if (m.category === 'DISCIPLINARY' && probability >= 78) {
@@ -2193,7 +2209,7 @@ export function generatePredictions(home, away, leagueId) {
 
   const selected = [];
   for (const [cat, list] of Object.entries(byCategory)) {
-    const limit = (cat === 'STANDARD' || cat === 'CORNERS') ? 4 : 3;
+    const limit = (cat === 'STANDARD' || cat === 'CORNERS' || cat === 'TEAM_CORNERS') ? 6 : 3;
     selected.push(...list.slice(0, limit));
   }
 
@@ -2225,14 +2241,24 @@ export function generatePredictions(home, away, leagueId) {
     return (b.convictionScore + structuralModB) - (a.convictionScore + structuralModA);
   });
 
-  // Guarantee First 15 Min Draw & Each Team Total Corners (Home + Away) are preserved in output slate
-  const guaranteedFirst15 = selected.find(p => p.marketCategory === 'FIRST_15_MIN' && p.selection.includes('15 Min Draw'));
-  const guaranteedHomeCorner = selected.find(p => p.market === 'Home Team Total Corners');
-  const guaranteedAwayCorner = selected.find(p => p.market === 'Away Team Total Corners');
-  const topSlice = selected.slice(0, 24);
+  // Guarantee First 15 Min Draw, Hollywoodbets 1st-Half 3.5/4.5, Match Total Corners, Home Over 1.5 & 7+/8+, and Away Over 1.5 are preserved in output slate
+  const guaranteedFirst15 = enriched.find(p => p.marketCategory === 'FIRST_15_MIN' && p.selection.includes('15 Min Draw'));
+  const guaranteed1stHalfCorner = enriched.find(p => p.market === '1st-Half Corners');
+  const guaranteedMatchCorner = enriched.find(p => p.market === 'Match Total Corners');
+  const guaranteedHomeOver15Corner = enriched.find(p => p.market === 'Home Team Total Corners' && /over\s+1\.5/i.test(p.selection));
+  const guaranteedHomeHighCorner = enriched.find(p => p.market === 'Home Team Total Corners' && (/7\+|8\+|under\s+6\.5|under\s+7\.5/i.test(p.selection)));
+  const guaranteedAwayOver15Corner = enriched.find(p => p.market === 'Away Team Total Corners' && /over\s+1\.5/i.test(p.selection));
+  const topSlice = selected.slice(0, 26);
   const existingKeys = new Set(topSlice.map(p => `${p.market}::${p.selection}`));
   const cappedSelected = [...topSlice];
-  [guaranteedFirst15, guaranteedHomeCorner, guaranteedAwayCorner].forEach(g => {
+  [
+    guaranteedFirst15,
+    guaranteed1stHalfCorner,
+    guaranteedMatchCorner,
+    guaranteedHomeOver15Corner,
+    guaranteedHomeHighCorner,
+    guaranteedAwayOver15Corner
+  ].forEach(g => {
     if (g && !existingKeys.has(`${g.market}::${g.selection}`)) {
       cappedSelected.push(g);
       existingKeys.add(`${g.market}::${g.selection}`);
@@ -2832,7 +2858,18 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   tacticalProfiles.cornerVolatilityProfile.teamCornerProjections = {
     homeExp: nbCornersTelemetry.lambdaHomeCorners,
     awayExp: nbCornersTelemetry.lambdaAwayCorners,
-    totalExp: nbCornersTelemetry.totalCornersExp
+    firstHalfExp: nbCornersTelemetry.lambdaFirstHalfCorners,
+    totalExp: nbCornersTelemetry.totalCornersExp,
+    homeOver15Pct: +(nbCornersTelemetry.home.over15 * 100).toFixed(1),
+    awayOver15Pct: +(nbCornersTelemetry.away.over15 * 100).toFixed(1),
+    home7PlusPct: +(nbCornersTelemetry.home.over65 * 100).toFixed(1),
+    homeUnder65Pct: +(nbCornersTelemetry.home.under65 * 100).toFixed(1),
+    home8PlusPct: +(nbCornersTelemetry.home.over75 * 100).toFixed(1),
+    homeUnder75Pct: +(nbCornersTelemetry.home.under75 * 100).toFixed(1),
+    firstHalf35OverPct: +(nbCornersTelemetry.firstHalf.over35 * 100).toFixed(1),
+    firstHalf35UnderPct: +(nbCornersTelemetry.firstHalf.under35 * 100).toFixed(1),
+    firstHalf45OverPct: +(nbCornersTelemetry.firstHalf.over45 * 100).toFixed(1),
+    firstHalf45UnderPct: +(nbCornersTelemetry.firstHalf.under45 * 100).toFixed(1)
   };
   tacticalProfiles.timeSegmentProfile.first15MinModel = {
     drawProbPct: +(first15Telemetry.pDraw15 * 100).toFixed(1),
@@ -4747,8 +4784,8 @@ export function optimizeFixturesPayload(fixturesData) {
     if (!m.topPick || !m.topPick.selection) {
       m.topPick = m.predictions[0];
     }
-    if (Array.isArray(m.predictions) && m.predictions.length > 28) {
-      m.predictions = m.predictions.slice(0, 28);
+    if (Array.isArray(m.predictions) && m.predictions.length > 34) {
+      m.predictions = m.predictions.slice(0, 34);
     }
     if (m.thirdPartySyndicate && Array.isArray(m.thirdPartySyndicate.predictions)) {
       m.thirdPartySyndicate = {

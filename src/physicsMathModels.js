@@ -229,6 +229,8 @@ export function calculateNegativeBinomialCorners({
   const awayForce = (Number(lambdaAway) * 1.00) * ((Number(awayWingFreq) || 65) / 70);
   const homeCornerShare = Math.min(0.69, Math.max(0.39, homeForce / Math.max(0.1, homeForce + awayForce)));
 
+  const lambdaFirstHalfCorners = +(totalCornersExp * 0.45).toFixed(2);
+  const lambdaSecondHalfCorners = +(totalCornersExp * 0.55).toFixed(2);
   const lambdaHomeCorners = +(totalCornersExp * homeCornerShare).toFixed(2);
   const lambdaAwayCorners = +(totalCornersExp * (1 - homeCornerShare)).toFixed(2);
 
@@ -239,40 +241,56 @@ export function calculateNegativeBinomialCorners({
       const pm = 0.65 * negativeBinomialPm(mu, c, rDisp) + 0.35 * poissonPm(mu, c);
       underProb += pm;
     }
-    underProb = Math.min(0.95, Math.max(0.05, underProb));
+    underProb = Math.min(0.96, Math.max(0.04, underProb));
     return {
       under: +underProb.toFixed(3),
       over: +(1 - underProb).toFixed(3)
     };
   };
 
-  // Standard sportsbook retail lines per team
+  // Standard Hollywoodbets Team Corner Lines:
+  // Home Team includes Over/Under 1.5 up to 5.5 + Home-Only 7+ (Over 6.5), 8+ (Over 7.5) & Unders
+  const home15 = calcCdf(lambdaHomeCorners, 1, 10.5);
   const home25 = calcCdf(lambdaHomeCorners, 2, 10.5);
   const home35 = calcCdf(lambdaHomeCorners, 3, 10.5);
   const home45 = calcCdf(lambdaHomeCorners, 4, 10.5);
   const home55 = calcCdf(lambdaHomeCorners, 5, 10.5);
+  const home65 = calcCdf(lambdaHomeCorners, 6, 10.5); // 7+ Corners (Over 6.5) / Under 6.5
+  const home75 = calcCdf(lambdaHomeCorners, 7, 10.5); // 8+ Corners (Over 7.5) / Under 7.5
 
+  // Away Team includes Over/Under 1.5 through 4.5 (no 7+/8+ milestone option for Away)
   const away15 = calcCdf(lambdaAwayCorners, 1, 10.5);
   const away25 = calcCdf(lambdaAwayCorners, 2, 10.5);
   const away35 = calcCdf(lambdaAwayCorners, 3, 10.5);
   const away45 = calcCdf(lambdaAwayCorners, 4, 10.5);
 
+  // Hollywoodbets Match Total Corner Lines (7.5, 8.5, 9.5, 10.5, 11.5)
   const match75 = calcCdf(totalCornersExp, 7, 14.0);
   const match85 = calcCdf(totalCornersExp, 8, 14.0);
   const match95 = calcCdf(totalCornersExp, 9, 14.0);
   const match105 = calcCdf(totalCornersExp, 10, 14.0);
+  const match115 = calcCdf(totalCornersExp, 11, 14.0);
+
+  // Hollywoodbets 1st-Half ("First Corners") strictly 3.5 & 4.5 Over/Under
+  const firstHalf35 = calcCdf(lambdaFirstHalfCorners, 3, 11.0);
+  const firstHalf45 = calcCdf(lambdaFirstHalfCorners, 4, 11.0);
 
   return {
     totalCornersExp: +totalCornersExp.toFixed(2),
     homeCornerShare: +homeCornerShare.toFixed(3),
     lambdaHomeCorners,
     lambdaAwayCorners,
+    lambdaFirstHalfCorners,
+    lambdaSecondHalfCorners,
     varianceInflationFactor: +(1 + totalCornersExp / 14.0).toFixed(2),
     home: {
+      over15: home15.over, under15: home15.under,
       over25: home25.over, under25: home25.under,
       over35: home35.over, under35: home35.under,
       over45: home45.over, under45: home45.under,
-      over55: home55.over, under55: home55.under
+      over55: home55.over, under55: home55.under,
+      over65: home65.over, under65: home65.under, // 7+ Corners / Under 6.5
+      over75: home75.over, under75: home75.under  // 8+ Corners / Under 7.5
     },
     away: {
       over15: away15.over, under15: away15.under,
@@ -284,7 +302,12 @@ export function calculateNegativeBinomialCorners({
       over75: match75.over, under75: match75.under,
       over85: match85.over, under85: match85.under,
       over95: match95.over, under95: match95.under,
-      over105: match105.over, under105: match105.under
+      over105: match105.over, under105: match105.under,
+      over115: match115.over, under115: match115.under
+    },
+    firstHalf: {
+      over35: firstHalf35.over, under35: firstHalf35.under,
+      over45: firstHalf45.over, under45: firstHalf45.under
     }
   };
 }

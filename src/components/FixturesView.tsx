@@ -433,6 +433,11 @@ export const FixturesView: React.FC = () => {
                                       <strong className="text-amber-400">
                                         {match.cornerVolatilityProfile.teamCornerProjections.awayExp}
                                       </strong>
+                                      {match.cornerVolatilityProfile.teamCornerProjections.homeOver15Pct !== undefined && (
+                                        <span className="text-slate-500">
+                                          {' '}(H O1.5: {match.cornerVolatilityProfile.teamCornerProjections.homeOver15Pct}%)
+                                        </span>
+                                      )}
                                     </span>
                                   )}
                                 </div>

@@ -53,7 +53,7 @@ export const MatchDrawer: React.FC = () => {
   const [fetchedEnsemble, setFetchedEnsemble] = useState<any[]>([]);
   const [ensembleLoading, setEnsembleLoading] = useState<boolean>(false);
 
-  const [marketSubFilter, setMarketSubFilter] = useState<'ALL' | 'FIRST_15_MIN' | 'TEAM_CORNERS' | 'CORE'>('ALL');
+  const [marketSubFilter, setMarketSubFilter] = useState<'ALL' | 'FIRST_15_MIN' | 'TEAM_CORNERS' | 'CORNERS' | 'CORE'>('ALL');
 
   // Reset per-match state whenever user switches match
   useEffect(() => {
@@ -449,11 +449,19 @@ export const MatchDrawer: React.FC = () => {
                     </div>
                   )}
                   {cornerProj && (
-                    <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
-                      <span className="text-slate-400 block">NegBin Team Corners (H / A):</span>
-                      <strong className="text-cyan-300">
-                        {cornerProj.homeExp} vs {cornerProj.awayExp} (Total {cornerProj.totalExp})
+                    <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46] col-span-2 space-y-1">
+                      <span className="text-slate-400 block">Hollywoodbets NegBin Corners (H / A / 1H):</span>
+                      <strong className="text-cyan-300 block">
+                        {cornerProj.homeExp} vs {cornerProj.awayExp} (1H λ={cornerProj.firstHalfExp ?? (cornerProj.totalExp * 0.45).toFixed(2)} · Total {cornerProj.totalExp})
                       </strong>
+                      {cornerProj.homeOver15Pct !== undefined && (
+                        <div className="text-[10px] text-slate-300 flex flex-wrap gap-x-3 gap-y-0.5 pt-0.5">
+                          <span>H O1.5: <strong className="text-emerald-400">{cornerProj.homeOver15Pct}%</strong></span>
+                          <span>A O1.5: <strong className="text-emerald-400">{cornerProj.awayOver15Pct}%</strong></span>
+                          <span>1H O3.5/U4.5: <strong className="text-[#00E5FF]">{cornerProj.firstHalf35OverPct}% / {cornerProj.firstHalf45UnderPct}%</strong></span>
+                          <span>Home 7+/8+: <strong className="text-amber-300">{cornerProj.home7PlusPct}% / {cornerProj.home8PlusPct}%</strong></span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -550,7 +558,8 @@ export const MatchDrawer: React.FC = () => {
                 {[
                   { id: 'ALL', label: `All (${(m.predictions || []).length})` },
                   { id: 'FIRST_15_MIN', label: 'First 15 Min Draw' },
-                  { id: 'TEAM_CORNERS', label: 'Each Team Corners' },
+                  { id: 'TEAM_CORNERS', label: 'Team Corners (O1.5 / Home 7+)' },
+                  { id: 'CORNERS', label: '1H (3.5/4.5) & Total Corners' },
                   { id: 'CORE', label: 'Core & Totals' }
                 ].map(sf => (
                   <button
@@ -577,7 +586,10 @@ export const MatchDrawer: React.FC = () => {
                     if (marketSubFilter === 'TEAM_CORNERS') {
                       return pred.marketCategory === 'TEAM_CORNERS' || (pred.market || '').toLowerCase().includes('team total corners');
                     }
-                    return pred.marketCategory !== 'FIRST_15_MIN' && pred.marketCategory !== 'TEAM_CORNERS';
+                    if (marketSubFilter === 'CORNERS') {
+                      return pred.marketCategory === 'CORNERS' || /1st-half corners|match total corners/i.test(pred.market || '');
+                    }
+                    return pred.marketCategory !== 'FIRST_15_MIN' && pred.marketCategory !== 'TEAM_CORNERS' && pred.marketCategory !== 'CORNERS';
                   })
                   .map((pred, i) => {
                     const isLegAdded = accumulatorLegs.some(l => l.matchId === m.id && l.selection === pred.selection);
