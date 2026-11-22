@@ -7,7 +7,7 @@
     "dev": "tsx server.ts",
     "start": "NODE_ENV=production tsx server.ts",
     "scrape": "node scripts/generateFixtures.js",
-    "build": "vite build",
+    "build": "vite build && node scripts/build.js",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

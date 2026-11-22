@@ -18,6 +18,12 @@ import {
   generateThirdPartyPredictionsForMatch,
   reanalyseWithThirdPartySyndicate
 } from './thirdPartySyndicateEngine.js';
+import {
+  calculateAtmosphericPhysics,
+  calculateEntropyAndSkellam,
+  calculateFirst15MinDistribution,
+  calculateNegativeBinomialCorners
+} from './physicsMathModels.js';
 
 // Sigmoid activation helper
 export function sigmoid(z) {
@@ -691,7 +697,65 @@ export function runConsolidatedEnsemble({
     }
   };
 
-  // 7. Consolidated Ensemble Composition (Expanded 21-Model Primary Stack with 32+ Total Active Sub-Models)
+  // 6b. Layer 22: Atmospheric Physics & Biomechanics Model
+  const physicsStats = calculateAtmosphericPhysics({
+    altitudeM: travelHome > 0 ? 450 : 280,
+    temperatureC: 17,
+    windKmh: 12,
+    precipitationPct: 18,
+    travelKm: travelAway
+  });
+  const rawLayer22Prob = Math.min(96, Math.max(20, +(rawDcHomeProb * physicsStats.goalHazardPhysicsMult).toFixed(1)));
+  const layer22Prob = mapDelta(rawLayer22Prob, 0.32);
+
+  const m_layer22 = {
+    name: 'Layer 22: Atmospheric Physics & Fluid Drag Biomechanics',
+    prob: layer22Prob,
+    weight: 0.04,
+    category: 'Physics & Biomechanics',
+    signal: `${physicsStats.physicsVerdict} (ρ=${physicsStats.airDensityKgM3} kg/m³, Drag ${physicsStats.dragReductionPct >= 0 ? `-${physicsStats.dragReductionPct}%` : `+${Math.abs(physicsStats.dragReductionPct)}%`})`,
+    diagnostics: physicsStats
+  };
+
+  // 6c. Layer 23: Shannon Information Entropy & Skellam Margin Model
+  const dcProbSum = Math.max(1e-6, rawDcHomeProb / 100 + 0.26 + Math.max(0.08, 1 - rawDcHomeProb / 100 - 0.26));
+  const entropySkellam = calculateEntropyAndSkellam({
+    lambdaHome: lh,
+    lambdaAway: la,
+    pHome: (rawDcHomeProb / 100) / dcProbSum,
+    pDraw: 0.26 / dcProbSum,
+    pAway: Math.max(0.08, 1 - rawDcHomeProb / 100 - 0.26) / dcProbSum
+  });
+  const entropyAdjustment = (entropySkellam.certaintyIndexPct - 20) * 0.14;
+  const rawLayer23Prob = Math.min(96, Math.max(20, +(rawDcHomeProb + entropyAdjustment).toFixed(1)));
+  const layer23Prob = mapDelta(rawLayer23Prob, 0.34);
+
+  const m_layer23 = {
+    name: 'Layer 23: Shannon Entropy & Skellam Margin Engine',
+    prob: layer23Prob,
+    weight: 0.04,
+    category: 'Information Theory & Stochastics',
+    signal: `Entropy=${entropySkellam.shannonEntropyBits}b · Certainty=${entropySkellam.certaintyIndexPct}% (${entropySkellam.entropyRegime})`,
+    diagnostics: entropySkellam
+  };
+
+  // 6d. Layer 24: Weibull Early-Tempo & Negative Binomial Micro-Segments
+  const earlyTempo = calculateFirst15MinDistribution({ lambdaHome: lh, lambdaAway: la, isDerby, physicsMetrics: physicsStats });
+  const nbCorners = calculateNegativeBinomialCorners({ totalLambda: lh + la, lambdaHome: lh, lambdaAway: la, isDerby, physicsMetrics: physicsStats });
+  const microShift = (earlyTempo.pDraw15 - 0.72) * 10 + (nbCorners.totalCornersExp - 9.5) * 0.4;
+  const rawLayer24Prob = Math.min(96, Math.max(20, +(rawDcHomeProb + microShift).toFixed(1)));
+  const layer24Prob = mapDelta(rawLayer24Prob, 0.28);
+
+  const m_layer24 = {
+    name: 'Layer 24: Weibull 15m Hazard & Negative Binomial Corners',
+    prob: layer24Prob,
+    weight: 0.04,
+    category: 'Stochastic Micro-Segments',
+    signal: `15m Draw ${(earlyTempo.pDraw15 * 100).toFixed(1)}% · Corners H:${nbCorners.lambdaHomeCorners} / A:${nbCorners.lambdaAwayCorners}`,
+    diagnostics: { first15Min: earlyTempo, corners: { home: nbCorners.lambdaHomeCorners, away: nbCorners.lambdaAwayCorners, total: nbCorners.totalCornersExp } }
+  };
+
+  // 7. Consolidated Ensemble Composition (24-Model Primary Stack across Statistical, GBDT, GNN, Transformer, Market, Physics & Information Theory)
   const fullEnsemble = [
     // Parametric & Mathematical Foundation (6 Models)
     { name: 'Dixon-Coles Bivariate Poisson (1997)', prob: dcHomeProb, weight: 0.10, category: 'Parametric Statistical', signal: 'Poisson Parameter Supremacy' },
@@ -732,7 +796,12 @@ export function runConsolidatedEnsemble({
     m_layer20,
 
     // Layer 21: 12-Site Third-Party Syndicate Consensus Engine (1 Model)
-    m_layer21
+    m_layer21,
+
+    // Layer 22-24: Physics Biomechanics, Information Entropy & Stochastic Micro-Segments (3 Models)
+    m_layer22,
+    m_layer23,
+    m_layer24
   ];
 
   // Normalized weighted voting

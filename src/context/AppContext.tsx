@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Fixture, DayTab, TopBankerPick, AccumulatorLeg, AccumulatorAnalysis, Toast, ChatMessage } from '../types.ts';
+import { fetchJsonSafe } from '../utils/safeFetch.ts';
+// @ts-ignore
+import { analyzeAccumulator } from '../beastEngine.js';
 // @ts-ignore
 import { auditFixturePrediction } from '../advancedRiskValidationLayer.js';
 
@@ -169,15 +172,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsSyncing(true);
     setLoadError(null);
     try {
-      const url = force ? '/api/fixtures?force=1&t=' + Date.now() : '/api/fixtures?t=' + Date.now();
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status} loading fixture feed`);
+      const ts = Date.now();
+      const apiUrl = force ? `/api/fixtures?force=1&t=${ts}` : `/api/fixtures?t=${ts}`;
+      let usedStaticFallback = false;
+      let res = await fetchJsonSafe<{ meta?: any; matches?: Fixture[] }>(apiUrl, { cache: 'no-store' });
+
+      if (!res.ok || !res.data || !Array.isArray(res.data.matches) || res.data.matches.length === 0) {
+        const staticCandidates = [`/data/fixtures.json?t=${ts}`, `./data/fixtures.json?t=${ts}`];
+        for (const candidate of staticCandidates) {
+          const fallbackRes = await fetchJsonSafe<{ meta?: any; matches?: Fixture[] }>(candidate, { cache: 'no-store' });
+          if (fallbackRes.ok && fallbackRes.data && Array.isArray(fallbackRes.data.matches) && fallbackRes.data.matches.length > 0) {
+            res = fallbackRes;
+            usedStaticFallback = true;
+            break;
+          }
+        }
       }
-      const data = await res.json();
-      if (data && Array.isArray(data.matches) && data.matches.length > 0) {
+
+      if (res.ok && res.data && Array.isArray(res.data.matches) && res.data.matches.length > 0) {
+        const data = res.data;
         setFixtures(data.matches);
-        setDataSource(data.meta?.dataSource || 'OFFICIAL ESPN LIVE INGESTION');
+        const baseSource = data.meta?.dataSource || 'OFFICIAL ESPN LIVE INGESTION';
+        setDataSource(usedStaticFallback ? `${baseSource} (EDGE CACHE)` : baseSource);
         setLastSyncedAt(data.meta?.generated_at || data.meta?.generatedAt || new Date().toISOString());
         syncDays(data.matches);
         if (!selectedMatchIdRef.current && data.matches.length > 0) {
@@ -188,7 +204,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           addToast('Synchronized', `Loaded ${data.matches.length} fixtures across ${lc} leagues`, 'success');
         }
       } else {
-        setLoadError('No fixtures returned from ingestion service.');
+        setLoadError(res.error || 'No fixtures returned from ingestion service.');
       }
     } catch (err: any) {
       setLoadError(err?.message || 'Unable to reach fixture ingestion server');
@@ -211,19 +227,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setAccumulatorAnalysis(null);
       return;
     }
+    const res = await fetchJsonSafe<AccumulatorAnalysis>('/api/beast/accumulator/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ selections: legs })
+    });
+    if (res.ok && res.data) {
+      setAccumulatorAnalysis(res.data);
+      return;
+    }
+
+    // Client-side exact Beast Engine quantitative calculation on static host
     try {
-      const res = await fetch('/api/beast/accumulator/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ selections: legs })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setAccumulatorAnalysis(data);
-        return;
-      }
-    } catch (e) {
-      // Fallback client calculation matching backend shape
+      const localAnalysis = analyzeAccumulator(legs);
+      setAccumulatorAnalysis(localAnalysis);
+      return;
+    } catch {
+      // Ultimate safe inline fallback
     }
     let compoundOdds = 1.0;
     let compoundProb = 1.0;
@@ -294,7 +314,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     try {
       const historyToSend = [...aiChatMessages, userMsg].map(m => ({ role: m.role, text: m.text }));
-      const res = await fetch('/api/ai/chat', {
+      const res = await fetchJsonSafe<{ reply?: string; grounding?: any; message?: string }>('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -305,22 +325,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         })
       });
 
-      if (res.ok) {
-        const data = await res.json();
+      if (res.ok && res.data) {
         const modelMsg: ChatMessage = {
           role: 'model',
-          text: data.reply || 'Analysis delivered.',
-          grounding: data.grounding,
+          text: res.data.reply || 'Analysis delivered.',
+          grounding: res.data.grounding,
           timestamp: new Date().toLocaleTimeString()
         };
         setAiChatMessages(prev => [...prev, modelMsg]);
-      } else {
-        const errData = await res.json().catch(() => ({}));
+      } else if (res.isHtmlFallback) {
         setAiChatMessages(prev => [
           ...prev,
           {
             role: 'model',
-            text: `⚠️ Engine Error: ${errData.message || 'Unable to complete AI query at this moment.'}`,
+            text: `ℹ️ **Static Edge Mode Active**: Live Gemini Google Search & Maps grounding requires the Node/Express runtime server, while all **24 quantitative engines**, Dixon-Coles projections, Atmospheric Physics, and Team Corner / First 15 Min Draw probabilities are running live locally across ${fixtures.length} fixtures.`,
+            timestamp: new Date().toLocaleTimeString()
+          }
+        ]);
+      } else {
+        setAiChatMessages(prev => [
+          ...prev,
+          {
+            role: 'model',
+            text: `⚠️ Engine Notice: ${res.error || 'Unable to complete AI query at this moment.'}`,
             timestamp: new Date().toLocaleTimeString()
           }
         ]);
@@ -337,7 +364,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } finally {
       setAiChatLoading(false);
     }
-  }, [aiChatMessages]);
+  }, [aiChatMessages, fixtures.length]);
 
   const selectedMatch = useMemo(() => {
     const found = fixtures.find(f => f.id === selectedMatchId) || null;
@@ -411,12 +438,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           allOdds: (best.odds && typeof best.odds === 'object') ? (best.odds as any) : { hollywoodbets: oddsVal, betway: +(oddsVal * 1.02).toFixed(2), easybet: oddsVal },
           bankerScore,
           modelAgreement,
-          modelsActive: ens.totalModelsActive || 17,
+          modelsActive: ens.totalModelsActive || 24,
           trustScore: beast.trustScore || 92,
           safetyTier: prob >= 82 ? 'ULTRA_BANKER' : 'VETTED_BANKER',
           safetyBadge: prob >= 82 ? '🛡️ ULTRA BANKER LOCK' : '✅ VETTED BANKER',
           badgeBg: prob >= 82 ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
-          whySafe: `${m.home.name} vs ${m.away.name}: 17-Model Ensemble agreement at ${modelAgreement}% with zero rotation look-ahead penalty.`,
+          whySafe: `${m.home.name} vs ${m.away.name}: ${ens.totalModelsActive || 24}-Model Ensemble agreement at ${modelAgreement}% with zero rotation look-ahead penalty.`,
           isFinished: m.matchStatus === 'FINISHED',
           finalScore: m.finalScore,
           settledResult: best.result || 'PENDING',

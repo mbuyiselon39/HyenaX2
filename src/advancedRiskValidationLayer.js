@@ -20,6 +20,12 @@
  * ============================================================================
  */
 
+import {
+  calculateAtmosphericPhysics,
+  calculateFirst15MinDistribution,
+  calculateNegativeBinomialCorners
+} from './physicsMathModels.js';
+
 /**
  * Audit a single fixture through the 20-Layer Intelligence & Risk Validation Engine.
  * 
@@ -221,12 +227,21 @@ export function auditFixturePrediction(fixture) {
     situationalImpact = 'SUPPORTS';
   }
 
+  const physRaw = fixture.situationalFactors?.physicsMetrics || calculateAtmosphericPhysics({
+    altitudeM: fixture.situationalFactors?.travelFatigue?.altitudeMeters ?? home.altitudeM ?? 200,
+    temperatureC: fixture.situationalFactors?.weatherConditions?.temperatureC ?? 17,
+    windKmh: fixture.situationalFactors?.weatherConditions?.windKmh ?? 12,
+    precipitationPct: fixture.situationalFactors?.weatherConditions?.precipitationPct ?? 15,
+    travelKm
+  });
+
   const layer7 = {
     isDerbyMatch: isDerby,
     derbyName: fixture.beastMeta?.derbyInfo?.derbyName || (isDerby ? 'Regional Derby' : 'None'),
     scheduleTurnaroundHours: restHours,
     travelDistanceKm: travelKm,
     midweekCongestionRisk: isMidweekCongested ? 'HIGH_CONGESTION_EXPOSURE' : 'OPTIMAL_REST',
+    atmosphericPhysics: physRaw,
     situationalImpact
   };
 
@@ -276,25 +291,50 @@ export function auditFixturePrediction(fixture) {
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 9 — CORNERS VALIDATION
+  // LAYER 9 — CORNERS VALIDATION (MATCH TOTAL + EACH TEAM CORNERS)
   // --------------------------------------------------------------------------
   let cornerAssessment = 'NO BET';
   const cornerProfile = fixture.cornerVolatilityProfile || fixture.tacticalProfiles?.cornerVolatilityProfile;
+  const nbCornersEval = calculateNegativeBinomialCorners({
+    totalLambda: expTotalGoals,
+    lambdaHome: homeXg,
+    lambdaAway: awayXg,
+    homeWingFreq: cornerProfile?.homeWingPlayFreq || 70,
+    awayWingFreq: cornerProfile?.awayWingPlayFreq || 65,
+    homeBlocksPct: cornerProfile?.homeBlocksOutOfBoundsPct || 44,
+    awayBlocksPct: cornerProfile?.awayBlocksOutOfBoundsPct || 46,
+    isDerby,
+    physicsMetrics: physRaw
+  });
   if (cornerProfile) {
     const homeWing = cornerProfile.homeWingPlayFreq || 70;
-    const awayWing = cornerProfile.awayWingPlayFreq || 70;
+    const awayWing = cornerProfile.awayWingPlayFreq || 65;
     if (homeWing > 75 && awayWing > 75) {
-      cornerAssessment = 'Over 8.5 Total Corners (High Wing Utilization)';
+      cornerAssessment = `Over 8.5 Total Corners (${home.name} λ=${nbCornersEval.lambdaHomeCorners}, ${away.name} λ=${nbCornersEval.lambdaAwayCorners})`;
     } else if (homeWing < 60 && awayWing < 60) {
-      cornerAssessment = 'Under 10.5 Total Corners (Central Progression)';
+      cornerAssessment = `Under 10.5 Total Corners (${home.name} λ=${nbCornersEval.lambdaHomeCorners}, ${away.name} λ=${nbCornersEval.lambdaAwayCorners})`;
     } else {
-      cornerAssessment = 'Under 10.5 Total Corners';
+      cornerAssessment = `Under 10.5 Total Corners · ${home.name} Over 3.5 (${(nbCornersEval.home.over35 * 100).toFixed(1)}%)`;
     }
   }
 
+  const homeTeamCornerChoice = nbCornersEval.home.over35 >= 0.72
+    ? `${home.name} Over 3.5 Corners (${(nbCornersEval.home.over35 * 100).toFixed(1)}%)`
+    : `${home.name} Under 5.5 Corners (${(nbCornersEval.home.under55 * 100).toFixed(1)}%)`;
+  const awayTeamCornerChoice = nbCornersEval.away.over25 >= 0.70
+    ? `${away.name} Over 2.5 Corners (${(nbCornersEval.away.over25 * 100).toFixed(1)}%)`
+    : `${away.name} Under 4.5 Corners (${(nbCornersEval.away.under45 * 100).toFixed(1)}%)`;
+
   const layer9 = {
     dataAvailable: Boolean(cornerProfile),
-    cornerVerdict: cornerAssessment
+    cornerVerdict: cornerAssessment,
+    homeTeamCorners: homeTeamCornerChoice,
+    awayTeamCorners: awayTeamCornerChoice,
+    expectedCorners: {
+      home: nbCornersEval.lambdaHomeCorners,
+      away: nbCornersEval.lambdaAwayCorners,
+      total: nbCornersEval.totalCornersExp
+    }
   };
 
   // --------------------------------------------------------------------------
@@ -320,7 +360,7 @@ export function auditFixturePrediction(fixture) {
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 11 — RESULT & HALF MARKETS (DNB, Double Chance, Win Either Half, Highest Scoring Half)
+  // LAYER 11 — RESULT, HALF & FIRST 15 MIN DRAW VALIDATION
   // --------------------------------------------------------------------------
   let dnbChoice = 'NO BET';
   let dcChoice = 'NO BET';
@@ -341,11 +381,22 @@ export function auditFixturePrediction(fixture) {
     dnbChoice = 'Home DNB';
   }
 
+  const first15Eval = calculateFirst15MinDistribution({
+    lambdaHome: homeXg,
+    lambdaAway: awayXg,
+    ppdaHome: fixture.tacticalFeeds?.ppdaPressing?.home || 10.5,
+    ppdaAway: fixture.tacticalFeeds?.ppdaPressing?.away || 11.2,
+    isDerby,
+    physicsMetrics: physRaw
+  });
+
   const layer11 = {
     drawNoBet: dnbChoice,
     doubleChance: dcChoice,
     winEitherHalf: eitherHalfChoice,
-    highestScoringHalf: highestScoringHalfChoice
+    highestScoringHalf: highestScoringHalfChoice,
+    first15MinDraw: `15 Min Draw (X) · ${(first15Eval.pDraw15 * 100).toFixed(1)}%`,
+    first15MinDrawProbPct: +(first15Eval.pDraw15 * 100).toFixed(1)
   };
 
   // --------------------------------------------------------------------------
@@ -423,8 +474,12 @@ export function auditFixturePrediction(fixture) {
       strongestRiskAdjusted: `${bestGoalSelection} (${bestGoalMarket})`
     },
     cornersFamily: {
-      markets: ['Total Corners', 'Half Corners'],
+      markets: ['Match Total Corners', 'Home Team Total Corners', 'Away Team Total Corners', '1st-Half Corners'],
       strongestRiskAdjusted: cornerAssessment
+    },
+    timeSegmentFamily: {
+      markets: ['First 15 Minutes (0-15 min) Draw', 'Goal in First 10 Minutes'],
+      strongestRiskAdjusted: layer11.first15MinDraw
     },
     cardsFamily: {
       markets: ['Total Cards', 'Each Team Cards'],

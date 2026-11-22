@@ -52,9 +52,11 @@ export const DailyTop20View: React.FC = () => {
   const marketOptions = [
     { id: 'all', label: 'All Safe Markets' },
     { id: 'WINNERS_DC', label: '1X2 / Double Chance' },
+    { id: 'FIRST_15_MIN', label: 'First 15 Min Draw' },
+    { id: 'TEAM_CORNERS', label: 'Each Team Total Corners' },
     { id: 'HALF_MARKETS', label: 'Highest Scoring Half' },
     { id: 'GOAL_OVERS_UNDERS', label: 'Over / Under Goals' },
-    { id: 'CORNERS', label: 'Corners' },
+    { id: 'CORNERS', label: 'Match Corners' },
     { id: 'BOOKINGS', label: 'Cards & Bookings' },
     { id: 'BTTS', label: 'BTTS' }
   ];
@@ -86,6 +88,12 @@ export const DailyTop20View: React.FC = () => {
       let eligible = allMarkets;
       if (marketFilter !== 'all') {
         const catFilter = eligible.filter(p => {
+          if (marketFilter === 'FIRST_15_MIN') {
+            return p.marketCategory === 'FIRST_15_MIN' || (p.market && p.market.toLowerCase().includes('first 15'));
+          }
+          if (marketFilter === 'TEAM_CORNERS') {
+            return p.marketCategory === 'TEAM_CORNERS' || (p.market && p.market.toLowerCase().includes('team total corners'));
+          }
           if (marketFilter === 'HALF_MARKETS') {
             return p.marketCategory === 'HALF_MARKETS' || (p.market && p.market.toLowerCase().includes('half'));
           }
@@ -93,7 +101,7 @@ export const DailyTop20View: React.FC = () => {
             return p.marketCategory === 'GOAL_OVERS_UNDERS' || (p.market && p.market.toLowerCase().includes('goal'));
           }
           if (marketFilter === 'CORNERS') {
-            return p.marketCategory === 'CORNERS' || (p.market && p.market.toLowerCase().includes('corner'));
+            return p.marketCategory === 'CORNERS' || (p.market && (p.market.toLowerCase().includes('match total corners') || p.market.toLowerCase().includes('1st-half corners')));
           }
           if (marketFilter === 'BOOKINGS') {
             return p.marketCategory === 'BOOKINGS' || (p.market && (p.market.toLowerCase().includes('card') || p.market.toLowerCase().includes('booking')));
@@ -145,12 +153,12 @@ export const DailyTop20View: React.FC = () => {
         allOdds: (best.odds && typeof best.odds === 'object') ? (best.odds as any) : { hollywoodbets: oddsVal, betway: +(oddsVal * 1.02).toFixed(2), easybet: oddsVal },
         bankerScore,
         modelAgreement,
-        modelsActive: ens.totalModelsActive || 17,
+        modelsActive: ens.totalModelsActive || 24,
         trustScore: beast.trustScore || 92,
         safetyTier: prob >= 82 ? 'ULTRA_BANKER' : 'VETTED_BANKER',
         safetyBadge: prob >= 82 ? '🛡️ ULTRA BANKER LOCK' : '✅ VETTED BANKER',
         badgeBg: prob >= 82 ? 'bg-[#00E5FF]/20 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
-        whySafe: `${m.home.name} vs ${m.away.name}: 17-Model Consensus agreement at ${modelAgreement}% with ${best.market} (${best.selection}).`,
+        whySafe: `${m.home.name} vs ${m.away.name}: ${ens.totalModelsActive || 24}-Model Consensus agreement at ${modelAgreement}% with ${best.market} (${best.selection}).`,
         isFinished: m.matchStatus === 'FINISHED',
         finalScore: m.finalScore,
         settledResult: best.result || 'PENDING',
@@ -199,7 +207,7 @@ export const DailyTop20View: React.FC = () => {
               Daily Top 20 Banker Predictions
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Autonomous 17-Model Consensus Stack with Bivariate Poisson, GBDT, GNN &amp; empirical calibration. Dynamically builds the highest-probability, most winnable market for every fixture.
+              Autonomous 24-Model Consensus Stack with Bivariate Poisson, Weibull 15m Draw, Negative Binomial Corners, Atmospheric Physics, GBDT, GNN &amp; empirical calibration.
             </p>
           </div>
 
@@ -366,7 +374,7 @@ export const DailyTop20View: React.FC = () => {
                       {pick.probability.toFixed(1)}%
                     </span>
                     <span className="text-[9px] uppercase tracking-wider font-bold text-slate-400">
-                      17-Model Consensus
+                      {pick.modelsActive || 24}-Model Consensus
                     </span>
                   </div>
                 </div>

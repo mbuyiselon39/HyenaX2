@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext.tsx';
+import { fetchJsonSafe } from '../utils/safeFetch.ts';
+// @ts-ignore
+import { analyzeAccumulator } from '../beastEngine.js';
 import {
   Trash2,
   AlertTriangle,
@@ -32,28 +35,30 @@ export const AccaStudioView: React.FC = () => {
       setOptimizedResult(null);
       return;
     }
-    try {
-      const res = await fetch('/api/beast/accumulator/optimize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ selections: accumulatorLegs })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const chosen = preset === 'best3'
-          ? data.optimizations?.best3CorePicks
-          : data.optimizations?.best5CorePicks;
-        if (chosen) {
-          setOptimizedResult(chosen);
-          addToast(
-            'Optimizer Active',
-            `Isolated top ${chosen.count || (preset === 'best3' ? 3 : 5)} highest-EV legs (${chosen.trueProbability}% survival)`,
-            'info'
-          );
-        }
-      }
-    } catch (e: any) {
-      addToast('Optimization Error', e.message, 'error');
+    const res = await fetchJsonSafe<any>('/api/beast/accumulator/optimize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ selections: accumulatorLegs })
+    });
+
+    let chosen: any = null;
+    if (res.ok && res.data) {
+      chosen = preset === 'best3'
+        ? res.data.optimizations?.best3CorePicks
+        : res.data.optimizations?.best5CorePicks;
+    } else {
+      const baseAnalysis = analyzeAccumulator(accumulatorLegs);
+      const sorted = [...baseAnalysis.legs].sort((a: any, b: any) => b.expectedValuePct - a.expectedValuePct);
+      chosen = analyzeAccumulator(sorted.slice(0, preset === 'best3' ? 3 : 5));
+    }
+
+    if (chosen) {
+      setOptimizedResult(chosen);
+      addToast(
+        'Optimizer Active',
+        `Isolated top ${chosen.count || (preset === 'best3' ? 3 : 5)} highest-EV legs (${chosen.trueProbability}% survival)`,
+        'info'
+      );
     }
   };
 

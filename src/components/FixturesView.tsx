@@ -412,6 +412,31 @@ export const FixturesView: React.FC = () => {
                                   </span>
                                 )}
                               </div>
+
+                              {(match.timeSegmentProfile?.first15MinModel || match.cornerVolatilityProfile?.teamCornerProjections) && (
+                                <div className="flex items-center gap-3 pt-0.5 text-[10px] font-num text-slate-400 flex-wrap">
+                                  {match.timeSegmentProfile?.first15MinModel && (
+                                    <span>
+                                      15m X:{' '}
+                                      <strong className="text-[#00E5FF]">
+                                        {Number(match.timeSegmentProfile.first15MinModel.drawProbPct).toFixed(1)}%
+                                      </strong>
+                                    </span>
+                                  )}
+                                  {match.cornerVolatilityProfile?.teamCornerProjections && (
+                                    <span>
+                                      Corners H/A:{' '}
+                                      <strong className="text-emerald-400">
+                                        {match.cornerVolatilityProfile.teamCornerProjections.homeExp}
+                                      </strong>
+                                      {' / '}
+                                      <strong className="text-amber-400">
+                                        {match.cornerVolatilityProfile.teamCornerProjections.awayExp}
+                                      </strong>
+                                    </span>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
 

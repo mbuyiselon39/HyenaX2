@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext.tsx';
+import { fetchJsonSafe } from '../utils/safeFetch.ts';
+// @ts-ignore
+import { BetSlipXRayEngine } from '../beastEngine.js';
 import { Scan } from 'lucide-react';
 
 export const BetSlipXRayView: React.FC = () => {
@@ -22,7 +25,7 @@ export const BetSlipXRayView: React.FC = () => {
     }
     setIsAnalyzing(true);
     try {
-      const res = await fetch('/api/beast/betslip/xray', {
+      const res = await fetchJsonSafe<any>('/api/beast/betslip/xray', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -31,13 +34,18 @@ export const BetSlipXRayView: React.FC = () => {
         })
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        setAnalysisResult(data);
-        addToast('X-Ray Complete', `Parsed ${data.legs?.length || 0} legs with full probability audit`, 'success');
+      if (res.ok && res.data) {
+        setAnalysisResult(res.data);
+        addToast('X-Ray Complete', `Parsed ${res.data.legs?.length || 0} legs with full probability audit`, 'success');
       } else {
-        const err = await res.json().catch(() => ({}));
-        addToast('X-Ray Failed', err.error || 'Failed to parse bet slip code', 'error');
+        const xray = new BetSlipXRayEngine();
+        const localData = xray.parseBetSlip(slipCode, bookmakerHint === 'auto' ? 'auto' : bookmakerHint);
+        if (localData && !localData.error) {
+          setAnalysisResult(localData);
+          addToast('X-Ray Complete', `Parsed ${localData.legs?.length || 0} legs via Quantitative X-Ray Engine`, 'success');
+        } else {
+          addToast('X-Ray Failed', localData?.error || res.error || 'Failed to parse bet slip code', 'error');
+        }
       }
     } catch (e: any) {
       addToast('Error', e.message, 'error');

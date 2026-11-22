@@ -23,12 +23,23 @@ import {
   reanalyseWithThirdPartySyndicate
 } from './advancedMLSuite.js';
 
+import {
+  calculateAtmosphericPhysics,
+  calculateFirst15MinDistribution,
+  calculateNegativeBinomialCorners,
+  calculateEntropyAndSkellam
+} from './physicsMathModels.js';
+
 export {
   runHybridPredictionLayer,
   calculatePlayerPropAnalytics,
   THIRD_PARTY_PLATFORMS,
   generateThirdPartyPredictionsForMatch,
-  reanalyseWithThirdPartySyndicate
+  reanalyseWithThirdPartySyndicate,
+  calculateAtmosphericPhysics,
+  calculateFirst15MinDistribution,
+  calculateNegativeBinomialCorners,
+  calculateEntropyAndSkellam
 };
 
 // Base Elo Ratings for key global clubs
@@ -2444,7 +2455,7 @@ export function evaluateDeepMarketVetting({
   }
 
   // 3. Tactical Lineup Validation (for Corner and Shooting markets)
-  const isCornerOrShotMarket = marketCategory === 'CORNERS' || marketCategory === 'SHOOTING' || /corner|shot/i.test(marketName);
+  const isCornerOrShotMarket = marketCategory === 'CORNERS' || marketCategory === 'TEAM_CORNERS' || marketCategory === 'SHOOTING' || /corner|shot/i.test(marketName);
   let tacticalLineupApproved = true;
   if (isCornerOrShotMarket) {
     if (!corners.wingersFullbacksLocked || corners.lineupValidationStatus !== 'LOCKED_AND_CONFIRMED') {
@@ -2792,8 +2803,8 @@ export function evaluateEngineVerifier({
       }
     }
 
-    // CHECK 10: Corners (Over 7.5 / 8.5 Corners or Under 10.5 Corners)
-    if (mkt === 'Match Total Corners' && prob >= 72.0) {
+    // CHECK 10: Corners (Match Corners & Each Team Total Corners)
+    if ((mkt === 'Match Total Corners' || mkt === 'Home Team Total Corners' || mkt === 'Away Team Total Corners') && prob >= 70.0) {
       verifierBonus += 14;
       safetyChecksPassed.push('HIGH_PROBABILITY_CORNER_VOLUME');
     }
@@ -2802,6 +2813,12 @@ export function evaluateEngineVerifier({
     if (mkt === 'Total Match Bookings' && prob >= 72.0) {
       verifierBonus += 14;
       safetyChecksPassed.push('VALIDATED_DISCIPLINARY_MARKET');
+    }
+
+    // CHECK 12: First 15 Minutes Draw (Weibull Early-Tempo Survival Validated)
+    if ((mkt === 'First 15 Minutes (0-15 min)' || sel.includes('15 Min Draw')) && prob >= 68.0) {
+      verifierBonus += 12;
+      safetyChecksPassed.push('WEIBULL_FIRST_15_MIN_DRAW_VALIDATED');
     }
 
     const calculatedVerifierScore = +(prob + verifierBonus - verifierPenalty).toFixed(1);

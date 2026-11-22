@@ -20,6 +20,12 @@ import {
   evaluateEngineVerifier
 } from '../src/beastEngine.js';
 import {
+  calculateAtmosphericPhysics,
+  calculateFirst15MinDistribution,
+  calculateNegativeBinomialCorners,
+  calculateEntropyAndSkellam
+} from '../src/physicsMathModels.js';
+import {
   WOMENS_AND_CUPS_LEAGUES,
   WOMENS_AND_CUPS_TEAMS,
   WOMENS_AND_CUPS_CALENDAR_FIXTURES
@@ -1677,6 +1683,20 @@ export function generatePredictions(home, away, leagueId) {
 
   const totalLambda = lambdaHome + lambdaAway;
   const tacticalProfiles = buildTacticalProfiles({ home, away, leagueId, isDerby: derbyInfo.isDerby, eloDelta });
+  const physicsMetrics = calculateAtmosphericPhysics({
+    altitudeM: home.altitudeM || 220,
+    temperatureC: 17,
+    windKmh: 12,
+    precipitationPct: 18,
+    travelKm: 240
+  });
+  const entropySkellam = calculateEntropyAndSkellam({
+    lambdaHome,
+    lambdaAway,
+    pHome,
+    pDraw,
+    pAway
+  });
 
   // 1. DISCIPLINARY & BOOKINGS MODELING
   const cardsLambda = Math.max(2.8, Math.min(6.8, tacticalProfiles.refereeStats.avgYellows * (tacticalProfiles.disciplinaryProfile.matchIntensityScore / 65) * tacticalProfiles.disciplinaryProfile.cardInflationFactor));
@@ -1700,24 +1720,31 @@ export function generatePredictions(home, away, leagueId) {
   const pMostCardsTie = 0.22;
   const pFirstCardAway = homeCardShare < 0.50 ? 0.56 : 0.44;
 
-  // 2. CORNER KICK VOLATILITY (FULL-TIME & HALVES)
-  const cornersLambda = Math.max(7.5, Math.min(13.2, totalLambda * 3.4 * (tacticalProfiles.cornerVolatilityProfile.homeWingPlayFreq / 70)));
-  const homeCornerShare = Math.min(0.72, Math.max(0.38, (lambdaHome * 1.12) / (lambdaHome * 1.12 + lambdaAway)));
+  // 2. CORNER KICK VOLATILITY (NEGATIVE BINOMIAL OVERDISPERSED + POISSON FULL-TIME, HALVES & EACH TEAM CORNERS)
+  const nbCorners = calculateNegativeBinomialCorners({
+    totalLambda,
+    lambdaHome,
+    lambdaAway,
+    homeWingFreq: tacticalProfiles.cornerVolatilityProfile.homeWingPlayFreq,
+    awayWingFreq: tacticalProfiles.cornerVolatilityProfile.awayWingPlayFreq,
+    homeBlocksPct: tacticalProfiles.cornerVolatilityProfile.homeBlocksOutOfBoundsPct,
+    awayBlocksPct: tacticalProfiles.cornerVolatilityProfile.awayBlocksOutOfBoundsPct,
+    isDerby: derbyInfo.isDerby,
+    physicsMetrics
+  });
+  const cornersLambda = nbCorners.totalCornersExp;
+  const homeCornerShare = nbCorners.homeCornerShare;
   const lambda1stCorners = cornersLambda * 0.45;
   const lambda2ndCorners = cornersLambda * 0.55;
-  const lambdaHomeCorners = cornersLambda * homeCornerShare;
-  const lambdaAwayCorners = cornersLambda * (1 - homeCornerShare);
+  const lambdaHomeCorners = nbCorners.lambdaHomeCorners;
+  const lambdaAwayCorners = nbCorners.lambdaAwayCorners;
 
-  let pCornUnder105 = 0, pCornUnder95 = 0, pCornOver85 = 0, pCornUnder85 = 0, pCornOver95 = 0, pCornOver105 = 0;
-  for (let c = 0; c <= 25; c++) {
-    const pc = poissonPm(cornersLambda, c);
-    if (c <= 10) pCornUnder105 += pc;
-    if (c <= 9) pCornUnder95 += pc;
-    if (c >= 9) pCornOver85 += pc;
-    if (c <= 8) pCornUnder85 += pc;
-    if (c >= 10) pCornOver95 += pc;
-    if (c >= 11) pCornOver105 += pc;
-  }
+  const pCornUnder105 = nbCorners.match.under105;
+  const pCornUnder95 = nbCorners.match.under95;
+  const pCornOver85 = nbCorners.match.over85;
+  const pCornUnder85 = nbCorners.match.under85;
+  const pCornOver95 = nbCorners.match.over95;
+  const pCornOver105 = nbCorners.match.over105;
 
   // 1st-Half Corners (Strictly standard retail lines: 3.5 & 4.5)
   let pCorn1stOver35 = 0, pCorn1stUnder35 = 0, pCorn1stOver45 = 0, pCorn1stUnder45 = 0;
@@ -1747,32 +1774,22 @@ export function generatePredictions(home, away, leagueId) {
     if (c >= 7) pCorn2nd7Plus += pc;
   }
 
-  // Team Corners (Strictly standard retail lines: 3.5, 4.5, 5.5 - Remodeled to actual betting app lines)
-  let pHomeCornOver35 = 0, pHomeCornUnder35 = 0;
-  let pHomeCornOver45 = 0, pHomeCornUnder45 = 0;
-  let pHomeCornOver55 = 0, pHomeCornUnder55 = 0;
-  for (let c = 0; c <= 20; c++) {
-    const pc = poissonPm(lambdaHomeCorners, c);
-    if (c >= 4) pHomeCornOver35 += pc;
-    if (c <= 3) pHomeCornUnder35 += pc;
-    if (c >= 5) pHomeCornOver45 += pc;
-    if (c <= 4) pHomeCornUnder45 += pc;
-    if (c >= 6) pHomeCornOver55 += pc;
-    if (c <= 5) pHomeCornUnder55 += pc;
-  }
+  // Each Team Total Corners (Negative Binomial + Poisson Retail Lines: 1.5, 2.5, 3.5, 4.5, 5.5)
+  const pHomeCornOver25 = nbCorners.home.over25;
+  const pHomeCornOver35 = nbCorners.home.over35;
+  const pHomeCornUnder35 = nbCorners.home.under35;
+  const pHomeCornOver45 = nbCorners.home.over45;
+  const pHomeCornUnder45 = nbCorners.home.under45;
+  const pHomeCornOver55 = nbCorners.home.over55;
+  const pHomeCornUnder55 = nbCorners.home.under55;
 
-  let pAwayCornOver35 = 0, pAwayCornUnder35 = 0;
-  let pAwayCornOver45 = 0, pAwayCornUnder45 = 0;
-  let pAwayCornOver55 = 0, pAwayCornUnder55 = 0;
-  for (let c = 0; c <= 20; c++) {
-    const pc = poissonPm(lambdaAwayCorners, c);
-    if (c >= 4) pAwayCornOver35 += pc;
-    if (c <= 3) pAwayCornUnder35 += pc;
-    if (c >= 5) pAwayCornOver45 += pc;
-    if (c <= 4) pAwayCornUnder45 += pc;
-    if (c >= 6) pAwayCornOver55 += pc;
-    if (c <= 5) pAwayCornUnder55 += pc;
-  }
+  const pAwayCornOver15 = nbCorners.away.over15;
+  const pAwayCornOver25 = nbCorners.away.over25;
+  const pAwayCornUnder25 = nbCorners.away.under25;
+  const pAwayCornOver35 = nbCorners.away.over35;
+  const pAwayCornUnder35 = nbCorners.away.under35;
+  const pAwayCornOver45 = nbCorners.away.over45;
+  const pAwayCornUnder45 = nbCorners.away.under45;
 
   const pFirstCornerHome = homeCornerShare;
   const pFirstCornerAway = 1 - homeCornerShare;
@@ -1938,7 +1955,7 @@ export function generatePredictions(home, away, leagueId) {
     { market: 'Goals Over/Under', selection: 'Under 3.5 Goals', prob: pUnder35, type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
 
     // 3. MATCH CORNER OVERS/UNDERS & 1ST HALF CORNER OVERS/UNDERS
-    { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: Math.min(0.94, +(pCornOver85 * 1.08).toFixed(3)), type: 'CORNERS', category: 'CORNERS' },
+    { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: nbCorners.match.over75, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Over 8.5 Total Corners', prob: pCornOver85, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Under 8.5 Total Corners', prob: pCornUnder85, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Over 9.5 Total Corners', prob: pCornOver95, type: 'CORNERS', category: 'CORNERS' },
@@ -1950,6 +1967,18 @@ export function generatePredictions(home, away, leagueId) {
     { market: '1st-Half Corners', selection: '1st-Half Over 4.5 Corners', prob: pCorn1stOver45, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corners', selection: '1st-Half Under 4.5 Corners', prob: pCorn1stUnder45, type: 'CORNERS', category: 'CORNERS' },
     { market: '1st-Half Corners', selection: '1st-Half Under 5.5 Corners', prob: Math.min(0.95, +(pCorn1stUnder45 * 1.14).toFixed(3)), type: 'CORNERS', category: 'CORNERS' },
+
+    // 3b. EACH TEAM TOTAL CORNERS (NEGATIVE BINOMIAL + POISSON BLEND)
+    { market: 'Home Team Total Corners', selection: `${home.name} Over 2.5 Corners`, prob: pHomeCornOver25, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Over 3.5 Corners`, prob: pHomeCornOver35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Under 4.5 Corners`, prob: pHomeCornUnder45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Over 4.5 Corners`, prob: pHomeCornOver45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Home Team Total Corners', selection: `${home.name} Under 5.5 Corners`, prob: pHomeCornUnder55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Over 1.5 Corners`, prob: pAwayCornOver15, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Over 2.5 Corners`, prob: pAwayCornOver25, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Under 3.5 Corners`, prob: pAwayCornUnder35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Over 3.5 Corners`, prob: pAwayCornOver35, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    { market: 'Away Team Total Corners', selection: `${away.name} Under 4.5 Corners`, prob: pAwayCornUnder45, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
 
     // 4. BOOKINGS (CARDS PER MATCH)
     { market: 'Total Match Bookings', selection: 'Over 2.5 Total Cards', prob: pCardsOver25, type: 'CARDS', category: 'BOOKINGS' },
@@ -1964,9 +1993,24 @@ export function generatePredictions(home, away, leagueId) {
     { market: 'Each Team Bookings', selection: `${home.name} Under 2.5 Cards`, prob: pHomeUnder25Cards, type: 'CARDS', category: 'BOOKINGS' },
     { market: 'Each Team Bookings', selection: `${away.name} Under 2.5 Cards`, prob: pAwayUnder25Cards, type: 'CARDS', category: 'BOOKINGS' },
 
-    // 5. FIRST 10 MINUTES GOAL (YES / NO)
+    // 5. FIRST 10 MINUTES GOAL (YES / NO) & FIRST 15 MINUTES DRAW (WEIBULL EARLY-TEMPO BIVARIATE POISSON)
     { market: 'Goal in the First 10 Minutes', selection: 'No Goal in First 10 Minutes', prob: pNoGoalFirst10, type: 'TIME_SEGMENTS', category: 'FIRST_10_MIN' },
     { market: 'Goal in the First 10 Minutes', selection: 'Goal in First 10 Minutes', prob: pGoalFirst10, type: 'TIME_SEGMENTS', category: 'FIRST_10_MIN' },
+    ...(() => {
+      const f15 = calculateFirst15MinDistribution({
+        lambdaHome,
+        lambdaAway,
+        rho: lg.rho,
+        isDerby: derbyInfo.isDerby,
+        physicsMetrics
+      });
+      return [
+        { market: 'First 15 Minutes (0-15 min)', selection: '15 Min Draw (X)', prob: f15.pDraw15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' },
+        { market: 'First 15 Minutes (0-15 min)', selection: 'No Goal in First 15 Min', prob: f15.pNoGoal15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' },
+        { market: 'First 15 Minutes (0-15 min)', selection: `15 Min Home (1 · ${home.name})`, prob: f15.pHomeLead15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' },
+        { market: 'First 15 Minutes (0-15 min)', selection: `15 Min Away (2 · ${away.name})`, prob: f15.pAwayLead15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' }
+      ];
+    })(),
 
     // 6. BOTH TEAMS TO SCORE (BTTS)
     { market: 'Both Teams to Score', selection: 'BTTS · Yes', prob: pBtts, type: 'BTTS', category: 'BTTS' },
@@ -2030,6 +2074,10 @@ export function generatePredictions(home, away, leagueId) {
       marketPricingFactor = 1.022;
     } else if (m.category === 'CORNERS' && m.prob >= 0.75) {
       marketPricingFactor = 1.035;
+    } else if (m.category === 'TEAM_CORNERS' && m.prob >= 0.72) {
+      marketPricingFactor = 1.032;
+    } else if (m.category === 'FIRST_15_MIN' && m.prob >= 0.68) {
+      marketPricingFactor = 1.030;
     } else if (m.category === 'DISCIPLINARY' && m.prob >= 0.75) {
       marketPricingFactor = 1.030;
     } else if (m.category === 'SHOOTING' && m.prob >= 0.75) {
@@ -2090,6 +2138,10 @@ export function generatePredictions(home, away, leagueId) {
       reliabilityBonus = +6.0;
     } else if (m.category === 'CORNERS' && probability >= 78) {
       reliabilityBonus = +5.5;
+    } else if (m.category === 'TEAM_CORNERS' && probability >= 72) {
+      reliabilityBonus = +4.8;
+    } else if (m.category === 'FIRST_15_MIN' && m.selection.includes('15 Min Draw') && probability >= 70) {
+      reliabilityBonus = +5.0;
     } else if (m.category === 'DISCIPLINARY' && probability >= 78) {
       reliabilityBonus = +5.0;
     } else if (m.category === 'SHOOTING' && probability >= 78) {
@@ -2106,8 +2158,10 @@ export function generatePredictions(home, away, leagueId) {
       reliabilityBonus = -4.0;
     }
 
-    // Composite conviction score: probability base + reliability + EV
-    const convictionScore = probability + reliabilityBonus + Math.max(0, ev) * 1.5;
+    // Apply subtle Information Entropy stability adjustment (reduces conviction slightly in pure-chaos entropy matches)
+    const entropyFactor = entropySkellam.certaintyIndexPct >= 22 ? +0.6 : -0.4;
+    // Composite conviction score: probability base + reliability + EV + entropy
+    const convictionScore = probability + reliabilityBonus + Math.max(0, ev) * 1.5 + entropyFactor;
 
     return {
       market: m.market,
@@ -2170,7 +2224,20 @@ export function generatePredictions(home, away, leagueId) {
 
     return (b.convictionScore + structuralModB) - (a.convictionScore + structuralModA);
   });
-  const cappedSelected = selected.slice(0, 24);
+
+  // Guarantee First 15 Min Draw & Each Team Total Corners (Home + Away) are preserved in output slate
+  const guaranteedFirst15 = selected.find(p => p.marketCategory === 'FIRST_15_MIN' && p.selection.includes('15 Min Draw'));
+  const guaranteedHomeCorner = selected.find(p => p.market === 'Home Team Total Corners');
+  const guaranteedAwayCorner = selected.find(p => p.market === 'Away Team Total Corners');
+  const topSlice = selected.slice(0, 24);
+  const existingKeys = new Set(topSlice.map(p => `${p.market}::${p.selection}`));
+  const cappedSelected = [...topSlice];
+  [guaranteedFirst15, guaranteedHomeCorner, guaranteedAwayCorner].forEach(g => {
+    if (g && !existingKeys.has(`${g.market}::${g.selection}`)) {
+      cappedSelected.push(g);
+      existingKeys.add(`${g.market}::${g.selection}`);
+    }
+  });
 
   return cappedSelected.map((p, idx) => {
     const item = {
@@ -2450,7 +2517,14 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         windKmh,
         precipitationPct: rainPct,
         impactSummary: windKmh > 22 ? 'Wind divergence may temper long passing accuracy' : discoveryNews.environment?.weather || 'Optimal playing conditions'
-      }
+      },
+      physicsMetrics: calculateAtmosphericPhysics({
+        altitudeM: venueDetails.altitudeM || 220,
+        temperatureC: tempC,
+        windKmh,
+        precipitationPct: rainPct,
+        travelKm: travelDistKm
+      })
     },
     marketPsychology: {
       betfairExchange: {
@@ -2736,6 +2810,35 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   });
 
   const tacticalProfiles = buildTacticalProfiles({ home, away, leagueId, isDerby, eloDelta: hRating - aRating });
+  const physSnap = teleResult.situationalFactors.physicsMetrics;
+  const nbCornersTelemetry = calculateNegativeBinomialCorners({
+    totalLambda: (home.xgFor || 1.45) + (away.xgFor || 1.25),
+    lambdaHome: home.xgFor || 1.45,
+    lambdaAway: away.xgFor || 1.25,
+    homeWingFreq: tacticalProfiles.cornerVolatilityProfile.homeWingPlayFreq,
+    awayWingFreq: tacticalProfiles.cornerVolatilityProfile.awayWingPlayFreq,
+    isDerby,
+    physicsMetrics: physSnap
+  });
+  const first15Telemetry = calculateFirst15MinDistribution({
+    lambdaHome: home.xgFor || 1.45,
+    lambdaAway: away.xgFor || 1.25,
+    ppdaHome,
+    ppdaAway,
+    isDerby,
+    physicsMetrics: physSnap
+  });
+
+  tacticalProfiles.cornerVolatilityProfile.teamCornerProjections = {
+    homeExp: nbCornersTelemetry.lambdaHomeCorners,
+    awayExp: nbCornersTelemetry.lambdaAwayCorners,
+    totalExp: nbCornersTelemetry.totalCornersExp
+  };
+  tacticalProfiles.timeSegmentProfile.first15MinModel = {
+    drawProbPct: +(first15Telemetry.pDraw15 * 100).toFixed(1),
+    noGoalProbPct: +(first15Telemetry.pNoGoal15 * 100).toFixed(1)
+  };
+
   teleResult.tacticalProfiles = tacticalProfiles;
   teleResult.refereeReport = tacticalProfiles.refereeStats;
   teleResult.disciplinaryProfile = tacticalProfiles.disciplinaryProfile;
@@ -4644,8 +4747,8 @@ export function optimizeFixturesPayload(fixturesData) {
     if (!m.topPick || !m.topPick.selection) {
       m.topPick = m.predictions[0];
     }
-    if (Array.isArray(m.predictions) && m.predictions.length > 24) {
-      m.predictions = m.predictions.slice(0, 24);
+    if (Array.isArray(m.predictions) && m.predictions.length > 28) {
+      m.predictions = m.predictions.slice(0, 28);
     }
     if (m.thirdPartySyndicate && Array.isArray(m.thirdPartySyndicate.predictions)) {
       m.thirdPartySyndicate = {

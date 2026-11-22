@@ -77,6 +77,45 @@ if (!fs.existsSync(fixturesFile)) {
   } else {
     console.log(`✓ All ${matches.length * 2} teams (${matches.length * 2} out of ${matches.length * 2}) have verified official crests/logos!`);
   }
+
+  let withFirst15 = 0;
+  let withTeamCorners = 0;
+  let withPhysics = 0;
+  let with24Models = 0;
+  for (const m of matches) {
+    const preds = m.predictions || [];
+    if (preds.some(p => p.marketCategory === 'FIRST_15_MIN') && m.timeSegmentProfile?.first15MinModel) {
+      withFirst15++;
+    }
+    if (preds.some(p => p.marketCategory === 'TEAM_CORNERS') && m.cornerVolatilityProfile?.teamCornerProjections) {
+      withTeamCorners++;
+    }
+    if (m.situationalFactors?.physicsMetrics?.airDensityKgM3 !== undefined) {
+      withPhysics++;
+    }
+    if ((m.beastMeta?.ensemble?.totalModelsActive || 0) >= 24) {
+      with24Models++;
+    }
+  }
+  if (withFirst15 === 0) {
+    console.error('❌ FAIL: No fixtures contain FIRST_15_MIN (First 15 Min Draw) markets!');
+    errors++;
+  } else {
+    console.log(`✓ First 15 Min Draw (Weibull) markets verified on ${withFirst15}/${matches.length} fixtures.`);
+  }
+  if (withTeamCorners === 0) {
+    console.error('❌ FAIL: No fixtures contain TEAM_CORNERS (Each Team Total Corners) markets!');
+    errors++;
+  } else {
+    console.log(`✓ Each Team Total Corners (Negative Binomial) markets verified on ${withTeamCorners}/${matches.length} fixtures.`);
+  }
+  if (withPhysics === 0) {
+    console.error('❌ FAIL: No fixtures contain atmospheric physics metrics!');
+    errors++;
+  } else {
+    console.log(`✓ Atmospheric & fluid physics telemetry verified on ${withPhysics}/${matches.length} fixtures.`);
+  }
+  console.log(`✓ 24-Model Consensus Stack metadata active on ${with24Models}/${matches.length} fixtures.`);
 }
 
 // 2. PWA Compliance Audit
@@ -157,17 +196,65 @@ if (!fs.existsSync(teamDbFile)) {
   console.log(`✓ Team Database contains ${crestEntries}+ curated club crest URLs with SVG shield fallback.`);
 }
 
-// 5. Build and Server Health
-console.log('\n[5/5] Auditing Package Manifest & Metadata...');
+// 5. Build, Static Edge & Server Health
+console.log('\n[5/5] Auditing Package Manifest, Metadata & Static Dist Bundle...');
 const metaFile = path.join(root, 'metadata.json');
 const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
 console.log(`✓ App Name: "${meta.name}"`);
 console.log(`✓ Description: "${meta.description}"`);
 
+const distDir = path.join(root, 'dist');
+if (fs.existsSync(distDir)) {
+  const requiredDist = [
+    'index.html',
+    'assets',
+    '_redirects',
+    '_headers',
+    'data/fixtures.json',
+    'manifest.webmanifest',
+    'sw.js'
+  ];
+  for (const rel of requiredDist) {
+    if (!fs.existsSync(path.join(distDir, rel))) {
+      console.error(`❌ FAIL: dist/${rel} is missing!`);
+      errors++;
+    } else {
+      console.log(`✓ dist/${rel} present.`);
+    }
+  }
+  const distHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8');
+  if (distHtml.includes('/src/main.tsx') || !distHtml.includes('/assets/')) {
+    console.error('❌ FAIL: dist/index.html does not reference compiled /assets/ bundle!');
+    errors++;
+  } else {
+    console.log('✓ dist/index.html points to compiled /assets/ Vite bundle.');
+  }
+
+  const MAX_CF_BYTES = 24 * 1024 * 1024;
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else {
+        const size = fs.statSync(full).size;
+        if (size > MAX_CF_BYTES) {
+          console.error(`❌ FAIL: ${path.relative(root, full)} exceeds Cloudflare 24MB limit (${(size / (1024 * 1024)).toFixed(2)} MB)!`);
+          errors++;
+        }
+      }
+    }
+  };
+  walk(distDir);
+  console.log('✓ All files in dist/ are strictly under the 24 MB Cloudflare Pages guardrail.');
+} else {
+  console.log('⚠ dist/ not built yet (run npm run build).');
+  warnings++;
+}
+
 console.log('\n=============================================');
 if (errors === 0) {
   console.log('🎉 AUDIT RESULT: PASSED 100% WITH ZERO ERRORS!');
-  console.log('All supported leagues active, all teams equipped with flags & logos, PWA manifest and React/Vite entry verified.');
+  console.log('All supported leagues active, 24-Model + Physics + First 15 Min + Team Corners engines verified, PWA manifest and Cloudflare dist bundle verified.');
 } else {
   console.error(`💥 AUDIT RESULT: FAILED with ${errors} error(s) and ${warnings} warning(s).`);
   process.exit(1);

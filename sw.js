@@ -9,7 +9,7 @@
    - CDN assets .......... stale-while-revalidate (Tailwind, Alpine, Google Fonts)
    ============================================================ */
 
-const VERSION = 'hyenax-v6';
+const VERSION = 'hyenax-v7';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 const APP_SHELL = [

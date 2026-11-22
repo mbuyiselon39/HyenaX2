@@ -149,6 +149,7 @@ export interface Fixture {
   refereeReport?: any;
   cornerVolatilityProfile?: any;
   situationalFactors?: any;
+  timeSegmentProfile?: any;
   marketPsychology?: any;
   thirdPartySyndicate?: any;
   engineVerifier?: any;

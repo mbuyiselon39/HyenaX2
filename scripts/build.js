@@ -8,40 +8,37 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 
-console.log('[Build] Starting HyenaX production build...');
+console.log('[Build] Starting HyenaX static & Cloudflare Pages post-build packaging...');
 
-// 1. Generate fixtures and model data if missing
+// 0. Verify Vite build output exists (NEVER wipe dist/ after vite build!)
+const viteIndexPath = path.join(distDir, 'index.html');
+const viteAssetsDir = path.join(distDir, 'assets');
+if (!fs.existsSync(viteIndexPath) || !fs.existsSync(viteAssetsDir)) {
+  throw new Error('[Build] Fatal: dist/index.html or dist/assets missing. Run "vite build" before "node scripts/build.js".');
+}
+
+// 1. Generate fixtures and model data if missing or empty
 const fixturesPath = path.join(rootDir, 'data', 'fixtures.json');
 if (!fs.existsSync(fixturesPath) || fs.statSync(fixturesPath).size < 1000) {
   try {
-    console.log('[Build] Ensuring latest fixtures and model predictions...');
+    console.log('[Build] Generating verified fixtures and model predictions...');
     await saveFixtures();
   } catch (err) {
     console.warn('[Build] Warning: Fixture generation encountered error:', err.message);
   }
 } else {
-  console.log('[Build] Existing verified fixtures cache verified.');
+  console.log('[Build] Existing verified fixtures cache detected.');
 }
 
-// 2. Prepare clean dist directory
-if (fs.existsSync(distDir)) {
-  fs.rmSync(distDir, { recursive: true, force: true });
-}
-fs.mkdirSync(distDir, { recursive: true });
-
-// 3. Copy static files & directories
+// 2. Copy PWA & legacy browser runtime assets into dist/ WITHOUT overwriting Vite dist/index.html or dist/assets/
 const filesToCopy = [
-  'index.html',
   'manifest.webmanifest',
-  'sw.js',
-  'motivation_modifier.py',
-  'validation_suite.py'
+  'sw.js'
 ];
 
 const dirsToCopy = [
   'icons',
-  'js',
-  'src'
+  'js'
 ];
 
 for (const file of filesToCopy) {
@@ -49,7 +46,7 @@ for (const file of filesToCopy) {
   const dest = path.join(distDir, file);
   if (fs.existsSync(src)) {
     fs.copyFileSync(src, dest);
-    console.log(`[Build] Copied file: ${file}`);
+    console.log(`[Build] Copied static file: ${file}`);
   }
 }
 
@@ -58,18 +55,17 @@ for (const dir of dirsToCopy) {
   const dest = path.join(distDir, dir);
   if (fs.existsSync(src)) {
     fs.cpSync(src, dest, { recursive: true });
-    console.log(`[Build] Copied directory: ${dir}`);
+    console.log(`[Build] Copied static directory: ${dir}`);
   }
 }
 
-// 3b. Copy public web data assets to dist/data (excluding bulky server-only caches to satisfy Cloudflare Pages 25MB limit)
+// 3. Copy public web data assets to dist/data (excluding server-only caches to satisfy Cloudflare Pages 25MB limit)
 const dataSrc = path.join(rootDir, 'data');
 const dataDest = path.join(distDir, 'data');
 fs.mkdirSync(dataDest, { recursive: true });
 
 if (fs.existsSync(dataSrc)) {
   const publicFiles = fs.readdirSync(dataSrc).filter(f => {
-    // Exclude server-only scraper caches & temporary files
     if (f === 'official_fallback_cache.json') return false;
     if (f.endsWith('.bak') || f.endsWith('.tmp')) return false;
     return true;
@@ -78,6 +74,7 @@ if (fs.existsSync(dataSrc)) {
   for (const f of publicFiles) {
     const s = path.join(dataSrc, f);
     const d = path.join(dataDest, f);
+    if (!fs.statSync(s).isFile()) continue;
     if (f === 'fixtures.json') {
       try {
         const parsed = JSON.parse(fs.readFileSync(s, 'utf-8'));
@@ -92,20 +89,30 @@ if (fs.existsSync(dataSrc)) {
   }
 }
 
-// 4. Create Cloudflare Pages / Netlify SPA routing rules & headers
+// 4. Write Cloudflare Pages / Netlify SPA routing rules & HTTP headers
 const redirectsContent = `# Cloudflare Pages / Netlify SPA Routing
-/api/fixtures    /data/fixtures.json    200
-/*               /index.html            200
+/api/fixtures      /data/fixtures.json    200
+/api/fixtures/*    /data/fixtures.json    200
+/*                 /index.html            200
 `;
 fs.writeFileSync(path.join(distDir, '_redirects'), redirectsContent, 'utf-8');
 
 const headersContent = `# Cloudflare Pages Headers
 /data/*
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
+  Access-Control-Allow-Origin: *
+
+/api/fixtures
+  Content-Type: application/json; charset=utf-8
   Cache-Control: no-cache, no-store, must-revalidate
   Access-Control-Allow-Origin: *
 
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
 /*
   X-Content-Type-Options: nosniff
@@ -134,4 +141,4 @@ function validateCloudflareAssetLimits(dir) {
 
 validateCloudflareAssetLimits(distDir);
 console.log('[Build] ✓ Cloudflare 25MB Asset Guardrail verified: all assets strictly under 24MB.');
-console.log('[Build] ✓ Production build successful! Output directory: dist/');
+console.log('[Build] ✓ Production packaging complete in dist/ (Vite bundle + data + _redirects + _headers + PWA).');
