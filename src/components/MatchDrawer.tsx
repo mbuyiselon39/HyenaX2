@@ -559,7 +559,7 @@ export const MatchDrawer: React.FC = () => {
                   { id: 'ALL', label: `All (${(m.predictions || []).length})` },
                   { id: 'FIRST_15_MIN', label: 'First 15 Min Draw' },
                   { id: 'TEAM_CORNERS', label: 'Team Corners (5.5+ / Home 7+)' },
-                  { id: 'CORNERS', label: '1H (3.5/4.5) & Total Corners' },
+                  { id: 'CORNERS', label: '1H (3.5/4.5) & Total Corners (7.5+)' },
                   { id: 'CORE', label: 'Core & Totals' }
                 ].map(sf => (
                   <button

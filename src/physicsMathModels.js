@@ -249,8 +249,8 @@ export function calculateNegativeBinomialCorners({
   };
 
   // Playable Sportsbook Corner Lines:
-  // Match Total Corners start at 5.5 upwards (5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5)
-  // Team Total Corners start at 5.5 upwards/under (Home also gets 7+ Over 6.5 & 8+ Over 7.5)
+  // Match Total Corners strictly start at 7.5+ (7.5, 8.5, 9.5, 10.5, 11.5 Over/Under)
+  // Team Total Corners start at 5.5+ or Under (Home also gets 7+ Over 6.5 & 8+ Over 7.5)
   const home55 = calcCdf(lambdaHomeCorners, 5, 10.5);
   const home65 = calcCdf(lambdaHomeCorners, 6, 10.5); // 7+ Corners (Over 6.5) / Under 6.5
   const home75 = calcCdf(lambdaHomeCorners, 7, 10.5); // 8+ Corners (Over 7.5) / Under 7.5
@@ -258,16 +258,14 @@ export function calculateNegativeBinomialCorners({
   // Away Team playable 5.5 Over/Under line only (no <5.5 and no 7+/8+ milestone options for Away)
   const away55 = calcCdf(lambdaAwayCorners, 5, 10.5);
 
-  // Hollywoodbets Match Total Corner Lines (5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5)
-  const match55 = calcCdf(totalCornersExp, 5, 14.0);
-  const match65 = calcCdf(totalCornersExp, 6, 14.0);
+  // Market-Ready Match Total Corner Lines strictly starting at 7.5+ (7.5, 8.5, 9.5, 10.5, 11.5)
   const match75 = calcCdf(totalCornersExp, 7, 14.0);
   const match85 = calcCdf(totalCornersExp, 8, 14.0);
   const match95 = calcCdf(totalCornersExp, 9, 14.0);
   const match105 = calcCdf(totalCornersExp, 10, 14.0);
   const match115 = calcCdf(totalCornersExp, 11, 14.0);
 
-  // Hollywoodbets 1st-Half ("First Corners") strictly 3.5 & 4.5 Over/Under
+  // 1st-Half ("First Corners") strictly 3.5 & 4.5 Over/Under
   const firstHalf35 = calcCdf(lambdaFirstHalfCorners, 3, 11.0);
   const firstHalf45 = calcCdf(lambdaFirstHalfCorners, 4, 11.0);
 
@@ -288,8 +286,6 @@ export function calculateNegativeBinomialCorners({
       over55: away55.over, under55: away55.under
     },
     match: {
-      over55: match55.over, under55: match55.under,
-      over65: match65.over, under65: match65.under,
       over75: match75.over, under75: match75.under,
       over85: match85.over, under85: match85.under,
       over95: match95.over, under95: match95.under,

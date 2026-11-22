@@ -56,7 +56,7 @@ export const DailyTop20View: React.FC = () => {
     { id: 'TEAM_CORNERS', label: 'Team Corners (5.5+ / Home 7+ / 8+)' },
     { id: 'HALF_MARKETS', label: 'Highest Scoring Half' },
     { id: 'GOAL_OVERS_UNDERS', label: 'Over / Under Goals' },
-    { id: 'CORNERS', label: '1st-Half (3.5/4.5) & Match Corners' },
+    { id: 'CORNERS', label: '1st-Half (3.5/4.5) & Match Corners (7.5+)' },
     { id: 'BOOKINGS', label: 'Cards & Bookings' },
     { id: 'BTTS', label: 'BTTS' }
   ];

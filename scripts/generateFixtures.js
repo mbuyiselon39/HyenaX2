@@ -1739,10 +1739,6 @@ export function generatePredictions(home, away, leagueId) {
   const lambdaHomeCorners = nbCorners.lambdaHomeCorners;
   const lambdaAwayCorners = nbCorners.lambdaAwayCorners;
 
-  const pCornOver55 = nbCorners.match.over55;
-  const pCornUnder55 = nbCorners.match.under55;
-  const pCornOver65 = nbCorners.match.over65;
-  const pCornUnder65 = nbCorners.match.under65;
   const pCornOver75 = nbCorners.match.over75;
   const pCornUnder75 = nbCorners.match.under75;
   const pCornOver85 = nbCorners.match.over85;
@@ -1945,11 +1941,7 @@ export function generatePredictions(home, away, leagueId) {
     { market: 'Goals Over/Under', selection: 'Over 3.5 Goals', prob: +(1 - pUnder35).toFixed(3), type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
     { market: 'Goals Over/Under', selection: 'Under 3.5 Goals', prob: pUnder35, type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
 
-    // 3. MATCH TOTAL CORNERS (PLAYABLE 5.5 - 11.5 OVER/UNDER) & 1ST-HALF ("FIRST") CORNERS (STRICTLY 3.5 OR 4.5 OVER/UNDER)
-    { market: 'Match Total Corners', selection: 'Over 5.5 Total Corners', prob: pCornOver55, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Under 5.5 Total Corners', prob: pCornUnder55, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Over 6.5 Total Corners', prob: pCornOver65, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Under 6.5 Total Corners', prob: pCornUnder65, type: 'CORNERS', category: 'CORNERS' },
+    // 3. MATCH TOTAL CORNERS (MARKET-READY 7.5 - 11.5 OVER/UNDER) & 1ST-HALF ("FIRST") CORNERS (STRICTLY 3.5 OR 4.5 OVER/UNDER)
     { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: pCornOver75, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Under 7.5 Total Corners', prob: pCornUnder75, type: 'CORNERS', category: 'CORNERS' },
     { market: 'Match Total Corners', selection: 'Over 8.5 Total Corners', prob: pCornOver85, type: 'CORNERS', category: 'CORNERS' },
@@ -2220,7 +2212,7 @@ export function generatePredictions(home, away, leagueId) {
     return (b.convictionScore + structuralModB) - (a.convictionScore + structuralModA);
   });
 
-  // Guarantee First 15 Min Draw, Hollywoodbets 1st-Half 3.5/4.5, Match Total Corners (5.5+), Home 5.5/7+/8+/Under, and Away 5.5 Over/Under are preserved in output slate
+  // Guarantee First 15 Min Draw, Hollywoodbets 1st-Half 3.5/4.5, Match Total Corners (7.5+), Home 5.5/7+/8+/Under, and Away 5.5 Over/Under are preserved in output slate
   const guaranteedFirst15 = enriched.find(p => p.marketCategory === 'FIRST_15_MIN' && p.selection.includes('15 Min Draw'));
   const guaranteed1stHalfCorner = enriched.find(p => p.market === '1st-Half Corners');
   const guaranteedMatchCorner = enriched.find(p => p.market === 'Match Total Corners');
@@ -2839,7 +2831,7 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
     awayExp: nbCornersTelemetry.lambdaAwayCorners,
     firstHalfExp: nbCornersTelemetry.lambdaFirstHalfCorners,
     totalExp: nbCornersTelemetry.totalCornersExp,
-    matchOver55Pct: +(nbCornersTelemetry.match.over55 * 100).toFixed(1),
+    matchOver75Pct: +(nbCornersTelemetry.match.over75 * 100).toFixed(1),
     homeOver55Pct: +(nbCornersTelemetry.home.over55 * 100).toFixed(1),
     homeUnder55Pct: +(nbCornersTelemetry.home.under55 * 100).toFixed(1),
     awayOver55Pct: +(nbCornersTelemetry.away.over55 * 100).toFixed(1),

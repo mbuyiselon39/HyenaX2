@@ -2464,17 +2464,19 @@ export function evaluateDeepMarketVetting({
     }
   }
 
-  // 3b. Hollywoodbets Retail Corner Line Alignment Check
+  // 3b. Bookmaker Market-Ready Corner Line Alignment Check
   // - 1st-Half Corners operate strictly on 3.5 & 4.5 (Over/Under)
-  // - Match Total Corners operate from 5.5 upwards (5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5 Over/Under)
-  // - Team Total Corners MUST start at 5.5 upwards or Under (sub-5.5 lines like 1.5/2.5/3.5/4.5 are unplayable)
+  // - Match Total Corners MUST start at 7.5 upwards (7.5, 8.5, 9.5, 10.5, 11.5 Over/Under)
+  // - Home/Away Team Total Corners MUST start at 5.5 upwards or Under (sub-5.5 lines are unplayable)
   // - Home-Only High Milestones: 7+ (Over 6.5) / Under 6.5 & 8+ (Over 7.5) / Under 7.5
   const isHalfCornerMkt = /1st[- ]?half\s+corners/i.test(marketName) || /1st[- ]?half/i.test(selectionName);
-  const isSub55UnplayableCorner = !isHalfCornerMkt &&
-    (marketCategory === 'TEAM_CORNERS' || marketCategory === 'CORNERS' || /corner/i.test(marketName)) &&
-    /(over|under)\s+[0-4]\.5/i.test(selectionName);
-  if (isSub55UnplayableCorner) {
-    violations.push({ code: 'UNPLAYABLE_SUB_5_5_CORNER_LINE', message: 'Full-match and team corner lines below 5.5 are not offered on retail sportsbooks.' });
+  const isMatchCornerMkt = marketName === 'Match Total Corners' || (!isHalfCornerMkt && marketCategory === 'CORNERS');
+  const isTeamCornerMkt = marketName === 'Home Team Total Corners' || marketName === 'Away Team Total Corners' || marketCategory === 'TEAM_CORNERS';
+  if (isMatchCornerMkt && /(over|under)\s+[0-6]\.5/i.test(selectionName)) {
+    violations.push({ code: 'UNPLAYABLE_SUB_7_5_MATCH_CORNER_LINE', message: 'Match Total Corners must start at Over/Under 7.5+ per standard bookmaker availability.' });
+  }
+  if (!isHalfCornerMkt && isTeamCornerMkt && /(over|under)\s+[0-4]\.5/i.test(selectionName)) {
+    violations.push({ code: 'UNPLAYABLE_SUB_5_5_TEAM_CORNER_LINE', message: 'Team Total Corners must start at Over/Under 5.5+ on standard retail sportsbooks.' });
   }
   const isAwayHighCornerDisallowed = marketName === 'Away Team Total Corners' && (/7\+|8\+|over\s+(6\.5|7\.5)/i.test(selectionName));
   if (isAwayHighCornerDisallowed) {
@@ -2817,17 +2819,19 @@ export function evaluateEngineVerifier({
       }
     }
 
-    // CHECK 10: Playable Hollywoodbets Corners (Match/Team >= 5.5, 1st-Half 3.5/4.5, Home-Only 7+/8+/Unders)
+    // CHECK 10: Market-Ready Corners (Match Total >= 7.5, Team Total >= 5.5, 1st-Half 3.5/4.5, Home-Only 7+/8+/Unders)
     if (
       mkt === 'Match Total Corners' ||
       mkt === '1st-Half Corners' ||
       mkt === 'Home Team Total Corners' ||
       mkt === 'Away Team Total Corners'
     ) {
-      const isHalfLine = mkt === '1st-Half Corners';
-      if (!isHalfLine && /(over|under)\s+[0-4]\.5/i.test(sel)) {
+      if (mkt === 'Match Total Corners' && /(over|under)\s+[0-6]\.5/i.test(sel)) {
         verifierPenalty += 60;
-        disqualifications.push('UNPLAYABLE_SUB_5_5_CORNER_LINE');
+        disqualifications.push('UNPLAYABLE_SUB_7_5_MATCH_CORNER_LINE');
+      } else if ((mkt === 'Home Team Total Corners' || mkt === 'Away Team Total Corners') && /(over|under)\s+[0-4]\.5/i.test(sel)) {
+        verifierPenalty += 60;
+        disqualifications.push('UNPLAYABLE_SUB_5_5_TEAM_CORNER_LINE');
       } else if (mkt === 'Away Team Total Corners' && /7\+|8\+|over\s+(6\.5|7\.5)/i.test(sel)) {
         verifierPenalty += 50;
         disqualifications.push('AWAY_HIGH_CORNER_DISALLOWED');
