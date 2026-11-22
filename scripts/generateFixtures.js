@@ -29,8 +29,25 @@ import { UnderStatScraper } from '../scrapers/understat.js';
 import { TransfermarktScraper } from '../scrapers/transfermarkt.js';
 import { SoccerWikiScraper } from '../scrapers/soccerWiki.js';
 import { WhoScoredScraper } from '../scrapers/whoscored.js';
-import { FBrefAdapter, TikiTakaAdapter, XGStatAdapter } from '../scrapers/tacticalAdapters.js';
-import { Scores365Adapter, BetfairExchangeAdapter } from '../scrapers/liveFeedAdapters.js';
+import { SofaScoreScraper } from '../scrapers/sofascore.js';
+import { BettingPredictionsEngine } from '../scrapers/bettingPredictions.js';
+import {
+  FBrefAdapter,
+  TikiTakaAdapter,
+  XGStatAdapter,
+  BeSoccerAdapter,
+  OptaAnalystAdapter,
+  FootyStatsAdapter
+} from '../scrapers/tacticalAdapters.js';
+import {
+  FotMobAdapter,
+  AiScoreAdapter,
+  Scores365Adapter,
+  OneFootballAdapter,
+  BetfairExchangeAdapter,
+  FlashscoreAdapter,
+  StatzAdapter
+} from '../scrapers/liveFeedAdapters.js';
 import { GoogleFootballDiscoveryEngine } from '../scrapers/googleDiscovery.js';
 import { runAutomatedDataSanityChecks } from '../scrapers/sourcesRegistry.js';
 
@@ -39,11 +56,21 @@ const understatAdapter = new UnderStatScraper();
 const transfermarktAdapter = new TransfermarktScraper();
 const soccerWikiAdapter = new SoccerWikiScraper();
 const whoScoredAdapter = new WhoScoredScraper();
+const sofaScoreAdapter = new SofaScoreScraper();
+const bettingPredictionsAdapter = new BettingPredictionsEngine();
 const fbrefAdapter = new FBrefAdapter();
 const tikiTakaAdapter = new TikiTakaAdapter();
 const xgStatAdapter = new XGStatAdapter();
+const besoccerAdapter = new BeSoccerAdapter();
+const optaAnalystAdapter = new OptaAnalystAdapter();
+const footyStatsAdapter = new FootyStatsAdapter();
+const fotmobAdapter = new FotMobAdapter();
+const aiscoreAdapter = new AiScoreAdapter();
 const scores365Adapter = new Scores365Adapter();
+const oneFootballAdapter = new OneFootballAdapter();
 const betfairExchangeAdapter = new BetfairExchangeAdapter();
+const flashscoreAdapter = new FlashscoreAdapter();
+const statzAdapter = new StatzAdapter();
 const googleDiscoveryAdapter = new GoogleFootballDiscoveryEngine();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -2320,12 +2347,14 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   const hRating = Number(home.rating || 75);
   const aRating = Number(away.rating || 75);
 
-  // 1. High-Fidelity Tactical Feeds from Adapters: FBref, Tiki Taka, xG Stat, WhoScored
-  const fbHome = fbrefAdapter.getTeamTacticalMetrics(home.name, hRating, home.xgFor || 1.45);
-  const fbAway = fbrefAdapter.getTeamTacticalMetrics(away.name, aRating, away.xgFor || 1.25);
+  // 1. High-Fidelity Multi-Source Feeds across all 17 Core + Supporting Adapters
+  const homeXgVal = home.xgFor || 1.45;
+  const awayXgVal = away.xgFor || 1.25;
+  const fbHome = fbrefAdapter.getTeamTacticalMetrics(home.name, hRating, homeXgVal);
+  const fbAway = fbrefAdapter.getTeamTacticalMetrics(away.name, aRating, awayXgVal);
   const ttMetrics = tikiTakaAdapter.getBuildUpMetrics(home.name, away.name, hRating, aRating);
-  const xgRegHome = xgStatAdapter.getRegressionDelta(home.name, home.xgFor || 1.45);
-  const xgRegAway = xgStatAdapter.getRegressionDelta(away.name, away.xgFor || 1.25);
+  const xgRegHome = xgStatAdapter.getRegressionDelta(home.name, homeXgVal);
+  const xgRegAway = xgStatAdapter.getRegressionDelta(away.name, awayXgVal);
   const tmHome = transfermarktAdapter.getSquadDetails(home.name);
   const tmAway = transfermarktAdapter.getSquadDetails(away.name);
   const venueDetails = soccerWikiAdapter.getVenueDetails(home.name, away.name);
@@ -2333,6 +2362,16 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   const wsAway = whoScoredAdapter.getTacticalProfile(away.name);
   const ref365 = scores365Adapter.getRefereeCardProfile(leagueId, home.name, away.name);
   const discoveryNews = googleDiscoveryAdapter.discoverTeamNews(home.name, away.name);
+  const flashscoreVer = flashscoreAdapter.getFixtureVerification(home.name, away.name);
+  const optaPower = optaAnalystAdapter.getPowerRankingProfile(home.name, away.name, hRating, aRating);
+  const footystatsSplits = footyStatsAdapter.getMarketSplits(home.name, away.name, homeXgVal, awayXgVal);
+  const statzProps = statzAdapter.getPlayerPropsTelemetry(home.name, away.name, hRating, aRating);
+  const fotmobSnap = fotmobAdapter.getMatchSnapshot(home.name, away.name, homeXgVal, awayXgVal);
+  const aiscoreTick = aiscoreAdapter.getSubSecondTicker(home.name, away.name);
+  const oneFootballAvail = oneFootballAdapter.getAvailabilityDigest(home.name, away.name);
+  const besoccerHome = besoccerAdapter.getEloProfile(home.name, hRating);
+  const besoccerAway = besoccerAdapter.getEloProfile(away.name, aRating);
+  const sofaTelemetry = sofaScoreAdapter.generateMatchTelemetry(home.name, away.name, `${leagueId}-${home.name}-${away.name}`);
 
   const xtHome = fbHome.xtPer90;
   const xtAway = fbAway.xtPer90;
@@ -2350,15 +2389,17 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   const windKmh = Math.round(6 + rng() * 24);
   const rainPct = Math.round(rng() * 55);
 
-  // 3. Market Psychology: Betfair Exchange & Steam Move Radar
-  const bestDec = topPick ? topPick.odds.betway : 1.85;
+  // 3. Market Psychology: Betfair Exchange, Steam Move Radar & Value Staking Edge
+  const bestDec = topPick && topPick.odds
+    ? (typeof topPick.odds === 'number' ? topPick.odds : (topPick.odds.betway || topPick.odds.hollywoodbets || topPick.odds.easybet || 1.85))
+    : 1.85;
   const bfDepth = betfairExchangeAdapter.getMarketDepth(home.name, away.name, bestDec);
+  const bpEdge = bettingPredictionsAdapter.calculateEdgeAndStaking(topPick ? topPick.probability : 75, bestDec);
   const backOdds = bfDepth.backOdds;
   const layOdds = bfDepth.layOdds;
   const steamDelta = bfDepth.steamShiftPct;
 
   // 4. Beast Meta & Vig Filter
-  const bestOdds = topPick ? Math.max(topPick.odds.hollywoodbets, topPick.odds.betway, topPick.odds.easybet) : 1.85;
   const beastScore = +(Math.min(96, Math.max(72, (topPick ? topPick.probability : 75) * 0.94 + 12 + rng() * 3))).toFixed(1);
 
   const teleResult = {
@@ -2372,7 +2413,7 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         fieldTiltAwayPct: ttMetrics.awayFieldTiltPct,
         homeFormation: wsHome.formation,
         awayFormation: wsAway.formation,
-        source: 'FBref, Tiki Taka & WhoScored Spatial Feed'
+        source: 'FBref, Opta Analyst, Tiki Taka & WhoScored Spatial Feed'
       },
       ppdaPressing: {
         home: ppdaHome,
@@ -2401,7 +2442,8 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         awayMotivationIndex: Math.round(76 + rng() * 18),
         contextTag: isMidweekCongested ? 'Midweek Travel Congestion' : 'Standard League Fixture',
         refereeStrictness: ref365.cardSeverity,
-        lineupStatus: discoveryNews.lineupStatus
+        lineupStatus: fotmobSnap.lineupConfirmed ? 'Starting XI Confirmed (FotMob + Google)' : discoveryNews.lineupStatus,
+        beatStatus: oneFootballAvail.verifiedBeatStatus
       },
       weatherConditions: {
         temperatureC: tempC,
@@ -2416,7 +2458,8 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
         layOdds,
         spreadPct: bfDepth.spreadPct,
         matchedVolume: bfDepth.matchedVolume.replace(/^\$/, ''),
-        liquidityRating: bfDepth.liquidityRating
+        liquidityRating: bfDepth.liquidityRating,
+        expectedValuePct: bpEdge.expectedValuePct
       },
       steamMoveRadar: {
         shiftPct: steamDelta,
@@ -2430,7 +2473,22 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
       homeSquadValueM: tmHome.marketValueM,
       awaySquadValueM: tmAway.marketValueM,
       homeInjuryPenalty: tmHome.injuryPenalty,
-      awayInjuryPenalty: tmAway.injuryPenalty
+      awayInjuryPenalty: tmAway.injuryPenalty,
+      flashscoreVerified: flashscoreVer.kickoffVerified,
+      optaPowerGap: optaPower.powerGap,
+      footystatsBttsPct: footystatsSplits.bttsHitRatePct,
+      footystatsOver25Pct: footystatsSplits.over25HitRatePct,
+      avgCornersCombined: footystatsSplits.avgCornersCombined,
+      avgCardsCombined: ref365.avgYellowCards,
+      aiscoreCornersTotal: aiscoreTick.projectedCornersTotal,
+      statzHomeShots90: statzProps.homeShotsPer90,
+      statzAwayShots90: statzProps.awayShotsPer90,
+      fotmobXgotHome: fotmobSnap.xgotHome,
+      fotmobXgotAway: fotmobSnap.xgotAway,
+      besoccerReloHome: besoccerHome.reloRating,
+      besoccerReloAway: besoccerAway.reloRating,
+      sofascorePossessionHome: sofaTelemetry.possession.home,
+      activeAdaptersCount: 17
     },
     beastMeta: (() => {
       const ens = runConsolidatedEnsemble({
@@ -4747,6 +4805,7 @@ export function recalculateSingleFixture(fixture, overrides = {}) {
   fixture.tacticalFeeds = telem.tacticalFeeds;
   fixture.situationalFactors = telem.situationalFactors;
   fixture.marketPsychology = telem.marketPsychology;
+  fixture.adapterEnrichment = telem.adapterEnrichment;
   fixture.beastMeta = telem.beastMeta;
   fixture.strictVetting = telem.strictVetting;
   fixture.multiLayerVerification = telem.multiLayerVerification;

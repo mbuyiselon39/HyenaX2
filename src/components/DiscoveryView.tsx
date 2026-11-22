@@ -57,21 +57,26 @@ export const DiscoveryView: React.FC = () => {
     }> = [];
 
     movementsData.slice(0, 4).forEach((mv, idx) => {
+      const matched = mv.matchId
+        ? fixtures.find(f => f.id === mv.matchId)
+        : fixtures.find(f => `${f.home.name} vs ${f.away.name}`.toLowerCase() === String(mv.fixture || '').toLowerCase());
       items.push({
         id: `mv-${idx}`,
+        matchId: matched?.id || mv.matchId,
         match: mv.fixture,
         badge: mv.direction || 'STEAM_SHIFT',
         source: 'Betfair Liquidity & Sharp Odds Mesh',
-        text: `${mv.market} shifted from @${mv.openOdds} to @${mv.currentOdds} on ${mv.volume || 'high'} market liquidity.`,
+        text: `${mv.market}${mv.selection ? ` (${mv.selection})` : ''} shifted from @${mv.openOdds} to @${mv.currentOdds} on ${mv.volume || 'high'} market liquidity.`,
         metricLabel: mv.league || 'Global Market',
         impact: `${mv.movePct > 0 ? `+${mv.movePct}%` : `${mv.movePct}%`} Odds Drift`
       });
     });
 
-    fixtures.slice(0, 60).forEach((m) => {
+    fixtures.slice(0, 80).forEach((m) => {
       if (items.length >= 8) return;
       const sit = m.situationalFactors || {};
       const derby = m.beastMeta?.derbyInfo;
+      const travelKm = Number(sit?.travelFatigue?.travelDistanceKm ?? 0);
       if (derby?.isDerby) {
         items.push({
           id: `derby-${m.id}`,
@@ -83,14 +88,14 @@ export const DiscoveryView: React.FC = () => {
           metricLabel: m.league.name,
           impact: `${m.topPick?.probability?.toFixed?.(1) ?? m.topPick?.probability ?? 75}% Calibrated`
         });
-      } else if (sit?.weatherConditions?.summary || sit?.travelFatigue?.awayTravelKm > 800) {
+      } else if (sit?.weatherConditions?.impactSummary || travelKm > 700) {
         items.push({
           id: `sit-${m.id}`,
           matchId: m.id,
           match: `${m.home.name} vs ${m.away.name}`,
           badge: 'TELEMETRY_SYNC',
           source: 'Venue Altitude & Fatigue Adapter',
-          text: `${m.venue || 'Confirmed stadium'}: ${sit.weatherConditions?.summary || 'Surface telemetry verified'}${sit.travelFatigue?.awayTravelKm ? ` · Away transit ${sit.travelFatigue.awayTravelKm} km` : ''}.`,
+          text: `${m.venue || 'Confirmed stadium'}: ${sit.weatherConditions?.impactSummary || 'Surface telemetry verified'}${travelKm ? ` · Away transit ${travelKm} km` : ''}.`,
           metricLabel: m.league.name,
           impact: m.topPick?.selection || 'Verified'
         });

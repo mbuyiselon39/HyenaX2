@@ -328,11 +328,11 @@ export const MatchDrawer: React.FC = () => {
           {activeTab === 'layer18' && (
             <div className="space-y-3 text-xs leading-relaxed">
               <div className="p-4 rounded-xl border border-[#00E5FF]/30 bg-[#0E131F] space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="font-bold text-[#00E5FF]">Layer 18 Look-Ahead &amp; Situational Matrix</div>
-                  {verifier.badge && (
+                  {(verifier.verificationBadge || verifier.badge) && (
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                      {verifier.badge}
+                      {verifier.verificationBadge || verifier.badge}
                     </span>
                   )}
                 </div>
@@ -356,21 +356,26 @@ export const MatchDrawer: React.FC = () => {
                     <span className="text-slate-400 block">Away Travel Distance:</span>
                     <strong className="text-white">
                       {travel.travelDistanceKm ?? 120} km
-                      {travel.fatiguePenaltyPct !== undefined ? ` (-${travel.fatiguePenaltyPct}% load)` : ''}
+                      {travel.fatiguePenaltyPct !== undefined ? ` (${Number(travel.fatiguePenaltyPct) > 0 ? '-' : ''}${travel.fatiguePenaltyPct}% load)` : ''}
                     </strong>
                   </div>
                   <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
                     <span className="text-slate-400 block">Venue Altitude &amp; Weather:</span>
                     <strong className="text-white">
-                      {travel.altitudeMeters ?? 300}m · {weather.condition || 'Clear'}
+                      {travel.altitudeMeters ?? 300}m · {weather.impactSummary || weather.condition || 'Optimal playing conditions'}
                     </strong>
                   </div>
                 </div>
 
-                {bayesian.posteriorProbabilityPct !== undefined && (
-                  <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46] text-[11px] text-slate-300 font-num flex items-center justify-between">
-                    <span>Bayesian Posterior Prob:</span>
-                    <strong className="text-emerald-400">{bayesian.posteriorProbabilityPct}%</strong>
+                {bayesian.posteriorElo !== undefined && (
+                  <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46] text-[11px] text-slate-300 font-num flex flex-wrap items-center justify-between gap-2">
+                    <span>Bayesian Elo Prior → Posterior:</span>
+                    <strong className="text-emerald-400">
+                      {bayesian.priorElo} → {bayesian.posteriorElo} ({Number(bayesian.eloAdjustmentDelta) >= 0 ? `+${bayesian.eloAdjustmentDelta}` : bayesian.eloAdjustmentDelta})
+                    </strong>
+                    {bayesian.shieldVerdict && (
+                      <span className="w-full text-[10px] text-slate-400 font-sans">{bayesian.shieldVerdict}</span>
+                    )}
                   </div>
                 )}
               </div>

@@ -83,15 +83,15 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-30 border-b border-[#1D2A45] bg-[#070A13]/95 backdrop-blur-md">
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <div className="mx-auto max-w-[1440px] px-3 sm:px-5 h-16 flex items-center justify-between gap-2 xl:gap-3">
 
         {/* ── Brand Zone ── */}
         <button
           onClick={() => navigateTo('daily-top15')}
-          className="flex items-center gap-2.5 shrink-0 cursor-pointer group focus:outline-none"
+          className="flex items-center gap-2 shrink-0 cursor-pointer group focus:outline-none"
           title="HyenaX · The Ndlela Millionaires GoldPack"
         >
-          <div className="relative w-9 h-9 rounded-lg overflow-hidden p-0.5 bg-gradient-to-br from-[#00E5FF] via-[#7B2EFA] to-[#FF2E9D] shadow-[0_0_16px_-4px_rgba(0,229,255,0.5)]">
+          <div className="relative w-8 h-8 xl:w-9 xl:h-9 rounded-lg overflow-hidden p-0.5 bg-gradient-to-br from-[#00E5FF] via-[#7B2EFA] to-[#FF2E9D] shadow-[0_0_16px_-4px_rgba(0,229,255,0.5)]">
             <img
               src="/icons/icon.svg"
               alt="HyenaX"
@@ -101,8 +101,8 @@ export const Header: React.FC = () => {
           </div>
           <div className="leading-none text-left whitespace-nowrap">
             <div className="flex items-baseline gap-0.5">
-              <span className="font-display font-bold text-xl tracking-tight text-white">Hyena</span>
-              <span className="font-display font-extrabold text-xl text-[#00E5FF]">X</span>
+              <span className="font-display font-bold text-lg xl:text-xl tracking-tight text-white">Hyena</span>
+              <span className="font-display font-extrabold text-lg xl:text-xl text-[#00E5FF]">X</span>
             </div>
             <div className="hidden 2xl:block text-[9px] font-semibold uppercase tracking-[0.16em] text-[#00E5FF]/75 mt-0.5">
               GoldPack Engine
@@ -111,14 +111,14 @@ export const Header: React.FC = () => {
         </button>
 
         {/* ── Center Desktop Nav Zone (Single-Line, Zero Wrapping) ── */}
-        <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-1 p-1 rounded-xl border border-[#1D2A45] bg-[#0B0F1A] shrink-0">
+        <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-0.5 xl:gap-1 p-1 rounded-xl border border-[#1D2A45] bg-[#0B0F1A] shrink-0">
           {primaryItems.map(item => {
             const active = activeView === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => navigateTo(item.id)}
-                className={`px-3 py-1.5 rounded-lg font-display text-[13px] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
+                className={`px-2 xl:px-3 py-1.5 rounded-lg font-display text-xs xl:text-[13px] font-semibold transition-colors flex items-center gap-1 xl:gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                   active
                     ? 'bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/40'
                     : 'text-slate-300 hover:text-white hover:bg-[#131A2C] border border-transparent'
@@ -140,7 +140,7 @@ export const Header: React.FC = () => {
               onClick={() => setNavDropdownOpen(prev => !prev)}
               aria-expanded={navDropdownOpen}
               aria-haspopup="menu"
-              className={`px-3 py-1.5 rounded-lg font-display text-[13px] font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
+              className={`px-2 xl:px-3 py-1.5 rounded-lg font-display text-xs xl:text-[13px] font-semibold transition-colors flex items-center gap-1 xl:gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                 isSecondaryActive || navDropdownOpen
                   ? 'bg-[#7B2EFA]/20 text-[#00E5FF] border border-[#7B2EFA]/50'
                   : 'text-slate-300 hover:text-white hover:bg-[#131A2C] border border-transparent'
@@ -189,7 +189,7 @@ export const Header: React.FC = () => {
         </nav>
 
         {/* ── Right Utility Zone ── */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 xl:gap-2 shrink-0">
           {/* Search Trigger (expands quick search bar cleanly without crowding nav) */}
           <button
             onClick={() => setSearchOpen(prev => !prev)}
@@ -210,11 +210,11 @@ export const Header: React.FC = () => {
 
           {/* Compact SAST / UTC Clock */}
           <div
-            className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[#1D2A45] bg-[#0B0F1A] shrink-0"
+            className="hidden sm:flex items-center gap-1.5 px-2 xl:px-2.5 py-1.5 rounded-lg border border-[#1D2A45] bg-[#0B0F1A] shrink-0"
             title={`${utcClock} · ${dataSource}`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-            <div className="flex items-center gap-1 text-xs font-bold text-[#00E5FF] font-num whitespace-nowrap">
+            <div className="flex items-center gap-1 text-[11px] xl:text-xs font-bold text-[#00E5FF] font-num whitespace-nowrap">
               <Clock className="w-3 h-3 text-[#00E5FF]/80" />
               <span>{sastClock}</span>
             </div>
@@ -234,7 +234,7 @@ export const Header: React.FC = () => {
           {/* AI Oracle */}
           <button
             onClick={() => setAiChatOpen(true)}
-            className="btn-primary hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs whitespace-nowrap shrink-0 cursor-pointer"
+            className="btn-primary hidden sm:flex items-center gap-1.5 px-2.5 xl:px-3 py-2 text-xs whitespace-nowrap shrink-0 cursor-pointer"
             title="Open the Quantitative AI Oracle"
           >
             <Bot className="w-4 h-4 shrink-0" />

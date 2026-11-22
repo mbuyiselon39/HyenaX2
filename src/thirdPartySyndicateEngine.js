@@ -377,10 +377,17 @@ export function generateThirdPartyPredictionsForMatch({
         break;
     }
 
-    // Check if this pick aligns with likely consensus
+    // Check if this pick aligns with directional expectation (Home Fav, Away Fav, or Close/Goals)
     const isAlignedWithHome = pick === '1' || pick === '1X' || pick === '1 & Over 1.5';
     const isAlignedWithAway = pick === '2' || pick === 'X2';
-    status = (isHeavyFav || isModerateFav) ? (isAlignedWithHome ? 'CONSENSUS_ALIGNED' : 'DIVERGENT') : 'SPLIT_OPINION';
+    const isGoalsPick = pick.includes('Goals') || pick.includes('Score') || pick.includes('Over') || pick.includes('Under');
+    if (isHeavyFav || isModerateFav) {
+      status = isAlignedWithHome ? 'CONSENSUS_ALIGNED' : (isGoalsPick ? 'MARKET_COMPLEMENT' : 'DIVERGENT');
+    } else if (isAwayFav) {
+      status = isAlignedWithAway ? 'CONSENSUS_ALIGNED' : (isGoalsPick ? 'MARKET_COMPLEMENT' : 'DIVERGENT');
+    } else {
+      status = (pick === 'X' || pick === '1X' || pick === 'X2' || isGoalsPick) ? 'CONSENSUS_ALIGNED' : 'SPLIT_OPINION';
+    }
 
     return {
       sourceId: platform.id,
@@ -407,6 +414,11 @@ export function reanalyseWithThirdPartySyndicate({
   home,
   away,
   leagueId = 'epl',
+  homeRating = undefined,
+  awayRating = undefined,
+  xgHome = undefined,
+  xgAway = undefined,
+  kickoff = undefined,
   calibratedProbability = 82.0,
   internalModelAgreement = 88.0,
   internalTopPick = null,
@@ -418,18 +430,29 @@ export function reanalyseWithThirdPartySyndicate({
 }) {
   const homeName = typeof home === 'object' ? (home?.name || 'Home') : String(home || 'Home');
   const awayName = typeof away === 'object' ? (away?.name || 'Away') : String(away || 'Away');
+  const resolvedHomeRating = homeRating ?? (typeof home === 'object' ? home?.rating : undefined) ?? 80;
+  const resolvedAwayRating = awayRating ?? (typeof away === 'object' ? away?.rating : undefined) ?? 75;
+  const resolvedXgHome = xgHome ?? (typeof home === 'object' ? home?.xgFor : undefined) ?? 1.6;
+  const resolvedXgAway = xgAway ?? (typeof away === 'object' ? away?.xgFor : undefined) ?? 1.1;
 
   // Generate if not provided
   const predictions = platformPredictions || generateThirdPartyPredictionsForMatch({
     home,
     away,
     leagueId,
+    homeRating: resolvedHomeRating,
+    awayRating: resolvedAwayRating,
+    xgHome: resolvedXgHome,
+    xgAway: resolvedXgAway,
     topPick: internalTopPick,
-    isDerby
+    isDerby,
+    kickoff: kickoff || new Date().toISOString()
   });
 
-  // Calculate Syndicate Agreement & Distribution
+  // Calculate Syndicate Agreement & Distribution aligned with internalTopPick direction
   let homePicksCount = 0;
+  let homeDcCount = 0;
+  let awayDcCount = 0;
   let doubleChanceCount = 0;
   let drawPicksCount = 0;
   let awayPicksCount = 0;
@@ -444,18 +467,30 @@ export function reanalyseWithThirdPartySyndicate({
 
     const pick = p.pick.toUpperCase();
     if (pick === '1' || pick.startsWith('1 &')) homePicksCount++;
-    else if (pick === '1X' || pick === 'X2') doubleChanceCount++;
+    else if (pick === '1X') { homeDcCount++; doubleChanceCount++; }
+    else if (pick === 'X2') { awayDcCount++; doubleChanceCount++; }
     else if (pick === 'X') drawPicksCount++;
     else if (pick === '2') awayPicksCount++;
-    else if (pick.includes('GOAL') || pick.includes('OVER') || pick.includes('UNDER')) goalsPicksCount++;
+    else if (pick.includes('GOAL') || pick.includes('OVER') || pick.includes('UNDER') || pick.includes('SCORE')) goalsPicksCount++;
   });
 
   const totalSites = predictions.length || 12;
   const externalAvgConfidence = +(weightedConfidenceSum / (totalSyndicateWeight || 1)).toFixed(1);
 
-  // Measure how many external platforms back the favorite (Home / Double Chance)
-  const homeOrSafeDcCount = homePicksCount + doubleChanceCount;
-  const syndicateAgreementPct = +((homeOrSafeDcCount / totalSites) * 100).toFixed(1);
+  const pickSel = String(internalTopPick?.selection || '').trim();
+  const pickMkt = String(internalTopPick?.market || '').toLowerCase();
+  let agreedSitesCount = homePicksCount + homeDcCount;
+
+  if (/^2(\s|$|·)|\bX2\b/i.test(pickSel)) {
+    agreedSitesCount = awayPicksCount + awayDcCount;
+  } else if (pickMkt.includes('goal') || pickMkt.includes('btts') || pickMkt.includes('score') || /over\s+\d|under\s+\d/i.test(pickSel)) {
+    // Goal/scoring picks align with goal-market picks as well as consensus directional leans unless conflicting
+    agreedSitesCount = Math.min(totalSites, goalsPicksCount + Math.max(homePicksCount + homeDcCount, awayPicksCount + awayDcCount));
+  } else if (/^X(\s|$|·)/i.test(pickSel)) {
+    agreedSitesCount = drawPicksCount + doubleChanceCount;
+  }
+
+  const syndicateAgreementPct = +((agreedSitesCount / totalSites) * 100).toFixed(1);
 
   // Divergence delta between HyenaX internal probability and external syndicate confidence
   const divergenceDelta = +(Math.abs(calibratedProbability - externalAvgConfidence)).toFixed(1);
@@ -488,7 +523,7 @@ export function reanalyseWithThirdPartySyndicate({
   // Check 3: Third-Party Syndicate Agreement (>= 70.0% of external sites must concur)
   if (syndicateAgreementPct < 70.0) {
     unmetCriteria.push(`Third-party syndicate consensus (${syndicateAgreementPct}%) is fractured across the 12 external sites.`);
-    uncertaintyWarnings.push(`Only ${homeOrSafeDcCount} of 12 verified external prediction sites agree with the primary outcome.`);
+    uncertaintyWarnings.push(`Only ${agreedSitesCount} of 12 verified external prediction sites agree with the primary outcome.`);
   }
 
   // Check 4: Divergence Delta Ceiling (< 10.0%)

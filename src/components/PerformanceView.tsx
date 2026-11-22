@@ -144,9 +144,11 @@ export const PerformanceView: React.FC = () => {
                 <tbody className="divide-y divide-[#222E46]/60 font-num">
                   {(data?.byLeague || []).map((row: any, i: number) => (
                     <tr key={i} className="hover:bg-[#141C2E] transition-colors">
-                      <td className="py-3 font-display font-semibold text-white flex items-center gap-2">
-                        <span>{row.flag || '⚽'}</span>
-                        <span>{row.league}</span>
+                      <td className="py-3 font-display font-semibold text-white">
+                        <div className="flex items-center gap-2">
+                          <span>{row.flag || '⚽'}</span>
+                          <span>{row.league}</span>
+                        </div>
                       </td>
                       <td className="py-3 text-right text-slate-400">{row.predictions}</td>
                       <td className="py-3 text-right font-bold text-emerald-400">{row.winRate}%</td>

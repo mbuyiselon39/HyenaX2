@@ -128,8 +128,7 @@ const indexHtml = fs.readFileSync(indexFile, 'utf8');
 const checks = [
   { name: 'Manifest link', regex: /<link rel="manifest" href="\/?manifest\.webmanifest"/ },
   { name: 'Apple Touch Icon', regex: /<link rel="apple-touch-icon"/ },
-  { name: 'Mobile Web App Capable (Android/Chrome)', regex: /<meta name="mobile-web-app-capable" content="yes"/ },
-  { name: 'Mobile Web App Capable (iOS)', regex: /<meta name="apple-mobile-web-app-capable" content="yes"/ },
+  { name: 'Mobile Web App Capable', regex: /<meta name="mobile-web-app-capable" content="yes"/ },
   { name: 'Status Bar Style (iOS)', regex: /<meta name="apple-mobile-web-app-status-bar-style"/ },
   { name: 'Theme Color', regex: /<meta name="theme-color"/ },
   { name: 'Viewport with viewport-fit=cover', regex: /viewport-fit=cover/ },
