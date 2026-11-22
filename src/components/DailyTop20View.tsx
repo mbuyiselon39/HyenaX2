@@ -53,7 +53,7 @@ export const DailyTop20View: React.FC = () => {
     { id: 'all', label: 'All Safe Markets' },
     { id: 'WINNERS_DC', label: '1X2 / Double Chance' },
     { id: 'FIRST_15_MIN', label: 'First 15 Min Draw' },
-    { id: 'TEAM_CORNERS', label: 'Team Corners (O1.5 / Home 7+ / 8+)' },
+    { id: 'TEAM_CORNERS', label: 'Team Corners (5.5+ / Home 7+ / 8+)' },
     { id: 'HALF_MARKETS', label: 'Highest Scoring Half' },
     { id: 'GOAL_OVERS_UNDERS', label: 'Over / Under Goals' },
     { id: 'CORNERS', label: '1st-Half (3.5/4.5) & Match Corners' },

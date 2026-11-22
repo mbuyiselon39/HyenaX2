@@ -454,10 +454,10 @@ export const MatchDrawer: React.FC = () => {
                       <strong className="text-cyan-300 block">
                         {cornerProj.homeExp} vs {cornerProj.awayExp} (1H λ={cornerProj.firstHalfExp ?? (cornerProj.totalExp * 0.45).toFixed(2)} · Total {cornerProj.totalExp})
                       </strong>
-                      {cornerProj.homeOver15Pct !== undefined && (
+                      {cornerProj.homeOver55Pct !== undefined && (
                         <div className="text-[10px] text-slate-300 flex flex-wrap gap-x-3 gap-y-0.5 pt-0.5">
-                          <span>H O1.5: <strong className="text-emerald-400">{cornerProj.homeOver15Pct}%</strong></span>
-                          <span>A O1.5: <strong className="text-emerald-400">{cornerProj.awayOver15Pct}%</strong></span>
+                          <span>H O5.5/U5.5: <strong className="text-emerald-400">{cornerProj.homeOver55Pct}% / {cornerProj.homeUnder55Pct}%</strong></span>
+                          <span>A O5.5/U5.5: <strong className="text-cyan-400">{cornerProj.awayOver55Pct}% / {cornerProj.awayUnder55Pct}%</strong></span>
                           <span>1H O3.5/U4.5: <strong className="text-[#00E5FF]">{cornerProj.firstHalf35OverPct}% / {cornerProj.firstHalf45UnderPct}%</strong></span>
                           <span>Home 7+/8+: <strong className="text-amber-300">{cornerProj.home7PlusPct}% / {cornerProj.home8PlusPct}%</strong></span>
                         </div>
@@ -558,7 +558,7 @@ export const MatchDrawer: React.FC = () => {
                 {[
                   { id: 'ALL', label: `All (${(m.predictions || []).length})` },
                   { id: 'FIRST_15_MIN', label: 'First 15 Min Draw' },
-                  { id: 'TEAM_CORNERS', label: 'Team Corners (O1.5 / Home 7+)' },
+                  { id: 'TEAM_CORNERS', label: 'Team Corners (5.5+ / Home 7+)' },
                   { id: 'CORNERS', label: '1H (3.5/4.5) & Total Corners' },
                   { id: 'CORE', label: 'Core & Totals' }
                 ].map(sf => (

@@ -248,23 +248,19 @@ export function calculateNegativeBinomialCorners({
     };
   };
 
-  // Standard Hollywoodbets Team Corner Lines:
-  // Home Team includes Over/Under 1.5 up to 5.5 + Home-Only 7+ (Over 6.5), 8+ (Over 7.5) & Unders
-  const home15 = calcCdf(lambdaHomeCorners, 1, 10.5);
-  const home25 = calcCdf(lambdaHomeCorners, 2, 10.5);
-  const home35 = calcCdf(lambdaHomeCorners, 3, 10.5);
-  const home45 = calcCdf(lambdaHomeCorners, 4, 10.5);
+  // Playable Sportsbook Corner Lines:
+  // Match Total Corners start at 5.5 upwards (5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5)
+  // Team Total Corners start at 5.5 upwards/under (Home also gets 7+ Over 6.5 & 8+ Over 7.5)
   const home55 = calcCdf(lambdaHomeCorners, 5, 10.5);
   const home65 = calcCdf(lambdaHomeCorners, 6, 10.5); // 7+ Corners (Over 6.5) / Under 6.5
   const home75 = calcCdf(lambdaHomeCorners, 7, 10.5); // 8+ Corners (Over 7.5) / Under 7.5
 
-  // Away Team includes Over/Under 1.5 through 4.5 (no 7+/8+ milestone option for Away)
-  const away15 = calcCdf(lambdaAwayCorners, 1, 10.5);
-  const away25 = calcCdf(lambdaAwayCorners, 2, 10.5);
-  const away35 = calcCdf(lambdaAwayCorners, 3, 10.5);
-  const away45 = calcCdf(lambdaAwayCorners, 4, 10.5);
+  // Away Team playable 5.5 Over/Under line only (no <5.5 and no 7+/8+ milestone options for Away)
+  const away55 = calcCdf(lambdaAwayCorners, 5, 10.5);
 
-  // Hollywoodbets Match Total Corner Lines (7.5, 8.5, 9.5, 10.5, 11.5)
+  // Hollywoodbets Match Total Corner Lines (5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5)
+  const match55 = calcCdf(totalCornersExp, 5, 14.0);
+  const match65 = calcCdf(totalCornersExp, 6, 14.0);
   const match75 = calcCdf(totalCornersExp, 7, 14.0);
   const match85 = calcCdf(totalCornersExp, 8, 14.0);
   const match95 = calcCdf(totalCornersExp, 9, 14.0);
@@ -284,21 +280,16 @@ export function calculateNegativeBinomialCorners({
     lambdaSecondHalfCorners,
     varianceInflationFactor: +(1 + totalCornersExp / 14.0).toFixed(2),
     home: {
-      over15: home15.over, under15: home15.under,
-      over25: home25.over, under25: home25.under,
-      over35: home35.over, under35: home35.under,
-      over45: home45.over, under45: home45.under,
       over55: home55.over, under55: home55.under,
       over65: home65.over, under65: home65.under, // 7+ Corners / Under 6.5
       over75: home75.over, under75: home75.under  // 8+ Corners / Under 7.5
     },
     away: {
-      over15: away15.over, under15: away15.under,
-      over25: away25.over, under25: away25.under,
-      over35: away35.over, under35: away35.under,
-      over45: away45.over, under45: away45.under
+      over55: away55.over, under55: away55.under
     },
     match: {
+      over55: match55.over, under55: match55.under,
+      over65: match65.over, under65: match65.under,
       over75: match75.over, under75: match75.under,
       over85: match85.over, under85: match85.under,
       over95: match95.over, under95: match95.under,

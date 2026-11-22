@@ -80,7 +80,8 @@ if (!fs.existsSync(fixturesFile)) {
 
   let withFirst15 = 0;
   let withTeamCorners = 0;
-  let withOver15Corners = 0;
+  let withPlayable55PlusCorners = 0;
+  let withSub55InvalidCorner = 0;
   let withFirstHalf3545 = 0;
   let withInvalidAwayHigh = 0;
   let withPhysics = 0;
@@ -93,8 +94,11 @@ if (!fs.existsSync(fixturesFile)) {
     if (preds.some(p => p.marketCategory === 'TEAM_CORNERS') && m.cornerVolatilityProfile?.teamCornerProjections) {
       withTeamCorners++;
     }
-    if (preds.some(p => p.marketCategory === 'TEAM_CORNERS' && /over\s+1\.5\s+corners/i.test(p.selection || ''))) {
-      withOver15Corners++;
+    if (preds.some(p => (p.market === 'Match Total Corners' || p.market === 'Home Team Total Corners' || p.market === 'Away Team Total Corners') && /(5\.5|6\.5|7\.5|8\.5|9\.5|10\.5|11\.5|7\+|8\+)/.test(p.selection || ''))) {
+      withPlayable55PlusCorners++;
+    }
+    if (preds.some(p => (p.market === 'Match Total Corners' || p.market === 'Home Team Total Corners' || p.market === 'Away Team Total Corners') && /(over|under)\s+[0-4]\.5/i.test(p.selection || ''))) {
+      withSub55InvalidCorner++;
     }
     if (preds.some(p => p.market === '1st-Half Corners' && /(3\.5|4\.5)/.test(p.selection || ''))) {
       withFirstHalf3545++;
@@ -115,11 +119,14 @@ if (!fs.existsSync(fixturesFile)) {
   } else {
     console.log(`✓ First 15 Min Draw (Weibull) markets verified on ${withFirst15}/${matches.length} fixtures.`);
   }
-  if (withTeamCorners === 0 || withOver15Corners === 0 || withFirstHalf3545 === 0) {
-    console.error('❌ FAIL: Missing Hollywoodbets corner markets (Over 1.5 Team Corners or 1st-Half 3.5/4.5)!');
+  if (withSub55InvalidCorner > 0) {
+    console.error(`❌ FAIL: Found ${withSub55InvalidCorner} matches with unplayable sub-5.5 Match/Team corner lines!`);
+    errors++;
+  } else if (withTeamCorners === 0 || withPlayable55PlusCorners === 0 || withFirstHalf3545 === 0) {
+    console.error('❌ FAIL: Missing playable corner markets (5.5+ Match/Team Corners or 1st-Half 3.5/4.5)!');
     errors++;
   } else {
-    console.log(`✓ Hollywoodbets Corners verified: Over 1.5 Corners (${withOver15Corners}/${matches.length}), 1st-Half 3.5/4.5 (${withFirstHalf3545}/${matches.length}), Team Corners (${withTeamCorners}/${matches.length}).`);
+    console.log(`✓ Playable Corners verified: Zero sub-5.5 match/team lines, 5.5+ Corners (${withPlayable55PlusCorners}/${matches.length}), 1st-Half 3.5/4.5 (${withFirstHalf3545}/${matches.length}), Team Corners (${withTeamCorners}/${matches.length}).`);
   }
   if (withInvalidAwayHigh > 0) {
     console.error(`❌ FAIL: Found ${withInvalidAwayHigh} matches with disallowed 7+/8+ corners on Away Team!`);

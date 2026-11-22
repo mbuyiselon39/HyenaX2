@@ -325,14 +325,14 @@ export function auditFixturePrediction(fixture) {
   }
 
   const homeTeamCornerChoice = nbCornersEval.home.over65 >= 0.54
-    ? `${home.name} 7+ Corners / Over 6.5 (${(nbCornersEval.home.over65 * 100).toFixed(1)}%) · Over 1.5 (${(nbCornersEval.home.over15 * 100).toFixed(1)}%)`
-    : nbCornersEval.home.over15 >= 0.80
-      ? `${home.name} Over 1.5 (${(nbCornersEval.home.over15 * 100).toFixed(1)}%) · Under 6.5 (${(nbCornersEval.home.under65 * 100).toFixed(1)}%)`
-      : `${home.name} Under 6.5 Corners (${(nbCornersEval.home.under65 * 100).toFixed(1)}%)`;
+    ? `${home.name} 7+ Corners / Over 6.5 (${(nbCornersEval.home.over65 * 100).toFixed(1)}%)`
+    : nbCornersEval.home.over55 >= 0.56
+      ? `${home.name} Over 5.5 Corners (${(nbCornersEval.home.over55 * 100).toFixed(1)}%)`
+      : `${home.name} Under 5.5 Corners (${(nbCornersEval.home.under55 * 100).toFixed(1)}%)`;
 
-  const awayTeamCornerChoice = nbCornersEval.away.over15 >= 0.78
-    ? `${away.name} Over 1.5 Corners (${(nbCornersEval.away.over15 * 100).toFixed(1)}%) · Under 4.5 (${(nbCornersEval.away.under45 * 100).toFixed(1)}%)`
-    : `${away.name} Under 4.5 Corners (${(nbCornersEval.away.under45 * 100).toFixed(1)}%)`;
+  const awayTeamCornerChoice = nbCornersEval.away.under55 >= 0.65
+    ? `${away.name} Under 5.5 Corners (${(nbCornersEval.away.under55 * 100).toFixed(1)}%)`
+    : `${away.name} Over 5.5 Corners (${(nbCornersEval.away.over55 * 100).toFixed(1)}%)`;
 
   const layer9 = {
     dataAvailable: Boolean(cornerProfile),
@@ -345,8 +345,9 @@ export function auditFixturePrediction(fixture) {
       away: nbCornersEval.lambdaAwayCorners,
       firstHalf: nbCornersEval.lambdaFirstHalfCorners,
       total: nbCornersEval.totalCornersExp,
-      homeOver15Pct: +(nbCornersEval.home.over15 * 100).toFixed(1),
-      awayOver15Pct: +(nbCornersEval.away.over15 * 100).toFixed(1),
+      homeOver55Pct: +(nbCornersEval.home.over55 * 100).toFixed(1),
+      homeUnder55Pct: +(nbCornersEval.home.under55 * 100).toFixed(1),
+      awayUnder55Pct: +(nbCornersEval.away.under55 * 100).toFixed(1),
       home7PlusPct: +(nbCornersEval.home.over65 * 100).toFixed(1),
       home8PlusPct: +(nbCornersEval.home.over75 * 100).toFixed(1)
     }

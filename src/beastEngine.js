@@ -2465,11 +2465,17 @@ export function evaluateDeepMarketVetting({
   }
 
   // 3b. Hollywoodbets Retail Corner Line Alignment Check
-  // - 1st-Half Corners operate on 3.5 & 4.5 (Over/Under)
-  // - Match Total Corners operate on 7.5, 8.5, 9.5, 10.5, 11.5 (Over/Under)
-  // - Home Team Total Corners allows Over 1.5 up to 5.5 + Home-Only 7+ (Over 6.5) / 8+ (Over 7.5) & Unders
-  // - Away Team Total Corners strictly capped at 1.5 - 4.5 (no 7+ or 8+ away lines)
-  const isOver15CornerMarket = (marketCategory === 'TEAM_CORNERS' || /corner/i.test(marketName)) && /over\s+1\.5\s+corners/i.test(selectionName);
+  // - 1st-Half Corners operate strictly on 3.5 & 4.5 (Over/Under)
+  // - Match Total Corners operate from 5.5 upwards (5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5 Over/Under)
+  // - Team Total Corners MUST start at 5.5 upwards or Under (sub-5.5 lines like 1.5/2.5/3.5/4.5 are unplayable)
+  // - Home-Only High Milestones: 7+ (Over 6.5) / Under 6.5 & 8+ (Over 7.5) / Under 7.5
+  const isHalfCornerMkt = /1st[- ]?half\s+corners/i.test(marketName) || /1st[- ]?half/i.test(selectionName);
+  const isSub55UnplayableCorner = !isHalfCornerMkt &&
+    (marketCategory === 'TEAM_CORNERS' || marketCategory === 'CORNERS' || /corner/i.test(marketName)) &&
+    /(over|under)\s+[0-4]\.5/i.test(selectionName);
+  if (isSub55UnplayableCorner) {
+    violations.push({ code: 'UNPLAYABLE_SUB_5_5_CORNER_LINE', message: 'Full-match and team corner lines below 5.5 are not offered on retail sportsbooks.' });
+  }
   const isAwayHighCornerDisallowed = marketName === 'Away Team Total Corners' && (/7\+|8\+|over\s+(6\.5|7\.5)/i.test(selectionName));
   if (isAwayHighCornerDisallowed) {
     violations.push({ code: 'AWAY_HIGH_CORNER_DISALLOWED', message: '7+ / 8+ team corner milestones are restricted to Home Team only per Hollywoodbets operating rules.' });
@@ -2492,9 +2498,9 @@ export function evaluateDeepMarketVetting({
     }
   }
 
-  // 4. Odds Integrity Check (Over 1.5 Team Corners explicitly counts in model when calibrated prob >= 78%)
-  const oddsIntegrityApproved = (numOdds >= 1.28 && numOdds <= 2.25) || (isOver15CornerMarket && numProb >= 78.0);
-  if (numOdds < 1.28 && !(isOver15CornerMarket && numProb >= 78.0)) {
+  // 4. Odds Integrity Check
+  const oddsIntegrityApproved = numOdds >= 1.28 && numOdds <= 2.25;
+  if (numOdds < 1.28) {
     violations.push({ code: 'LOW_ODDS_TRAP', message: `Retail odds of ${numOdds.toFixed(2)} represent an asymmetric downside trap.` });
   }
 
@@ -2738,13 +2744,11 @@ export function evaluateEngineVerifier({
     }
 
     // CHECK 3: Negative utility low-odds traps (< 1.25 decimal odds)
-    // Exception: Over 1.5 Corners explicitly counts in this model when high-probability (>= 78%)
-    const isOver15Corners = /corner/i.test(mkt) && /over\s+1\.5/i.test(sel) && prob >= 78.0;
-    if (oddsNum < 1.25 && !isOver15Corners) {
+    if (oddsNum < 1.25) {
       disqualifications.push('NEGATIVE_UTILITY_LOW_ODDS_TRAP');
       verifierPenalty += 40;
     } else {
-      safetyChecksPassed.push(isOver15Corners ? 'OVER_15_CORNERS_MODEL_COUNTED' : 'FAIR_PRICE_UTILITY_VALIDATED');
+      safetyChecksPassed.push('FAIR_PRICE_UTILITY_VALIDATED');
     }
 
     // CHECK 4: Structural preference for Double Chance (1X / X2)
@@ -2813,22 +2817,23 @@ export function evaluateEngineVerifier({
       }
     }
 
-    // CHECK 10: Hollywoodbets Corners (Over 1.5 Team Corners, 1st-Half 3.5/4.5, Total 7.5-11.5, Home-Only 7+/8+/Unders)
+    // CHECK 10: Playable Hollywoodbets Corners (Match/Team >= 5.5, 1st-Half 3.5/4.5, Home-Only 7+/8+/Unders)
     if (
       mkt === 'Match Total Corners' ||
       mkt === '1st-Half Corners' ||
       mkt === 'Home Team Total Corners' ||
       mkt === 'Away Team Total Corners'
     ) {
-      if (mkt === 'Away Team Total Corners' && /7\+|8\+|over\s+(6\.5|7\.5)/i.test(sel)) {
+      const isHalfLine = mkt === '1st-Half Corners';
+      if (!isHalfLine && /(over|under)\s+[0-4]\.5/i.test(sel)) {
+        verifierPenalty += 60;
+        disqualifications.push('UNPLAYABLE_SUB_5_5_CORNER_LINE');
+      } else if (mkt === 'Away Team Total Corners' && /7\+|8\+|over\s+(6\.5|7\.5)/i.test(sel)) {
         verifierPenalty += 50;
         disqualifications.push('AWAY_HIGH_CORNER_DISALLOWED');
-      } else if (isOver15Corners) {
-        verifierBonus += 16;
-        safetyChecksPassed.push('HOLLYWOODBETS_OVER_15_CORNERS_VALIDATED');
-      } else if (prob >= 70.0) {
+      } else if (prob >= 68.0) {
         verifierBonus += 14;
-        safetyChecksPassed.push('HOLLYWOODBETS_CORNER_LINE_VALIDATED');
+        safetyChecksPassed.push('HOLLYWOODBETS_PLAYABLE_CORNER_LINE');
       }
     }
 
