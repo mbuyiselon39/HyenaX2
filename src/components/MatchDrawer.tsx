@@ -75,7 +75,7 @@ export const MatchDrawer: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKey);
   }, [drawerOpen, setDrawerOpen]);
 
-  // Fetch live multi-model breakdown from backend or evaluate locally with 24-Model Stack if static edge
+  // Fetch live multi-model breakdown from backend or evaluate locally with 27-Model Human+Systems+AI Stack if static edge
   useEffect(() => {
     if (!drawerOpen || !selectedMatch) return;
     const embedded = selectedMatch.beastMeta?.ensemble?.breakdown || [];
@@ -194,15 +194,16 @@ export const MatchDrawer: React.FC = () => {
       }
 
       if (res.isHtmlFallback) {
-        const f10Str = first10Proj ? `0-10' Draw (X): ${first10Proj.drawProbPct}% (0-10' No Goal: ${first10Proj.noGoalProbPct}%)` : '0-10m Weibull hazard decay active';
+        const f10Str = first10Proj ? `0-10' Draw (X): ${first10Proj.drawProbPct}% (0-10' No Goal: ${first10Proj.noGoalProbPct}%)` : 'Not priced in league sportsbook tier';
         const f15Str = first15Proj ? ` | 0-15' Draw (X): ${first15Proj.drawProbPct}% (0-15' No Goal: ${first15Proj.noGoalProbPct}%)` : '';
-        const shotsStr = shotsProj ? `Total Match Shots xShots: ${shotsProj.expectedTotalShots} (O19.5: ${shotsProj.over195Pct}% · U27.5: ${shotsProj.under275Pct}%)` : 'Negative Binomial shot line active';
+        const shotsStr = shotsProj ? `Total Match Shots xShots: ${shotsProj.expectedTotalShots} (O19.5: ${shotsProj.over195Pct}% · U27.5: ${shotsProj.under275Pct}%)` : 'Not priced in league sportsbook tier';
         const cornStr = cornerProj ? `Corner Projections: ${m.home.name} ${cornerProj.homeExp} vs ${m.away.name} ${cornerProj.awayExp} (Total ${cornerProj.totalExp})` : 'Corner market suppressed (not offered on sportsbooks for this competition)';
+        const goalDdStr = (m.situationalFactors as any)?.goalDueDiligence ? ` · Goal Guard: ${(m.situationalFactors as any).goalDueDiligence.verdict} (P(0-0)=${(m.situationalFactors as any).goalDueDiligence.pZeroZeroPct}%)` : '';
         const physStr = physicsSnapshot ? `Atmospheric Density: ${physicsSnapshot.airDensityKgM3} kg/m³ · Drag Delta: ${physicsSnapshot.dragSpeedupPct}% · Altitude Hypoxia Factor: ${physicsSnapshot.altitudeHypoxiaFactor}` : '';
         setAiReport(
           `[QUANTITATIVE ENGINE BRIEFING — ${m.home.name} vs ${m.away.name}]\n\n` +
           `• Top Consensus Market: ${top?.selection} (${top?.market}) at ${top?.probability}% calibrated probability (@${topOdds.toFixed(2)}).\n` +
-          `• 24-Model Agreement: ${ens.modelAgreementScore ?? 88}% | Bayesian Elo: ${bayesian.posteriorElo ?? m.home.rating}.\n` +
+          `• ${models.length || ens.totalModelsActive || 27}-Model Human+Systems+AI Agreement: ${ens.modelAgreementScore ?? 88}% | Bayesian Elo: ${bayesian.posteriorElo ?? m.home.rating}${goalDdStr}.\n` +
           `• Time Segments: ${f10Str}${f15Str}.\n` +
           `• Shooting Volume: ${shotsStr}.\n` +
           `• Corner Governance: ${cornStr}.\n` +
@@ -321,7 +322,7 @@ export const MatchDrawer: React.FC = () => {
         {/* Drawer Tabs */}
         <div className="flex items-center gap-2 px-5 py-2.5 border-b border-[#222E46] overflow-x-auto no-scrollbar bg-[#0A0E17]">
           {[
-            { id: 'ensemble', label: `${models.length || ens.totalModelsActive || 24}-Model Consensus` },
+            { id: 'ensemble', label: `${models.length || ens.totalModelsActive || 27}-Model Consensus` },
             { id: 'layer18', label: 'Layer 18 & Physics' },
             { id: 'h2h', label: 'H2H & Form' },
             { id: 'predictions', label: `Markets (${m.predictions?.length || 0})` },
@@ -472,18 +473,38 @@ export const MatchDrawer: React.FC = () => {
                   )}
                   {cornerProj && (
                     <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46] col-span-2 space-y-1">
-                      <span className="text-slate-400 block">Hollywoodbets NegBin Corners (H / A / 1H):</span>
+                      <span className="text-slate-400 block">9-Market NegBin Corners Suite (H / A / 1H / 2H / Ranges):</span>
                       <strong className="text-cyan-300 block">
-                        {cornerProj.homeExp} vs {cornerProj.awayExp} (1H λ={cornerProj.firstHalfExp ?? (cornerProj.totalExp * 0.45).toFixed(2)} · Total {cornerProj.totalExp})
+                        {cornerProj.homeExp} vs {cornerProj.awayExp} (1H λ={cornerProj.firstHalfExp ?? (cornerProj.totalExp * 0.45).toFixed(2)} · 2H λ={cornerProj.secondHalfExp ?? (cornerProj.totalExp * 0.55).toFixed(2)} · Total {cornerProj.totalExp})
                       </strong>
                       {cornerProj.homeOver55Pct !== undefined && (
                         <div className="text-[10px] text-slate-300 flex flex-wrap gap-x-3 gap-y-0.5 pt-0.5">
                           <span>H O5.5/U5.5: <strong className="text-emerald-400">{cornerProj.homeOver55Pct}% / {cornerProj.homeUnder55Pct}%</strong></span>
                           <span>A O5.5/U5.5: <strong className="text-cyan-400">{cornerProj.awayOver55Pct}% / {cornerProj.awayUnder55Pct}%</strong></span>
                           <span>1H O3.5/U4.5: <strong className="text-[#00E5FF]">{cornerProj.firstHalf35OverPct}% / {cornerProj.firstHalf45UnderPct}%</strong></span>
-                          <span>Home 7+/8+: <strong className="text-amber-300">{cornerProj.home7PlusPct}% / {cornerProj.home8PlusPct}%</strong></span>
+                          {cornerProj.secondHalf35OverPct !== undefined && (
+                            <span>2H O3.5/U5.5: <strong className="text-sky-300">{cornerProj.secondHalf35OverPct}% / {cornerProj.secondHalf55UnderPct}%</strong></span>
+                          )}
+                          {cornerProj.winner && (
+                            <span>Corner Winner (H/A): <strong className="text-emerald-300">{cornerProj.winner.homeMostPct}% / {cornerProj.winner.awayMostPct}%</strong></span>
+                          )}
+                          {cornerProj.handicap && (
+                            <span>Handicap (-1.5H/+1.5A): <strong className="text-amber-300">{cornerProj.handicap.homeMinus15Pct}% / {cornerProj.handicap.awayPlus15Pct}%</strong></span>
+                          )}
+                          {cornerProj.matchRange && (
+                            <span>Match Range (0-8 / 9-11 / 12+): <strong className="text-violet-300">{cornerProj.matchRange.zeroTo8Pct}% / {cornerProj.matchRange.nineTo11Pct}% / {cornerProj.matchRange.twelvePlusPct}%</strong></span>
+                          )}
                         </div>
                       )}
+                    </div>
+                  )}
+                  {(m.situationalFactors as any)?.goalDueDiligence && (
+                    <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46] col-span-2 space-y-1">
+                      <span className="text-slate-400 block">0-0 Stalemate &amp; Goal-Over Due Diligence Guard:</span>
+                      <strong className={`block ${(m.situationalFactors as any).goalDueDiligence.deadlockRisk ? 'text-amber-300' : 'text-emerald-400'}`}>
+                        {(m.situationalFactors as any).goalDueDiligence.verdict} · P(0-0)={(m.situationalFactors as any).goalDueDiligence.pZeroZeroPct}% · P(Over 1.5)={(m.situationalFactors as any).goalDueDiligence.pOver15Pct}%
+                      </strong>
+                      <div className="text-[10px] text-slate-400">{(m.situationalFactors as any).goalDueDiligence.verdictReason}</div>
                     </div>
                   )}
                 </div>
@@ -583,7 +604,7 @@ export const MatchDrawer: React.FC = () => {
                   { id: 'GOALS_COMBOS', label: 'Totals (1.5+), Team Goals, BTTS & Combos' },
                   { id: 'HALVES_TIMING', label: 'Halves, HT/FT & First 10m/15m' },
                   { id: 'BOOKINGS_SCORERS', label: 'Shots, Bookings (Unders) & Scorers' },
-                  ...(cornerProj ? [{ id: 'CORNERS' as const, label: 'Corners (1H / Team / Match)' }] : [])
+                  ...(cornerProj ? [{ id: 'CORNERS' as const, label: 'Corners (9 Markets · League-Gated)' }] : [])
                 ].map(sf => (
                   <button
                     key={sf.id}

@@ -43,7 +43,7 @@ export const DiscoveryView: React.FC = () => {
               type: syn ? 'Syndicate Consensus Variance' : 'Tactical & Atmospheric Calibration',
               resolvedValue: `${m.topPick?.selection || 'Verified'} (${m.topPick?.probability ?? 76}%)`,
               sourceA: { name: 'ESPN & SofaScore', value: `xG ${Number(m.home?.xgFor ?? 1.5).toFixed(2)} vs ${Number(m.away?.xgFor ?? 1.2).toFixed(2)}` },
-              sourceB: { name: '24-Model Stack & Exchange', value: syn ? `${syn.syndicateAgreementPct ?? 86}% Agreement` : `${m.beastMeta?.modelAgreementScore ?? 88}% Consensus` },
+              sourceB: { name: '27-Model Human+Systems+AI Stack', value: syn ? `${syn.syndicateAgreementPct ?? 86}% Agreement` : `${m.beastMeta?.modelAgreementScore ?? 88}% Consensus` },
               resolutionReason: 'Automated physics, Dixon-Coles & multi-source de-vigging reconciliation passed.'
             };
           });

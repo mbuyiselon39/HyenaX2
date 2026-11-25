@@ -269,6 +269,63 @@ export function calculateNegativeBinomialCorners({
   const firstHalf35 = calcCdf(lambdaFirstHalfCorners, 3, 11.0);
   const firstHalf45 = calcCdf(lambdaFirstHalfCorners, 4, 11.0);
 
+  // 2nd-Half Corners Over/Under (3.5, 4.5, 5.5)
+  const secondHalf35 = calcCdf(lambdaSecondHalfCorners, 3, 11.0);
+  const secondHalf45 = calcCdf(lambdaSecondHalfCorners, 4, 11.0);
+  const secondHalf55 = calcCdf(lambdaSecondHalfCorners, 5, 11.0);
+
+  // Build exact normalized PMFs for Winner, Handicap, and Corner Ranges
+  const buildPmf = (mu, maxK, rDisp) => {
+    const arr = [];
+    let s = 0;
+    for (let c = 0; c <= maxK; c++) {
+      const val = 0.65 * negativeBinomialPm(mu, c, rDisp) + 0.35 * poissonPm(mu, c);
+      arr.push(val);
+      s += val;
+    }
+    const inv = s > 0 ? 1 / s : 1;
+    return arr.map(v => v * inv);
+  };
+
+  const pmfHome = buildPmf(lambdaHomeCorners, 18, 10.5);
+  const pmfAway = buildPmf(lambdaAwayCorners, 18, 10.5);
+  const pmfMatch = buildPmf(totalCornersExp, 24, 14.0);
+  const pmf1H = buildPmf(lambdaFirstHalfCorners, 16, 11.0);
+  const pmf2H = buildPmf(lambdaSecondHalfCorners, 16, 11.0);
+
+  // Corner Winner (Most Corners) & Exact Corner Difference (Corner Handicap)
+  let pHomeMost = 0, pTieCorners = 0, pAwayMost = 0;
+  let pHomeMinus15 = 0, pAwayPlus15 = 0;
+  let pHomeMinus25 = 0, pAwayPlus25 = 0;
+  let pHomePlus15 = 0, pAwayMinus15 = 0;
+  for (let h = 0; h < pmfHome.length; h++) {
+    for (let a = 0; a < pmfAway.length; a++) {
+      const pJoint = pmfHome[h] * pmfAway[a];
+      const diff = h - a;
+      if (diff > 0) pHomeMost += pJoint;
+      else if (diff === 0) pTieCorners += pJoint;
+      else pAwayMost += pJoint;
+
+      if (diff >= 2) pHomeMinus15 += pJoint;
+      if (diff <= 1) pAwayPlus15 += pJoint;
+      if (diff >= 3) pHomeMinus25 += pJoint;
+      if (diff <= 2) pAwayPlus25 += pJoint;
+      if (diff >= -1) pHomePlus15 += pJoint;
+      if (diff <= -2) pAwayMinus15 += pJoint;
+    }
+  }
+  const sumWinner = pHomeMost + pTieCorners + pAwayMost || 1;
+  pHomeMost /= sumWinner;
+  pTieCorners /= sumWinner;
+  pAwayMost /= sumWinner;
+
+  // Match Corner Ranges (0-8, 9-11, 12+)
+  const rangeSum = (pmf, lo, hi) => {
+    let acc = 0;
+    for (let k = lo; k <= Math.min(hi, pmf.length - 1); k++) acc += pmf[k];
+    return +Math.min(0.95, Math.max(0.03, acc)).toFixed(3);
+  };
+
   return {
     totalCornersExp: +totalCornersExp.toFixed(2),
     homeCornerShare: +homeCornerShare.toFixed(3),
@@ -277,6 +334,19 @@ export function calculateNegativeBinomialCorners({
     lambdaFirstHalfCorners,
     lambdaSecondHalfCorners,
     varianceInflationFactor: +(1 + totalCornersExp / 14.0).toFixed(2),
+    winner: {
+      home: +Math.min(0.90, Math.max(0.08, pHomeMost)).toFixed(3),
+      tie: +Math.min(0.28, Math.max(0.05, pTieCorners)).toFixed(3),
+      away: +Math.min(0.88, Math.max(0.08, pAwayMost)).toFixed(3)
+    },
+    handicap: {
+      homeMinus15: +Math.min(0.88, Math.max(0.10, pHomeMinus15)).toFixed(3),
+      awayPlus15: +Math.min(0.92, Math.max(0.12, pAwayPlus15)).toFixed(3),
+      homeMinus25: +Math.min(0.84, Math.max(0.08, pHomeMinus25)).toFixed(3),
+      awayPlus25: +Math.min(0.94, Math.max(0.16, pAwayPlus25)).toFixed(3),
+      homePlus15: +Math.min(0.94, Math.max(0.18, pHomePlus15)).toFixed(3),
+      awayMinus15: +Math.min(0.84, Math.max(0.06, pAwayMinus15)).toFixed(3)
+    },
     home: {
       over55: home55.over, under55: home55.under,
       over65: home65.over, under65: home65.under, // 7+ Corners / Under 6.5
@@ -295,6 +365,36 @@ export function calculateNegativeBinomialCorners({
     firstHalf: {
       over35: firstHalf35.over, under35: firstHalf35.under,
       over45: firstHalf45.over, under45: firstHalf45.under
+    },
+    secondHalf: {
+      over35: secondHalf35.over, under35: secondHalf35.under,
+      over45: secondHalf45.over, under45: secondHalf45.under,
+      over55: secondHalf55.over, under55: secondHalf55.under
+    },
+    matchRange: {
+      zeroTo8: rangeSum(pmfMatch, 0, 8),
+      nineTo11: rangeSum(pmfMatch, 9, 11),
+      twelvePlus: rangeSum(pmfMatch, 12, 24)
+    },
+    firstHalfRange: {
+      zeroTo3: rangeSum(pmf1H, 0, 3),
+      fourTo5: rangeSum(pmf1H, 4, 5),
+      sixPlus: rangeSum(pmf1H, 6, 16)
+    },
+    secondHalfRange: {
+      zeroTo4: rangeSum(pmf2H, 0, 4),
+      fiveTo6: rangeSum(pmf2H, 5, 6),
+      sevenPlus: rangeSum(pmf2H, 7, 16)
+    },
+    homeRange: {
+      zeroTo3: rangeSum(pmfHome, 0, 3),
+      fourTo5: rangeSum(pmfHome, 4, 5),
+      sixPlus: rangeSum(pmfHome, 6, 18)
+    },
+    awayRange: {
+      zeroTo3: rangeSum(pmfAway, 0, 3),
+      fourTo5: rangeSum(pmfAway, 4, 5),
+      sixPlus: rangeSum(pmfAway, 6, 18)
     }
   };
 }
@@ -529,6 +629,91 @@ export function calculateTotalMatchShotsDistribution({
       over255: line255.over, under255: line255.under,
       over275: line275.over, under275: line275.under
     }
+  };
+}
+
+/**
+ * 9. Goal-Over Due-Diligence & Zero-Zero (0-0) Deadlock Gatekeeper
+ * Ensures the engine NEVER pushes Over 1.5 or Over 2.5 Goals on matches with
+ * genuine 0-0 stalemate risk (elevated Dixon-Coles tau(0,0), low attack xG,
+ * defensive league profile, or derby/knockout cageyness).
+ */
+export function evaluateGoalOverDueDiligence({
+  lambdaHome = 1.45,
+  lambdaAway = 1.15,
+  rho = -0.125,
+  home = null,
+  away = null,
+  h2hAvgGoals = null,
+  isDerby = false,
+  isKnockout = false,
+  leagueAvgGoals = 2.65,
+  physicsMetrics = null
+} = {}) {
+  const lh = Math.max(0.35, Number(lambdaHome) || 1.35);
+  const la = Math.max(0.30, Number(lambdaAway) || 1.05);
+  const physMult = physicsMetrics?.goalHazardPhysicsMult || 1.0;
+  const effLh = lh * physMult;
+  const effLa = la * physMult;
+
+  let norm = 0;
+  let p00Raw = 0;
+  let pOver15Raw = 0;
+  let pOver25Raw = 0;
+  for (let x = 0; x <= 7; x++) {
+    for (let y = 0; y <= 7; y++) {
+      const val = poissonPm(effLh, x) * poissonPm(effLa, y) * dixonColesTau(x, y, effLh, effLa, rho);
+      norm += val;
+      if (x === 0 && y === 0) p00Raw = val;
+      if (x + y >= 2) pOver15Raw += val;
+      if (x + y >= 3) pOver25Raw += val;
+    }
+  }
+  const inv = norm > 0 ? 1 / norm : 1;
+  const pZeroZero = +(p00Raw * inv).toFixed(4);
+  const pOver15 = +(pOver15Raw * inv).toFixed(3);
+  const pOver25 = +(pOver25Raw * inv).toFixed(3);
+
+  const totalLambda = +(effLh + effLa).toFixed(2);
+  const homeXg = Number(home?.xgFor ?? lh);
+  const awayXg = Number(away?.xgFor ?? la);
+  const homeDef = Number(home?.xgAgainst ?? 1.15);
+  const awayDef = Number(away?.xgAgainst ?? 1.25);
+
+  const isLowGoalLeague = Number(leagueAvgGoals || 2.65) < 2.35;
+  const bothLowAttack = homeXg < 1.25 && awayXg < 1.15;
+  const doubleTightDefence = homeDef <= 0.95 && awayDef <= 1.05;
+  const h2hLowScoring = h2hAvgGoals !== null && Number(h2hAvgGoals) > 0 && Number(h2hAvgGoals) < 2.15;
+
+  const elevatedZeroZero = pZeroZero > 0.082 || (isDerby && pZeroZero > 0.068) || (isKnockout && pZeroZero > 0.070);
+  const deadlockRisk = elevatedZeroZero || bothLowAttack || doubleTightDefence || (isLowGoalLeague && totalLambda < 2.55) || (h2hLowScoring && totalLambda < 2.60);
+
+  const allowOver15 = !deadlockRisk && totalLambda >= 2.38 && pOver15 >= 0.77 && pZeroZero <= 0.082 && (Math.max(homeXg, awayXg) >= 1.35 || totalLambda >= 2.65);
+  const allowOver25 = allowOver15 && totalLambda >= 2.85 && pOver25 >= 0.60 && pZeroZero <= 0.055 && (Math.min(homeXg, awayXg) >= 1.00 || totalLambda >= 3.15);
+  const allowOver35 = allowOver25 && totalLambda >= 3.35 && pZeroZero <= 0.038;
+  const allowBttsYes = !deadlockRisk && homeXg >= 1.15 && awayXg >= 1.05 && pZeroZero <= 0.065;
+
+  const riskReasons = [];
+  if (elevatedZeroZero) riskReasons.push(`0-0 probability ${(pZeroZero * 100).toFixed(1)}% exceeds safety ceiling`);
+  if (bothLowAttack) riskReasons.push('Both clubs show sub-1.25 attacking xG');
+  if (doubleTightDefence) riskReasons.push('Dual low-conceding defensive blocks');
+  if (isLowGoalLeague) riskReasons.push(`Low-scoring league baseline (${leagueAvgGoals} goals/match)`);
+  if (isDerby) riskReasons.push('Derby tactical caution dampens early open play');
+  if (isKnockout) riskReasons.push('Knockout elimination pressure increases deadlock risk');
+
+  return {
+    totalLambda,
+    pZeroZero,
+    pZeroZeroPct: +(pZeroZero * 100).toFixed(1),
+    pOver15Pct: +(pOver15 * 100).toFixed(1),
+    pOver25Pct: +(pOver25 * 100).toFixed(1),
+    deadlockRisk,
+    allowOver15,
+    allowOver25,
+    allowOver35,
+    allowBttsYes,
+    verdict: allowOver25 ? 'HIGH_TEMPO_GOALS_VERIFIED' : allowOver15 ? 'OVER15_CLEARED_OVER25_CAUTIOUS' : 'ZERO_ZERO_STALEMATE_PROTECTED',
+    verdictReason: riskReasons.length > 0 ? riskReasons.join(' · ') : 'Attacking metrics & low P(0-0) validate Goal Over structures.'
   };
 }
 

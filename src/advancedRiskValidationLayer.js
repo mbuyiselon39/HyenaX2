@@ -24,9 +24,10 @@ import {
   calculateAtmosphericPhysics,
   calculateFirst10MinResult,
   calculateFirst15MinDistribution,
-  calculateNegativeBinomialCorners
+  calculateNegativeBinomialCorners,
+  evaluateGoalOverDueDiligence
 } from './physicsMathModels.js';
-import { isCornerMarketAvailable } from './marketRules.js';
+import { isCornerMarketAvailable, getLeagueMarketCoverage } from './marketRules.js';
 
 /**
  * Audit a single fixture through the 20-Layer Intelligence & Risk Validation Engine.
@@ -248,22 +249,34 @@ export function auditFixturePrediction(fixture) {
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 8 — GOALS VALIDATION (Exhaustive analysis across 8 markets)
+  // LAYER 8 — GOALS VALIDATION & 0-0 STALEMATE DUE DILIGENCE GUARD
   // --------------------------------------------------------------------------
+  const leagueId = fixture.league?.id || 'default';
+  const marketCov = getLeagueMarketCoverage(leagueId);
   const expTotalGoals = +(homeXg + awayXg).toFixed(2);
+  const goalDd = fixture.situationalFactors?.goalDueDiligence || evaluateGoalOverDueDiligence({
+    lambdaHome: homeXg,
+    lambdaAway: awayXg,
+    home,
+    away,
+    h2hAvgGoals: h2h.avgGoals ?? null,
+    isDerby,
+    physicsMetrics: physRaw
+  });
+
   let bestGoalMarket = 'Under 3.5 Goals';
   let bestGoalSelection = 'Under 3.5 Goals';
   let bestGoalConfidence = 'HIGH';
 
-  if (expTotalGoals >= 3.2) {
+  if (goalDd.allowOver25 && expTotalGoals >= 3.1) {
     bestGoalMarket = 'Goals Over/Under';
     bestGoalSelection = 'Over 2.5 Goals';
     bestGoalConfidence = 'HIGH';
-  } else if (expTotalGoals <= 2.2) {
+  } else if (goalDd.deadlockRisk || expTotalGoals <= 2.25) {
     bestGoalMarket = 'Goals Over/Under';
     bestGoalSelection = 'Under 2.5 Goals';
-    bestGoalConfidence = 'MEDIUM';
-  } else if (h2h.bttsPct >= 65) {
+    bestGoalConfidence = 'HIGH';
+  } else if (goalDd.allowBttsYes && (h2h.bttsPct || 50) >= 65) {
     bestGoalMarket = 'Both Teams To Score';
     bestGoalSelection = 'BTTS · Yes';
     bestGoalConfidence = 'MEDIUM';
@@ -275,16 +288,23 @@ export function auditFixturePrediction(fixture) {
 
   const layer8 = {
     expectedMatchGoals: expTotalGoals,
+    goalDueDiligence: goalDd,
     evaluations: {
-      over15: { prob: 79.5, status: expTotalGoals >= 2.5 ? 'STRONG' : 'MODERATE' },
-      over25: { prob: expTotalGoals >= 2.8 ? 62.4 : 44.8, status: expTotalGoals >= 2.8 ? 'VIABLE' : 'RISKY' },
-      under25: { prob: expTotalGoals <= 2.3 ? 58.2 : 41.8, status: expTotalGoals <= 2.3 ? 'STRONG' : 'RISKY' },
-      under35: { prob: 76.5, status: 'HIGH_SAFETY_CEILING' },
-      under45: { prob: 88.0, status: 'EXTREME_SAFETY_LOW_ODDS' },
-      bttsYes: { prob: h2h.bttsPct || 50.0, status: (h2h.bttsPct || 50) > 55 ? 'SUPPORTED' : 'UNFAVORED' },
-      bttsNo: { prob: 100 - (h2h.bttsPct || 50.0), status: (h2h.bttsPct || 50) <= 45 ? 'SUPPORTED' : 'UNFAVORED' }
+      over15: {
+        prob: goalDd.pOver15Pct,
+        status: !goalDd.allowOver15 ? 'VETOED (0-0 Risk)' : (expTotalGoals >= 2.6 ? 'STRONG' : 'MODERATE')
+      },
+      over25: {
+        prob: goalDd.pOver25Pct,
+        status: !goalDd.allowOver25 ? 'VETOED (Deadlock Guard)' : 'VIABLE'
+      },
+      under25: { prob: +(100 - goalDd.pOver25Pct).toFixed(1), status: expTotalGoals <= 2.35 ? 'STRONG' : 'MODERATE' },
+      under35: { prob: +(Math.max(60, 96 - goalDd.pOver25Pct * 0.35)).toFixed(1), status: 'HIGH_SAFETY_CEILING' },
+      under45: { prob: 89.5, status: 'EXTREME_SAFETY_LOW_ODDS' },
+      bttsYes: { prob: h2h.bttsPct || 50.0, status: goalDd.allowBttsYes && (h2h.bttsPct || 50) > 55 ? 'SUPPORTED' : 'UNFAVORED' },
+      bttsNo: { prob: 100 - (h2h.bttsPct || 50.0), status: (h2h.bttsPct || 50) <= 45 || goalDd.deadlockRisk ? 'SUPPORTED' : 'UNFAVORED' }
     },
-    teamGoalTotalsNote: 'Team Goal Overs supported from Over 0.5+; Match Goal Overs strictly from Over 1.5+.',
+    teamGoalTotalsNote: 'Team Goal Overs supported from Over 0.5+; Match Goal Overs strictly from Over 1.5+ with 0-0 Deadlock Guard.',
     strongestGoalOpportunity: {
       market: bestGoalMarket,
       selection: bestGoalSelection,
@@ -293,11 +313,10 @@ export function auditFixturePrediction(fixture) {
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 9 — CORNERS VALIDATION (STRICTLY LEAGUE-GATED TO BOOKMAKER AVAILABILITY)
+  // LAYER 9 — CORNERS VALIDATION (FULL 9-MARKET SUITE, STRICTLY LEAGUE-GATED)
   // --------------------------------------------------------------------------
-  const leagueId = fixture.league?.id || 'default';
-  const cornersSupported = isCornerMarketAvailable(leagueId);
-  let cornerAssessment = cornersSupported ? 'NO BET' : 'NOT OFFERED (No Corner Market in League)';
+  const cornersSupported = marketCov.hasCorners && isCornerMarketAvailable(leagueId);
+  let cornerAssessment = cornersSupported ? 'NO BET' : 'NOT OFFERED (Sportsbook has no corner coverage in league)';
   const cornerProfile = fixture.cornerVolatilityProfile || fixture.tacticalProfiles?.cornerVolatilityProfile;
   const nbCornersEval = cornersSupported ? calculateNegativeBinomialCorners({
     totalLambda: expTotalGoals,
@@ -308,7 +327,8 @@ export function auditFixturePrediction(fixture) {
     homeBlocksPct: cornerProfile?.homeBlocksOutOfBoundsPct || 44,
     awayBlocksPct: cornerProfile?.awayBlocksOutOfBoundsPct || 46,
     isDerby,
-    physicsMetrics: physRaw
+    physicsMetrics: physRaw,
+    leagueId
   }) : null;
 
   const firstHalfPick = cornersSupported && nbCornersEval ? (
@@ -319,15 +339,23 @@ export function auditFixturePrediction(fixture) {
         : `1st-Half Under 3.5 (${(nbCornersEval.firstHalf.under35 * 100).toFixed(1)}%)`
   ) : 'N/A';
 
+  const secondHalfPick = cornersSupported && nbCornersEval ? (
+    nbCornersEval.secondHalf.over35 >= 0.68
+      ? `2nd-Half Over 3.5 (${(nbCornersEval.secondHalf.over35 * 100).toFixed(1)}%)`
+      : nbCornersEval.secondHalf.under55 >= 0.65
+        ? `2nd-Half Under 5.5 (${(nbCornersEval.secondHalf.under55 * 100).toFixed(1)}%)`
+        : `2nd-Half Under 4.5 (${(nbCornersEval.secondHalf.under45 * 100).toFixed(1)}%)`
+  ) : 'N/A';
+
   if (cornersSupported && cornerProfile && nbCornersEval) {
     const homeWing = cornerProfile.homeWingPlayFreq || 70;
     const awayWing = cornerProfile.awayWingPlayFreq || 65;
     if (nbCornersEval.match.over85 >= 0.72 || (homeWing > 75 && awayWing > 75)) {
-      cornerAssessment = `Over 8.5 Total Corners (${(nbCornersEval.match.over85 * 100).toFixed(1)}%) · ${firstHalfPick}`;
+      cornerAssessment = `Over 8.5 Total Corners (${(nbCornersEval.match.over85 * 100).toFixed(1)}%) · ${firstHalfPick} · ${secondHalfPick}`;
     } else if (nbCornersEval.match.over75 >= 0.74) {
-      cornerAssessment = `Over 7.5 Total Corners (${(nbCornersEval.match.over75 * 100).toFixed(1)}%) · ${firstHalfPick}`;
+      cornerAssessment = `Over 7.5 Total Corners (${(nbCornersEval.match.over75 * 100).toFixed(1)}%) · ${firstHalfPick} · ${secondHalfPick}`;
     } else {
-      cornerAssessment = `Under 10.5 Total Corners (${(nbCornersEval.match.under105 * 100).toFixed(1)}%) · ${firstHalfPick}`;
+      cornerAssessment = `Under 10.5 Total Corners (${(nbCornersEval.match.under105 * 100).toFixed(1)}%) · ${firstHalfPick} · ${secondHalfPick}`;
     }
   }
 
@@ -345,32 +373,53 @@ export function auditFixturePrediction(fixture) {
       : `${away.name} Over 5.5 Corners (${(nbCornersEval.away.over55 * 100).toFixed(1)}%)`
   ) : 'N/A';
 
+  const cornerWinnerChoice = cornersSupported && nbCornersEval ? (
+    nbCornersEval.winner.home >= nbCornersEval.winner.away
+      ? `${home.name} Most Corners (${(nbCornersEval.winner.home * 100).toFixed(1)}%)`
+      : `${away.name} Most Corners (${(nbCornersEval.winner.away * 100).toFixed(1)}%)`
+  ) : 'N/A';
+
+  const cornerHandicapChoice = cornersSupported && nbCornersEval ? (
+    nbCornersEval.handicap.homeMinus15 >= nbCornersEval.handicap.awayPlus15
+      ? `${home.name} -1.5 Corners (${(nbCornersEval.handicap.homeMinus15 * 100).toFixed(1)}%)`
+      : `${away.name} +1.5 Corners (${(nbCornersEval.handicap.awayPlus15 * 100).toFixed(1)}%)`
+  ) : 'N/A';
+
   const layer9 = {
     dataAvailable: Boolean(cornersSupported && cornerProfile),
     cornersSupported,
     cornerVerdict: cornerAssessment,
+    cornerWinner: cornerWinnerChoice,
+    cornerHandicap: cornerHandicapChoice,
     firstHalfCorners: firstHalfPick,
+    secondHalfCorners: secondHalfPick,
     homeTeamCorners: homeTeamCornerChoice,
     awayTeamCorners: awayTeamCornerChoice,
     expectedCorners: cornersSupported && nbCornersEval ? {
       home: nbCornersEval.lambdaHomeCorners,
       away: nbCornersEval.lambdaAwayCorners,
       firstHalf: nbCornersEval.lambdaFirstHalfCorners,
+      secondHalf: nbCornersEval.lambdaSecondHalfCorners,
       total: nbCornersEval.totalCornersExp,
       homeOver55Pct: +(nbCornersEval.home.over55 * 100).toFixed(1),
       homeUnder55Pct: +(nbCornersEval.home.under55 * 100).toFixed(1),
       awayUnder55Pct: +(nbCornersEval.away.under55 * 100).toFixed(1),
       home7PlusPct: +(nbCornersEval.home.over65 * 100).toFixed(1),
-      home8PlusPct: +(nbCornersEval.home.over75 * 100).toFixed(1)
+      home8PlusPct: +(nbCornersEval.home.over75 * 100).toFixed(1),
+      matchRange: nbCornersEval.matchRange,
+      firstHalfRange: nbCornersEval.firstHalfRange,
+      secondHalfRange: nbCornersEval.secondHalfRange,
+      homeRange: nbCornersEval.homeRange,
+      awayRange: nbCornersEval.awayRange
     } : null
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 10 — BOOKINGS / CARDS VALIDATION (UNDERS ONLY + Yellow=1pt, Red=2pt)
+  // LAYER 10 — BOOKINGS / CARDS VALIDATION (UNDERS ONLY, LEAGUE-GATED)
   // --------------------------------------------------------------------------
-  let cardAssessment = 'NO BET';
+  let cardAssessment = marketCov.hasBookings ? 'NO BET' : 'NOT OFFERED (No Card Market in League)';
   const referee = fixture.refereeReport;
-  if (referee && referee.isConfirmed) {
+  if (marketCov.hasBookings && referee && referee.isConfirmed) {
     const yellows = Number(referee.avgYellows || 3.8);
     if (yellows < 3.4 && !isDerby) {
       cardAssessment = 'Under 3.5 Total Booking Points (Controlled Official)';
@@ -382,13 +431,14 @@ export function auditFixturePrediction(fixture) {
   }
 
   const layer10 = {
+    bookingsSupported: marketCov.hasBookings,
     refereeConfirmed: Boolean(referee && referee.isConfirmed),
     refereeName: referee?.isConfirmed ? referee.name : 'Unconfirmed / Not Stated',
     cardVerdict: cardAssessment
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 11 — RESULT, HALF & FIRST 10 MIN RESULT VALIDATION
+  // LAYER 11 — RESULT, HALF & FIRST 10/15 MIN RESULT VALIDATION
   // --------------------------------------------------------------------------
   let dnbChoice = 'NO BET';
   let dcChoice = 'NO BET';
@@ -409,32 +459,32 @@ export function auditFixturePrediction(fixture) {
     dnbChoice = 'Home DNB';
   }
 
-  const first10Eval = calculateFirst10MinResult({
+  const first10Eval = marketCov.hasEarlyTimeSegments ? calculateFirst10MinResult({
     lambdaHome: homeXg,
     lambdaAway: awayXg,
     ppdaHome: fixture.tacticalFeeds?.ppdaPressing?.home || 10.5,
     ppdaAway: fixture.tacticalFeeds?.ppdaPressing?.away || 11.2,
     isDerby,
     physicsMetrics: physRaw
-  });
-  const first15Eval = calculateFirst15MinDistribution({
+  }) : null;
+  const first15Eval = marketCov.hasEarlyTimeSegments ? calculateFirst15MinDistribution({
     lambdaHome: homeXg,
     lambdaAway: awayXg,
     ppdaHome: fixture.tacticalFeeds?.ppdaPressing?.home || 10.5,
     ppdaAway: fixture.tacticalFeeds?.ppdaPressing?.away || 11.2,
     isDerby,
     physicsMetrics: physRaw
-  });
+  }) : null;
 
   const layer11 = {
     drawNoBet: dnbChoice,
     doubleChance: dcChoice,
     winEitherHalf: eitherHalfChoice,
     highestScoringHalf: highestScoringHalfChoice,
-    first10MinResult: `First 10 Min Draw (X) · ${(first10Eval.pDraw10 * 100).toFixed(1)}%`,
-    first10MinDrawProbPct: +(first10Eval.pDraw10 * 100).toFixed(1),
-    first15MinDraw: `First 15 Min Draw (X) · ${(first15Eval.pDraw15 * 100).toFixed(1)}%`,
-    first15MinDrawProbPct: +(first15Eval.pDraw15 * 100).toFixed(1)
+    first10MinResult: first10Eval ? `First 10 Min Draw (X) · ${(first10Eval.pDraw10 * 100).toFixed(1)}%` : 'N/A (Market Not Offered)',
+    first10MinDrawProbPct: first10Eval ? +(first10Eval.pDraw10 * 100).toFixed(1) : null,
+    first15MinDraw: first15Eval ? `First 15 Min Draw (X) · ${(first15Eval.pDraw15 * 100).toFixed(1)}%` : 'N/A (Market Not Offered)',
+    first15MinDrawProbPct: first15Eval ? +(first15Eval.pDraw15 * 100).toFixed(1) : null
   };
 
   // --------------------------------------------------------------------------
@@ -457,6 +507,9 @@ export function auditFixturePrediction(fixture) {
   if (misleadingWinRisk) {
     contradictionEvidence.push('xG Regression Warning: Team record overperformed underlying chance creation.');
   }
+  if (goalDd.deadlockRisk && /goals\s+over/i.test(layer1.originalMarket)) {
+    contradictionEvidence.push(`0-0 Deadlock Risk (${goalDd.pZeroZeroPct}% P(0-0)): Low-scoring tactical profile contradicts Goal Over prediction.`);
+  }
   if (topPick.odds && typeof topPick.odds === 'number' && topPick.odds < 1.25) {
     contradictionEvidence.push('Retail Odds Trap: Price below 1.25 creates extreme asymmetric negative expectation on draw scenarios.');
   }
@@ -475,7 +528,7 @@ export function auditFixturePrediction(fixture) {
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 13 — MULTI-MODEL CONSENSUS
+  // LAYER 13 — MULTI-MODEL CONSENSUS (27 HUMAN + SYSTEMS + AI MODELS)
   // --------------------------------------------------------------------------
   const ensemble = fixture.beastMeta?.ensemble || {};
   const modelAgreement = ensemble.modelAgreementScore || 86;
@@ -490,15 +543,16 @@ export function auditFixturePrediction(fixture) {
   const layer13 = {
     consensusGrade,
     modelAgreementScore: modelAgreement,
-    totalModelsChecked: ensemble.totalModelsActive || 17,
+    totalModelsChecked: ensemble.totalModelsActive || 27,
     dissentingModelsCount: dissentingCount,
     dissentingModels: ensemble.dissentingModels || []
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 14 — MARKET CORRELATION CHECK (Group into Families)
+  // LAYER 14 — MARKET CORRELATION CHECK (STRICTLY TIER-GATED BY LEAGUE COVERAGE)
   // --------------------------------------------------------------------------
   const layer14 = {
+    leagueCoverageTier: marketCov.tier,
     resultFamily: {
       markets: ['1X2', 'Double Chance', 'Draw No Bet', 'Win Either Half'],
       strongestRiskAdjusted: dcChoice !== 'NO BET' ? dcChoice : dnbChoice
@@ -512,21 +566,37 @@ export function auditFixturePrediction(fixture) {
       strongestRiskAdjusted: `${bestGoalSelection} (${bestGoalMarket})`
     },
     cornersFamily: {
-      markets: cornersSupported ? ['Total Corners', '1st-Half Corners', 'Team Corners'] : [],
+      markets: cornersSupported ? [
+        'Corner Winner',
+        'Corner Handicap',
+        'Match Total Corners',
+        '1st-Half Corners',
+        '2nd-Half Corners',
+        'Match Corner Range',
+        '1st-Half Corner Range',
+        '2nd-Half Corner Range',
+        'Home/Away Team Corner Range'
+      ] : [],
       strongestRiskAdjusted: cornerAssessment
     },
     timeSegmentFamily: {
-      markets: ['First 10 Minutes Result', 'First 15 Minutes Draw', 'First Goal Interval (10m)', 'First / Last Team to Score'],
-      strongestRiskAdjusted: `${layer11.first10MinResult} · ${layer11.first15MinDraw}`
+      markets: marketCov.hasEarlyTimeSegments
+        ? ['First 10 Minutes Result', 'First 15 Minutes Draw', 'First Goal Interval (10m)', 'First / Last Team to Score']
+        : ['First / Last Team to Score'],
+      strongestRiskAdjusted: marketCov.hasEarlyTimeSegments
+        ? `${layer11.first10MinResult} · ${layer11.first15MinDraw}`
+        : 'NOT OFFERED (Sportsbook does not price early minute segments in this league)'
     },
     shotsFamily: {
-      markets: ['Match Total Shots'],
-      strongestRiskAdjusted: fixture.shootingMetricsProfile?.matchTotalShotsExp
-        ? `Expected ${fixture.shootingMetricsProfile.matchTotalShotsExp} Total Match Shots`
-        : 'Modeled Total Match Shots'
+      markets: marketCov.hasTotalShots ? ['Match Total Shots'] : [],
+      strongestRiskAdjusted: marketCov.hasTotalShots
+        ? (fixture.shootingMetricsProfile?.matchTotalShotsExp
+          ? `Expected ${fixture.shootingMetricsProfile.matchTotalShotsExp} Total Match Shots`
+          : 'Modeled Total Match Shots')
+        : 'NOT OFFERED (Sportsbook does not price Match Shots in this competition)'
     },
     cardsFamily: {
-      markets: ['Bookings Unders (Yellow=1pt, Red=2pt)', 'Most Bookings', 'First Team Booked'],
+      markets: marketCov.hasBookings ? ['Bookings Unders (Yellow=1pt, Red=2pt)', 'Most Bookings', ...(marketCov.hasFirstTeamBooked ? ['First Team Booked'] : [])] : [],
       strongestRiskAdjusted: cardAssessment
     }
   };

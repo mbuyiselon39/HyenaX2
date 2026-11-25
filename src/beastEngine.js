@@ -29,11 +29,13 @@ import {
   calculateFirst10MinResult,
   calculateNegativeBinomialCorners,
   calculateEntropyAndSkellam,
-  calculateTotalMatchShotsDistribution
+  calculateTotalMatchShotsDistribution,
+  evaluateGoalOverDueDiligence
 } from './physicsMathModels.js';
 import {
   isBannedOrDisallowedMarket,
-  isCornerMarketAvailable
+  isCornerMarketAvailable,
+  getLeagueMarketCoverage
 } from './marketRules.js';
 
 export {
@@ -48,8 +50,10 @@ export {
   calculateNegativeBinomialCorners,
   calculateEntropyAndSkellam,
   calculateTotalMatchShotsDistribution,
+  evaluateGoalOverDueDiligence,
   isBannedOrDisallowedMarket,
-  isCornerMarketAvailable
+  isCornerMarketAvailable,
+  getLeagueMarketCoverage
 };
 
 // Base Elo Ratings for key global clubs
@@ -1694,13 +1698,16 @@ export function calculateExpandedMarkets({
   leagueId = 'epl'
 } = {}) {
   const totalAttackingPower = lambdaHome + lambdaAway;
-  const cornersSupported = isCornerMarketAvailable(leagueId);
+  const cov = getLeagueMarketCoverage(leagueId);
+  const cornersSupported = cov.hasCorners;
 
-  // 1. Team Corners (strictly league-gated to competitions with sportsbook corner coverage)
-  const cornersLambda = Math.max(8.0, Math.min(13.5, totalAttackingPower * 3.6));
-  const homeCornerShare = lambdaHome / totalAttackingPower;
-  const expCornersHome = +(cornersLambda * homeCornerShare).toFixed(1);
-  const expCornersAway = +(cornersLambda * (1 - homeCornerShare)).toFixed(1);
+  // 1. Complete 9-Market Corner Suite (strictly league-gated to competitions with sportsbook corner coverage)
+  const nbCorners = cornersSupported ? calculateNegativeBinomialCorners({
+    totalLambda: totalAttackingPower,
+    lambdaHome,
+    lambdaAway,
+    leagueId
+  }) : null;
 
   // 2. Bookings & Cards (Yellow=1pt, Red=2pt — UNDERS ONLY + Most Bookings / First Booked)
   const ratingFriction = Math.abs(homeRating - awayRating);
@@ -1715,15 +1722,15 @@ export function calculateExpandedMarkets({
   }
 
   // 3. First 10 Minutes Result (00:00 - 09:59) & First 15 Minutes Draw (00:00 - 14:59)
-  const f10 = calculateFirst10MinResult({ lambdaHome, lambdaAway, ppdaHome, ppdaAway });
-  const f15 = calculateFirst15MinDistribution({ lambdaHome, lambdaAway, ppdaHome, ppdaAway });
+  const f10 = cov.hasEarlyTimeSegments ? calculateFirst10MinResult({ lambdaHome, lambdaAway, ppdaHome, ppdaAway }) : null;
+  const f15 = cov.hasEarlyTimeSegments ? calculateFirst15MinDistribution({ lambdaHome, lambdaAway, ppdaHome, ppdaAway }) : null;
 
   // 3b. Total Match Shots (#34) & Team Goal Totals (#35)
-  const shotsDist = calculateTotalMatchShotsDistribution({
+  const shotsDist = cov.hasTotalShots ? calculateTotalMatchShotsDistribution({
     matchTotalShotsExp: +(Math.max(18.5, Math.min(30.5, totalAttackingPower * 8.6))).toFixed(1),
     homeTotalShotsExp: +(Math.max(8.5, Math.min(18.5, lambdaHome * 8.9))).toFixed(1),
     awayTotalShotsExp: +(Math.max(6.5, Math.min(16.5, lambdaAway * 8.2))).toFixed(1)
-  });
+  }) : null;
   const pHomeOver05Goals = +((1 - poissonPm(lambdaHome, 0)) * 100).toFixed(1);
   const pHomeOver15Goals = +((1 - poissonPm(lambdaHome, 0) - poissonPm(lambdaHome, 1)) * 100).toFixed(1);
   const pHomeUnder25Goals = +((poissonPm(lambdaHome, 0) + poissonPm(lambdaHome, 1) + poissonPm(lambdaHome, 2)) * 100).toFixed(1);
@@ -1760,16 +1767,73 @@ export function calculateExpandedMarkets({
   const equalHalfProbPct = +((pEqualHalf / sumHalves) * 100).toFixed(1);
 
   return {
+    marketCoverage: cov,
     cornersSupported,
-    corners: cornersSupported ? {
-      expectedTotal: +cornersLambda.toFixed(1),
-      homeCornersExp: expCornersHome,
-      awayCornersExp: expCornersAway,
-      over85ProbPct: 78.4,
-      over95ProbPct: 65.2,
-      under115ProbPct: 74.0
+    corners: cornersSupported && nbCorners ? {
+      expectedTotal: nbCorners.totalCornersExp,
+      homeCornersExp: nbCorners.lambdaHomeCorners,
+      awayCornersExp: nbCorners.lambdaAwayCorners,
+      firstHalfCornersExp: nbCorners.lambdaFirstHalfCorners,
+      secondHalfCornersExp: nbCorners.lambdaSecondHalfCorners,
+      over75ProbPct: +(nbCorners.match.over75 * 100).toFixed(1),
+      over85ProbPct: +(nbCorners.match.over85 * 100).toFixed(1),
+      over95ProbPct: +(nbCorners.match.over95 * 100).toFixed(1),
+      under105ProbPct: +(nbCorners.match.under105 * 100).toFixed(1),
+      under115ProbPct: +(nbCorners.match.under115 * 100).toFixed(1),
+      cornerWinner: {
+        homeMostPct: +(nbCorners.winner.home * 100).toFixed(1),
+        tiePct: +(nbCorners.winner.tie * 100).toFixed(1),
+        awayMostPct: +(nbCorners.winner.away * 100).toFixed(1)
+      },
+      cornerHandicap: {
+        homeMinus15Pct: +(nbCorners.handicap.homeMinus15 * 100).toFixed(1),
+        awayPlus15Pct: +(nbCorners.handicap.awayPlus15 * 100).toFixed(1),
+        homeMinus25Pct: +(nbCorners.handicap.homeMinus25 * 100).toFixed(1),
+        awayPlus25Pct: +(nbCorners.handicap.awayPlus25 * 100).toFixed(1),
+        homePlus15Pct: +(nbCorners.handicap.homePlus15 * 100).toFixed(1),
+        awayMinus15Pct: +(nbCorners.handicap.awayMinus15 * 100).toFixed(1)
+      },
+      firstHalf: {
+        over35Pct: +(nbCorners.firstHalf.over35 * 100).toFixed(1),
+        under35Pct: +(nbCorners.firstHalf.under35 * 100).toFixed(1),
+        over45Pct: +(nbCorners.firstHalf.over45 * 100).toFixed(1),
+        under45Pct: +(nbCorners.firstHalf.under45 * 100).toFixed(1)
+      },
+      secondHalf: {
+        over35Pct: +(nbCorners.secondHalf.over35 * 100).toFixed(1),
+        under35Pct: +(nbCorners.secondHalf.under35 * 100).toFixed(1),
+        over45Pct: +(nbCorners.secondHalf.over45 * 100).toFixed(1),
+        under45Pct: +(nbCorners.secondHalf.under45 * 100).toFixed(1),
+        over55Pct: +(nbCorners.secondHalf.over55 * 100).toFixed(1),
+        under55Pct: +(nbCorners.secondHalf.under55 * 100).toFixed(1)
+      },
+      matchRange: {
+        zeroTo8Pct: +(nbCorners.matchRange.zeroTo8 * 100).toFixed(1),
+        nineTo11Pct: +(nbCorners.matchRange.nineTo11 * 100).toFixed(1),
+        twelvePlusPct: +(nbCorners.matchRange.twelvePlus * 100).toFixed(1)
+      },
+      firstHalfRange: {
+        zeroTo3Pct: +(nbCorners.firstHalfRange.zeroTo3 * 100).toFixed(1),
+        fourTo5Pct: +(nbCorners.firstHalfRange.fourTo5 * 100).toFixed(1),
+        sixPlusPct: +(nbCorners.firstHalfRange.sixPlus * 100).toFixed(1)
+      },
+      secondHalfRange: {
+        zeroTo4Pct: +(nbCorners.secondHalfRange.zeroTo4 * 100).toFixed(1),
+        fiveTo6Pct: +(nbCorners.secondHalfRange.fiveTo6 * 100).toFixed(1),
+        sevenPlusPct: +(nbCorners.secondHalfRange.sevenPlus * 100).toFixed(1)
+      },
+      homeRange: {
+        zeroTo3Pct: +(nbCorners.homeRange.zeroTo3 * 100).toFixed(1),
+        fourTo5Pct: +(nbCorners.homeRange.fourTo5 * 100).toFixed(1),
+        sixPlusPct: +(nbCorners.homeRange.sixPlus * 100).toFixed(1)
+      },
+      awayRange: {
+        zeroTo3Pct: +(nbCorners.awayRange.zeroTo3 * 100).toFixed(1),
+        fourTo5Pct: +(nbCorners.awayRange.fourTo5 * 100).toFixed(1),
+        sixPlusPct: +(nbCorners.awayRange.sixPlus * 100).toFixed(1)
+      }
     } : null,
-    bookingsAndCards: {
+    bookingsAndCards: cov.hasBookings ? {
       expectedTotalBookingPoints: cardExpectation,
       under35PointsProbPct: +(pUnder35Cards * 100).toFixed(1),
       under45PointsProbPct: +(pUnder45Cards * 100).toFixed(1),
@@ -1777,20 +1841,20 @@ export function calculateExpandedMarkets({
       mostBookingsSide: homeRating < awayRating ? 'Away/Underdog Pressure' : 'Opposition Midfield',
       scoringSystem: 'Yellow = 1 pt · Red = 2 pts · Unders Only',
       refereeDisciplineWeight: 'STANDARD_STRICT'
-    },
-    first10MinResult: {
+    } : null,
+    first10MinResult: cov.hasEarlyTimeSegments && f10 ? {
       drawProbPct: +(f10.pDraw10 * 100).toFixed(1),
       noGoalProbPct: +(f10.pNoGoal10 * 100).toFixed(1),
       homeLeadProbPct: +(f10.pHomeLead10 * 100).toFixed(1),
       awayLeadProbPct: +(f10.pAwayLead10 * 100).toFixed(1)
-    },
-    first15MinDraw: {
+    } : null,
+    first15MinDraw: cov.hasEarlyTimeSegments && f15 ? {
       drawProbPct: +(f15.pDraw15 * 100).toFixed(1),
       noGoalProbPct: +(f15.pNoGoal15 * 100).toFixed(1),
       homeLeadProbPct: +(f15.pHomeLead15 * 100).toFixed(1),
       awayLeadProbPct: +(f15.pAwayLead15 * 100).toFixed(1)
-    },
-    totalMatchShots: {
+    } : null,
+    totalMatchShots: cov.hasTotalShots && shotsDist ? {
       expectedTotal: shotsDist.expectedTotalShots,
       homeExp: shotsDist.homeShotsExp,
       awayExp: shotsDist.awayShotsExp,
@@ -1799,7 +1863,7 @@ export function calculateExpandedMarkets({
       over235ProbPct: +(shotsDist.match.over235 * 100).toFixed(1),
       under255ProbPct: +(shotsDist.match.under255 * 100).toFixed(1),
       under275ProbPct: +(shotsDist.match.under275 * 100).toFixed(1)
-    },
+    } : null,
     teamGoalTotals: {
       homeOver05ProbPct: pHomeOver05Goals,
       homeOver15ProbPct: pHomeOver15Goals,
@@ -2484,7 +2548,9 @@ export function evaluateDeepMarketVetting({
   odds = 1.35,
   modelAgreement = 85,
   tacticalProfiles = null,
-  isDerby = false
+  isDerby = false,
+  goalDueDiligence = null,
+  leagueId = 'default'
 }) {
   const numProb = Number(probability) || 0;
   const numOdds = Number(odds) || 1.35;
@@ -2493,6 +2559,12 @@ export function evaluateDeepMarketVetting({
   const t = tacticalProfiles || {};
   const ref = t.refereeStats || {};
   const corners = t.cornerVolatilityProfile || {};
+
+  // 0. Strict League Sportsbook Market Availability Check
+  const banCheck = isBannedOrDisallowedMarket(marketName, selectionName, leagueId);
+  if (banCheck.banned) {
+    violations.push({ code: banCheck.reason, message: `Market unavailable or disallowed for league "${leagueId}".` });
+  }
 
   // 1. Bookmaker Liquidity Check
   const isLiquidityHigh = true; // High exchange depth & global sportsbook alignment
@@ -2524,18 +2596,20 @@ export function evaluateDeepMarketVetting({
     }
   }
 
-  // 3b. Bookmaker Market-Ready Corner Line Alignment Check
+  // 3b. Bookmaker Market-Ready Corner Line Alignment Check (covers all 9 Corner market types)
   // - 1st-Half Corners operate strictly on 3.5 & 4.5 (Over/Under)
+  // - 2nd-Half Corners operate strictly on 3.5, 4.5 & 5.5 (Over/Under)
+  // - Corner Winner, Corner Handicap, and Corner Ranges use explicit structural markets
   // - Match Total Corners MUST start at 7.5 upwards (7.5, 8.5, 9.5, 10.5, 11.5 Over/Under)
   // - Home/Away Team Total Corners MUST start at 5.5 upwards or Under (sub-5.5 lines are unplayable)
-  // - Home-Only High Milestones: 7+ (Over 6.5) / Under 6.5 & 8+ (Over 7.5) / Under 7.5
-  const isHalfCornerMkt = /1st[- ]?half\s+corners/i.test(marketName) || /1st[- ]?half/i.test(selectionName);
-  const isMatchCornerMkt = marketName === 'Match Total Corners' || (!isHalfCornerMkt && marketCategory === 'CORNERS');
-  const isTeamCornerMkt = marketName === 'Home Team Total Corners' || marketName === 'Away Team Total Corners' || marketCategory === 'TEAM_CORNERS';
+  const isHalfCornerMkt = /\b(1st|2nd)[- ]?half/i.test(marketName) || /\b(1st|2nd)[- ]?half/i.test(selectionName);
+  const isCornerRangeOrWinner = /range|winner|handicap/i.test(marketName);
+  const isMatchCornerMkt = marketName === 'Match Total Corners' || (!isHalfCornerMkt && !isCornerRangeOrWinner && marketCategory === 'CORNERS' && !/team/i.test(marketName));
+  const isTeamCornerMkt = (marketName === 'Home Team Total Corners' || marketName === 'Away Team Total Corners') || (!isCornerRangeOrWinner && !isHalfCornerMkt && marketCategory === 'TEAM_CORNERS');
   if (isMatchCornerMkt && /(over|under)\s+[0-6]\.5/i.test(selectionName)) {
     violations.push({ code: 'UNPLAYABLE_SUB_7_5_MATCH_CORNER_LINE', message: 'Match Total Corners must start at Over/Under 7.5+ per standard bookmaker availability.' });
   }
-  if (!isHalfCornerMkt && isTeamCornerMkt && /(over|under)\s+[0-4]\.5/i.test(selectionName)) {
+  if (!isHalfCornerMkt && !isCornerRangeOrWinner && isTeamCornerMkt && /(over|under)\s+[0-4]\.5/i.test(selectionName)) {
     violations.push({ code: 'UNPLAYABLE_SUB_5_5_TEAM_CORNER_LINE', message: 'Team Total Corners must start at Over/Under 5.5+ on standard retail sportsbooks.' });
   }
   const isAwayHighCornerDisallowed = marketName === 'Away Team Total Corners' && (/7\+|8\+|over\s+(6\.5|7\.5)/i.test(selectionName));
@@ -2553,10 +2627,19 @@ export function evaluateDeepMarketVetting({
   const isHalfMarket = marketCategory === 'HALF_MARKETS' || /half/i.test(marketName);
   let halfMarketApproved = true;
   if (isHalfMarket) {
-    // Highest Scoring Half is an officially supported standard retail market on SA bookies
     if (selectionName.includes('2nd Half') && numProb < 48) {
       halfMarketApproved = false;
       violations.push({ code: 'HALF_PROBABILITY_BELOW_THRESHOLD', message: 'Second half goal expectancy below mathematical validation threshold.' });
+    }
+  }
+
+  // 3d. Goal-Over Zero-Zero Stalemate Due Diligence
+  if (goalDueDiligence && /goals\s+over\/under|totals|matchbet\s*\+\s*totals|btts\s+and\s+totals/i.test(marketName)) {
+    if (/over\s+1\.5/i.test(selectionName) && !goalDueDiligence.allowOver15) {
+      violations.push({ code: 'ZERO_ZERO_STALEMATE_OVER15_VETOED', message: goalDueDiligence.verdictReason });
+    }
+    if (/over\s+[23]\.5/i.test(selectionName) && !goalDueDiligence.allowOver25) {
+      violations.push({ code: 'LOW_TEMPO_OVER25_VETOED', message: goalDueDiligence.verdictReason });
     }
   }
 
@@ -2567,16 +2650,19 @@ export function evaluateDeepMarketVetting({
   }
 
   // 5. Daily Top 20 qualification: validates winnable market across all tiers
-  const qualifiesTop20 = numProb >= 68.0 && modelAgreement >= 72;
+  const qualifiesTop20 = numProb >= 68.0 && modelAgreement >= 72 && violations.length === 0;
   const isEliteDeepMarketTop20 = qualifiesTop20 && (numProb >= 82.0 || modelAgreement >= 84);
 
-  const status = 'VETTED';
+  const status = violations.some(v => v.code === 'ZERO_ZERO_STALEMATE_OVER15_VETOED' || v.code === 'LOW_TEMPO_OVER25_VETOED' || v.code === 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE')
+    ? 'VETOED'
+    : 'VETTED';
 
   const dv = {
     status,
     refereeClauseApproved,
     tacticalLineupApproved,
-    halfMarketApproved: isHalfMarket ? halfMarketApproved : true
+    halfMarketApproved: isHalfMarket ? halfMarketApproved : true,
+    oddsIntegrityApproved
   };
   if (isEliteDeepMarketTop20) dv.isEliteDeepMarketTop20 = true;
   return dv;
@@ -2758,7 +2844,13 @@ export function evaluateEngineVerifier({
   formVolatilityScore = 0,
   hasCriticalAbsence = false,
   steamDelta = 0,
-  thirdPartySyndicate = null
+  thirdPartySyndicate = null,
+  goalDueDiligence = null,
+  lambdaHome = 1.45,
+  lambdaAway = 1.15,
+  home = null,
+  away = null,
+  leagueAvgGoals = 2.65
 } = {}) {
   const list = (predictions && predictions.length) ? predictions : (topPick ? [topPick] : []);
   if (!list.length) {
@@ -2776,6 +2868,15 @@ export function evaluateEngineVerifier({
     };
   }
 
+  const dd = goalDueDiligence || evaluateGoalOverDueDiligence({
+    lambdaHome,
+    lambdaAway,
+    isDerby,
+    leagueAvgGoals,
+    home,
+    away
+  });
+
   const auditedCandidates = list.map(p => {
     const sel = p.selection || '';
     const mkt = p.market || '';
@@ -2789,7 +2890,7 @@ export function evaluateEngineVerifier({
     const disqualifications = [];
     const safetyChecksPassed = [];
 
-    // CHECK 0: Strict 35-Market Charter, Goal Over 1.5+ / Team Over 0.5+ Discipline, No-Booking-Over, & League-Corner Eligibility Gate
+    // CHECK 0: Strict 35-Market Charter, League Sportsbook Availability Gate, Goal Over 1.5+ / Team Over 0.5+ Discipline
     const banCheck = isBannedOrDisallowedMarket(mkt, sel, leagueId);
     if (banCheck.banned) {
       disqualifications.push(banCheck.reason);
@@ -2831,7 +2932,7 @@ export function evaluateEngineVerifier({
       safetyChecksPassed.push('VALIDATED_DNB_CUSHION');
     }
 
-    // CHECK 4: Totals, Team Goal Totals & Multigoals structural safety
+    // CHECK 4: Totals, Team Goal Totals, Multigoals & 0-0 Stalemate Deadlock Guard
     if ((mkt === 'Goals Over/Under' || mkt === 'Totals (Over/Under Goals)') && sel.includes('Under 3.5')) {
       if (prob >= 78.0) {
         verifierBonus += 20;
@@ -2840,13 +2941,26 @@ export function evaluateEngineVerifier({
         verifierPenalty += 10;
       }
     }
-    if ((mkt === 'Goals Over/Under' || mkt === 'Totals (Over/Under Goals)') && sel.includes('Over 1.5')) {
-      if (prob >= 86.0) {
+    const isGoalOverMkt = (mkt === 'Goals Over/Under' || mkt === 'Totals (Over/Under Goals)' || mkt === 'Matchbet + Totals' || mkt === 'BTTS and Totals');
+    if (isGoalOverMkt && /over\s+1\.5/i.test(sel)) {
+      if (!dd.allowOver15) {
+        verifierPenalty += 90;
+        disqualifications.push('ZERO_ZERO_STALEMATE_OVER15_VETOED');
+      } else if (prob >= 86.0) {
         verifierBonus += 8;
         safetyChecksPassed.push('OVERWHELMING_OVER15_GOALS');
       } else {
         verifierPenalty += 20;
         disqualifications.push('MARGINAL_OVER15_VOLATILITY');
+      }
+    }
+    if (isGoalOverMkt && /over\s+[23]\.5/i.test(sel)) {
+      if (!dd.allowOver25) {
+        verifierPenalty += 75;
+        disqualifications.push('LOW_TEMPO_OVER25_VETOED');
+      } else if (prob >= 68.0) {
+        verifierBonus += 6;
+        safetyChecksPassed.push('DUE_DILIGENCE_PASSED_OVER25');
       }
     }
     if ((mkt === 'Home Team Total Goals' || mkt === 'Away Team Total Goals') && prob >= 72.0) {
@@ -2891,21 +3005,23 @@ export function evaluateEngineVerifier({
       safetyChecksPassed.push('HALF_TIME_TEMPO_VALIDATED');
     }
 
-    // CHECK 8: Market-Ready Corners (STRICTLY League-Gated)
+    // CHECK 8: Full 9-Market Corner Suite (STRICTLY League-Gated)
     if (/corner/i.test(mkt)) {
+      const isHalfCorner = /\b(1st|2nd)[- ]?half/i.test(mkt) || /\b(1st|2nd)[- ]?half/i.test(sel);
+      const isRangeOrWinner = /range|winner|handicap/i.test(mkt);
       if (!isCornerMarketAvailable(leagueId)) {
         verifierPenalty += 200;
         disqualifications.push('CORNERS_UNAVAILABLE_IN_LEAGUE');
       } else if (mkt === 'Match Total Corners' && /(over|under)\s+[0-6]\.5/i.test(sel)) {
         verifierPenalty += 60;
         disqualifications.push('UNPLAYABLE_SUB_7_5_MATCH_CORNER_LINE');
-      } else if ((mkt === 'Home Team Total Corners' || mkt === 'Away Team Total Corners') && /(over|under)\s+[0-4]\.5/i.test(sel)) {
+      } else if ((mkt === 'Home Team Total Corners' || mkt === 'Away Team Total Corners') && !isRangeOrWinner && /(over|under)\s+[0-4]\.5/i.test(sel)) {
         verifierPenalty += 60;
         disqualifications.push('UNPLAYABLE_SUB_5_5_TEAM_CORNER_LINE');
       } else if (mkt === 'Away Team Total Corners' && /7\+|8\+|over\s+(6\.5|7\.5)/i.test(sel)) {
         verifierPenalty += 50;
         disqualifications.push('AWAY_HIGH_CORNER_DISALLOWED');
-      } else if (prob >= 68.0) {
+      } else if ((isHalfCorner || isRangeOrWinner || prob >= 68.0) && prob >= 58.0) {
         verifierBonus += 14;
         safetyChecksPassed.push('LEAGUE_GATED_CORNER_LINE_VALIDATED');
       }
@@ -2961,6 +3077,9 @@ export function evaluateEngineVerifier({
     d === 'NEGATIVE_UTILITY_LOW_ODDS_TRAP' ||
     d === 'BOOKINGS_OVER_FORBIDDEN_UNDERS_ONLY' ||
     d === 'CORNERS_UNAVAILABLE_IN_LEAGUE' ||
+    d === 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE' ||
+    d === 'ZERO_ZERO_STALEMATE_OVER15_VETOED' ||
+    d === 'LOW_TEMPO_OVER25_VETOED' ||
     d === 'GOAL_OVER_0_5_ONLY_ALLOWED_FOR_TEAM_TOTALS' ||
     d === 'PLAYER_TACKLES_REMOVED' ||
     (d === 'KEY_SPINE_ABSENCE' && bestCandidate.market !== 'Goals Over/Under')
@@ -2977,7 +3096,7 @@ export function evaluateEngineVerifier({
     : '⚠️ VETTED CANDIDATE';
 
   const verdictSummary = isVerifiedApproved
-    ? `ENGINE VERIFIER PASSED: All 24 predictive engines audited. Selection "${bestCandidate.selection}" (${bestCandidate.market}) verified with ${bestCandidate.probability}% density against the 35-market charter.`
+    ? `ENGINE VERIFIER PASSED: All 27 Human+Systems+AI engines audited. Selection "${bestCandidate.selection}" (${bestCandidate.market}) verified with ${bestCandidate.probability}% density (${dd.verdict} goal guard).`
     : `ENGINE VERIFIER CAUTION FLAGGED: Non-guessing protection active. Prediction did not meet strict certainty criteria. ${bestCandidate.disqualifications[0] || 'High entropy or sub-threshold consensus detected.'}`;
 
   return {
@@ -2991,6 +3110,7 @@ export function evaluateEngineVerifier({
     verifierScore: bestCandidate.verifierScore,
     confidenceScore: bestCandidate.probability,
     structuralIntegrity: isVerifiedApproved ? 'VERIFIED_FORTIFIED' : 'UNCERTAIN_PROTECTED',
+    goalDueDiligence: dd,
     verdictSummary
   };
 }

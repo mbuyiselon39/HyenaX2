@@ -60,7 +60,7 @@ export const DailyTop20View: React.FC = () => {
     { id: 'TIME_SEGMENTS', label: 'First 10m / 15m Draw & Goal Intervals' },
     { id: 'SHOOTING', label: 'Total Match Shots' },
     { id: 'BOOKINGS', label: 'Bookings (Unders & Cards)' },
-    { id: 'CORNERS', label: 'Corners (Eligible Leagues Only)' },
+    { id: 'CORNERS', label: 'Corners (9 Markets · League-Gated)' },
     { id: 'SCORER_CUP', label: 'Goalscorers, Matchflow & Cup' }
   ];
 
@@ -169,12 +169,12 @@ export const DailyTop20View: React.FC = () => {
         allOdds: (best.odds && typeof best.odds === 'object') ? (best.odds as any) : { hollywoodbets: oddsVal, betway: +(oddsVal * 1.02).toFixed(2), easybet: oddsVal },
         bankerScore,
         modelAgreement,
-        modelsActive: ens.totalModelsActive || 24,
+        modelsActive: ens.totalModelsActive || 27,
         trustScore: beast.trustScore || 92,
         safetyTier: prob >= 82 ? 'ULTRA_BANKER' : 'VETTED_BANKER',
         safetyBadge: prob >= 82 ? '🛡️ ULTRA BANKER LOCK' : '✅ VETTED BANKER',
         badgeBg: prob >= 82 ? 'bg-[#00E5FF]/20 text-[#00E5FF] border-[#00E5FF]/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
-        whySafe: `${m.home.name} vs ${m.away.name}: ${ens.totalModelsActive || 24}-Model Consensus agreement at ${modelAgreement}% with ${best.market} (${best.selection}).`,
+        whySafe: `${m.home.name} vs ${m.away.name}: ${ens.totalModelsActive || 27}-Model Human+Systems+AI Consensus at ${modelAgreement}% with ${best.market} (${best.selection}).`,
         isFinished: m.matchStatus === 'FINISHED',
         finalScore: m.finalScore,
         settledResult: best.result || 'PENDING',
@@ -223,7 +223,7 @@ export const DailyTop20View: React.FC = () => {
               Daily Top 20 Banker Predictions
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Autonomous 24-Model Consensus Stack with Bivariate Dixon-Coles, Cross-League Standings Calibration, Weibull 10m/15m Result &amp; Goal Intervals, Total Match Shots, Team Goal Totals, Bookings Unders Discipline, League-Gated Corners, Atmospheric Physics, GBDT &amp; GNN validation.
+              Autonomous 27-Model Human+Systems+AI Consensus Stack with Bivariate Dixon-Coles, 0-0 Deadlock Goal Guard, Weibull 10m/15m Result &amp; Goal Intervals, Sportsbook-Tier Gated Shots/Bookings/Scorers, 9-Market Corner Suite, Atmospheric Physics, GBDT &amp; GNN validation.
             </p>
           </div>
 

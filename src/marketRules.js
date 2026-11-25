@@ -35,7 +35,7 @@ export const APPROVED_MARKETS_32 = [
   { id: 26, key: 'HALF_PERFORMANCE', name: 'Win Both Halves / Win Either Half / Score Both Halves', group: 'TEAM_PERF', description: 'Team-specific half win or scoring performance markets.' },
   { id: 27, key: 'GOAL_SCORER', name: 'Goal Scorer Markets', group: 'SCORER_FLOW', description: 'First Goalscorer or Anytime Goalscorer for key attackers.' },
   { id: 28, key: 'MATCHFLOW', name: 'Matchflow', group: 'SCORER_FLOW', description: 'Combined bet on first team/player to score and final match winner.' },
-  { id: 29, key: 'TOTAL_CORNERS', name: 'Total Corners', group: 'CORNERS', description: 'Over/Under lines on corners (strictly in corner-eligible leagues).' },
+  { id: 29, key: 'TOTAL_CORNERS', name: 'Corner Markets Suite (9 Markets)', group: 'CORNERS', description: 'Total Match Corners, Corner Winner, Corner Handicap, 1st/2nd Half Corners, Match/Half/Team Corner Ranges (strictly in corner-eligible leagues).' },
   { id: 30, key: 'BOOKINGS_CARDS', name: 'Bookings / Cards Markets', group: 'BOOKINGS', description: 'Booking points Unders only (Yellow=1pt, Red=2pt), Most Bookings, First Team Booked.' },
   { id: 31, key: 'KNOCKOUT_CUP', name: 'Knockout / Cup Markets', group: 'CUP_OUTRIGHT', description: 'To Qualify, Overtime/Extra Time, or Penalty Shootout in cup ties.' },
   { id: 32, key: 'ANTE_POST_OUTRIGHT', name: 'Ante-Post / Outright Markets', group: 'CUP_OUTRIGHT', description: 'Long-term bets on league winners, tournament champions, or seasonal titles.' },
@@ -47,9 +47,32 @@ export const APPROVED_MARKETS_32 = [
 export const APPROVED_MARKETS_35 = APPROVED_MARKETS_32;
 
 /**
- * Authoritative Corner-Eligible Leagues Set:
- * Betting apps (Hollywoodbets, Betway, EasyBet, Bet365, Pinnacle) reliably offer
- * corner markets in these Tier 1/2, continental, major women's, and established leagues.
+ * Tier 1 Global Broadcast Competitions:
+ * Betting apps (Hollywoodbets, Betway, EasyBet, Bet365) price the FULL market menu
+ * including Total Match Shots, Anytime/First Goalscorers, Matchflow, First Team Booked,
+ * First 10m/15m Result, and all 9 Corner market variants.
+ */
+export const ELITE_FULL_SPORTSBOOK_LEAGUES = new Set([
+  // Top European Leagues
+  'epl', 'laliga', 'seriea', 'bundesliga', 'ligue1',
+  'championship', 'eredivisie', 'ligaportugal', 'jupiler', 'scotprem',
+  'superlig', 'greece', 'austria', 'superliga', 'swiss',
+  // UEFA & Major Continental / International
+  'ucl', 'uel', 'uecl', 'uefa_nations', 'afcon', 'world_cup', 'euro', 'copa_america',
+  'libertadores', 'sudamericana', 'caf_cl',
+  // Global Tier 1 & South Africa
+  'psl', 'egypt', 'botola', 'brasileirao', 'argliga', 'mls', 'ligamx',
+  'saudi', 'j1', 'kleague1', 'aleague',
+  // Top Women's & Domestic FA Cups with full props
+  'wsl', 'nwsl', 'liga_f', 'frauen_bundesliga', 'premiere_ligue',
+  'uwcl', 'fifa_wwc', 'uefa_w_euro', 'uefa_w_nations', 'olympic_w_football',
+  'mens_fa_cup', 'womens_fa_cup'
+]);
+
+/**
+ * Authoritative Corner-Eligible Leagues Set (Tier 1 + Tier 2):
+ * Betting apps reliably offer Corner markets (Winner, Handicap, Match/1H/2H Totals, Ranges)
+ * in these Tier 1/2, continental, major women's, and established leagues.
  * Friendlies, college NCAA, micro-leagues, and unsupported women's/regional leagues are EXCLUDED.
  */
 export const CORNER_ELIGIBLE_LEAGUES = new Set([
@@ -62,9 +85,9 @@ export const CORNER_ELIGIBLE_LEAGUES = new Set([
   'finland', 'ireland', 'israel', 'cyprus', 'bulgaria', 'slovakia', 'slovenia',
   'netherlands_eerste', 'germany_3liga', 'iceland_urvalsdeild',
   // Continental & Major International
-  'ucl', 'uel', 'uecl', 'uefa_nations', 'afcon',
+  'ucl', 'uel', 'uecl', 'uefa_nations', 'afcon', 'world_cup', 'euro', 'copa_america',
   'libertadores', 'sudamericana', 'caf_cl', 'caf_cc', 'afc_cl',
-  // South Africa & Global Tier 1
+  // South Africa & Global Tier 1/2
   'psl', 'egypt', 'botola', 'tunisia', 'algeria',
   'brasileirao', 'brasileiro_serieb', 'argliga', 'mls', 'usl_championship', 'ligamx',
   'colombia', 'chile', 'ecuador', 'uruguay', 'paraguay', 'peru',
@@ -78,6 +101,48 @@ export const CORNER_ELIGIBLE_LEAGUES = new Set([
 export function isCornerMarketAvailable(leagueId) {
   if (!leagueId) return false;
   return CORNER_ELIGIBLE_LEAGUES.has(String(leagueId).toLowerCase());
+}
+
+/**
+ * Returns exact Sportsbook Market Coverage capabilities for a competition.
+ * Prevents the engine from ever predicting markets that sportsbooks don't offer on that match.
+ */
+export function getLeagueMarketCoverage(leagueId = '') {
+  const id = String(leagueId || '').toLowerCase();
+  if (ELITE_FULL_SPORTSBOOK_LEAGUES.has(id)) {
+    return {
+      tier: 'FULL',
+      hasCorners: true,
+      hasTotalShots: true,
+      hasGoalscorersAndMatchflow: true,
+      hasBookings: true,
+      hasFirstTeamBooked: true,
+      hasFirstHalfBookings: true,
+      hasEarlyTimeSegments: true
+    };
+  }
+  if (CORNER_ELIGIBLE_LEAGUES.has(id)) {
+    return {
+      tier: 'CORNER_STANDARD',
+      hasCorners: true,
+      hasTotalShots: false,
+      hasGoalscorersAndMatchflow: false,
+      hasBookings: true,
+      hasFirstTeamBooked: false,
+      hasFirstHalfBookings: false,
+      hasEarlyTimeSegments: true
+    };
+  }
+  return {
+    tier: 'CORE_ONLY',
+    hasCorners: false,
+    hasTotalShots: false,
+    hasGoalscorersAndMatchflow: false,
+    hasBookings: false,
+    hasFirstTeamBooked: false,
+    hasFirstHalfBookings: false,
+    hasEarlyTimeSegments: false
+  };
 }
 
 export function isKnockoutMatch(leagueId = '', roundStr = '') {
@@ -149,9 +214,9 @@ export function getCrossLeagueRatingOffset(domesticLeagueId = '') {
  * Strict Market Gatekeeper Check:
  * 1. NEVER allow Bookings/Cards OVER markets (ONLY Unders + Most Bookings + First Team Booked).
  * 2. NEVER allow Corners in leagues without bookmaker corner coverage.
- * 3. NEVER allow Match Goal Overs below 1.5 (e.g. Match Over 0.5 Goals is forbidden; ONLY Team Total Goal Overs can start from Over 0.5).
- * 4. Disallow unsupported player/micro markets outside the 35 Approved Sportsbook Markets (Player Tackles, Shots on Target, Shot-Creating Actions, Goalkeeper Saves, 1UP/2UP/3UP, 12).
- *    Approved additions: First 15 Minutes Draw/Result, Total Match Shots, and Team Goal Totals.
+ * 3. NEVER allow Total Match Shots, Goalscorers, Matchflow, Bookings, or 10m/15m micro-props in leagues where sportsbooks don't offer them.
+ * 4. NEVER allow Match Goal Overs below 1.5 (e.g. Match Over 0.5 Goals is forbidden; ONLY Team Total Goal Overs can start from Over 0.5).
+ * 5. Disallow unsupported player/micro markets outside the 35 Approved Sportsbook Markets (Player Tackles, Shots on Target, Shot-Creating Actions, Goalkeeper Saves, 1UP/2UP/3UP, 12).
  */
 export function isBannedOrDisallowedMarket(market = '', selection = '', leagueId = null) {
   const m = String(market || '').trim();
@@ -175,14 +240,37 @@ export function isBannedOrDisallowedMarket(market = '', selection = '', leagueId
     }
   }
 
-  // Rule 3: Goal Over Discipline — Match/Half goal overs must NOT be Over 0.5; ONLY Team Total Goals can start from Over 0.5
+  // Rule 3: Strictly gate league-specific sportsbook availability (never predict unavailable props)
+  if (leagueId) {
+    const cov = getLeagueMarketCoverage(leagueId);
+    if (!cov.hasTotalShots && (/match\s+total\s+shots|total\s+match\s+shots/i.test(mLow) || /\btotal\s+shots\b/i.test(sLow))) {
+      return { banned: true, reason: 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE' };
+    }
+    if (!cov.hasGoalscorersAndMatchflow && (/goalscorer|matchflow/i.test(combined))) {
+      return { banned: true, reason: 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE' };
+    }
+    if (!cov.hasFirstTeamBooked && /first\s+team\s+booked/i.test(combined)) {
+      return { banned: true, reason: 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE' };
+    }
+    if (!cov.hasFirstHalfBookings && /1st[- ]?half\s+bookings/i.test(combined)) {
+      return { banned: true, reason: 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE' };
+    }
+    if (!cov.hasBookings && /booking|card/i.test(combined)) {
+      return { banned: true, reason: 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE' };
+    }
+    if (!cov.hasEarlyTimeSegments && (/first\s*10\s*min|first\s*15\s*min|first\s*goal\s*interval|0-10m|0-15m/i.test(combined))) {
+      return { banned: true, reason: 'SPORTSBOOK_MARKET_UNAVAILABLE_IN_LEAGUE' };
+    }
+  }
+
+  // Rule 4: Goal Over Discipline — Match/Half goal overs must NOT be Over 0.5; ONLY Team Total Goals can start from Over 0.5
   const isTeamGoalMarket = /team\s+total\s+goals|team\s+goal\s+totals/i.test(mLow);
   const isGoalOverZeroFive = /\bover\s+0\.5\b/i.test(sLow) && !/corner|card|booking|shot/i.test(combined);
   if (isGoalOverZeroFive && !isTeamGoalMarket) {
     return { banned: true, reason: 'GOAL_OVER_0_5_ONLY_ALLOWED_FOR_TEAM_TOTALS' };
   }
 
-  // Rule 4: Disallow unsupported player micro-props, early payouts & 12 draw traps
+  // Rule 5: Disallow unsupported player micro-props, early payouts & 12 draw traps
   if (/player\s+tackles|tackles\s+over/i.test(combined)) {
     return { banned: true, reason: 'PLAYER_TACKLES_REMOVED' };
   }
