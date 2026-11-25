@@ -413,17 +413,33 @@ export const FixturesView: React.FC = () => {
                                 )}
                               </div>
 
-                              {(match.timeSegmentProfile?.first15MinModel || match.cornerVolatilityProfile?.teamCornerProjections) && (
+                              {(match.timeSegmentProfile?.first10MinModel || match.timeSegmentProfile?.first15MinModel || match.shootingMetricsProfile?.matchTotalShotsExp || (match.cornerVolatilityProfile?.cornersSupported !== false && match.cornerVolatilityProfile?.teamCornerProjections)) && (
                                 <div className="flex items-center gap-3 pt-0.5 text-[10px] font-num text-slate-400 flex-wrap">
+                                  {match.timeSegmentProfile?.first10MinModel && (
+                                    <span>
+                                      10m X:{' '}
+                                      <strong className="text-[#00E5FF]">
+                                        {Number(match.timeSegmentProfile.first10MinModel.drawProbPct).toFixed(1)}%
+                                      </strong>
+                                    </span>
+                                  )}
                                   {match.timeSegmentProfile?.first15MinModel && (
                                     <span>
                                       15m X:{' '}
-                                      <strong className="text-[#00E5FF]">
+                                      <strong className="text-sky-300">
                                         {Number(match.timeSegmentProfile.first15MinModel.drawProbPct).toFixed(1)}%
                                       </strong>
                                     </span>
                                   )}
-                                  {match.cornerVolatilityProfile?.teamCornerProjections && (
+                                  {match.shootingMetricsProfile?.matchTotalShotsExp && (
+                                    <span>
+                                      Shots:{' '}
+                                      <strong className="text-violet-300">
+                                        {match.shootingMetricsProfile.matchTotalShotsExp}
+                                      </strong>
+                                    </span>
+                                  )}
+                                  {match.cornerVolatilityProfile?.cornersSupported !== false && match.cornerVolatilityProfile?.teamCornerProjections && (
                                     <span>
                                       Corners H/A:{' '}
                                       <strong className="text-emerald-400">

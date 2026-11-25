@@ -50,15 +50,18 @@ export const DailyTop20View: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>('probability');
 
   const marketOptions = [
-    { id: 'all', label: 'All Safe Markets' },
-    { id: 'WINNERS_DC', label: '1X2 / Double Chance' },
-    { id: 'FIRST_15_MIN', label: 'First 15 Min Draw' },
-    { id: 'TEAM_CORNERS', label: 'Team Corners (5.5+ / Home 7+ / 8+)' },
-    { id: 'HALF_MARKETS', label: 'Highest Scoring Half' },
-    { id: 'GOAL_OVERS_UNDERS', label: 'Over / Under Goals' },
-    { id: 'CORNERS', label: '1st-Half (3.5/4.5) & Match Corners (7.5+)' },
-    { id: 'BOOKINGS', label: 'Cards & Bookings' },
-    { id: 'BTTS', label: 'BTTS' }
+    { id: 'all', label: 'All 35 Vetted Markets' },
+    { id: 'WINNERS_DC', label: '1X2 / Double Chance / DNB' },
+    { id: 'HANDICAP_MARGINS', label: 'Handicaps & Winning Margins' },
+    { id: 'HALF_MARKETS', label: 'HT/FT, 2H 1X2 & Highest Half' },
+    { id: 'GOAL_OVERS_UNDERS', label: 'Totals (1.5+), Team Goals & Multigoals' },
+    { id: 'BTTS_COMBOS', label: 'BTTS & Matchbet Combos' },
+    { id: 'TEAM_PERFORMANCE', label: 'Clean Sheet & Win to Nil' },
+    { id: 'TIME_SEGMENTS', label: 'First 10m / 15m Draw & Goal Intervals' },
+    { id: 'SHOOTING', label: 'Total Match Shots' },
+    { id: 'BOOKINGS', label: 'Bookings (Unders & Cards)' },
+    { id: 'CORNERS', label: 'Corners (Eligible Leagues Only)' },
+    { id: 'SCORER_CUP', label: 'Goalscorers, Matchflow & Cup' }
   ];
 
   // Dynamically build the most winnable market for every fixture
@@ -88,36 +91,49 @@ export const DailyTop20View: React.FC = () => {
       let eligible = allMarkets;
       if (marketFilter !== 'all') {
         const catFilter = eligible.filter(p => {
-          if (marketFilter === 'FIRST_15_MIN') {
-            return p.marketCategory === 'FIRST_15_MIN' || (p.market && p.market.toLowerCase().includes('first 15'));
+          const mktLow = (p.market || '').toLowerCase();
+          if (marketFilter === 'TIME_SEGMENTS') {
+            return p.marketCategory === 'TIME_SEGMENTS' || /first\s*10|first\s*15|first\s*goal\s*interval|first\s*\/\s*last/i.test(mktLow);
           }
-          if (marketFilter === 'TEAM_CORNERS') {
-            return p.marketCategory === 'TEAM_CORNERS' || (p.market && p.market.toLowerCase().includes('team total corners'));
+          if (marketFilter === 'SHOOTING') {
+            return p.marketCategory === 'SHOOTING' || mktLow.includes('shots');
+          }
+          if (marketFilter === 'HANDICAP_MARGINS') {
+            return p.marketCategory === 'HANDICAP_MARGINS' || p.marketCategory === 'EXACT_SCORE' || /handicap|margin|correct score/i.test(mktLow);
           }
           if (marketFilter === 'HALF_MARKETS') {
-            return p.marketCategory === 'HALF_MARKETS' || (p.market && p.market.toLowerCase().includes('half'));
+            return p.marketCategory === 'HALF_MARKETS' || mktLow.includes('half') || mktLow.includes('ht/ft');
           }
           if (marketFilter === 'GOAL_OVERS_UNDERS') {
-            return p.marketCategory === 'GOAL_OVERS_UNDERS' || (p.market && p.market.toLowerCase().includes('goal'));
+            return p.marketCategory === 'GOAL_OVERS_UNDERS' || p.marketCategory === 'TEAM_GOALS' || /goals over\/under|team total goals|odd\/even|multigoals|which team/i.test(mktLow);
+          }
+          if (marketFilter === 'BTTS_COMBOS') {
+            return p.marketCategory === 'BTTS' || p.marketCategory === 'BTTS_COMBOS' || mktLow.includes('btts') || mktLow.includes('matchbet');
+          }
+          if (marketFilter === 'TEAM_PERFORMANCE') {
+            return p.marketCategory === 'TEAM_PERFORMANCE' || /clean sheet|win to nil/i.test(mktLow);
           }
           if (marketFilter === 'CORNERS') {
-            return p.marketCategory === 'CORNERS' || (p.market && (p.market.toLowerCase().includes('match total corners') || p.market.toLowerCase().includes('1st-half corners')));
+            return p.marketCategory === 'CORNERS' || p.marketCategory === 'TEAM_CORNERS' || mktLow.includes('corner');
           }
           if (marketFilter === 'BOOKINGS') {
-            return p.marketCategory === 'BOOKINGS' || (p.market && (p.market.toLowerCase().includes('card') || p.market.toLowerCase().includes('booking')));
+            return p.marketCategory === 'BOOKINGS' || /booking|card/i.test(mktLow);
           }
-          if (marketFilter === 'BTTS') {
-            return p.marketCategory === 'BTTS' || (p.market && p.market.toLowerCase().includes('btts'));
+          if (marketFilter === 'SCORER_CUP') {
+            return p.marketCategory === 'SCORER_MATCHFLOW' || p.marketCategory === 'KNOCKOUT_CUP' || /goalscorer|matchflow|qualify|extra time|penalty/i.test(mktLow);
           }
           if (marketFilter === 'WINNERS_DC') {
-            return p.marketCategory === 'WINNERS_DC' || (p.market && (p.market.includes('1X2') || p.market.includes('Double Chance') || p.market.includes('Draw No Bet')));
+            return p.marketCategory === 'WINNERS_DC' || /match winner|double chance|draw no bet/i.test(mktLow);
           }
-          return p.marketCategory === marketFilter || (p.market && p.market.toLowerCase().includes(marketFilter.toLowerCase()));
+          return p.marketCategory === marketFilter || mktLow.includes(marketFilter.toLowerCase());
         });
         if (catFilter.length > 0) {
           eligible = catFilter;
+        } else if (marketFilter === 'CORNERS') {
+          eligible = [];
         }
       }
+      if (!eligible.length) return;
 
       const sorted = eligible.slice().sort((a, b) => (Number(b.probability) || 0) - (Number(a.probability) || 0));
       const best = sorted[0];
@@ -207,7 +223,7 @@ export const DailyTop20View: React.FC = () => {
               Daily Top 20 Banker Predictions
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Autonomous 24-Model Consensus Stack with Bivariate Poisson, Weibull 15m Draw, Negative Binomial Corners, Atmospheric Physics, GBDT, GNN &amp; empirical calibration.
+              Autonomous 24-Model Consensus Stack with Bivariate Dixon-Coles, Cross-League Standings Calibration, Weibull 10m/15m Result &amp; Goal Intervals, Total Match Shots, Team Goal Totals, Bookings Unders Discipline, League-Gated Corners, Atmospheric Physics, GBDT &amp; GNN validation.
             </p>
           </div>
 

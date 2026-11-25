@@ -21,10 +21,21 @@ import {
 } from '../src/beastEngine.js';
 import {
   calculateAtmosphericPhysics,
+  calculateFirst10MinResult,
   calculateFirst15MinDistribution,
+  calculateFirstGoalIntervals10m,
+  calculateMatchWinningMarginsAndHandicaps,
   calculateNegativeBinomialCorners,
-  calculateEntropyAndSkellam
+  calculateEntropyAndSkellam,
+  calculateTotalMatchShotsDistribution
 } from '../src/physicsMathModels.js';
+import {
+  isCornerMarketAvailable,
+  isKnockoutMatch,
+  getCrossLeagueRatingOffset,
+  isBannedOrDisallowedMarket,
+  filterPredictionsByMarketRules
+} from '../src/marketRules.js';
 import {
   WOMENS_AND_CUPS_LEAGUES,
   WOMENS_AND_CUPS_TEAMS,
@@ -442,9 +453,6 @@ export const GLOBAL_CLUB_REGISTRY = {
   'psv': { name: 'PSV Eindhoven', rating: 82, domestic: 'eredivisie', form: ['W','W','W','W','D'], xgFor: 2.45, xgAgainst: 0.95 },
 
   // --- Tier 3 Mid-Europe Giants & Powerhouses (Elo 79 - 82) ---
-  'salzburg': { name: 'RB Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
-  'rb salzburg': { name: 'RB Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
-  'red bull salzburg': { name: 'RB Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.10, xgAgainst: 1.05 },
   'celtic': { name: 'Celtic', rating: 81, domestic: 'scotprem', form: ['W','W','W','W','D'], xgFor: 2.30, xgAgainst: 0.95 },
   'feyenoord': { name: 'Feyenoord', rating: 81, domestic: 'eredivisie', form: ['W','W','D','W','W'], xgFor: 2.20, xgAgainst: 1.10 },
   'feyenoord rotterdam': { name: 'Feyenoord', rating: 81, domestic: 'eredivisie', form: ['W','W','D','W','W'], xgFor: 2.20, xgAgainst: 1.10 },
@@ -452,12 +460,9 @@ export const GLOBAL_CLUB_REGISTRY = {
   'lille': { name: 'Lille', rating: 81, domestic: 'ligue1', form: ['W','D','W','W','D'], xgFor: 1.80, xgAgainst: 1.10 },
   'lyon': { name: 'Lyon', rating: 81, domestic: 'ligue1', form: ['W','L','W','W','D'], xgFor: 1.85, xgAgainst: 1.30 },
   'olympique lyonnais': { name: 'Lyon', rating: 81, domestic: 'ligue1', form: ['W','L','W','W','D'], xgFor: 1.85, xgAgainst: 1.30 },
-  'shakhtar donetsk': { name: 'Shakhtar Donetsk', rating: 81, domestic: 'ukraine', form: ['W','W','D','W','W'], xgFor: 2.05, xgAgainst: 1.10 },
-  'shakhtar': { name: 'Shakhtar Donetsk', rating: 81, domestic: 'ukraine', form: ['W','W','D','W','W'], xgFor: 2.05, xgAgainst: 1.10 },
   'galatasaray': { name: 'Galatasaray', rating: 81, domestic: 'superlig', form: ['W','W','W','W','D'], xgFor: 2.25, xgAgainst: 1.10 },
   'fenerbahce': { name: 'Fenerbahce', rating: 81, domestic: 'superlig', form: ['W','D','W','W','L'], xgFor: 2.15, xgAgainst: 1.10 },
   'besiktas': { name: 'Besiktas', rating: 80, domestic: 'superlig', form: ['W','W','D','W','L'], xgFor: 1.95, xgAgainst: 1.25 },
-  'olympiacos': { name: 'Olympiacos', rating: 80, domestic: 'greece', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 1.05 },
   'olympiacos piraeus': { name: 'Olympiacos', rating: 80, domestic: 'greece', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 1.05 },
   'crystal palace': { name: 'Crystal Palace', rating: 80, domestic: 'epl', form: ['D','W','L','W','D'], xgFor: 1.50, xgAgainst: 1.30 },
   'manchester united': { name: 'Manchester United', rating: 80, domestic: 'epl', form: ['L','W','D','W','L'], xgFor: 1.55, xgAgainst: 1.40 },
@@ -479,82 +484,56 @@ export const GLOBAL_CLUB_REGISTRY = {
   'union st gilloise': { name: 'Union St.-Gilloise', rating: 79, domestic: 'jupiler', form: ['W','W','D','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
   'royale union saint gilloise': { name: 'Union St.-Gilloise', rating: 79, domestic: 'jupiler', form: ['W','W','D','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
   'club brugge': { name: 'Club Brugge', rating: 79, domestic: 'jupiler', form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 1.15 },
-  'sparta prague': { name: 'Sparta Prague', rating: 79, domestic: 'czech', form: ['W','W','W','D','W'], xgFor: 2.05, xgAgainst: 1.05 },
   'sparta praha': { name: 'Sparta Prague', rating: 79, domestic: 'czech', form: ['W','W','W','D','W'], xgFor: 2.05, xgAgainst: 1.05 },
 
   // --- Tier 4 European Contenders (Elo 76 - 78) ---
   'anderlecht': { name: 'Anderlecht', rating: 78, domestic: 'jupiler', form: ['W','D','W','D','L'], xgFor: 1.65, xgAgainst: 1.25 },
   'rsc anderlecht': { name: 'Anderlecht', rating: 78, domestic: 'jupiler', form: ['W','D','W','D','L'], xgFor: 1.65, xgAgainst: 1.25 },
-  'dinamo zagreb': { name: 'Dinamo Zagreb', rating: 78, domestic: 'croatia', form: ['W','W','D','W','W'], xgFor: 1.90, xgAgainst: 1.10 },
   'sk sturm graz': { name: 'SK Sturm Graz', rating: 78, domestic: 'austria', form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 1.20 },
-  'sturm graz': { name: 'SK Sturm Graz', rating: 78, domestic: 'austria', form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 1.20 },
   'celta vigo': { name: 'Celta Vigo', rating: 78, domestic: 'laliga', form: ['W','D','L','W','D'], xgFor: 1.55, xgAgainst: 1.35 },
   'celta': { name: 'Celta Vigo', rating: 78, domestic: 'laliga', form: ['W','D','L','W','D'], xgFor: 1.55, xgAgainst: 1.35 },
   'getafe': { name: 'Getafe', rating: 78, domestic: 'laliga', form: ['D','W','D','L','W'], xgFor: 1.35, xgAgainst: 1.15 },
   'las palmas': { name: 'UD Las Palmas', rating: 77, domestic: 'laliga', form: ['L','D','L','D','L'], xgFor: 1.15, xgAgainst: 1.65 },
   'braga': { name: 'Braga', rating: 79, domestic: 'ligaportugal', form: ['D','W','W','L','W'], xgFor: 1.75, xgAgainst: 1.25 },
-  'slavia prague': { name: 'Slavia Prague', rating: 78, domestic: 'czech', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 0.95 },
   'bodo glimt': { name: 'Bodo/Glimt', rating: 78, domestic: 'eliteserien', form: ['W','W','D','W','L'], xgFor: 2.05, xgAgainst: 1.20 },
-  'viktoria plzen': { name: 'Viktoria Plzen', rating: 77, domestic: 'czech', form: ['W','W','D','W','L'], xgFor: 1.65, xgAgainst: 1.20 },
   'leeds united': { name: 'Leeds United', rating: 77, domestic: 'epl', form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
-  'panathinaikos': { name: 'Panathinaikos', rating: 77, domestic: 'greece', form: ['W','W','D','L','W'], xgFor: 1.70, xgAgainst: 1.15 },
-  'paok': { name: 'PAOK', rating: 78, domestic: 'greece', form: ['W','W','D','W','D'], xgFor: 1.85, xgAgainst: 1.10 },
-  'red star belgrade': { name: 'Red Star Belgrade', rating: 77, domestic: 'serbia', form: ['W','W','W','D','W'], xgFor: 2.00, xgAgainst: 1.15 },
   'crvena zvezda': { name: 'Red Star Belgrade', rating: 77, domestic: 'serbia', form: ['W','W','W','D','W'], xgFor: 2.00, xgAgainst: 1.15 },
-  'ferencvaros': { name: 'Ferencvaros', rating: 76, domestic: 'hungary', form: ['W','W','D','L','W'], xgFor: 1.65, xgAgainst: 1.25 },
-  'fc midtjylland': { name: 'FC Midtjylland', rating: 76, domestic: 'superliga', form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 1.20 },
-  'midtjylland': { name: 'FC Midtjylland', rating: 76, domestic: 'superliga', form: ['W','W','D','W','L'], xgFor: 1.80, xgAgainst: 1.20 },
-  'young boys': { name: 'Young Boys', rating: 77, domestic: 'swiss', form: ['W','D','W','L','W'], xgFor: 1.85, xgAgainst: 1.30 },
   'malmo ff': { name: 'Malmö FF', rating: 76, domestic: 'allsvenskan', form: ['W','W','D','W','L'], xgFor: 1.90, xgAgainst: 1.15 },
   'lask linz': { name: 'LASK Linz', rating: 76, domestic: 'austria', form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.30 },
-  'lask': { name: 'LASK Linz', rating: 76, domestic: 'austria', form: ['W','D','L','W','D'], xgFor: 1.45, xgAgainst: 1.30 },
-  'aek athens': { name: 'AEK Athens', rating: 77, domestic: 'greece', form: ['W','W','D','W','L'], xgFor: 1.75, xgAgainst: 1.15 },
   'kaa gent': { name: 'KAA Gent', rating: 76, domestic: 'jupiler', form: ['W','D','W','L','D'], xgFor: 1.60, xgAgainst: 1.25 },
   'gent': { name: 'KAA Gent', rating: 76, domestic: 'jupiler', form: ['W','D','W','L','D'], xgFor: 1.60, xgAgainst: 1.25 },
   'trabzonspor': { name: 'Trabzonspor', rating: 77, domestic: 'superlig', form: ['W','D','D','W','L'], xgFor: 1.65, xgAgainst: 1.30 },
-  'hajduk split': { name: 'Hajduk Split', rating: 75, domestic: 'croatia', form: ['W','W','D','L','W'], xgFor: 1.60, xgAgainst: 1.20 },
   'fc lugano': { name: 'FC Lugano', rating: 75, domestic: 'swiss', form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
-  'lugano': { name: 'FC Lugano', rating: 75, domestic: 'swiss', form: ['W','D','W','L','D'], xgFor: 1.50, xgAgainst: 1.30 },
 
-  // --- Tier 5 Challengers (Elo 72 - 75) ---
+  // --- Tier 5 Challengers & Surge Clubs (Elo 72 - 83) ---
   'sunderland': { name: 'Sunderland', rating: 75, domestic: 'championship', form: ['W','W','D','L','W'], xgFor: 1.45, xgAgainst: 1.25 },
-  'lech poznan': { name: 'Lech Poznan', rating: 75, domestic: 'ekstraklasa', form: ['W','D','W','L','D'], xgFor: 1.45, xgAgainst: 1.35 },
-  'jagiellonia bialystok': { name: 'Jagiellonia Bialystok', rating: 74, domestic: 'ekstraklasa', form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.40 },
   'jagiellonia': { name: 'Jagiellonia Bialystok', rating: 74, domestic: 'ekstraklasa', form: ['W','D','L','W','D'], xgFor: 1.40, xgAgainst: 1.40 },
   'nec nijmegen': { name: 'NEC Nijmegen', rating: 74, domestic: 'eredivisie', form: ['L','D','W','L','D'], xgFor: 1.25, xgAgainst: 1.60 },
   'nec': { name: 'NEC Nijmegen', rating: 74, domestic: 'eredivisie', form: ['L','D','W','L','D'], xgFor: 1.25, xgAgainst: 1.60 },
-  'hapoel beer sheva': { name: 'Hapoel Be\'er Sheva', rating: 73, domestic: 'israel', form: ['D','W','D','L','W'], xgFor: 1.30, xgAgainst: 1.35 },
   'hapoel beer': { name: 'Hapoel Be\'er Sheva', rating: 73, domestic: 'israel', form: ['D','W','D','L','W'], xgFor: 1.30, xgAgainst: 1.35 },
   'lillestrom': { name: 'Lillestrom', rating: 72, domestic: 'eliteserien', form: ['D','L','W','D','L'], xgFor: 1.15, xgAgainst: 1.45 },
   'agf': { name: 'AGF', rating: 73, domestic: 'superliga', form: ['D','W','L','D','W'], xgFor: 1.35, xgAgainst: 1.35 },
-  'agf aarhus': { name: 'AGF', rating: 73, domestic: 'superliga', form: ['D','W','L','D','W'], xgFor: 1.35, xgAgainst: 1.35 },
   'viking fk': { name: 'Viking FK', rating: 74, domestic: 'eliteserien', form: ['W','D','L','W','D'], xgFor: 1.50, xgAgainst: 1.40 },
   'viking': { name: 'Viking FK', rating: 74, domestic: 'eliteserien', form: ['W','D','L','W','D'], xgFor: 1.50, xgAgainst: 1.40 },
-  'como': { name: 'Como', rating: 73, domestic: 'seriea', form: ['D','L','W','D','L'], xgFor: 1.20, xgAgainst: 1.40 },
-  'parma': { name: 'Parma', rating: 73, domestic: 'seriea', form: ['L','W','D','L','D'], xgFor: 1.20, xgAgainst: 1.40 },
+  'como': { name: 'Como 1907', rating: 83, domestic: 'seriea', form: ['W','W','D','W','W'], xgFor: 1.85, xgAgainst: 0.98 },
+  'como 1907': { name: 'Como 1907', rating: 83, domestic: 'seriea', form: ['W','W','D','W','W'], xgFor: 1.85, xgAgainst: 0.98 },
+  'parma': { name: 'Parma', rating: 74, domestic: 'seriea', form: ['L','W','D','L','D'], xgFor: 1.25, xgAgainst: 1.40 },
   'lens': { name: 'Lens', rating: 78, domestic: 'ligue1', form: ['W','D','D','W','L'], xgFor: 1.55, xgAgainst: 1.20 },
 
   // --- Tier 6 Lesser & Qualifier Clubs (Elo 64 - 71) ---
-  'levski sofia': { name: 'Levski Sofia', rating: 71, domestic: 'bulgaria', form: ['W','D','L','W','D'], xgFor: 1.15, xgAgainst: 1.45 },
   'ofi crete': { name: 'OFI Crete', rating: 71, domestic: 'greece', form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.50 },
-  'omonia nicosia': { name: 'Omonia Nicosia', rating: 71, domestic: 'cyprus', form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.50 },
   'omonia': { name: 'Omonia Nicosia', rating: 71, domestic: 'cyprus', form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.50 },
   'csu craiova': { name: 'CSU Craiova', rating: 71, domestic: 'romania', form: ['D','W','L','D','L'], xgFor: 1.15, xgAgainst: 1.45 },
-  'cska sofia': { name: 'CSKA Sofia', rating: 71, domestic: 'bulgaria', form: ['L','W','D','L','D'], xgFor: 1.10, xgAgainst: 1.50 },
   'mjallby aif': { name: 'Mjällby AIF', rating: 71, domestic: 'allsvenskan', form: ['W','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.40 },
   'mjallby': { name: 'Mjällby AIF', rating: 71, domestic: 'allsvenskan', form: ['W','D','L','W','L'], xgFor: 1.20, xgAgainst: 1.40 },
-  'nk celje': { name: 'NK Celje', rating: 70, domestic: 'slovenia', form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.55 },
-  'celje': { name: 'NK Celje', rating: 70, domestic: 'slovenia', form: ['L','D','W','L','D'], xgFor: 1.05, xgAgainst: 1.55 },
+  'celje': { name: 'NK Celje', rating: 75, domestic: 'slovenia', form: ['W','W','D','L','W'], xgFor: 1.85, xgAgainst: 1.10 },
   'torreense': { name: 'Torreense', rating: 70, domestic: 'ligaportugal', form: ['D','L','D','W','L'], xgFor: 1.00, xgAgainst: 1.40 },
   'ararat armenia': { name: 'Ararat-Armenia', rating: 69, domestic: 'armenia', form: ['L','D','W','D','L'], xgFor: 0.95, xgAgainst: 1.55 },
-  'kups kuopio': { name: 'KuPS Kuopio', rating: 68, domestic: 'finland', form: ['W','L','D','W','L'], xgFor: 1.05, xgAgainst: 1.45 },
-  'kups': { name: 'KuPS Kuopio', rating: 68, domestic: 'finland', form: ['W','L','D','W','L'], xgFor: 1.05, xgAgainst: 1.45 },
-  'borac banja luka': { name: 'Borac Banja Luka', rating: 68, domestic: 'bosnia', form: ['D','L','W','D','L'], xgFor: 1.00, xgAgainst: 1.50 },
+  'kups': { name: 'KuPS Kuopio', rating: 74, domestic: 'finland', form: ['W','W','W','D','W'], xgFor: 1.95, xgAgainst: 0.75 },
   'riga fc': { name: 'Riga FC', rating: 68, domestic: 'uecl', form: ['W','D','L','W','L'], xgFor: 1.10, xgAgainst: 1.50 },
   'kairat almaty': { name: 'Kairat Almaty', rating: 67, domestic: 'kazakhstan', form: ['L','W','D','L','D'], xgFor: 1.00, xgAgainst: 1.55 },
-  'egnatia': { name: 'Egnatia', rating: 67, domestic: 'kategoria_superiore', form: ['D','L','L','W','D'], xgFor: 0.95, xgAgainst: 1.55 },
   'inter d escaldes': { name: 'Inter D\'Escaldes', rating: 64, domestic: 'uecl', form: ['L','D','L','L','D'], xgFor: 0.75, xgAgainst: 1.85 },
-  'sabah fk': { name: 'Sabah FK', rating: 69, domestic: 'azerbaijan', form: ['L','D','W','D','L'], xgFor: 1.00, xgAgainst: 1.55 },
+  'rb salzburg': { name: 'RB Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.25, xgAgainst: 0.95 },
 
   // --- Austrian Bundesliga ---
   'red bull salzburg': { name: 'Red Bull Salzburg', rating: 81, domestic: 'austria', form: ['W','W','D','W','L'], xgFor: 2.25, xgAgainst: 0.95 },
@@ -603,10 +582,10 @@ export const GLOBAL_CLUB_REGISTRY = {
   'schalke 04': { name: 'Schalke 04', rating: 75, domestic: 'bundesliga2', form: ['L','W','D','L','W'], xgFor: 1.65, xgAgainst: 1.45 },
 
   // --- Greek Super League ---
-  'olympiacos': { name: 'Olympiacos', rating: 81, domestic: 'greece', form: ['W','W','W','D','W'], xgFor: 2.20, xgAgainst: 0.75 },
-  'paok': { name: 'PAOK', rating: 80, domestic: 'greece', form: ['W','D','W','W','L'], xgFor: 2.05, xgAgainst: 0.85 },
-  'panathinaikos': { name: 'Panathinaikos', rating: 80, domestic: 'greece', form: ['W','W','D','W','W'], xgFor: 1.95, xgAgainst: 0.80 },
-  'aek athens': { name: 'AEK Athens', rating: 79, domestic: 'greece', form: ['W','W','D','L','W'], xgFor: 1.95, xgAgainst: 0.90 },
+  'olympiacos': { name: 'Olympiacos', rating: 80, domestic: 'greece', form: ['W','W','W','D','W'], xgFor: 2.10, xgAgainst: 0.85 },
+  'paok': { name: 'PAOK', rating: 78, domestic: 'greece', form: ['W','D','W','W','L'], xgFor: 1.90, xgAgainst: 0.95 },
+  'panathinaikos': { name: 'Panathinaikos', rating: 78, domestic: 'greece', form: ['W','W','D','W','W'], xgFor: 1.85, xgAgainst: 0.90 },
+  'aek athens': { name: 'AEK Athens', rating: 77, domestic: 'greece', form: ['W','W','D','L','W'], xgFor: 1.75, xgAgainst: 1.05 },
 
   // --- Italian Serie B ---
   'sassuolo': { name: 'Sassuolo', rating: 77, domestic: 'serieb', form: ['W','W','W','D','W'], xgFor: 1.85, xgAgainst: 0.95 },
@@ -714,8 +693,7 @@ export const GLOBAL_CLUB_REGISTRY = {
   'lanus': { name: 'Lanús', rating: 76, domestic: 'argliga', form: ['W','D','W','D','L'], xgFor: 1.55, xgAgainst: 1.00 },
   'estudiantes lp': { name: 'Estudiantes LP', rating: 76, domestic: 'argliga', form: ['W','W','D','L','W'], xgFor: 1.50, xgAgainst: 0.95 },
   'estudiantes de la plata': { name: 'Estudiantes LP', rating: 76, domestic: 'argliga', form: ['W','W','D','L','W'], xgFor: 1.50, xgAgainst: 0.95 },
-  'racing santander': { name: 'Racing Santander', rating: 74, domestic: 'laliga', form: ['W','W','W','D','L'], xgFor: 1.65, xgAgainst: 1.05 },
-  'rayo vallecano': { name: 'Rayo Vallecano', rating: 74, domestic: 'laliga', form: ['D','L','W','D','L'], xgFor: 1.10, xgAgainst: 1.30 },
+  'rayo vallecano': { name: 'Rayo Vallecano', rating: 75, domestic: 'laliga', form: ['D','L','W','D','L'], xgFor: 1.15, xgAgainst: 1.25 },
   'olimpia': { name: 'Olimpia', rating: 77, domestic: 'paraguay', form: ['W','W','D','W','W'], xgFor: 1.75, xgAgainst: 0.70 },
   'cerro porteno': { name: 'Cerro Porteño', rating: 77, domestic: 'paraguay', form: ['W','D','W','L','W'], xgFor: 1.70, xgAgainst: 0.80 },
   'libertad': { name: 'Libertad', rating: 77, domestic: 'paraguay', form: ['W','L','W','W','D'], xgFor: 1.75, xgAgainst: 0.85 },
@@ -1425,9 +1403,11 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
 
   function finalize(obj) {
     const venueInfo = soccerWikiAdapter.getVenueDetails(idInfo.name || teamName);
+    const finalDomestic = obj.domestic || leagueId;
     return {
       ...obj,
-      domestic: obj.domestic || leagueId,
+      domestic: finalDomestic,
+      crossLeagueTierOffset: getCrossLeagueRatingOffset(finalDomestic),
       name: idInfo.name || teamName,
       short: idInfo.short || teamName.slice(0, 3).toUpperCase(),
       logo: idInfo.logo || rawLogo || null,
@@ -1435,23 +1415,68 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
     };
   }
 
-  // 1. Check Authoritative Global Club Registry (Essential for UEFA UCL, UEL, UECL & Cups)
+  // Helper to locate empirical standing across requested domestic league or global table
+  function lookupEmpiricalStanding(preferredDomestic = null) {
+    if (standingsMap) {
+      if (preferredDomestic && standingsMap[preferredDomestic]?.[norm]?.gamesPlayed >= 2) {
+        return { standing: standingsMap[preferredDomestic][norm], sourceLeague: preferredDomestic };
+      }
+      if (standingsMap[leagueId]?.[norm]?.gamesPlayed >= 2) {
+        return { standing: standingsMap[leagueId][norm], sourceLeague: leagueId };
+      }
+      for (const [lid, teams] of Object.entries(standingsMap)) {
+        if (teams?.[norm]?.gamesPlayed >= 2) {
+          return { standing: teams[norm], sourceLeague: lid };
+        }
+      }
+    }
+    const emp = teamStatsAdapter.findTeamRecord(teamName);
+    if (emp && emp.playedGames >= 2) {
+      const gp = emp.playedGames;
+      const ppg = +(emp.points / gp).toFixed(2);
+      const gfPerGame = +(emp.goalsFor / gp).toFixed(2);
+      const gaPerGame = +(emp.goalsAgainst / gp).toFixed(2);
+      const gdPerGame = +((emp.goalsFor - emp.goalsAgainst) / gp).toFixed(2);
+      return {
+        standing: {
+          gamesPlayed: gp,
+          ppg,
+          gfPerGame,
+          gaPerGame,
+          gdPerGame,
+          rank: emp.position || null,
+          form: Array.isArray(emp.form) && emp.form.length ? emp.form.slice(-5) : null,
+          xgFor: Math.max(0.85, +(gfPerGame * 0.85 + (lg.avgGoals / 2) * 0.15).toFixed(2)),
+          xgAgainst: Math.max(0.60, +(gaPerGame * 0.85 + (lg.avgGoals / 2) * 0.15).toFixed(2))
+        },
+        sourceLeague: preferredDomestic || leagueId
+      };
+    }
+    return null;
+  }
+
+  // 1. Check Authoritative Global Club Registry + Blend with Live Standings / Empirical Stats
   const regEntry = GLOBAL_CLUB_REGISTRY[norm];
   if (regEntry) {
     let finalRating = regEntry.rating;
     let finalForm = [...regEntry.form];
     let finalXgFor = regEntry.xgFor;
     let finalXgAgainst = regEntry.xgAgainst;
+    let rank;
+    let ppg;
 
-    // If active domestic league standings are available, blend current season data
-    if (regEntry.domestic && standingsMap && standingsMap[regEntry.domestic] && standingsMap[regEntry.domestic][norm]) {
-      const s = standingsMap[regEntry.domestic][norm];
-      if (s.gamesPlayed >= 2) {
-        finalForm = s.form || finalForm;
-        finalXgFor = +(regEntry.xgFor * 0.60 + s.xgFor * 0.40).toFixed(2);
-        finalXgAgainst = +(regEntry.xgAgainst * 0.60 + s.xgAgainst * 0.40).toFixed(2);
-        // Slight dynamic adjustment based on domestic ppg (-2 to +2)
-        finalRating = Math.min(94, Math.max(68, finalRating + Math.round((s.ppg - 1.4) * 2)));
+    const liveEmp = lookupEmpiricalStanding(regEntry.domestic);
+    if (liveEmp && liveEmp.standing) {
+      const s = liveEmp.standing;
+      if (s.gamesPlayed >= 3) {
+        if (s.form && s.form.length >= 3) finalForm = s.form;
+        finalXgFor = +(regEntry.xgFor * 0.50 + s.xgFor * 0.50).toFixed(2);
+        finalXgAgainst = +(regEntry.xgAgainst * 0.50 + s.xgAgainst * 0.50).toFixed(2);
+        const ppgShift = (s.ppg - 1.40) * 4.5 + (s.gdPerGame || 0) * 2.5;
+        const clampedShift = Math.max(-7, Math.min(7, Math.round(ppgShift)));
+        finalRating = Math.min(95, Math.max(68, finalRating + clampedShift));
+        rank = s.rank;
+        ppg = s.ppg;
       }
     }
 
@@ -1461,7 +1486,9 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
       xgFor: finalXgFor,
       xgAgainst: finalXgAgainst,
       domestic: regEntry.domestic || leagueId,
-      statsSource: 'authoritative-club-registry'
+      rank,
+      ppg,
+      statsSource: 'authoritative-club-registry+live-calibrated'
     });
   }
 
@@ -1491,6 +1518,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
           form: s.form,
           xgFor: s.xgFor,
           xgAgainst: s.xgAgainst,
+          domestic: lid,
           rank: s.rank,
           ppg: s.ppg,
           statsSource: `official-standings-${lid}`
@@ -1503,7 +1531,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
   const empiricalRec = teamStatsAdapter.findTeamRecord(teamName);
   if (empiricalRec && empiricalRec.playedGames >= 2) {
     const gp = empiricalRec.playedGames;
-    const ppg = empiricalRec.points / gp;
+    const ppg = +(empiricalRec.points / gp).toFixed(2);
     const gfPerGame = empiricalRec.goalsFor / gp;
     const gaPerGame = empiricalRec.goalsAgainst / gp;
     const gdPerGame = (empiricalRec.goalsFor - empiricalRec.goalsAgainst) / gp;
@@ -1521,6 +1549,8 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
       form: Array.isArray(empiricalRec.form) && empiricalRec.form.length > 0 ? empiricalRec.form.slice(-5) : ['W', 'D', 'W', 'L', 'W'],
       xgFor: xgForEmp,
       xgAgainst: Math.max(0.60, +(gaPerGame * 0.85 + (lg.avgGoals / 2) * 0.15).toFixed(2)),
+      rank: empiricalRec.position,
+      ppg,
       statsSource: 'empirical-team-stats-json'
     });
   }
@@ -1542,40 +1572,38 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
   let derivedRating = lg.tierBase;
   let derivedXgFor = +(lg.avgGoals / 2).toFixed(2);
   let derivedXgAgainst = +(lg.avgGoals / 2).toFixed(2);
-  let derivedForm = ['W','D','W','L','W'];
+  let derivedForm = ['W', 'D', 'W', 'L', 'W'];
+  let derivedPpg;
 
   if (compObj) {
-    // Form analysis
     if (typeof compObj.form === 'string' && compObj.form.length > 0) {
       const cleanForm = compObj.form.toUpperCase().replace(/[^WDL]/g, '').slice(-5);
       if (cleanForm.length > 0) {
         derivedForm = cleanForm.split('');
         const formPoints = derivedForm.reduce((sum, r) => sum + (r === 'W' ? 3 : r === 'D' ? 1 : 0), 0);
         const formPpg = formPoints / derivedForm.length;
-        // Adjust rating based on recent form (-2 to +3)
-        derivedRating += Math.round((formPpg - 1.3) * 2.5);
+        derivedRating += Math.round((formPpg - 1.3) * 3.0);
       }
     }
 
-    // Season Record Analysis: summary: "W-D-L" (e.g. "11-6-7")
     const recSummary = compObj.records?.[0]?.summary;
     if (recSummary && /^\d+-\d+-\d+$/.test(recSummary)) {
       const [w, d, l] = recSummary.split('-').map(Number);
       const totalGames = w + d + l;
       if (totalGames > 0) {
         const ppg = (w * 3 + d) / totalGames;
+        derivedPpg = +ppg.toFixed(2);
         const winPct = w / totalGames;
-        // Recalibrate rating dynamically
         derivedRating = Math.round(lg.minElo + (winPct * 0.6 + (ppg / 3) * 0.4) * (lg.maxElo - lg.minElo));
-        derivedXgFor = Math.max(0.9, +(1.1 + (ppg - 1.2) * 0.45).toFixed(2));
-        derivedXgAgainst = Math.max(0.8, +(1.4 - (ppg - 1.2) * 0.35).toFixed(2));
+        derivedXgFor = Math.max(0.85, +(1.05 + (ppg - 1.2) * 0.48).toFixed(2));
+        derivedXgAgainst = Math.max(0.70, +(1.42 - (ppg - 1.2) * 0.38).toFixed(2));
       }
     }
   }
 
-  // 5. Deterministic Hash Offset (ensuring no two unranked teams share an identical rating)
+  // 5. Deterministic Hash Offset
   const hash = teamName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  const hashDelta = (hash % 7) - 3; // -3 to +3
+  const hashDelta = (hash % 7) - 3;
   derivedRating = Math.min(lg.maxElo, Math.max(lg.minElo, derivedRating + hashDelta));
 
   return finalize({
@@ -1583,6 +1611,7 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
     form: derivedForm,
     xgFor: derivedXgFor,
     xgAgainst: derivedXgAgainst,
+    ppg: derivedPpg,
     statsSource: 'telemetry-modeled'
   });
 }
@@ -1591,24 +1620,34 @@ export function getTeamObj(leagueId, teamName, compObj = null, standingsMap = ST
  * Deep Dixon-Coles & Poisson Modeling with Market Prioritization
  * Evaluates comprehensive betting angles and selects an actionable, high-conviction top pick.
  */
-export function generatePredictions(home, away, leagueId) {
+export function generatePredictions(home, away, leagueId, options = {}) {
+  const { realHomeMl = null, realDrawMl = null, realAwayMl = null, round = '' } = options || {};
   const lg = LEAGUE_MAP[leagueId] || { rho: -0.125, avgGoals: 2.65, homeAdv: 1.18 };
   const derbyInfo = detectDerbyAndRivalry(home.name, away.name, leagueId);
 
+  // Cross-border domestic league coefficient differential for continental & cup matches
+  const isCrossBorderComp = /^(ucl|uel|uecl|caf_cl|caf_cc|afc_cl|libertadores|sudamericana|uwcl|mens_fa_cup|womens_fa_cup)$/i.test(leagueId || '');
+  const hDom = home.domestic || leagueId;
+  const aDom = away.domestic || leagueId;
+  const hTierOffset = isCrossBorderComp && hDom !== aDom ? getCrossLeagueRatingOffset(hDom) : 0;
+  const aTierOffset = isCrossBorderComp && hDom !== aDom ? getCrossLeagueRatingOffset(aDom) : 0;
+
+  const effectiveHomeRating = (home.rating || 75) + hTierOffset;
+  const effectiveAwayRating = (away.rating || 75) + aTierOffset;
+
   // Elo rating differential with Derby Dampener
-  const eloDelta = (home.rating || 75) - (away.rating || 75);
-  // In derbies, home advantage and baseline Elo gaps collapse significantly
-  const eloMultiplierRate = derbyInfo.isDerby ? 0.008 : 0.016;
-  const eloFactorHome = Math.max(0.75, Math.min(1.35, 1 + eloDelta * eloMultiplierRate));
-  const eloFactorAway = Math.max(0.75, Math.min(1.35, 1 - eloDelta * eloMultiplierRate));
+  const eloDelta = effectiveHomeRating - effectiveAwayRating;
+  const eloMultiplierRate = derbyInfo.isDerby ? 0.008 : 0.017;
+  const eloFactorHome = Math.max(0.72, Math.min(1.40, 1 + eloDelta * eloMultiplierRate));
+  const eloFactorAway = Math.max(0.72, Math.min(1.40, 1 - eloDelta * eloMultiplierRate));
 
   // Form momentum factor (bounded)
   const hFormPts = (home.form || []).reduce((s, r) => s + (r === 'W' ? 3 : r === 'D' ? 1 : 0), 0) / (home.form?.length || 5);
   const aFormPts = (away.form || []).reduce((s, r) => s + (r === 'W' ? 3 : r === 'D' ? 1 : 0), 0) / (away.form?.length || 5);
-  const formMultHome = Math.max(0.88, Math.min(1.15, 1 + (hFormPts - 1.35) * (derbyInfo.isDerby ? 0.018 : 0.035)));
-  const formMultAway = Math.max(0.88, Math.min(1.15, 1 + (aFormPts - 1.35) * (derbyInfo.isDerby ? 0.018 : 0.035)));
+  const formMultHome = Math.max(0.88, Math.min(1.16, 1 + (hFormPts - 1.35) * (derbyInfo.isDerby ? 0.018 : 0.038)));
+  const formMultAway = Math.max(0.88, Math.min(1.16, 1 + (aFormPts - 1.35) * (derbyInfo.isDerby ? 0.018 : 0.038)));
 
-  // League base goals distribution (approx 56% home, 44% away; derbies even closer)
+  // League base goals distribution
   const avgG = lg.avgGoals || 2.65;
   const homeSplit = derbyInfo.isDerby ? 0.52 : 0.56;
   const awaySplit = 1.0 - homeSplit;
@@ -1621,65 +1660,188 @@ export function generatePredictions(home, away, leagueId) {
   const aAtt = (away.xgFor || 1.25) / muAway;
   const hDef = (home.xgAgainst || 1.45) / muAway;
 
-  // Interaction via geometric mean to prevent runaway inflation
   const rawLh = muHome * Math.sqrt(Math.max(0.35, hAtt * aDef)) * eloFactorHome * formMultHome;
   const rawLa = muAway * Math.sqrt(Math.max(0.35, aAtt * hDef)) * eloFactorAway * formMultAway;
 
-  const lambdaHome = Math.max(0.50, Math.min(3.20, +rawLh.toFixed(3)));
-  const lambdaAway = Math.max(0.40, Math.min(2.80, +rawLa.toFixed(3)));
+  let lambdaHome = Math.max(0.48, Math.min(3.30, +rawLh.toFixed(3)));
+  let lambdaAway = Math.max(0.38, Math.min(2.90, +rawLa.toFixed(3)));
 
-  // Bivariate Dixon-Coles Matrix with strict probability normalization
-  let totalGridProb = 0;
-  for (let x = 0; x <= 8; x++) {
-    for (let y = 0; y <= 8; y++) {
-      const tau = dixonColesTau(x, y, lambdaHome, lambdaAway, lg.rho);
-      totalGridProb += poissonPm(lambdaHome, x) * poissonPm(lambdaAway, y) * tau;
+  // Helper to evaluate full Dixon-Coles 9x9 score grid
+  const computeGridMetrics = (lh, la) => {
+    let totalGrid = 0;
+    const grid = Array.from({ length: 9 }, () => Array(9).fill(0));
+    for (let x = 0; x <= 8; x++) {
+      for (let y = 0; y <= 8; y++) {
+        const tau = dixonColesTau(x, y, lh, la, lg.rho);
+        const val = poissonPm(lh, x) * poissonPm(la, y) * tau;
+        grid[x][y] = val;
+        totalGrid += val;
+      }
     }
-  }
-  const normFactor = totalGridProb > 0 ? (1 / totalGridProb) : 1;
+    const norm = totalGrid > 0 ? (1 / totalGrid) : 1;
 
-  let pHome = 0, pDraw = 0, pAway = 0;
-  let pOver15 = 0, pOver25 = 0, pOver35 = 0;
-  let pBtts = 0;
-  let pHomeCleanSheet = 0, pAwayCleanSheet = 0;
+    let gHome = 0, gDraw = 0, gAway = 0;
+    let gOver05 = 0, gOver15 = 0, gOver25 = 0, gOver35 = 0, gOver45 = 0;
+    let gBtts = 0, gHomeOnly = 0, gAwayOnly = 0, gNoGoal = 0;
+    let gHomeCs = 0, gAwayCs = 0, gOdd = 0, gEven = 0;
+    let gBttsOver25 = 0, gBttsNoUnder35 = 0;
+    let gMg0 = 0, gMg1_2 = 0, gMg1_3 = 0, gMg2_3 = 0, gMg4Plus = 0;
+    let gH_Mg0 = 0, gH_Mg1_2 = 0, gH_Mg1_3 = 0;
+    let gA_Mg0 = 0, gA_Mg1_2 = 0, gA_Mg1_3 = 0;
+    let gH_Over05 = 0, gH_Over15 = 0, gH_Under25 = 0;
+    let gA_Over05 = 0, gA_Under15 = 0, gA_Under25 = 0;
+    const exactScores = [];
 
-  for (let x = 0; x <= 8; x++) {
-    for (let y = 0; y <= 8; y++) {
-      const tau = dixonColesTau(x, y, lambdaHome, lambdaAway, lg.rho);
-      const prob = poissonPm(lambdaHome, x) * poissonPm(lambdaAway, y) * tau * normFactor;
-      if (x > y) pHome += prob;
-      else if (x === y) pDraw += prob;
-      else pAway += prob;
+    for (let x = 0; x <= 8; x++) {
+      for (let y = 0; y <= 8; y++) {
+        const prob = grid[x][y] * norm;
+        if (x <= 4 && y <= 4) {
+          exactScores.push({ home: x, away: y, prob });
+        }
+        if (x > y) gHome += prob;
+        else if (x === y) gDraw += prob;
+        else gAway += prob;
 
-      const tot = x + y;
-      if (tot > 1.5) pOver15 += prob;
-      if (tot > 2.5) pOver25 += prob;
-      if (tot > 3.5) pOver35 += prob;
-      if (x > 0 && y > 0) pBtts += prob;
-      if (y === 0) pHomeCleanSheet += prob;
-      if (x === 0) pAwayCleanSheet += prob;
+        const tot = x + y;
+        if (tot >= 1) gOver05 += prob;
+        if (tot >= 2) gOver15 += prob;
+        if (tot >= 3) gOver25 += prob;
+        if (tot >= 4) gOver35 += prob;
+        if (tot >= 5) gOver45 += prob;
+
+        if (x > 0 && y > 0) gBtts += prob;
+        if (x > 0 && y === 0) gHomeOnly += prob;
+        if (x === 0 && y > 0) gAwayOnly += prob;
+        if (x === 0 && y === 0) gNoGoal += prob;
+
+        if (y === 0) gHomeCs += prob;
+        if (x === 0) gAwayCs += prob;
+
+        if (tot % 2 === 1) gOdd += prob;
+        else gEven += prob;
+
+        if (x > 0 && y > 0 && tot >= 3) gBttsOver25 += prob;
+        if (!(x > 0 && y > 0) && tot <= 3) gBttsNoUnder35 += prob;
+
+        if (tot === 0) gMg0 += prob;
+        if (tot >= 1 && tot <= 2) gMg1_2 += prob;
+        if (tot >= 1 && tot <= 3) gMg1_3 += prob;
+        if (tot >= 2 && tot <= 3) gMg2_3 += prob;
+        if (tot >= 4) gMg4Plus += prob;
+
+        if (x === 0) gH_Mg0 += prob;
+        if (x >= 1 && x <= 2) gH_Mg1_2 += prob;
+        if (x >= 1 && x <= 3) gH_Mg1_3 += prob;
+
+        if (y === 0) gA_Mg0 += prob;
+        if (y >= 1 && y <= 2) gA_Mg1_2 += prob;
+        if (y >= 1 && y <= 3) gA_Mg1_3 += prob;
+
+        if (x >= 1) gH_Over05 += prob;
+        if (x >= 2) gH_Over15 += prob;
+        if (x <= 2) gH_Under25 += prob;
+        if (y >= 1) gA_Over05 += prob;
+        if (y <= 1) gA_Under15 += prob;
+        if (y <= 2) gA_Under25 += prob;
+      }
     }
+
+    exactScores.sort((a, b) => b.prob - a.prob);
+    const s1x2 = gHome + gDraw + gAway || 1;
+
+    return {
+      pHome: gHome / s1x2,
+      pDraw: gDraw / s1x2,
+      pAway: gAway / s1x2,
+      pOver05: gOver05,
+      pUnder05: Math.max(0.02, 1 - gOver05),
+      pOver15: gOver15,
+      pUnder15: Math.max(0.03, 1 - gOver15),
+      pOver25: gOver25,
+      pUnder25: Math.max(0.04, 1 - gOver25),
+      pOver35: gOver35,
+      pUnder35: Math.max(0.04, 1 - gOver35),
+      pOver45: gOver45,
+      pUnder45: Math.max(0.03, 1 - gOver45),
+      pBtts: gBtts,
+      pBttsNo: Math.max(0.04, 1 - gBtts),
+      pHomeOnly: gHomeOnly,
+      pAwayOnly: gAwayOnly,
+      pNoGoal: gNoGoal,
+      pHomeCleanSheet: gHomeCs,
+      pHomeCleanSheetNo: Math.max(0.04, 1 - gHomeCs),
+      pAwayCleanSheet: gAwayCs,
+      pAwayCleanSheetNo: Math.max(0.04, 1 - gAwayCs),
+      pGoalsOdd: gOdd,
+      pGoalsEven: gEven,
+      pBttsOver25: gBttsOver25,
+      pBttsNoUnder35: gBttsNoUnder35,
+      mg: { gMg0, gMg1_2, gMg1_3, gMg2_3, gMg4Plus, gH_Mg0, gH_Mg1_2, gH_Mg1_3, gA_Mg0, gA_Mg1_2, gA_Mg1_3 },
+      teamTotals: {
+        pHomeOver05: gH_Over05,
+        pHomeOver15: gH_Over15,
+        pHomeUnder25: gH_Under25,
+        pAwayOver05: gA_Over05,
+        pAwayUnder15: gA_Under15,
+        pAwayUnder25: gA_Under25
+      },
+      exactScores,
+      grid,
+      norm
+    };
+  };
+
+  let mat = computeGridMetrics(lambdaHome, lambdaAway);
+
+  // Due-Diligence Sharp Bookmaker Odds Anchor (prevents model hallucinating against real-world sharp odds)
+  if (realHomeMl && realDrawMl && realAwayMl && realHomeMl > 1.02 && realDrawMl > 1.02 && realAwayMl > 1.02) {
+    const invH = 1 / realHomeMl;
+    const invD = 1 / realDrawMl;
+    const invA = 1 / realAwayMl;
+    const invSum = invH + invD + invA;
+    const mktH = invH / invSum;
+    const mktD = invD / invSum;
+    const mktA = invA / invSum;
+
+    const maxDivergence = Math.max(Math.abs(mat.pHome - mktH), Math.abs(mat.pAway - mktA));
+    const mktWeight = maxDivergence > 0.12 ? 0.50 : 0.35;
+    const modelWeight = 1 - mktWeight;
+
+    const targetH = mat.pHome * modelWeight + mktH * mktWeight;
+    const targetD = mat.pDraw * modelWeight + mktD * mktWeight;
+    const targetA = mat.pAway * modelWeight + mktA * mktWeight;
+    const tSum = targetH + targetD + targetA || 1;
+    const blendedH = targetH / tSum;
+    const blendedD = targetD / tSum;
+    const blendedA = targetA / tSum;
+
+    // Proportionally tilt lambdas toward sharp market ratio so all derived markets agree
+    const modelRatio = mat.pHome / Math.max(0.05, mat.pAway);
+    const targetRatio = blendedH / Math.max(0.05, blendedA);
+    const ratioShift = Math.max(0.68, Math.min(1.48, targetRatio / Math.max(0.15, modelRatio)));
+    lambdaHome = Math.max(0.45, Math.min(3.35, +(lambdaHome * Math.sqrt(ratioShift)).toFixed(3)));
+    lambdaAway = Math.max(0.35, Math.min(2.95, +(lambdaAway / Math.sqrt(ratioShift)).toFixed(3)));
+
+    mat = computeGridMetrics(lambdaHome, lambdaAway);
+    mat.pHome = +(blendedH * 0.85 + mat.pHome * 0.15).toFixed(4);
+    mat.pDraw = +(blendedD * 0.85 + mat.pDraw * 0.15).toFixed(4);
+    mat.pAway = +(blendedA * 0.85 + mat.pAway * 0.15).toFixed(4);
+    const final1x2 = mat.pHome + mat.pDraw + mat.pAway || 1;
+    mat.pHome /= final1x2;
+    mat.pDraw /= final1x2;
+    mat.pAway /= final1x2;
   }
 
-  // Axiomatic boundary clamping & complementary consistency
-  const sum1X2 = pHome + pDraw + pAway;
-  if (sum1X2 > 0) {
-    pHome /= sum1X2;
-    pDraw /= sum1X2;
-    pAway /= sum1X2;
-  }
+  const pHome = mat.pHome;
+  const pDraw = mat.pDraw;
+  const pAway = mat.pAway;
 
-  // In derbies, cap double chance to reflect realistic historical friction
+  // Double Chance (ONLY 1X and X2 — ZERO 12 draw traps)
   const maxDcCap = derbyInfo.isDerby ? 0.76 : 0.94;
   const p1X = Math.min(maxDcCap, pHome + pDraw);
   const pX2 = Math.min(maxDcCap, pDraw + pAway);
-  const p12 = Math.min(maxDcCap, pHome + pAway);
   const pDnbHome = pHome / (pHome + pAway || 1);
   const pDnbAway = pAway / (pHome + pAway || 1);
-  const pUnder25 = Math.max(0.04, 1 - pOver25);
-  const pUnder15 = Math.max(0.04, 1 - pOver15);
-  const pUnder35 = Math.max(0.04, 1 - pOver35);
-  const pBttsNo = Math.max(0.04, 1 - pBtts);
 
   const totalLambda = lambdaHome + lambdaAway;
   const tacticalProfiles = buildTacticalProfiles({ home, away, leagueId, isDerby: derbyInfo.isDerby, eloDelta });
@@ -1698,175 +1860,179 @@ export function generatePredictions(home, away, leagueId) {
     pAway
   });
 
-  // 1. DISCIPLINARY & BOOKINGS MODELING
-  const cardsLambda = Math.max(2.8, Math.min(6.8, tacticalProfiles.refereeStats.avgYellows * (tacticalProfiles.disciplinaryProfile.matchIntensityScore / 65) * tacticalProfiles.disciplinaryProfile.cardInflationFactor));
-  let pCardsUnder35 = 0, pCardsUnder45 = 0, pCardsUnder55 = 0, pCardsOver25 = 0, pCardsOver35 = 0, pCardsOver45 = 0;
-  for (let c = 0; c <= 15; c++) {
-    const pc = poissonPm(cardsLambda, c);
-    if (c <= 3) pCardsUnder35 += pc;
-    if (c <= 4) pCardsUnder45 += pc;
-    if (c <= 5) pCardsUnder55 += pc;
-    if (c >= 3) pCardsOver25 += pc;
-    if (c >= 4) pCardsOver35 += pc;
-    if (c >= 5) pCardsOver45 += pc;
-  }
-  const homeCardShare = tacticalProfiles.disciplinaryProfile.homeFoulToTackle / (tacticalProfiles.disciplinaryProfile.homeFoulToTackle + tacticalProfiles.disciplinaryProfile.awayFoulToTackle);
-  const pHomeOver15Cards = Math.min(0.88, Math.max(0.35, +(pCardsOver25 * homeCardShare * 1.15).toFixed(3)));
-  const pHomeUnder25Cards = Math.min(0.88, Math.max(0.35, +(1 - pHomeOver15Cards * 0.78).toFixed(3)));
-  const pAwayOver15Cards = Math.min(0.88, Math.max(0.35, +(pCardsOver25 * (1 - homeCardShare) * 1.18).toFixed(3)));
-  const pAwayUnder25Cards = Math.min(0.88, Math.max(0.35, +(1 - pAwayOver15Cards * 0.78).toFixed(3)));
-  const pMostCardsAway = homeCardShare < 0.48 ? 0.54 : 0.42;
-  const pMostCardsHome = homeCardShare >= 0.52 ? 0.52 : 0.40;
-  const pMostCardsTie = 0.22;
-  const pFirstCardAway = homeCardShare < 0.50 ? 0.56 : 0.44;
+  // #7 HANDICAPS & #8 WINNING MARGINS
+  const marginHandicap = calculateMatchWinningMarginsAndHandicaps(lambdaHome, lambdaAway);
 
-  // 2. CORNER KICK VOLATILITY (NEGATIVE BINOMIAL OVERDISPERSED + POISSON FULL-TIME, HALVES & EACH TEAM CORNERS)
-  const nbCorners = calculateNegativeBinomialCorners({
-    totalLambda,
+  // #21 FIRST 10 MINUTES RESULT, #33 FIRST 15 MINUTES DRAW, #20 FIRST GOAL INTERVAL, #34 TOTAL MATCH SHOTS
+  const f10 = calculateFirst10MinResult({
     lambdaHome,
     lambdaAway,
-    homeWingFreq: tacticalProfiles.cornerVolatilityProfile.homeWingPlayFreq,
-    awayWingFreq: tacticalProfiles.cornerVolatilityProfile.awayWingPlayFreq,
-    homeBlocksPct: tacticalProfiles.cornerVolatilityProfile.homeBlocksOutOfBoundsPct,
-    awayBlocksPct: tacticalProfiles.cornerVolatilityProfile.awayBlocksOutOfBoundsPct,
+    rho: lg.rho,
     isDerby: derbyInfo.isDerby,
     physicsMetrics
   });
-  const cornersLambda = nbCorners.totalCornersExp;
-  const homeCornerShare = nbCorners.homeCornerShare;
-  const lambda1stCorners = cornersLambda * 0.45;
-  const lambda2ndCorners = cornersLambda * 0.55;
-  const lambdaHomeCorners = nbCorners.lambdaHomeCorners;
-  const lambdaAwayCorners = nbCorners.lambdaAwayCorners;
+  const f15 = calculateFirst15MinDistribution({
+    lambdaHome,
+    lambdaAway,
+    rho: lg.rho,
+    isDerby: derbyInfo.isDerby,
+    physicsMetrics
+  });
+  const fgIntervals = calculateFirstGoalIntervals10m({
+    lambdaHome,
+    lambdaAway,
+    isDerby: derbyInfo.isDerby,
+    physicsMetrics
+  });
+  const shotsDist = calculateTotalMatchShotsDistribution({
+    matchTotalShotsExp: tacticalProfiles.shootingMetricsProfile.matchTotalShotsExp,
+    homeTotalShotsExp: tacticalProfiles.shootingMetricsProfile.homeTotalShotsExp,
+    awayTotalShotsExp: tacticalProfiles.shootingMetricsProfile.awayTotalShotsExp,
+    isDerby: derbyInfo.isDerby,
+    physicsMetrics
+  });
 
-  const pCornOver75 = nbCorners.match.over75;
-  const pCornUnder75 = nbCorners.match.under75;
-  const pCornOver85 = nbCorners.match.over85;
-  const pCornUnder85 = nbCorners.match.under85;
-  const pCornOver95 = nbCorners.match.over95;
-  const pCornUnder95 = nbCorners.match.under95;
-  const pCornOver105 = nbCorners.match.over105;
-  const pCornUnder105 = nbCorners.match.under105;
-  const pCornOver115 = nbCorners.match.over115;
-  const pCornUnder115 = nbCorners.match.under115;
+  // #30 BOOKINGS / CARDS MARKETS (Yellow = 1 pt, Red = 2 pts — UNDERS ONLY + Most Bookings / First Team Booked)
+  const redFactor = 1 + (tacticalProfiles.refereeStats.avgReds || 0.16) * 1.1;
+  const bookingPtsLambda = Math.max(2.9, Math.min(6.4, tacticalProfiles.refereeStats.avgYellows * (tacticalProfiles.disciplinaryProfile.matchIntensityScore / 66) * tacticalProfiles.disciplinaryProfile.cardInflationFactor * redFactor * 0.95));
+  let pBookUnder35 = 0, pBookUnder45 = 0, pBookUnder55 = 0;
+  for (let c = 0; c <= 16; c++) {
+    const pc = poissonPm(bookingPtsLambda, c);
+    if (c <= 3) pBookUnder35 += pc;
+    if (c <= 4) pBookUnder45 += pc;
+    if (c <= 5) pBookUnder55 += pc;
+  }
+  const lambdaBook1H = bookingPtsLambda * 0.41;
+  let pBook1HUnder25 = 0;
+  for (let c = 0; c <= 8; c++) {
+    if (c <= 2) pBook1HUnder25 += poissonPm(lambdaBook1H, c);
+  }
+  const homeCardShare = tacticalProfiles.disciplinaryProfile.homeFoulToTackle / (tacticalProfiles.disciplinaryProfile.homeFoulToTackle + tacticalProfiles.disciplinaryProfile.awayFoulToTackle);
+  const pMostBookingsAway = Math.min(0.68, Math.max(0.36, +(1 - homeCardShare + (eloDelta > 6 ? 0.08 : -0.04)).toFixed(3)));
+  const pMostBookingsHome = Math.min(0.65, Math.max(0.34, +(homeCardShare + (eloDelta < -6 ? 0.08 : -0.04)).toFixed(3)));
+  const pFirstBookedAway = Math.min(0.62, Math.max(0.40, +(1 - homeCardShare * 0.94).toFixed(3)));
+  const pFirstBookedHome = Math.min(0.60, Math.max(0.38, +(homeCardShare * 0.94).toFixed(3)));
 
-  // 1st-Half ("First") Corners via Negative Binomial Blend (Strictly Hollywoodbets 3.5 & 4.5 Over/Under)
-  const pCorn1stOver35 = nbCorners.firstHalf.over35;
-  const pCorn1stUnder35 = nbCorners.firstHalf.under35;
-  const pCorn1stOver45 = nbCorners.firstHalf.over45;
-  const pCorn1stUnder45 = nbCorners.firstHalf.under45;
+  // #29 LEAGUE-GATED CORNERS (STRICTLY AVAILABLE IN CORNER_ELIGIBLE_LEAGUES ONLY)
+  const cornersSupported = isCornerMarketAvailable(leagueId);
+  let nbCorners = null;
+  let pCornOver75 = 0, pCornUnder75 = 0, pCornOver85 = 0, pCornUnder85 = 0;
+  let pCornOver95 = 0, pCornUnder95 = 0, pCornOver105 = 0, pCornUnder105 = 0, pCornOver115 = 0, pCornUnder115 = 0;
+  let pCorn1stOver35 = 0, pCorn1stUnder35 = 0, pCorn1stOver45 = 0, pCorn1stUnder45 = 0;
+  let pHomeCornOver55 = 0, pHomeCornUnder55 = 0, pHomeCornOver65 = 0, pHomeCornUnder65 = 0, pHomeCornOver75 = 0, pHomeCornUnder75 = 0;
+  let pAwayCornOver55 = 0, pAwayCornUnder55 = 0;
 
-  // 2nd-Half Corners (Standard retail lines: 3.5 & 4.5)
-  let pCorn2ndOver35 = 0, pCorn2ndUnder35 = 0, pCorn2ndOver45 = 0, pCorn2ndUnder45 = 0;
-  for (let c = 0; c <= 15; c++) {
-    const pc = poissonPm(lambda2ndCorners, c);
-    if (c >= 4) pCorn2ndOver35 += pc;
-    if (c <= 3) pCorn2ndUnder35 += pc;
-    if (c >= 5) pCorn2ndOver45 += pc;
-    if (c <= 4) pCorn2ndUnder45 += pc;
+  if (cornersSupported) {
+    nbCorners = calculateNegativeBinomialCorners({
+      totalLambda,
+      lambdaHome,
+      lambdaAway,
+      homeWingFreq: tacticalProfiles.cornerVolatilityProfile.homeWingPlayFreq,
+      awayWingFreq: tacticalProfiles.cornerVolatilityProfile.awayWingPlayFreq,
+      homeBlocksPct: tacticalProfiles.cornerVolatilityProfile.homeBlocksOutOfBoundsPct,
+      awayBlocksPct: tacticalProfiles.cornerVolatilityProfile.awayBlocksOutOfBoundsPct,
+      isDerby: derbyInfo.isDerby,
+      physicsMetrics
+    });
+    pCornOver75 = nbCorners.match.over75;
+    pCornUnder75 = nbCorners.match.under75;
+    pCornOver85 = nbCorners.match.over85;
+    pCornUnder85 = nbCorners.match.under85;
+    pCornOver95 = nbCorners.match.over95;
+    pCornUnder95 = nbCorners.match.under95;
+    pCornOver105 = nbCorners.match.over105;
+    pCornUnder105 = nbCorners.match.under105;
+    pCornOver115 = nbCorners.match.over115;
+    pCornUnder115 = nbCorners.match.under115;
+
+    pCorn1stOver35 = nbCorners.firstHalf.over35;
+    pCorn1stUnder35 = nbCorners.firstHalf.under35;
+    pCorn1stOver45 = nbCorners.firstHalf.over45;
+    pCorn1stUnder45 = nbCorners.firstHalf.under45;
+
+    pHomeCornOver55 = nbCorners.home.over55;
+    pHomeCornUnder55 = nbCorners.home.under55;
+    pHomeCornOver65 = nbCorners.home.over65;
+    pHomeCornUnder65 = nbCorners.home.under65;
+    pHomeCornOver75 = nbCorners.home.over75;
+    pHomeCornUnder75 = nbCorners.home.under75;
+    pAwayCornOver55 = nbCorners.away.over55;
+    pAwayCornUnder55 = nbCorners.away.under55;
   }
 
-  // Each Team Total Corners (Strictly Playable Sportsbook Lines >= 5.5 + Home-Only 7+/8+/Unders)
-  const pHomeCornOver55 = nbCorners.home.over55;
-  const pHomeCornUnder55 = nbCorners.home.under55;
-  const pHomeCornOver65 = nbCorners.home.over65; // Home 7+ Corners
-  const pHomeCornUnder65 = nbCorners.home.under65;
-  const pHomeCornOver75 = nbCorners.home.over75; // Home 8+ Corners
-  const pHomeCornUnder75 = nbCorners.home.under75;
-
-  // Away Team strictly 5.5 Over/Under (no <5.5 and no 7+/8+ away lines)
-  const pAwayCornOver55 = nbCorners.away.over55;
-  const pAwayCornUnder55 = nbCorners.away.under55;
-
-  const pFirstCornerHome = homeCornerShare;
-  const pFirstCornerAway = 1 - homeCornerShare;
-  const pLastCornerHome = Math.min(0.72, Math.max(0.38, homeCornerShare * 0.98));
-  const pLastCornerAway = 1 - pLastCornerHome;
-  const pCornerOdd = 0.505;
-  const pCornerEven = 0.495;
-  const pCornerMatchBetHome = Math.min(0.78, Math.max(0.35, homeCornerShare * 1.18));
-  const pCornerMatchBetAway = Math.min(0.65, Math.max(0.25, (1 - homeCornerShare) * 1.15));
-  const pCornerMatchBetTie = Math.max(0.12, 1 - (pCornerMatchBetHome + pCornerMatchBetAway));
-  const pCornerHandicapHomeMinus15 = Math.min(0.74, Math.max(0.35, pCornerMatchBetHome * 0.88));
-  const pCornerHandicapAwayPlus25 = Math.min(0.85, Math.max(0.45, 1 - pCornerHandicapHomeMinus15 * 0.65));
-
-  // 3. SHOOTING & PERFORMANCE METRICS
-  const matchShotsExp = tacticalProfiles.shootingMetricsProfile.matchTotalShotsExp;
-  const matchSotExp = tacticalProfiles.shootingMetricsProfile.matchSotExp;
-  const homeShotsExp = tacticalProfiles.shootingMetricsProfile.homeTotalShotsExp;
-  const awayShotsExp = tacticalProfiles.shootingMetricsProfile.awayTotalShotsExp;
-  const homeSotExp = tacticalProfiles.shootingMetricsProfile.homeSotExp;
-  const awaySotExp = tacticalProfiles.shootingMetricsProfile.awaySotExp;
-
-  // Approximate Poisson/Normal for Shots (Strictly standard retail sportsbook lines)
-  const pShotsOver215 = Math.min(0.86, Math.max(0.42, +(0.50 + (matchShotsExp - 22.0) * 0.048).toFixed(3)));
-  const pShotsUnder215 = +(1 - pShotsOver215).toFixed(3);
-  const pShotsOver235 = Math.min(0.82, Math.max(0.38, +(0.48 + (matchShotsExp - 24.0) * 0.048).toFixed(3)));
-  const pShotsUnder235 = +(1 - pShotsOver235).toFixed(3);
-
-  const pSotOver75 = Math.min(0.85, Math.max(0.45, +(0.52 + (matchSotExp - 8.0) * 0.075).toFixed(3)));
-  const pSotUnder75 = +(1 - pSotOver75).toFixed(3);
-  const pSotOver85 = Math.min(0.80, Math.max(0.38, +(0.48 + (matchSotExp - 9.0) * 0.075).toFixed(3)));
-  const pSotUnder85 = +(1 - pSotOver85).toFixed(3);
-
-  const pHomeShotsOver125 = Math.min(0.88, Math.max(0.42, +(0.50 + (homeShotsExp - 13.0) * 0.065).toFixed(3)));
-  const pHomeShotsUnder125 = +(1 - pHomeShotsOver125).toFixed(3);
-  const pAwayShotsOver85 = Math.min(0.84, Math.max(0.38, +(0.50 + (awayShotsExp - 9.0) * 0.065).toFixed(3)));
-  const pAwayShotsUnder85 = +(1 - pAwayShotsOver85).toFixed(3);
-
-  const pHomeSotOver45 = Math.min(0.86, Math.max(0.40, +(0.50 + (homeSotExp - 4.8) * 0.11).toFixed(3)));
-  const pHomeSotUnder45 = +(1 - pHomeSotOver45).toFixed(3);
-  const pAwaySotOver35 = Math.min(0.82, Math.max(0.36, +(0.48 + (awaySotExp - 3.5) * 0.11).toFixed(3)));
-  const pAwaySotUnder35 = +(1 - pAwaySotOver35).toFixed(3);
-
-  // 4. TIME-SEGMENT & TEAM-SPECIFIC SCORING DETERMINATION ENGINE
-  // Analyzes whether teams can or cannot score in each half based on attacking tempo and defensive structure
+  // HALF-SPECIFIC TIME-SEGMENT DISTRIBUTIONS (#2 HT 1X2, #3 2H 1X2, #6 1H DNB, #9 HT/FT, #12 1H Totals, #22 Highest Scoring Half, #26 Half Perf)
   const homeAttackVsAwayDef = (hAtt / Math.max(0.6, aDef));
   const awayAttackVsHomeDef = (aAtt / Math.max(0.6, hDef));
-  
-  // Tactical half tempo:
-  // Aggressive front-runners break through in 1st half; grinding defensive battles see goals concentrated late in 2nd half
-  const home1stShare = homeAttackVsAwayDef > 1.4 ? 0.46 : (homeAttackVsAwayDef < 0.85 ? 0.35 : 0.41);
-  const away1stShare = awayAttackVsHomeDef > 1.3 ? 0.43 : (awayAttackVsHomeDef < 0.8 ? 0.30 : 0.37);
+  const home1stShare = homeAttackVsAwayDef > 1.4 ? 0.45 : (homeAttackVsAwayDef < 0.85 ? 0.36 : 0.41);
+  const away1stShare = awayAttackVsHomeDef > 1.3 ? 0.43 : (awayAttackVsHomeDef < 0.8 ? 0.32 : 0.38);
 
   const lambdaHome1st = +(lambdaHome * home1stShare).toFixed(3);
   const lambdaHome2nd = +(lambdaHome * (1.0 - home1stShare)).toFixed(3);
-
   const lambdaAway1st = +(lambdaAway * away1stShare).toFixed(3);
   const lambdaAway2nd = +(lambdaAway * (1.0 - away1stShare)).toFixed(3);
 
+  const evalHalfGrid = (lhH, laH) => {
+    let hWin = 0, hDraw = 0, aWin = 0, ov05 = 0, ov15 = 0, ov25 = 0, normH = 0;
+    for (let x = 0; x <= 5; x++) {
+      for (let y = 0; y <= 5; y++) {
+        const val = poissonPm(lhH, x) * poissonPm(laH, y) * dixonColesTau(x, y, lhH, laH, lg.rho);
+        normH += val;
+      }
+    }
+    const inv = normH > 0 ? 1 / normH : 1;
+    for (let x = 0; x <= 5; x++) {
+      for (let y = 0; y <= 5; y++) {
+        const p = poissonPm(lhH, x) * poissonPm(laH, y) * dixonColesTau(x, y, lhH, laH, lg.rho) * inv;
+        if (x > y) hWin += p;
+        else if (x === y) hDraw += p;
+        else aWin += p;
+        if (x + y >= 1) ov05 += p;
+        if (x + y >= 2) ov15 += p;
+        if (x + y >= 3) ov25 += p;
+      }
+    }
+    return { hWin, hDraw, aWin, ov05, un05: 1 - ov05, ov15, un15: 1 - ov15, ov25, un25: 1 - ov25 };
+  };
+
+  const g1h = evalHalfGrid(lambdaHome1st, lambdaAway1st);
+  const g2h = evalHalfGrid(lambdaHome2nd, lambdaAway2nd);
+
+  const pHtHome = g1h.hWin;
+  const pHtDraw = g1h.hDraw;
+  const pHtAway = g1h.aWin;
+  const p1hDnbHome = pHtHome / (pHtHome + pHtAway || 1);
+  const p1hDnbAway = pHtAway / (pHtHome + pHtAway || 1);
+
+  // HT/FT exact convolution (independent 1H and 2H goal difference)
+  const diff1h = Array(11).fill(0); // index = d + 5
+  const diff2h = Array(11).fill(0);
+  for (let x = 0; x <= 5; x++) {
+    for (let y = 0; y <= 5; y++) {
+      diff1h[x - y + 5] += poissonPm(lambdaHome1st, x) * poissonPm(lambdaAway1st, y);
+      diff2h[x - y + 5] += poissonPm(lambdaHome2nd, x) * poissonPm(lambdaAway2nd, y);
+    }
+  }
+  let pHtFt_1_1 = 0, pHtFt_X_1 = 0, pHtFt_X_X = 0, pHtFt_X_2 = 0, pHtFt_2_2 = 0;
+  for (let d1 = -5; d1 <= 5; d1++) {
+    for (let d2 = -5; d2 <= 5; d2++) {
+      const pJoint = diff1h[d1 + 5] * diff2h[d2 + 5];
+      const ft = d1 + d2;
+      if (d1 > 0 && ft > 0) pHtFt_1_1 += pJoint;
+      else if (d1 === 0 && ft > 0) pHtFt_X_1 += pJoint;
+      else if (d1 === 0 && ft === 0) pHtFt_X_X += pJoint;
+      else if (d1 === 0 && ft < 0) pHtFt_X_2 += pJoint;
+      else if (d1 < 0 && ft < 0) pHtFt_2_2 += pJoint;
+    }
+  }
+
+  // Highest Scoring Half
   const lambda1st = +(lambdaHome1st + lambdaAway1st).toFixed(3);
   const lambda2nd = +(lambdaHome2nd + lambdaAway2nd).toFixed(3);
-
-  // Exact Team-Specific Scoring Probabilities (Can / Cannot score per half)
-  const pHomeScore1st = Math.min(0.88, Math.max(0.18, +(1 - Math.exp(-lambdaHome1st)).toFixed(3)));
-  const pHomeCannotScore1st = +(1 - pHomeScore1st).toFixed(3);
-  const pHomeScore2nd = Math.min(0.92, Math.max(0.24, +(1 - Math.exp(-lambdaHome2nd)).toFixed(3)));
-  const pHomeCannotScore2nd = +(1 - pHomeScore2nd).toFixed(3);
-
-  const pAwayScore1st = Math.min(0.82, Math.max(0.12, +(1 - Math.exp(-lambdaAway1st)).toFixed(3)));
-  const pAwayCannotScore1st = +(1 - pAwayScore1st).toFixed(3);
-  const pAwayScore2nd = Math.min(0.86, Math.max(0.18, +(1 - Math.exp(-lambdaAway2nd)).toFixed(3)));
-  const pAwayCannotScore2nd = +(1 - pAwayScore2nd).toFixed(3);
-
-  const p1stOver05 = Math.min(0.85, Math.max(0.55, +(1 - Math.exp(-lambda1st)).toFixed(3)));
-  const p1stUnder15 = Math.min(0.88, Math.max(0.60, +(Math.exp(-lambda1st) * (1 + lambda1st)).toFixed(3)));
-  const p1stOver15 = Math.min(0.65, Math.max(0.25, +(1 - p1stUnder15).toFixed(3)));
-
-  const p2ndOver05 = Math.min(0.90, Math.max(0.68, +(1 - Math.exp(-lambda2nd)).toFixed(3)));
-  const p2ndOver15 = Math.min(0.72, Math.max(0.35, +(1 - (Math.exp(-lambda2nd) * (1 + lambda2nd))).toFixed(3)));
-  const pGoalFirst10 = Math.min(0.35, Math.max(0.18, +(1 - Math.exp(-totalLambda * (10 / 90))).toFixed(3)));
-  const pNoGoalFirst10 = +(1 - pGoalFirst10).toFixed(3);
-
-  // Dynamic Bivariate Goal Distribution per Half for Highest Scoring Half (Strictly Discrete 1st vs 2nd)
-  let calcP2ndHighest = 0;
-  let calcP1stHighest = 0;
-  let calcPEqualHalves = 0;
+  let calcP2ndHighest = 0, calcP1stHighest = 0, calcPEqualHalves = 0;
   for (let g1 = 0; g1 <= 8; g1++) {
     const pg1 = poissonPm(lambda1st, g1);
     for (let g2 = 0; g2 <= 8; g2++) {
-      const pg2 = poissonPm(lambda2nd, g2);
-      const pJointHalf = pg1 * pg2;
+      const pJointHalf = pg1 * poissonPm(lambda2nd, g2);
       if (g2 > g1) calcP2ndHighest += pJointHalf;
       else if (g1 > g2) calcP1stHighest += pJointHalf;
       else calcPEqualHalves += pJointHalf;
@@ -1876,200 +2042,245 @@ export function generatePredictions(home, away, leagueId) {
   const pHighestScoring2nd = +(calcP2ndHighest / sumHalves).toFixed(3);
   const pHighestScoring1st = +(calcP1stHighest / sumHalves).toFixed(3);
   const pHighestScoringEqual = +(calcPEqualHalves / sumHalves).toFixed(3);
-  const pBothHalvesUnder15 = Math.min(0.68, Math.max(0.35, +(p1stUnder15 * (1 - p2ndOver15 * 0.85)).toFixed(3)));
-  const pBothHalvesOver15 = Math.min(0.48, Math.max(0.18, +(p1stOver15 * p2ndOver15).toFixed(3)));
-  const pScoreBothHalvesHome = Math.min(0.75, Math.max(0.28, +((1 - Math.exp(-lambdaHome * 0.43)) * (1 - Math.exp(-lambdaHome * 0.57))).toFixed(3)));
-  const pScoreBothHalvesAway = Math.min(0.65, Math.max(0.20, +((1 - Math.exp(-lambdaAway * 0.43)) * (1 - Math.exp(-lambdaAway * 0.57))).toFixed(3)));
 
-  const pHomeWinBothHalves = Math.min(0.45, Math.max(0.15, +(pHome * 0.52).toFixed(3)));
-  const pAwayWinBothHalves = Math.min(0.35, Math.max(0.10, +(pAway * 0.50).toFixed(3)));
+  // Team half performance (#26)
+  const pHomeWinBothHalves = +(g1h.hWin * g2h.hWin).toFixed(3);
+  const pAwayWinBothHalves = +(g1h.aWin * g2h.aWin).toFixed(3);
+  const pHomeWinEitherHalf = Math.min(derbyInfo.isDerby ? 0.78 : 0.92, +(1 - (1 - g1h.hWin) * (1 - g2h.hWin)).toFixed(3));
+  const pAwayWinEitherHalf = Math.min(derbyInfo.isDerby ? 0.76 : 0.90, +(1 - (1 - g1h.aWin) * (1 - g2h.aWin)).toFixed(3));
+  const pScoreBothHalvesHome = Math.min(0.75, Math.max(0.18, +((1 - Math.exp(-lambdaHome1st)) * (1 - Math.exp(-lambdaHome2nd))).toFixed(3)));
+  const pScoreBothHalvesAway = Math.min(0.68, Math.max(0.14, +((1 - Math.exp(-lambdaAway1st)) * (1 - Math.exp(-lambdaAway2nd))).toFixed(3)));
 
-  const pHtHome = Math.min(0.68, Math.max(0.22, +(pHome * 0.68).toFixed(3)));
-  const pHtDraw = Math.min(0.52, Math.max(0.35, +(0.42 + (1 - p1stOver05) * 0.25).toFixed(3)));
-  const pHtAway = Math.max(0.12, +(1 - (pHtHome + pHtDraw)).toFixed(3));
+  // #19 First / Last Team to Score
+  const pAnyGoal = Math.max(0.05, 1 - mat.pNoGoal);
+  const homeGoalShare = lambdaHome / Math.max(0.1, lambdaHome + lambdaAway);
+  const pFirstGoalHome = +(pAnyGoal * homeGoalShare).toFixed(3);
+  const pFirstGoalAway = +(pAnyGoal * (1 - homeGoalShare)).toFixed(3);
+  const pLastGoalHome = +(pAnyGoal * (homeGoalShare * 0.97 + 0.015)).toFixed(3);
+  const pLastGoalAway = +(pAnyGoal * (1 - (homeGoalShare * 0.97 + 0.015))).toFixed(3);
 
-  // Expanded markets: Win Either Half, Both Halves Goal
-  const pHomeWinEitherHalf = Math.min(derbyInfo.isDerby ? 0.78 : 0.92, +(1 - Math.pow(1 - (pHome * 0.65), 2)).toFixed(3));
-  const pAwayWinEitherHalf = Math.min(0.88, +(1 - Math.pow(1 - (pAway * 0.65), 2)).toFixed(3));
-  const pBothHalvesGoal = Math.min(0.85, Math.max(0.48, +((1 - Math.exp(-lambdaHome * 0.5)) * (1 - Math.exp(-lambdaAway * 0.5)) * 1.35).toFixed(3)));
-  const pOver25TacklesAnchor = Math.min(0.85, Math.max(0.55, +(0.62 + (aAtt > 1.0 ? 0.12 : 0.02)).toFixed(3)));
+  // #24 Clean Sheet & #25 Win to Nil
+  let pHomeWinToNil = 0, pAwayWinToNil = 0;
+  for (let x = 1; x <= 8; x++) pHomeWinToNil += mat.grid[x][0] * mat.norm;
+  for (let y = 1; y <= 8; y++) pAwayWinToNil += mat.grid[0][y] * mat.norm;
 
-  // 5. CLEAN SHEETS, MARGINS & ENHANCED COMBINATIONS
-  const pHome1UpPayout = Math.min(0.96, Math.max(0.65, +(pHome * 1.28).toFixed(3)));
-  const pHome2UpPayout = Math.min(0.92, Math.max(0.55, +(pHome * 1.10).toFixed(3)));
-  const pHome3UpPayout = Math.min(0.72, Math.max(0.28, +(pHome * 0.70).toFixed(3)));
-  const pHomeWinToNil = Math.min(0.68, Math.max(0.25, +(pHome * pAwayCleanSheet * 1.38).toFixed(3)));
-  const pAwayWinToNil = Math.min(0.58, Math.max(0.18, +(pAway * pHomeCleanSheet * 1.35).toFixed(3)));
-  const p1XOver15 = Math.min(0.89, Math.max(0.58, +(p1X * pOver15 * 1.04).toFixed(3)));
-  const p1XUnder35 = Math.min(0.92, Math.max(0.62, +(p1X * pUnder35 * 1.06).toFixed(3)));
-  const pX2Under35 = Math.min(0.88, Math.max(0.55, +(pX2 * pUnder35 * 1.05).toFixed(3)));
-  const p1XBttsYes = Math.min(0.75, Math.max(0.42, +(p1X * pBtts * 1.02).toFixed(3)));
-  const p1XBttsNo = Math.min(0.78, Math.max(0.45, +(p1X * pBttsNo * 1.02).toFixed(3)));
-  const pGoalsOdd = 0.51;
-  const pGoalsEven = 0.49;
-  const pAnytimeGoalscorer = Math.min(0.75, Math.max(0.42, +(0.45 + (lambdaHome - 1.2) * 0.14).toFixed(3)));
-  const pPlaymakerScaOver15 = Math.min(0.88, Math.max(0.60, +(0.64 + (eloDelta > 0 ? 0.12 : 0.04)).toFixed(3)));
-  const pGkSavesOver25 = Math.min(0.88, Math.max(0.55, +(0.58 + (tacticalProfiles.shootingMetricsProfile.homeSotExp > 4.5 ? 0.18 : 0.08)).toFixed(3)));
+  // #14 Matchbet & BTTS, #15 Matchbet + Totals
+  const p1XBttsYes = Math.min(0.78, Math.max(0.25, +(p1X * mat.pBtts * 1.02).toFixed(3)));
+  const p1XBttsNo = Math.min(0.80, Math.max(0.25, +(p1X * mat.pBttsNo * 1.02).toFixed(3)));
+  let pHomeBttsYes = 0, pAwayBttsYes = 0, pHomeOver15Ft = 0, pAwayOver15Ft = 0;
+  for (let x = 0; x <= 8; x++) {
+    for (let y = 0; y <= 8; y++) {
+      const pr = mat.grid[x][y] * mat.norm;
+      if (x > y && x > 0 && y > 0) pHomeBttsYes += pr;
+      if (y > x && x > 0 && y > 0) pAwayBttsYes += pr;
+      if (x > y && x + y >= 2) pHomeOver15Ft += pr;
+      if (y > x && x + y >= 2) pAwayOver15Ft += pr;
+    }
+  }
+  const p1XOver15 = Math.min(0.90, Math.max(0.45, +(p1X * mat.pOver15 * 1.04).toFixed(3)));
+  const p1XUnder35 = Math.min(0.92, Math.max(0.48, +(p1X * mat.pUnder35 * 1.05).toFixed(3)));
+  const pX2Under35 = Math.min(0.90, Math.max(0.42, +(pX2 * mat.pUnder35 * 1.05).toFixed(3)));
 
-  // Team Total Goals (Standard Sportsbook Retail Lines)
-  const pHomeOver05Goals = Math.min(0.96, Math.max(0.50, +(1 - Math.exp(-lambdaHome)).toFixed(3)));
-  const pHomeUnder05Goals = +(1 - pHomeOver05Goals).toFixed(3);
-  const pHomeOver15Goals = Math.min(0.85, Math.max(0.20, +(1 - Math.exp(-lambdaHome) * (1 + lambdaHome)).toFixed(3)));
-  const pHomeUnder15Goals = +(1 - pHomeOver15Goals).toFixed(3);
+  // #27 Goal Scorers & #28 Matchflow
+  const pHomeAnytimeScorer = Math.min(0.72, Math.max(0.28, +(1 - Math.exp(-lambdaHome * 0.44)).toFixed(3)));
+  const pAwayAnytimeScorer = Math.min(0.66, Math.max(0.22, +(1 - Math.exp(-lambdaAway * 0.44)).toFixed(3)));
+  const pHomeFirstScorer = +(pHomeAnytimeScorer * homeGoalShare * 0.62).toFixed(3);
+  const pMatchflowHome = Math.min(0.66, Math.max(0.18, +(pFirstGoalHome * (pHome / Math.max(0.1, homeGoalShare)) * 0.78).toFixed(3)));
+  const pMatchflowAway = Math.min(0.60, Math.max(0.12, +(pFirstGoalAway * (pAway / Math.max(0.1, 1 - homeGoalShare)) * 0.78).toFixed(3)));
 
-  const pAwayOver05Goals = Math.min(0.92, Math.max(0.40, +(1 - Math.exp(-lambdaAway)).toFixed(3)));
-  const pAwayUnder05Goals = +(1 - pAwayOver05Goals).toFixed(3);
-  const pAwayOver15Goals = Math.min(0.78, Math.max(0.15, +(1 - Math.exp(-lambdaAway) * (1 + lambdaAway)).toFixed(3)));
-  const pAwayUnder15Goals = +(1 - pAwayOver15Goals).toFixed(3);
-
+  // Build strict 35-Market Candidate Slate
   const rawMarkets = [
-    // 1. OUTRIGHT WINNERS & DOUBLE CHANCES
+    // #1 Full Time / Match Result (1X2)
     { market: 'Match Winner', selection: `1 · ${home.name}`, prob: pHome, type: '1X2', category: 'WINNERS_DC' },
     { market: 'Match Winner', selection: 'X · Draw', prob: pDraw, type: '1X2_DRAW', category: 'WINNERS_DC' },
     { market: 'Match Winner', selection: `2 · ${away.name}`, prob: pAway, type: '1X2', category: 'WINNERS_DC' },
+    // #4 Double Chance (strictly 1X and X2)
     { market: 'Double Chance', selection: '1X · Home or Draw', prob: p1X, type: 'DOUBLE_CHANCE', category: 'WINNERS_DC' },
     { market: 'Double Chance', selection: 'X2 · Away or Draw', prob: pX2, type: 'DOUBLE_CHANCE', category: 'WINNERS_DC' },
-    { market: 'Double Chance', selection: '12 · Either to Win', prob: p12, type: 'DOUBLE_CHANCE', category: 'WINNERS_DC' },
+    // #5 Draw No Bet (DNB)
     { market: 'Draw No Bet', selection: `DNB · ${home.name}`, prob: pDnbHome, type: 'DNB', category: 'WINNERS_DC' },
     { market: 'Draw No Bet', selection: `DNB · ${away.name}`, prob: pDnbAway, type: 'DNB', category: 'WINNERS_DC' },
 
-    // 2. GOAL OVERS / UNDERS
-    { market: 'Goals Over/Under', selection: 'Over 1.5 Goals', prob: pOver15, type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
-    { market: 'Goals Over/Under', selection: 'Under 1.5 Goals', prob: +(1 - pOver15).toFixed(3), type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
-    { market: 'Goals Over/Under', selection: 'Over 2.5 Goals', prob: pOver25, type: 'GOALS_MED_PROB', category: 'GOAL_OVERS_UNDERS' },
-    { market: 'Goals Over/Under', selection: 'Under 2.5 Goals', prob: pUnder25, type: 'GOALS_MED_PROB', category: 'GOAL_OVERS_UNDERS' },
-    { market: 'Goals Over/Under', selection: 'Over 3.5 Goals', prob: +(1 - pUnder35).toFixed(3), type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
-    { market: 'Goals Over/Under', selection: 'Under 3.5 Goals', prob: pUnder35, type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
+    // #7 Handicap & #8 Winning Margins
+    { market: 'Handicap', selection: `${home.name} -1.5 Handicap`, prob: marginHandicap.handicaps.homeMinus15, type: 'HANDICAP', category: 'HANDICAP_MARGINS' },
+    { market: 'Handicap', selection: `${away.name} +1.5 Handicap`, prob: marginHandicap.handicaps.awayPlus15, type: 'HANDICAP', category: 'HANDICAP_MARGINS' },
+    { market: 'Handicap', selection: `${home.name} +1.5 Handicap`, prob: marginHandicap.handicaps.homePlus15, type: 'HANDICAP', category: 'HANDICAP_MARGINS' },
+    { market: 'Handicap', selection: `${away.name} -1.5 Handicap`, prob: marginHandicap.handicaps.awayMinus15, type: 'HANDICAP', category: 'HANDICAP_MARGINS' },
+    { market: 'Winning Margins', selection: `${home.name} by 1 Goal`, prob: marginHandicap.margins.homeBy1, type: 'WINNING_MARGINS', category: 'HANDICAP_MARGINS' },
+    { market: 'Winning Margins', selection: `${home.name} by 2 Goals`, prob: marginHandicap.margins.homeBy2, type: 'WINNING_MARGINS', category: 'HANDICAP_MARGINS' },
+    { market: 'Winning Margins', selection: `${away.name} by 1 Goal`, prob: marginHandicap.margins.awayBy1, type: 'WINNING_MARGINS', category: 'HANDICAP_MARGINS' },
 
-    // 3. MATCH TOTAL CORNERS (MARKET-READY 7.5 - 11.5 OVER/UNDER) & 1ST-HALF ("FIRST") CORNERS (STRICTLY 3.5 OR 4.5 OVER/UNDER)
-    { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: pCornOver75, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Under 7.5 Total Corners', prob: pCornUnder75, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Over 8.5 Total Corners', prob: pCornOver85, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Under 8.5 Total Corners', prob: pCornUnder85, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Over 9.5 Total Corners', prob: pCornOver95, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Under 9.5 Total Corners', prob: pCornUnder95, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Over 10.5 Total Corners', prob: pCornOver105, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Under 10.5 Total Corners', prob: pCornUnder105, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Over 11.5 Total Corners', prob: pCornOver115, type: 'CORNERS', category: 'CORNERS' },
-    { market: 'Match Total Corners', selection: 'Under 11.5 Total Corners', prob: pCornUnder115, type: 'CORNERS', category: 'CORNERS' },
-    { market: '1st-Half Corners', selection: '1st-Half Over 3.5 Corners', prob: pCorn1stOver35, type: 'CORNERS', category: 'CORNERS' },
-    { market: '1st-Half Corners', selection: '1st-Half Under 3.5 Corners', prob: pCorn1stUnder35, type: 'CORNERS', category: 'CORNERS' },
-    { market: '1st-Half Corners', selection: '1st-Half Over 4.5 Corners', prob: pCorn1stOver45, type: 'CORNERS', category: 'CORNERS' },
-    { market: '1st-Half Corners', selection: '1st-Half Under 4.5 Corners', prob: pCorn1stUnder45, type: 'CORNERS', category: 'CORNERS' },
+    // #10 Correct Score (Top 2 empirical matrix modes)
+    ...mat.exactScores.slice(0, 2).map(sc => ({
+      market: 'Correct Score',
+      selection: `${sc.home} - ${sc.away}`,
+      prob: +sc.prob.toFixed(3),
+      type: 'CORRECT_SCORE',
+      category: 'EXACT_SCORE'
+    })),
 
-    // 3b. EACH TEAM TOTAL CORNERS (STRICTLY PLAYABLE 5.5+ LINES OR UNDERS + HOME-ONLY 7+ / 8+ / UNDERS)
-    { market: 'Home Team Total Corners', selection: `${home.name} Over 5.5 Corners`, prob: pHomeCornOver55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Home Team Total Corners', selection: `${home.name} Under 5.5 Corners`, prob: pHomeCornUnder55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Home Team Total Corners', selection: `${home.name} 7+ Corners (Over 6.5)`, prob: pHomeCornOver65, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Home Team Total Corners', selection: `${home.name} Under 6.5 Corners`, prob: pHomeCornUnder65, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Home Team Total Corners', selection: `${home.name} 8+ Corners (Over 7.5)`, prob: pHomeCornOver75, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Home Team Total Corners', selection: `${home.name} Under 7.5 Corners`, prob: pHomeCornUnder75, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Away Team Total Corners', selection: `${away.name} Over 5.5 Corners`, prob: pAwayCornOver55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
-    { market: 'Away Team Total Corners', selection: `${away.name} Under 5.5 Corners`, prob: pAwayCornUnder55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+    // #11 Totals (Match Goal Overs strictly start from Over 1.5 Goals; Unders 1.5 - 4.5)
+    { market: 'Goals Over/Under', selection: 'Over 1.5 Goals', prob: +mat.pOver15.toFixed(3), type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Goals Over/Under', selection: 'Under 1.5 Goals', prob: +mat.pUnder15.toFixed(3), type: 'GOALS_MED_PROB', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Goals Over/Under', selection: 'Over 2.5 Goals', prob: +mat.pOver25.toFixed(3), type: 'GOALS_MED_PROB', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Goals Over/Under', selection: 'Under 2.5 Goals', prob: +mat.pUnder25.toFixed(3), type: 'GOALS_MED_PROB', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Goals Over/Under', selection: 'Over 3.5 Goals', prob: +mat.pOver35.toFixed(3), type: 'GOALS_MED_PROB', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Goals Over/Under', selection: 'Under 3.5 Goals', prob: +mat.pUnder35.toFixed(3), type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Goals Over/Under', selection: 'Under 4.5 Goals', prob: +mat.pUnder45.toFixed(3), type: 'GOALS_HIGH_PROB', category: 'GOAL_OVERS_UNDERS' },
 
-    // 4. BOOKINGS (CARDS PER MATCH)
-    { market: 'Total Match Bookings', selection: 'Over 2.5 Total Cards', prob: pCardsOver25, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Total Match Bookings', selection: 'Over 3.5 Total Cards', prob: pCardsOver35, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Total Match Bookings', selection: 'Under 3.5 Total Cards', prob: pCardsUnder35, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Total Match Bookings', selection: 'Over 4.5 Total Cards', prob: pCardsOver45, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Total Match Bookings', selection: 'Under 4.5 Total Cards', prob: pCardsUnder45, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Each Team Bookings', selection: `${home.name} Over 1.5 Cards`, prob: pHomeOver15Cards, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Each Team Bookings', selection: `${home.name} Under 1.5 Cards`, prob: +(1 - pHomeOver15Cards).toFixed(3), type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Each Team Bookings', selection: `${away.name} Over 1.5 Cards`, prob: pAwayOver15Cards, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Each Team Bookings', selection: `${away.name} Under 1.5 Cards`, prob: +(1 - pAwayOver15Cards).toFixed(3), type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Each Team Bookings', selection: `${home.name} Under 2.5 Cards`, prob: pHomeUnder25Cards, type: 'CARDS', category: 'BOOKINGS' },
-    { market: 'Each Team Bookings', selection: `${away.name} Under 2.5 Cards`, prob: pAwayUnder25Cards, type: 'CARDS', category: 'BOOKINGS' },
+    // #35 Team Goal Totals (Team Goal Overs can start from Over 0.5 Goals)
+    { market: 'Home Team Total Goals', selection: `${home.name} Over 0.5 Goals`, prob: +mat.teamTotals.pHomeOver05.toFixed(3), type: 'TEAM_TOTAL_GOALS', category: 'TEAM_GOALS' },
+    { market: 'Home Team Total Goals', selection: `${home.name} Over 1.5 Goals`, prob: +mat.teamTotals.pHomeOver15.toFixed(3), type: 'TEAM_TOTAL_GOALS', category: 'TEAM_GOALS' },
+    { market: 'Home Team Total Goals', selection: `${home.name} Under 2.5 Goals`, prob: +mat.teamTotals.pHomeUnder25.toFixed(3), type: 'TEAM_TOTAL_GOALS', category: 'TEAM_GOALS' },
+    { market: 'Away Team Total Goals', selection: `${away.name} Over 0.5 Goals`, prob: +mat.teamTotals.pAwayOver05.toFixed(3), type: 'TEAM_TOTAL_GOALS', category: 'TEAM_GOALS' },
+    { market: 'Away Team Total Goals', selection: `${away.name} Under 1.5 Goals`, prob: +mat.teamTotals.pAwayUnder15.toFixed(3), type: 'TEAM_TOTAL_GOALS', category: 'TEAM_GOALS' },
+    { market: 'Away Team Total Goals', selection: `${away.name} Under 2.5 Goals`, prob: +mat.teamTotals.pAwayUnder25.toFixed(3), type: 'TEAM_TOTAL_GOALS', category: 'TEAM_GOALS' },
 
-    // 5. FIRST 10 MINUTES GOAL (YES / NO) & FIRST 15 MINUTES DRAW (WEIBULL EARLY-TEMPO BIVARIATE POISSON)
-    { market: 'Goal in the First 10 Minutes', selection: 'No Goal in First 10 Minutes', prob: pNoGoalFirst10, type: 'TIME_SEGMENTS', category: 'FIRST_10_MIN' },
-    { market: 'Goal in the First 10 Minutes', selection: 'Goal in First 10 Minutes', prob: pGoalFirst10, type: 'TIME_SEGMENTS', category: 'FIRST_10_MIN' },
-    ...(() => {
-      const f15 = calculateFirst15MinDistribution({
-        lambdaHome,
-        lambdaAway,
-        rho: lg.rho,
-        isDerby: derbyInfo.isDerby,
-        physicsMetrics
-      });
-      return [
-        { market: 'First 15 Minutes (0-15 min)', selection: '15 Min Draw (X)', prob: f15.pDraw15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' },
-        { market: 'First 15 Minutes (0-15 min)', selection: 'No Goal in First 15 Min', prob: f15.pNoGoal15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' },
-        { market: 'First 15 Minutes (0-15 min)', selection: `15 Min Home (1 · ${home.name})`, prob: f15.pHomeLead15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' },
-        { market: 'First 15 Minutes (0-15 min)', selection: `15 Min Away (2 · ${away.name})`, prob: f15.pAwayLead15, type: 'FIRST_15_MIN', category: 'FIRST_15_MIN' }
-      ];
-    })(),
+    // #13 BTTS & #14-#16 Combos & #17 Odd/Even & #18 Which Team to Score & #23 Multigoals
+    { market: 'Both Teams to Score', selection: 'BTTS · Yes', prob: +mat.pBtts.toFixed(3), type: 'BTTS', category: 'BTTS' },
+    { market: 'Both Teams to Score', selection: 'BTTS · No', prob: +mat.pBttsNo.toFixed(3), type: 'BTTS', category: 'BTTS' },
+    { market: 'Matchbet & BTTS', selection: '1X & BTTS · Yes', prob: p1XBttsYes, type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Matchbet & BTTS', selection: '1X & BTTS · No', prob: p1XBttsNo, type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Matchbet & BTTS', selection: `${home.name} & BTTS · Yes`, prob: +pHomeBttsYes.toFixed(3), type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Matchbet + Totals', selection: '1X & Over 1.5 Goals', prob: p1XOver15, type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Matchbet + Totals', selection: '1X & Under 3.5 Goals', prob: p1XUnder35, type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Matchbet + Totals', selection: 'X2 & Under 3.5 Goals', prob: pX2Under35, type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Matchbet + Totals', selection: `${home.name} & Over 1.5 Goals`, prob: +pHomeOver15Ft.toFixed(3), type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Matchbet + Totals', selection: `${away.name} & Over 1.5 Goals`, prob: +pAwayOver15Ft.toFixed(3), type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'BTTS and Totals', selection: 'BTTS · Yes & Over 2.5 Goals', prob: +mat.pBttsOver25.toFixed(3), type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'BTTS and Totals', selection: 'BTTS · No & Under 3.5 Goals', prob: +mat.pBttsNoUnder35.toFixed(3), type: 'COMBINATIONS', category: 'BTTS_COMBOS' },
+    { market: 'Odd/Even Goals', selection: 'Even Goals (0=Even)', prob: +mat.pGoalsEven.toFixed(3), type: 'ODD_EVEN', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Odd/Even Goals', selection: 'Odd Goals', prob: +mat.pGoalsOdd.toFixed(3), type: 'ODD_EVEN', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Which Team to Score', selection: 'Both Teams to Score', prob: +mat.pBtts.toFixed(3), type: 'WHICH_TEAM', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Which Team to Score', selection: `${home.name} Only`, prob: +mat.pHomeOnly.toFixed(3), type: 'WHICH_TEAM', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Which Team to Score', selection: `${away.name} Only`, prob: +mat.pAwayOnly.toFixed(3), type: 'WHICH_TEAM', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Multigoals', selection: 'Match 1-3 Goals', prob: +mat.mg.gMg1_3.toFixed(3), type: 'MULTIGOALS', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Multigoals', selection: 'Match 2-3 Goals', prob: +mat.mg.gMg2_3.toFixed(3), type: 'MULTIGOALS', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Multigoals', selection: `${home.name} 1-3 Goals`, prob: +mat.mg.gH_Mg1_3.toFixed(3), type: 'MULTIGOALS', category: 'GOAL_OVERS_UNDERS' },
+    { market: 'Multigoals', selection: `${away.name} 1-2 Goals`, prob: +mat.mg.gA_Mg1_2.toFixed(3), type: 'MULTIGOALS', category: 'GOAL_OVERS_UNDERS' },
 
-    // 6. BOTH TEAMS TO SCORE (BTTS)
-    { market: 'Both Teams to Score', selection: 'BTTS · Yes', prob: pBtts, type: 'BTTS', category: 'BTTS' },
-    { market: 'Both Teams to Score', selection: 'BTTS · No', prob: pBttsNo, type: 'BTTS', category: 'BTTS' },
-
-    // 7. TEAM TOTALS
-    { market: 'Team Total Goals', selection: `${home.name} Over 0.5 Goals`, prob: pHomeOver05Goals, type: 'GOALS_HIGH_PROB', category: 'TEAM_TOTALS' },
-    { market: 'Team Total Goals', selection: `${home.name} Over 1.5 Goals`, prob: pHomeOver15Goals, type: 'GOALS_HIGH_PROB', category: 'TEAM_TOTALS' },
-    { market: 'Team Total Goals', selection: `${home.name} Under 1.5 Goals`, prob: pHomeUnder15Goals, type: 'GOALS_HIGH_PROB', category: 'TEAM_TOTALS' },
-    { market: 'Team Total Goals', selection: `${away.name} Over 0.5 Goals`, prob: pAwayOver05Goals, type: 'GOALS_HIGH_PROB', category: 'TEAM_TOTALS' },
-    { market: 'Team Total Goals', selection: `${away.name} Over 1.5 Goals`, prob: pAwayOver15Goals, type: 'GOALS_HIGH_PROB', category: 'TEAM_TOTALS' },
-    { market: 'Team Total Goals', selection: `${away.name} Under 1.5 Goals`, prob: pAwayUnder15Goals, type: 'GOALS_HIGH_PROB', category: 'TEAM_TOTALS' },
-
-    // 8. PLAYER SPECIALS & COMBOS
-    { market: 'Anytime Goalscorer', selection: `${home.name} Lead Striker Anytime Goalscorer`, prob: pAnytimeGoalscorer, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Player Shots on Target', selection: `${home.name} Lead Attacker Over 1.5 Shots on Target`, prob: Math.min(0.85, +(pHomeSotOver45 * 0.94).toFixed(3)), type: 'SHOOTING', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Player Tackles', selection: `${home.name} Anchor Midfielder Over 2.5 Tackles`, prob: pOver25TacklesAnchor, type: 'TACKLES', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Player Chance Creation', selection: `${home.name} Playmaker Over 1.5 Shot-Creating Actions`, prob: pPlaymakerScaOver15, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Goalkeeper Saves', selection: `${away.name} Goalkeeper Over 2.5 Saves`, prob: pGkSavesOver25, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Double Chance + Totals', selection: '1X & Over 1.5 Goals', prob: p1XOver15, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Double Chance + Totals', selection: '1X & Under 3.5 Goals', prob: p1XUnder35, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Double Chance + Totals', selection: 'X2 & Under 3.5 Goals', prob: pX2Under35, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Double Chance + BTTS', selection: '1X & BTTS · Yes', prob: p1XBttsYes, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Win to Nil', selection: `${home.name} Win to Nil · Yes`, prob: pHomeWinToNil, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Clean Sheets', selection: `${home.name} Clean Sheet · Yes`, prob: pHomeCleanSheet, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-    { market: 'Clean Sheets', selection: `${away.name} Clean Sheet · Yes`, prob: pAwayCleanSheet, type: 'COMBINATIONS', category: 'PLAYER_SPECIALS_COMBOS' },
-
-    // 9. HIGHEST SCORING HALF & TEAM-SPECIFIC HALF TIMING SUITE (DISCRETE 1ST / 2ND HALF)
+    // #2 Half Time Result, #3 2nd Half 1X2, #6 1H DNB, #9 HT/FT, #12 1H Totals, #22 Highest Scoring Half, #26 Half Perf
+    { market: 'Half Time Result', selection: `HT · 1 (${home.name})`, prob: +pHtHome.toFixed(3), type: 'HALF_RESULT', category: 'HALF_MARKETS' },
+    { market: 'Half Time Result', selection: 'HT · X (Draw)', prob: +pHtDraw.toFixed(3), type: 'HALF_RESULT', category: 'HALF_MARKETS' },
+    { market: 'Half Time Result', selection: `HT · 2 (${away.name})`, prob: +pHtAway.toFixed(3), type: 'HALF_RESULT', category: 'HALF_MARKETS' },
+    { market: '2nd Half 1X2', selection: `2H · 1 (${home.name})`, prob: +g2h.hWin.toFixed(3), type: 'HALF_RESULT', category: 'HALF_MARKETS' },
+    { market: '2nd Half 1X2', selection: '2H · X (Draw)', prob: +g2h.hDraw.toFixed(3), type: 'HALF_RESULT', category: 'HALF_MARKETS' },
+    { market: '2nd Half 1X2', selection: `2H · 2 (${away.name})`, prob: +g2h.aWin.toFixed(3), type: 'HALF_RESULT', category: 'HALF_MARKETS' },
+    { market: '1st Half Draw No Bet', selection: `1H DNB · ${home.name}`, prob: +p1hDnbHome.toFixed(3), type: 'DNB', category: 'HALF_MARKETS' },
+    { market: '1st Half Draw No Bet', selection: `1H DNB · ${away.name}`, prob: +p1hDnbAway.toFixed(3), type: 'DNB', category: 'HALF_MARKETS' },
+    { market: 'Half Time / Full Time', selection: `${home.name} / ${home.name} (1/1)`, prob: +pHtFt_1_1.toFixed(3), type: 'HT_FT', category: 'HALF_MARKETS' },
+    { market: 'Half Time / Full Time', selection: `Draw / ${home.name} (X/1)`, prob: +pHtFt_X_1.toFixed(3), type: 'HT_FT', category: 'HALF_MARKETS' },
+    { market: 'Half Time / Full Time', selection: `${away.name} / ${away.name} (2/2)`, prob: +pHtFt_2_2.toFixed(3), type: 'HT_FT', category: 'HALF_MARKETS' },
+    { market: '1st-Half Totals', selection: '1st-Half Under 1.5 Goals', prob: +g1h.un15.toFixed(3), type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
+    { market: '1st-Half Totals', selection: '1st-Half Under 2.5 Goals', prob: +g1h.un25.toFixed(3), type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
     { market: 'Highest Scoring Half', selection: '2nd Half', prob: pHighestScoring2nd, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
     { market: 'Highest Scoring Half', selection: '1st Half', prob: pHighestScoring1st, type: 'HIGHEST_SCORING_HALF', category: 'HALF_MARKETS' },
-    { market: '1st-Half Totals', selection: '1st-Half Over 0.5 Goals', prob: p1stOver05, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
-    { market: '1st-Half Totals', selection: '1st-Half Under 1.5 Goals', prob: p1stUnder15, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
-    { market: '2nd-Half Totals', selection: '2nd-Half Over 0.5 Goals', prob: p2ndOver05, type: 'GOALS_HIGH_PROB', category: 'HALF_MARKETS' },
-    { market: 'Team to Score in 2nd Half', selection: `${home.name} to Score in 2nd Half · Yes`, prob: pHomeScore2nd, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
-    { market: 'Team to Score in 2nd Half', selection: `${away.name} to Score in 2nd Half · Yes`, prob: pAwayScore2nd, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
-    { market: 'Team Clean Sheet in 1st Half', selection: `${home.name} Clean Sheet in 1st Half · Yes`, prob: pAwayCannotScore1st, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
-    { market: 'Team Clean Sheet in 1st Half', selection: `${away.name} Clean Sheet in 1st Half · Yes`, prob: pHomeCannotScore1st, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' }
+    { market: 'Win Either Half', selection: `${home.name} Win Either Half · Yes`, prob: pHomeWinEitherHalf, type: 'WIN_EITHER_HALF', category: 'HALF_MARKETS' },
+    { market: 'Win Either Half', selection: `${away.name} Win Either Half · Yes`, prob: pAwayWinEitherHalf, type: 'WIN_EITHER_HALF', category: 'HALF_MARKETS' },
+    { market: 'Score Both Halves', selection: `${home.name} Score Both Halves · Yes`, prob: pScoreBothHalvesHome, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
+    { market: 'Win Both Halves', selection: `${home.name} Win Both Halves · Yes`, prob: pHomeWinBothHalves, type: 'TEAM_HALF_GOALS', category: 'HALF_MARKETS' },
+
+    // #19 First / Last Team to Score, #20 First Goal Interval (10m), #21 First 10 Minutes Result, #33 First 15 Minutes Draw
+    { market: 'First 10 Minutes Result', selection: '0-10m Draw (X)', prob: f10.pDraw10, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First 10 Minutes Result', selection: '0-10m No Goal', prob: f10.pNoGoal10, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First 10 Minutes Result', selection: `0-10m Home Lead (1 · ${home.name})`, prob: f10.pHomeLead10, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First 10 Minutes Result', selection: `0-10m Away Lead (2 · ${away.name})`, prob: f10.pAwayLead10, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First 15 Minutes Result', selection: '0-15m Draw (X)', prob: f15.pDraw15, type: 'FIRST_15_MIN', category: 'TIME_SEGMENTS' },
+    { market: 'First 15 Minutes Result', selection: '0-15m No Goal', prob: f15.pNoGoal15, type: 'FIRST_15_MIN', category: 'TIME_SEGMENTS' },
+    { market: 'First Goal Interval (10m)', selection: `First Goal ${fgIntervals.mostLikelyBracket}`, prob: +Math.max(0.11, fgIntervals.mostLikelyBracketProb).toFixed(3), type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First Goal Interval (10m)', selection: 'First Goal in 1-30 Min', prob: fgIntervals.goalBefore30MinProb, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First / Last Team to Score', selection: `First Team to Score · ${home.name}`, prob: pFirstGoalHome, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First / Last Team to Score', selection: `First Team to Score · ${away.name}`, prob: pFirstGoalAway, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+    { market: 'First / Last Team to Score', selection: `Last Team to Score · ${home.name}`, prob: pLastGoalHome, type: 'TIME_SEGMENTS', category: 'TIME_SEGMENTS' },
+
+    // #34 Total Match Shots (Negative Binomial Over/Under Lines)
+    { market: 'Match Total Shots', selection: 'Over 19.5 Total Shots', prob: shotsDist.match.over195, type: 'SHOOTING', category: 'SHOOTING' },
+    { market: 'Match Total Shots', selection: 'Over 21.5 Total Shots', prob: shotsDist.match.over215, type: 'SHOOTING', category: 'SHOOTING' },
+    { market: 'Match Total Shots', selection: 'Over 23.5 Total Shots', prob: shotsDist.match.over235, type: 'SHOOTING', category: 'SHOOTING' },
+    { market: 'Match Total Shots', selection: 'Under 25.5 Total Shots', prob: shotsDist.match.under255, type: 'SHOOTING', category: 'SHOOTING' },
+    { market: 'Match Total Shots', selection: 'Under 27.5 Total Shots', prob: shotsDist.match.under275, type: 'SHOOTING', category: 'SHOOTING' },
+
+    // #24 Clean Sheet & #25 Win to Nil
+    { market: 'Clean Sheet', selection: `${home.name} Clean Sheet · Yes`, prob: +mat.pHomeCleanSheet.toFixed(3), type: 'TEAM_PERF', category: 'TEAM_PERFORMANCE' },
+    { market: 'Clean Sheet', selection: `${home.name} Clean Sheet · No`, prob: +mat.pHomeCleanSheetNo.toFixed(3), type: 'TEAM_PERF', category: 'TEAM_PERFORMANCE' },
+    { market: 'Clean Sheet', selection: `${away.name} Clean Sheet · Yes`, prob: +mat.pAwayCleanSheet.toFixed(3), type: 'TEAM_PERF', category: 'TEAM_PERFORMANCE' },
+    { market: 'Clean Sheet', selection: `${away.name} Clean Sheet · No`, prob: +mat.pAwayCleanSheetNo.toFixed(3), type: 'TEAM_PERF', category: 'TEAM_PERFORMANCE' },
+    { market: 'Win to Nil', selection: `${home.name} Win to Nil · Yes`, prob: +pHomeWinToNil.toFixed(3), type: 'TEAM_PERF', category: 'TEAM_PERFORMANCE' },
+    { market: 'Win to Nil', selection: `${away.name} Win to Nil · Yes`, prob: +pAwayWinToNil.toFixed(3), type: 'TEAM_PERF', category: 'TEAM_PERFORMANCE' },
+
+    // #27 Goal Scorer Markets & #28 Matchflow
+    { market: 'Anytime Goalscorer', selection: `${home.name} Lead Striker Anytime Goalscorer`, prob: pHomeAnytimeScorer, type: 'SCORER', category: 'SCORER_MATCHFLOW' },
+    { market: 'Anytime Goalscorer', selection: `${away.name} Lead Striker Anytime Goalscorer`, prob: pAwayAnytimeScorer, type: 'SCORER', category: 'SCORER_MATCHFLOW' },
+    { market: 'First Goalscorer', selection: `${home.name} Lead Striker First Goalscorer`, prob: pHomeFirstScorer, type: 'SCORER', category: 'SCORER_MATCHFLOW' },
+    { market: 'Matchflow', selection: `${home.name} Score First & Win`, prob: pMatchflowHome, type: 'MATCHFLOW', category: 'SCORER_MATCHFLOW' },
+    { market: 'Matchflow', selection: `${away.name} Score First & Win`, prob: pMatchflowAway, type: 'MATCHFLOW', category: 'SCORER_MATCHFLOW' },
+
+    // #30 Bookings / Cards Markets (UNDERS ONLY + Most Bookings + First Team Booked)
+    { market: 'Total Match Bookings', selection: 'Under 3.5 Booking Points (Yellow=1, Red=2)', prob: +pBookUnder35.toFixed(3), type: 'CARDS', category: 'BOOKINGS' },
+    { market: 'Total Match Bookings', selection: 'Under 4.5 Booking Points (Yellow=1, Red=2)', prob: +pBookUnder45.toFixed(3), type: 'CARDS', category: 'BOOKINGS' },
+    { market: 'Total Match Bookings', selection: 'Under 5.5 Booking Points (Yellow=1, Red=2)', prob: +pBookUnder55.toFixed(3), type: 'CARDS', category: 'BOOKINGS' },
+    { market: '1st Half Bookings', selection: '1st-Half Under 2.5 Booking Points', prob: +pBook1HUnder25.toFixed(3), type: 'CARDS', category: 'BOOKINGS' },
+    { market: 'Most Bookings', selection: `${away.name} Most Bookings`, prob: pMostBookingsAway, type: 'CARDS', category: 'BOOKINGS' },
+    { market: 'Most Bookings', selection: `${home.name} Most Bookings`, prob: pMostBookingsHome, type: 'CARDS', category: 'BOOKINGS' },
+    { market: 'First Team Booked', selection: `${away.name} First Team Booked`, prob: pFirstBookedAway, type: 'CARDS', category: 'BOOKINGS' },
+    { market: 'First Team Booked', selection: `${home.name} First Team Booked`, prob: pFirstBookedHome, type: 'CARDS', category: 'BOOKINGS' },
+
+    // #29 Total Corners (ONLY generated in CORNER_ELIGIBLE_LEAGUES)
+    ...(cornersSupported ? [
+      { market: 'Match Total Corners', selection: 'Over 7.5 Total Corners', prob: pCornOver75, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Under 7.5 Total Corners', prob: pCornUnder75, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Over 8.5 Total Corners', prob: pCornOver85, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Under 8.5 Total Corners', prob: pCornUnder85, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Over 9.5 Total Corners', prob: pCornOver95, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Under 9.5 Total Corners', prob: pCornUnder95, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Over 10.5 Total Corners', prob: pCornOver105, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Under 10.5 Total Corners', prob: pCornUnder105, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Match Total Corners', selection: 'Under 11.5 Total Corners', prob: pCornUnder115, type: 'CORNERS', category: 'CORNERS' },
+      { market: '1st-Half Corners', selection: '1st-Half Over 3.5 Corners', prob: pCorn1stOver35, type: 'CORNERS', category: 'CORNERS' },
+      { market: '1st-Half Corners', selection: '1st-Half Under 3.5 Corners', prob: pCorn1stUnder35, type: 'CORNERS', category: 'CORNERS' },
+      { market: '1st-Half Corners', selection: '1st-Half Over 4.5 Corners', prob: pCorn1stOver45, type: 'CORNERS', category: 'CORNERS' },
+      { market: '1st-Half Corners', selection: '1st-Half Under 4.5 Corners', prob: pCorn1stUnder45, type: 'CORNERS', category: 'CORNERS' },
+      { market: 'Home Team Total Corners', selection: `${home.name} Over 5.5 Corners`, prob: pHomeCornOver55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+      { market: 'Home Team Total Corners', selection: `${home.name} Under 5.5 Corners`, prob: pHomeCornUnder55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+      { market: 'Home Team Total Corners', selection: `${home.name} 7+ Corners (Over 6.5)`, prob: pHomeCornOver65, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+      { market: 'Home Team Total Corners', selection: `${home.name} Under 6.5 Corners`, prob: pHomeCornUnder65, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+      { market: 'Home Team Total Corners', selection: `${home.name} 8+ Corners (Over 7.5)`, prob: pHomeCornOver75, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+      { market: 'Home Team Total Corners', selection: `${home.name} Under 7.5 Corners`, prob: pHomeCornUnder75, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+      { market: 'Away Team Total Corners', selection: `${away.name} Over 5.5 Corners`, prob: pAwayCornOver55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' },
+      { market: 'Away Team Total Corners', selection: `${away.name} Under 5.5 Corners`, prob: pAwayCornUnder55, type: 'TEAM_CORNERS', category: 'TEAM_CORNERS' }
+    ] : []),
+
+    // #31 Knockout / Cup Markets (ONLY generated when tie is a cup/knockout fixture)
+    ...(isKnockoutMatch(leagueId, round) ? [
+      { market: 'To Qualify', selection: `${home.name} to Qualify`, prob: +(pHome + pDraw * 0.54).toFixed(3), type: 'CUP', category: 'KNOCKOUT_CUP' },
+      { market: 'To Qualify', selection: `${away.name} to Qualify`, prob: +(pAway + pDraw * 0.46).toFixed(3), type: 'CUP', category: 'KNOCKOUT_CUP' },
+      { market: 'Extra Time / Overtime', selection: 'No Extra Time (Decided in 90m)', prob: +(1 - pDraw).toFixed(3), type: 'CUP', category: 'KNOCKOUT_CUP' },
+      { market: 'Penalty Shootout', selection: 'No Penalty Shootout', prob: +(1 - pDraw * 0.62).toFixed(3), type: 'CUP', category: 'KNOCKOUT_CUP' }
+    ] : [])
   ];
 
   // Professional Syndicate Anti-Trap Market Pricing & Conviction Architecture
-  const enriched = rawMarkets.map(m => {
-    const probability = +(m.prob * 100).toFixed(1);
+  const enriched = filterPredictionsByMarketRules(rawMarkets, leagueId).map(m => {
+    const probability = +(Math.min(0.97, Math.max(0.03, m.prob)) * 100).toFixed(1);
     const fairOdds = 1 / Math.max(0.04, m.prob);
 
-    let marketPricingFactor = 0.94; // Default retail vig (6% house overround)
-    if (m.type === 'DOUBLE_CHANCE' && m.prob >= 0.75) {
-      marketPricingFactor = 1.042;
-    } else if (m.type === 'WIN_EITHER_HALF' && m.prob >= 0.74) {
-      marketPricingFactor = 1.045;
-    } else if (m.type === 'HIGHEST_SCORING_HALF' && m.prob >= 0.50) {
-      marketPricingFactor = 1.040;
-    } else if (m.type === 'TEAM_HALF_GOALS' && m.prob >= 0.65) {
-      marketPricingFactor = 1.035;
-    } else if (m.category === 'HALF_MARKETS' && m.prob >= 0.52) {
-      marketPricingFactor = 1.032;
-    } else if (m.type === 'GOALS_HIGH_PROB' && m.prob >= 0.78) {
-      marketPricingFactor = 1.038;
-    } else if (m.type === 'DNB' && m.prob >= 0.70) {
-      marketPricingFactor = 1.028;
-    } else if (m.type === '1X2' && m.prob >= 0.65) {
-      marketPricingFactor = 1.022;
-    } else if (m.category === 'CORNERS' && m.prob >= 0.75) {
-      marketPricingFactor = 1.035;
-    } else if (m.category === 'TEAM_CORNERS' && m.prob >= 0.72) {
-      marketPricingFactor = 1.032;
-    } else if (m.category === 'FIRST_15_MIN' && m.prob >= 0.68) {
-      marketPricingFactor = 1.030;
-    } else if (m.category === 'DISCIPLINARY' && m.prob >= 0.75) {
-      marketPricingFactor = 1.030;
-    } else if (m.category === 'SHOOTING' && m.prob >= 0.75) {
-      marketPricingFactor = 1.028;
-    }
+    let marketPricingFactor = 0.94;
+    if (m.type === 'DOUBLE_CHANCE' && m.prob >= 0.75) marketPricingFactor = 1.042;
+    else if (m.type === 'WIN_EITHER_HALF' && m.prob >= 0.74) marketPricingFactor = 1.045;
+    else if (m.type === 'HIGHEST_SCORING_HALF' && m.prob >= 0.50) marketPricingFactor = 1.040;
+    else if (m.type === 'TEAM_HALF_GOALS' && m.prob >= 0.65) marketPricingFactor = 1.035;
+    else if (m.category === 'HALF_MARKETS' && m.prob >= 0.52) marketPricingFactor = 1.032;
+    else if (m.type === 'GOALS_HIGH_PROB' && m.prob >= 0.78) marketPricingFactor = 1.038;
+    else if (m.type === 'MULTIGOALS' && m.prob >= 0.68) marketPricingFactor = 1.035;
+    else if (m.type === 'TEAM_TOTAL_GOALS' && m.prob >= 0.68) marketPricingFactor = 1.036;
+    else if (m.type === 'DNB' && m.prob >= 0.68) marketPricingFactor = 1.028;
+    else if (m.type === '1X2' && m.prob >= 0.60) marketPricingFactor = 1.025;
+    else if (m.category === 'CORNERS' && m.prob >= 0.72) marketPricingFactor = 1.035;
+    else if (m.category === 'TEAM_CORNERS' && m.prob >= 0.70) marketPricingFactor = 1.032;
+    else if (m.category === 'SHOOTING' && m.prob >= 0.68) marketPricingFactor = 1.032;
+    else if (m.category === 'TIME_SEGMENTS' && m.prob >= 0.66) marketPricingFactor = 1.032;
+    else if (m.category === 'BOOKINGS' && m.prob >= 0.72) marketPricingFactor = 1.032;
+    else if (m.type === 'CUP' && m.prob >= 0.68) marketPricingFactor = 1.030;
 
     const basePrice = fairOdds * marketPricingFactor;
     const hwOdds = Math.min(26.0, Math.max(1.03, +(basePrice * 0.985).toFixed(2)));
@@ -2078,15 +2289,14 @@ export function generatePredictions(home, away, leagueId) {
     const bestOdds = Math.max(hwOdds, bwOdds, ebOdds);
     const ev = +(((m.prob * bestOdds) - 1) * 100).toFixed(1);
 
-    // ANTI-TRAP GATEKEEPER EVALUATION (Uniform >= 1.28 playable odds check across all markets)
     const isLowOddsTrap = bestOdds < 1.28;
     const isDerbyFavoriteTrap = derbyInfo.isDerby && (m.type === 'DOUBLE_CHANCE' || m.type === '1X2');
 
-    // Deep-Market Strict Vetting Protocol Check
     const deepVetting = evaluateDeepMarketVetting({
       marketCategory: m.category,
       marketName: m.market,
       selectionName: m.selection,
+      leagueId,
       probability,
       odds: bestOdds,
       modelAgreement: 86,
@@ -2094,60 +2304,34 @@ export function generatePredictions(home, away, leagueId) {
       isDerby: derbyInfo.isDerby
     });
 
-    // Scoring weights: Prioritize high-certainty, high-hit-rate outcomes while suppressing traps
     let reliabilityBonus = 0;
     const isHighTensionDefensiveGoalTrap = (leagueId === 'uefa_nations' || leagueId.includes('nations') || (lg && lg.avgGoals < 2.35)) && (m.selection.includes('Over 1.5') || m.selection.includes('Over 2.5')) && m.category !== 'TEAM_CORNERS';
     const isDefensiveStructuralMarket = (leagueId === 'uefa_nations' || leagueId.includes('nations') || (lg && lg.avgGoals < 2.35)) && (m.selection.includes('Under 3.5') || m.type === 'DOUBLE_CHANCE');
 
-    if (isLowOddsTrap) {
-      // CRITICAL: Heavy penalty for < 1.28 odds traps to avoid bankroll ruin on a single upset
-      reliabilityBonus = -24.0;
-    } else if (isHighTensionDefensiveGoalTrap) {
-      // CRITICAL: In low-scoring international / defensive leagues, penalize volatile Over goal traps
-      reliabilityBonus = -22.0;
-    } else if (isDerbyFavoriteTrap) {
-      // CRITICAL: Derbies are high-entropy upset territory; suppress favorite backing
-      reliabilityBonus = -22.0;
-    } else if (isDefensiveStructuralMarket) {
-      // Reward structural safety (Under 3.5 / Double Chance) in high-friction leagues
-      reliabilityBonus = +8.0;
-    } else if (m.type === 'DOUBLE_CHANCE') {
-      reliabilityBonus = probability >= 76 ? +7.0 : +3.0;
-    } else if (m.type === 'HIGHEST_SCORING_HALF') {
-      reliabilityBonus = probability >= 52 ? +6.0 : +2.0;
-    } else if (m.type === 'TEAM_HALF_GOALS') {
-      reliabilityBonus = probability >= 72 ? +7.0 : +3.0;
-    } else if (m.type === 'WIN_EITHER_HALF' || m.market === 'Either-Half Winner') {
-      reliabilityBonus = probability >= 75 ? +6.5 : +2.5;
-    } else if (m.type === 'GOALS_HIGH_PROB' || m.market === '1st-Half Totals' || m.market === '2nd-Half Totals') {
-      reliabilityBonus = probability >= 78 ? +7.0 : +3.0;
-    } else if (m.market === '1X2 (2UP) Early Payout' && probability >= 75) {
-      reliabilityBonus = +6.0;
-    } else if (m.category === 'CORNERS' && probability >= 68) {
-      reliabilityBonus = +5.5;
-    } else if (m.category === 'TEAM_CORNERS' && probability >= 68) {
-      reliabilityBonus = +5.0;
-    } else if (m.category === 'FIRST_15_MIN' && m.selection.includes('15 Min Draw') && probability >= 70) {
-      reliabilityBonus = +5.0;
-    } else if (m.category === 'DISCIPLINARY' && probability >= 78) {
-      reliabilityBonus = +5.0;
-    } else if (m.category === 'SHOOTING' && probability >= 78) {
-      reliabilityBonus = +4.5;
-    } else if (m.type === 'DNB') {
-      reliabilityBonus = probability >= 72 ? +4.5 : +1.5;
-    } else if (m.type === '1X2') {
-      reliabilityBonus = probability >= 64 ? +5.0 : -4.0;
-    } else if (m.type === 'TACKLES' || m.type === 'CARDS') {
-      reliabilityBonus = (derbyInfo.isDerby && m.type === 'CARDS') ? +8.0 : (probability >= 75 ? +3.0 : -4.0);
-    } else if (m.type === 'GOALS_MED_PROB' || m.type === 'BTTS') {
-      reliabilityBonus = probability >= 78 ? +1.5 : -6.0;
-    } else {
-      reliabilityBonus = -4.0;
-    }
+    if (isLowOddsTrap) reliabilityBonus = -24.0;
+    else if (isHighTensionDefensiveGoalTrap) reliabilityBonus = -22.0;
+    else if (isDerbyFavoriteTrap) reliabilityBonus = -22.0;
+    else if (isDefensiveStructuralMarket) reliabilityBonus = +8.0;
+    else if (m.type === 'DOUBLE_CHANCE') reliabilityBonus = probability >= 76 ? +7.5 : +3.0;
+    else if (m.type === 'HIGHEST_SCORING_HALF') reliabilityBonus = probability >= 52 ? +6.0 : +2.0;
+    else if (m.type === 'TEAM_HALF_GOALS') reliabilityBonus = probability >= 72 ? +6.5 : +2.5;
+    else if (m.type === 'WIN_EITHER_HALF') reliabilityBonus = probability >= 74 ? +6.5 : +2.5;
+    else if (m.type === 'GOALS_HIGH_PROB' || m.market === '1st-Half Totals') reliabilityBonus = probability >= 78 ? +7.0 : +3.0;
+    else if (m.type === 'TEAM_TOTAL_GOALS') reliabilityBonus = probability >= 74 ? +6.5 : +2.5;
+    else if (m.type === 'MULTIGOALS') reliabilityBonus = probability >= 70 ? +6.5 : +2.0;
+    else if (m.category === 'CORNERS' && probability >= 68) reliabilityBonus = +5.5;
+    else if (m.category === 'TEAM_CORNERS' && probability >= 68) reliabilityBonus = +5.0;
+    else if (m.category === 'SHOOTING' && probability >= 68) reliabilityBonus = +5.0;
+    else if ((m.category === 'TIME_SEGMENTS' || m.type === 'FIRST_15_MIN') && probability >= 68) reliabilityBonus = +5.5;
+    else if (m.category === 'BOOKINGS' && probability >= 72) reliabilityBonus = +5.5;
+    else if (m.type === 'DNB') reliabilityBonus = probability >= 70 ? +5.0 : +1.5;
+    else if (m.type === '1X2') reliabilityBonus = probability >= 62 ? +5.5 : -4.0;
+    else if (m.type === 'HANDICAP' || m.type === 'TEAM_PERF') reliabilityBonus = probability >= 72 ? +5.0 : -2.0;
+    else if (m.type === 'CUP') reliabilityBonus = probability >= 70 ? +5.0 : 0.0;
+    else if (m.type === 'GOALS_MED_PROB' || m.type === 'BTTS') reliabilityBonus = probability >= 76 ? +2.0 : -5.0;
+    else reliabilityBonus = -3.0;
 
-    // Apply subtle Information Entropy stability adjustment (reduces conviction slightly in pure-chaos entropy matches)
     const entropyFactor = entropySkellam.certaintyIndexPct >= 22 ? +0.6 : -0.4;
-    // Composite conviction score: probability base + reliability + EV + entropy
     const convictionScore = probability + reliabilityBonus + Math.max(0, ev) * 1.5 + entropyFactor;
 
     return {
@@ -2162,81 +2346,84 @@ export function generatePredictions(home, away, leagueId) {
       isDerby: derbyInfo.isDerby,
       derbyName: derbyInfo.derbyName,
       isLowOddsTrap,
-      antiTrapApproved: !isLowOddsTrap && !isDerbyFavoriteTrap && probability >= 72,
+      antiTrapApproved: !isLowOddsTrap && !isDerbyFavoriteTrap && probability >= 70,
       deepVetting
     };
   });
 
-  // Sort primarily by conviction score for distinct, highly accurate top picks
   enriched.sort((a, b) => b.convictionScore - a.convictionScore);
 
-  // Group predictions by category, keep top per category up to ~45-50 total
   const byCategory = {};
   for (const p of enriched) {
-    const cat = p.marketCategory || 'STANDARD';
+    const cat = p.marketCategory || 'WINNERS_DC';
     if (!byCategory[cat]) byCategory[cat] = [];
     byCategory[cat].push(p);
   }
 
   const selected = [];
   for (const [cat, list] of Object.entries(byCategory)) {
-    const limit = (cat === 'STANDARD' || cat === 'CORNERS' || cat === 'TEAM_CORNERS') ? 6 : 3;
+    const limit = (cat === 'WINNERS_DC' || cat === 'GOAL_OVERS_UNDERS' || cat === 'TEAM_GOALS' || cat === 'HALF_MARKETS' || cat === 'CORNERS' || cat === 'TEAM_CORNERS') ? 4 : 3;
     selected.push(...list.slice(0, limit));
   }
 
-  // Autonomous Engine Verifier Ranking:
-  // Heavily penalize structural trap markets (12 draw traps, brittle team totals)
-  // and promote fortified markets (Double Chance 1X/X2, High-density Under 3.5, Over 1.5)
   selected.sort((a, b) => {
     let structuralModA = 0;
     let structuralModB = 0;
 
-    if (a.selection.startsWith('12')) structuralModA -= 50;
-    if (b.selection.startsWith('12')) structuralModB -= 50;
-
-    if (a.market === 'Team Total Goals') structuralModA -= 25;
-    if (b.market === 'Team Total Goals') structuralModB -= 25;
-
     if (a.market === 'Double Chance' && (a.selection.startsWith('1X') || a.selection.startsWith('X2'))) structuralModA += 18;
     if (b.market === 'Double Chance' && (b.selection.startsWith('1X') || b.selection.startsWith('X2'))) structuralModB += 18;
 
-    if (a.market === 'Goals Over/Under' && a.selection.includes('Under 3.5')) structuralModA += 16;
-    if (b.market === 'Goals Over/Under' && b.selection.includes('Under 3.5')) structuralModB += 16;
+    if (a.market === 'Goals Over/Under' && a.selection.includes('Under 3.5')) structuralModA += 15;
+    if (b.market === 'Goals Over/Under' && b.selection.includes('Under 3.5')) structuralModB += 15;
 
-    if (a.market === 'Goals Over/Under' && a.selection.includes('Over 1.5') && a.probability >= 86) structuralModA += 8;
-    if (b.market === 'Goals Over/Under' && b.selection.includes('Over 1.5') && b.probability >= 86) structuralModB += 8;
+    if (a.market === 'Goals Over/Under' && a.selection.includes('Over 1.5') && a.probability >= 85) structuralModA += 8;
+    if (b.market === 'Goals Over/Under' && b.selection.includes('Over 1.5') && b.probability >= 85) structuralModB += 8;
 
-    if (a.market === 'Highest Scoring Half' && a.selection.includes('2nd Half') && a.probability >= 70) structuralModA += 14;
-    if (b.market === 'Highest Scoring Half' && b.selection.includes('2nd Half') && b.probability >= 70) structuralModB += 14;
+    if (a.market === 'Highest Scoring Half' && a.selection.includes('2nd Half') && a.probability >= 70) structuralModA += 12;
+    if (b.market === 'Highest Scoring Half' && b.selection.includes('2nd Half') && b.probability >= 70) structuralModB += 12;
+
+    if (a.market === 'Match Winner' && a.probability >= 64) structuralModA += 10;
+    if (b.market === 'Match Winner' && b.probability >= 64) structuralModB += 10;
 
     return (b.convictionScore + structuralModB) - (a.convictionScore + structuralModA);
   });
 
-  // Guarantee First 15 Min Draw, Hollywoodbets 1st-Half 3.5/4.5, Match Total Corners (7.5+), Home 5.5/7+/8+/Under, and Away 5.5 Over/Under are preserved in output slate
-  const guaranteedFirst15 = enriched.find(p => p.marketCategory === 'FIRST_15_MIN' && p.selection.includes('15 Min Draw'));
-  const guaranteed1stHalfCorner = enriched.find(p => p.market === '1st-Half Corners');
-  const guaranteedMatchCorner = enriched.find(p => p.market === 'Match Total Corners');
-  const guaranteedHomeCorner = enriched.find(p => p.market === 'Home Team Total Corners');
-  const guaranteedHomeHighCorner = enriched.find(p => p.market === 'Home Team Total Corners' && (/7\+|8\+|under\s+6\.5|under\s+7\.5/i.test(p.selection)));
-  const guaranteedAwayCorner = enriched.find(p => p.market === 'Away Team Total Corners');
-  const topSlice = selected.slice(0, 26);
+  // Preserve key 35-market representatives in final fixture payload (capped cleanly at 40)
+  const guaranteedFirst10 = enriched.find(p => p.market === 'First 10 Minutes Result' && p.selection.includes('Draw'));
+  const guaranteedFirst15 = enriched.find(p => p.market === 'First 15 Minutes Result' && p.selection.includes('Draw'));
+  const guaranteedMatchShots = enriched.find(p => p.market === 'Match Total Shots');
+  const guaranteedTeamGoals = enriched.find(p => p.marketCategory === 'TEAM_GOALS');
+  const guaranteedBookingUnder = enriched.find(p => p.category === 'BOOKINGS' || p.marketCategory === 'BOOKINGS');
+  const guaranteedMultigoal = enriched.find(p => p.market === 'Multigoals');
+  const guaranteedHandicap = enriched.find(p => p.market === 'Handicap');
+  const guaranteed1stHalfCorner = cornersSupported ? enriched.find(p => p.market === '1st-Half Corners') : null;
+  const guaranteedMatchCorner = cornersSupported ? enriched.find(p => p.market === 'Match Total Corners') : null;
+  const guaranteedHomeCorner = cornersSupported ? enriched.find(p => p.market === 'Home Team Total Corners') : null;
+  const guaranteedAwayCorner = cornersSupported ? enriched.find(p => p.market === 'Away Team Total Corners') : null;
+
+  const topSlice = selected.slice(0, 29);
   const existingKeys = new Set(topSlice.map(p => `${p.market}::${p.selection}`));
   const cappedSelected = [...topSlice];
   [
+    guaranteedFirst10,
     guaranteedFirst15,
+    guaranteedMatchShots,
+    guaranteedTeamGoals,
+    guaranteedBookingUnder,
+    guaranteedMultigoal,
+    guaranteedHandicap,
     guaranteed1stHalfCorner,
     guaranteedMatchCorner,
     guaranteedHomeCorner,
-    guaranteedHomeHighCorner,
     guaranteedAwayCorner
   ].forEach(g => {
-    if (g && !existingKeys.has(`${g.market}::${g.selection}`)) {
+    if (g && cappedSelected.length < 40 && !existingKeys.has(`${g.market}::${g.selection}`)) {
       cappedSelected.push(g);
       existingKeys.add(`${g.market}::${g.selection}`);
     }
   });
 
-  return cappedSelected.map((p, idx) => {
+  return filterPredictionsByMarketRules(cappedSelected, leagueId).slice(0, 40).map((p, idx) => {
     const item = {
       rank: idx + 1,
       market: p.market,
@@ -2399,7 +2586,7 @@ export function buildH2H(homeName, awayName, home = null, away = null, leagueId 
   };
 }
 
-export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick, predictionsList = null) {
+export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick, predictionsList = null, roundStr = 'Official Match') {
   const seed = (home.name + '::' + away.name + '::telem_v2').split('').reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 1), 0);
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
@@ -2808,12 +2995,47 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
 
   const tacticalProfiles = buildTacticalProfiles({ home, away, leagueId, isDerby, eloDelta: hRating - aRating });
   const physSnap = teleResult.situationalFactors.physicsMetrics;
-  const nbCornersTelemetry = calculateNegativeBinomialCorners({
-    totalLambda: (home.xgFor || 1.45) + (away.xgFor || 1.25),
+  const cornersSupported = isCornerMarketAvailable(leagueId);
+  tacticalProfiles.cornerVolatilityProfile.cornersSupported = cornersSupported;
+
+  if (cornersSupported) {
+    const nbCornersTelemetry = calculateNegativeBinomialCorners({
+      totalLambda: (home.xgFor || 1.45) + (away.xgFor || 1.25),
+      lambdaHome: home.xgFor || 1.45,
+      lambdaAway: away.xgFor || 1.25,
+      homeWingFreq: tacticalProfiles.cornerVolatilityProfile.homeWingPlayFreq,
+      awayWingFreq: tacticalProfiles.cornerVolatilityProfile.awayWingPlayFreq,
+      isDerby,
+      physicsMetrics: physSnap
+    });
+    tacticalProfiles.cornerVolatilityProfile.teamCornerProjections = {
+      homeExp: nbCornersTelemetry.lambdaHomeCorners,
+      awayExp: nbCornersTelemetry.lambdaAwayCorners,
+      firstHalfExp: nbCornersTelemetry.lambdaFirstHalfCorners,
+      totalExp: nbCornersTelemetry.totalCornersExp,
+      matchOver75Pct: +(nbCornersTelemetry.match.over75 * 100).toFixed(1),
+      homeOver55Pct: +(nbCornersTelemetry.home.over55 * 100).toFixed(1),
+      homeUnder55Pct: +(nbCornersTelemetry.home.under55 * 100).toFixed(1),
+      awayOver55Pct: +(nbCornersTelemetry.away.over55 * 100).toFixed(1),
+      awayUnder55Pct: +(nbCornersTelemetry.away.under55 * 100).toFixed(1),
+      home7PlusPct: +(nbCornersTelemetry.home.over65 * 100).toFixed(1),
+      homeUnder65Pct: +(nbCornersTelemetry.home.under65 * 100).toFixed(1),
+      home8PlusPct: +(nbCornersTelemetry.home.over75 * 100).toFixed(1),
+      homeUnder75Pct: +(nbCornersTelemetry.home.under75 * 100).toFixed(1),
+      firstHalf35OverPct: +(nbCornersTelemetry.firstHalf.over35 * 100).toFixed(1),
+      firstHalf35UnderPct: +(nbCornersTelemetry.firstHalf.under35 * 100).toFixed(1),
+      firstHalf45OverPct: +(nbCornersTelemetry.firstHalf.over45 * 100).toFixed(1),
+      firstHalf45UnderPct: +(nbCornersTelemetry.firstHalf.under45 * 100).toFixed(1)
+    };
+  } else {
+    tacticalProfiles.cornerVolatilityProfile.teamCornerProjections = null;
+  }
+
+  const first10Telemetry = calculateFirst10MinResult({
     lambdaHome: home.xgFor || 1.45,
     lambdaAway: away.xgFor || 1.25,
-    homeWingFreq: tacticalProfiles.cornerVolatilityProfile.homeWingPlayFreq,
-    awayWingFreq: tacticalProfiles.cornerVolatilityProfile.awayWingPlayFreq,
+    ppdaHome,
+    ppdaAway,
     isDerby,
     physicsMetrics: physSnap
   });
@@ -2825,37 +3047,59 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
     isDerby,
     physicsMetrics: physSnap
   });
+  const firstGoalIntervalTelemetry = calculateFirstGoalIntervals10m({
+    lambdaHome: home.xgFor || 1.45,
+    lambdaAway: away.xgFor || 1.25,
+    isDerby,
+    physicsMetrics: physSnap
+  });
+  const shotsTelemetry = calculateTotalMatchShotsDistribution({
+    matchTotalShotsExp: tacticalProfiles.shootingMetricsProfile.matchTotalShotsExp,
+    homeTotalShotsExp: tacticalProfiles.shootingMetricsProfile.homeTotalShotsExp,
+    awayTotalShotsExp: tacticalProfiles.shootingMetricsProfile.awayTotalShotsExp,
+    isDerby,
+    physicsMetrics: physSnap
+  });
 
-  tacticalProfiles.cornerVolatilityProfile.teamCornerProjections = {
-    homeExp: nbCornersTelemetry.lambdaHomeCorners,
-    awayExp: nbCornersTelemetry.lambdaAwayCorners,
-    firstHalfExp: nbCornersTelemetry.lambdaFirstHalfCorners,
-    totalExp: nbCornersTelemetry.totalCornersExp,
-    matchOver75Pct: +(nbCornersTelemetry.match.over75 * 100).toFixed(1),
-    homeOver55Pct: +(nbCornersTelemetry.home.over55 * 100).toFixed(1),
-    homeUnder55Pct: +(nbCornersTelemetry.home.under55 * 100).toFixed(1),
-    awayOver55Pct: +(nbCornersTelemetry.away.over55 * 100).toFixed(1),
-    awayUnder55Pct: +(nbCornersTelemetry.away.under55 * 100).toFixed(1),
-    home7PlusPct: +(nbCornersTelemetry.home.over65 * 100).toFixed(1),
-    homeUnder65Pct: +(nbCornersTelemetry.home.under65 * 100).toFixed(1),
-    home8PlusPct: +(nbCornersTelemetry.home.over75 * 100).toFixed(1),
-    homeUnder75Pct: +(nbCornersTelemetry.home.under75 * 100).toFixed(1),
-    firstHalf35OverPct: +(nbCornersTelemetry.firstHalf.over35 * 100).toFixed(1),
-    firstHalf35UnderPct: +(nbCornersTelemetry.firstHalf.under35 * 100).toFixed(1),
-    firstHalf45OverPct: +(nbCornersTelemetry.firstHalf.over45 * 100).toFixed(1),
-    firstHalf45UnderPct: +(nbCornersTelemetry.firstHalf.under45 * 100).toFixed(1)
+  tacticalProfiles.timeSegmentProfile.first10MinModel = {
+    drawProbPct: +(first10Telemetry.pDraw10 * 100).toFixed(1),
+    noGoalProbPct: +(first10Telemetry.pNoGoal10 * 100).toFixed(1),
+    homeLeadProbPct: +(first10Telemetry.pHomeLead10 * 100).toFixed(1),
+    awayLeadProbPct: +(first10Telemetry.pAwayLead10 * 100).toFixed(1)
   };
   tacticalProfiles.timeSegmentProfile.first15MinModel = {
     drawProbPct: +(first15Telemetry.pDraw15 * 100).toFixed(1),
-    noGoalProbPct: +(first15Telemetry.pNoGoal15 * 100).toFixed(1)
+    noGoalProbPct: +(first15Telemetry.pNoGoal15 * 100).toFixed(1),
+    homeLeadProbPct: +(first15Telemetry.pHomeLead15 * 100).toFixed(1),
+    awayLeadProbPct: +(first15Telemetry.pAwayLead15 * 100).toFixed(1)
+  };
+  tacticalProfiles.timeSegmentProfile.firstGoalIntervalModel = firstGoalIntervalTelemetry;
+  tacticalProfiles.shootingMetricsProfile.matchShotLines = {
+    expectedTotalShots: shotsTelemetry.expectedTotalShots,
+    over195Pct: +(shotsTelemetry.match.over195 * 100).toFixed(1),
+    over215Pct: +(shotsTelemetry.match.over215 * 100).toFixed(1),
+    over235Pct: +(shotsTelemetry.match.over235 * 100).toFixed(1),
+    under255Pct: +(shotsTelemetry.match.under255 * 100).toFixed(1),
+    under275Pct: +(shotsTelemetry.match.under275 * 100).toFixed(1)
   };
 
   teleResult.tacticalProfiles = tacticalProfiles;
   teleResult.refereeReport = tacticalProfiles.refereeStats;
-  teleResult.disciplinaryProfile = tacticalProfiles.disciplinaryProfile;
+  teleResult.disciplinaryProfile = {
+    ...tacticalProfiles.disciplinaryProfile,
+    scoringSystem: 'Yellow = 1 pt · Red = 2 pts · Unders Only'
+  };
   teleResult.cornerVolatilityProfile = tacticalProfiles.cornerVolatilityProfile;
   teleResult.shootingMetricsProfile = tacticalProfiles.shootingMetricsProfile;
   teleResult.timeSegmentProfile = tacticalProfiles.timeSegmentProfile;
+  teleResult.antePostProfile = {
+    competitionId: leagueId,
+    roundContext: roundStr,
+    isKnockoutTie: isKnockoutMatch(leagueId, roundStr),
+    homeDomesticCoefficient: getCrossLeagueRatingOffset(home.domestic || leagueId),
+    awayDomesticCoefficient: getCrossLeagueRatingOffset(away.domestic || leagueId),
+    titleRaceImpact: hRating >= 82 || aRating >= 82 ? 'HIGH_OUTRIGHT_LEVERAGE' : 'STANDARD_TABLE_PROGRESSION'
+  };
 
   teleResult.strictVetting = strictVetting;
   teleResult.multiLayerVerification = strictVetting.multiLayerVerification;
@@ -2864,70 +3108,49 @@ export function buildFixtureTelemetryAndValidation(home, away, leagueId, topPick
   // The Hybrid Layer: Human & Sentiment Refinement
   teleResult.hybridLayer = teleResult.beastMeta.hybridLayer;
 
-  // Advanced Player Prop Analytics (Strict mathematical backing, zero guessing, preserved depth)
+  // Approved Player Goalscorer & Matchflow Analytics (No Tackles, Shots on Target, SCA, or Saves)
+  const homeGoalProb = Math.min(74, Math.max(30, Math.round((1 - Math.exp(-(home.xgFor || 1.45) * 0.44)) * 100)));
+  const awayGoalProb = Math.min(68, Math.max(24, Math.round((1 - Math.exp(-(away.xgFor || 1.25) * 0.44)) * 100)));
   teleResult.playerPropAnalytics = {
     compressionPreservationCertified: true,
     depthScore: 99.4,
     leadStriker: {
       playerRole: `${home.name} Primary Striker`,
       metric: 'Anytime Goalscorer',
-      probability: Math.min(88, Math.round((home.xgFor || 1.45) * 44)),
-      odds: +(1 / Math.max(0.1, (home.xgFor || 1.45) * 0.44 * 0.94)).toFixed(2),
-      inTheMoneyStatus: 'HIGH_CONVERSION_PROP',
+      probability: homeGoalProb,
+      odds: +(1 / Math.max(0.15, (homeGoalProb / 100) * 0.94)).toFixed(2),
+      inTheMoneyStatus: 'APPROVED_GOALSCORER_MARKET',
       confidenceTier: 'VETTED_SHARP',
-      xgShare: +( (home.xgFor || 1.45) * 0.42 ).toFixed(2),
-      shotConversionPct: 18.4,
+      xgShare: +((home.xgFor || 1.45) * 0.42).toFixed(2),
       penaltyTaker: true,
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     },
-    shotCreator: {
-      playerRole: `${home.name} Lead Attacker`,
-      metric: 'Over 1.5 Shots on Target',
-      probability: Math.min(86, Math.round(52 + (home.xgFor || 1.45) * 16)),
-      odds: 1.62,
-      inTheMoneyStatus: 'HIGH_VOLUME_SHOT_BASE',
+    awayStriker: {
+      playerRole: `${away.name} Lead Forward`,
+      metric: 'Anytime Goalscorer',
+      probability: awayGoalProb,
+      odds: +(1 / Math.max(0.15, (awayGoalProb / 100) * 0.94)).toFixed(2),
+      inTheMoneyStatus: 'APPROVED_GOALSCORER_MARKET',
       confidenceTier: 'VETTED_SHARP',
-      boxTouchesPer90: 6.8,
-      sotExpectation: 2.1,
+      xgShare: +((away.xgFor || 1.25) * 0.42).toFixed(2),
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     },
-    defensiveAnchor: {
-      playerRole: `${home.name} Defensive Anchor`,
-      metric: 'Over 2.5 Match Tackles',
-      probability: Math.min(88, Math.round(58 + (aRating > 75 ? 18 : 10))),
-      odds: 1.55,
-      inTheMoneyStatus: 'HIGH_INTERCEPTION_BASE',
+    firstGoalscorer: {
+      playerRole: `${home.name} Lead Striker`,
+      metric: 'First Goalscorer',
+      probability: Math.max(16, Math.round(homeGoalProb * 0.42)),
+      odds: +(1 / Math.max(0.12, (homeGoalProb * 0.0042) * 0.92)).toFixed(2),
       confidenceTier: 'VETTED_SHARP',
-      tackleSuccessRatePct: 76.5,
-      oppositionPressureZone: 'Midfield Transition Block',
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     },
-    playmaker: {
-      playerRole: `${home.name} Primary Playmaker`,
-      metric: 'Over 1.5 Shot-Creating Actions',
-      probability: Math.min(89, Math.round(62 + (hRating - aRating > 0 ? 14 : 6))),
-      odds: 1.58,
-      inTheMoneyStatus: 'CHANCE_CREATION_ANCHOR',
-      confidenceTier: 'VETTED_SHARP',
-      progressivePassesPer90: 7.2,
-      throughBallFrequency: 'HIGH',
-      dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
-    },
-    goalkeeper: {
-      playerRole: `${away.name} Starting Goalkeeper`,
-      metric: 'Over 2.5 Match Saves',
-      probability: Math.min(88, Math.round(55 + (tacticalProfiles.shootingMetricsProfile.homeSotExp > 4.5 ? 22 : 12))),
-      odds: 1.60,
-      inTheMoneyStatus: 'SHOT_STOPPER_REFLEX_BASE',
-      confidenceTier: 'VETTED_SHARP',
-      savePctSeason: 74.2,
-      expectedShotsFaced: tacticalProfiles.shootingMetricsProfile.homeSotExp,
+    matchflowProfile: {
+      market: 'Matchflow',
+      preferredScenario: hRating >= aRating ? `${home.name} Score First & Win` : `${away.name} Score First & Win`,
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     }
   };
 
   // Layer 22: Autonomous Engine Verifier
-  // Verifies all 20 predictive engines across all available market predictions
   const engineVerification = evaluateEngineVerifier({
     homeName: home.name,
     awayName: away.name,
@@ -4447,14 +4670,20 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
     away.short = awayInitial;
     away.logo = awayComp.team?.logo || away.logo || null;
 
-    // Real market odds
+    // Real market odds & round context
     const oddsObj = comp.odds?.[0];
     const ml = oddsObj?.moneyline;
     const realHomeMl = ml?.home?.close?.odds ? americanToDecimal(ml.home.close.odds) : null;
     const realAwayMl = ml?.away?.close?.odds ? americanToDecimal(ml.away.close.odds) : null;
     const realDrawMl = ml?.draw?.close?.odds ? americanToDecimal(ml.draw.close.odds) : null;
+    const matchRound = comp.notes?.[0]?.headline || 'Official Match';
 
-    const predictions = generatePredictions(home, away, lg.id);
+    const predictions = generatePredictions(home, away, lg.id, {
+      realHomeMl,
+      realDrawMl,
+      realAwayMl,
+      round: matchRound
+    });
     predictions.forEach((p) => {
       if (p.market === 'Match Winner') {
         if (p.selection.startsWith('1') && realHomeMl) {
@@ -4473,7 +4702,7 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       }
     });
 
-    const topPick = predictions[0];
+    const initialTopPick = predictions[0];
     const combinedRating = home.rating + away.rating;
     const isRivalry = /derby|clásico|clasico|soweto/i.test(e.name || '') ||
       (lg.id === 'psl' && (home.name.includes('Pirates') || home.name.includes('Chiefs') || home.name.includes('Sundowns'))) ||
@@ -4510,23 +4739,15 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       finalScore = `${hs}-${as_}`;
     }
 
+    const telePayload = buildFixtureTelemetryAndValidation(home, away, lg.id, initialTopPick, predictions, matchRound);
+    const verifiedCandidate = telePayload.engineVerifier?.verifiedTopPick;
+    const topPick = (verifiedCandidate && !isBannedOrDisallowedMarket(verifiedCandidate.market, verifiedCandidate.selection, lg.id).banned)
+      ? verifiedCandidate
+      : initialTopPick;
+
     let topPickResult = undefined;
     if (isCompleted && score) {
-      if (topPick.market === 'Match Winner') {
-        if (topPick.selection.startsWith('1')) topPickResult = score.home > score.away ? 'WON' : 'LOST';
-        else if (topPick.selection.startsWith('2')) topPickResult = score.away > score.home ? 'WON' : 'LOST';
-        else if (topPick.selection.startsWith('X')) topPickResult = score.home === score.away ? 'WON' : 'LOST';
-      } else if (topPick.market === 'Double Chance') {
-        if (topPick.selection.includes('1X')) topPickResult = score.home >= score.away ? 'WON' : 'LOST';
-        else if (topPick.selection.includes('X2')) topPickResult = score.away >= score.home ? 'WON' : 'LOST';
-        else if (topPick.selection.includes('12')) topPickResult = score.home !== score.away ? 'WON' : 'LOST';
-      } else if (topPick.market === 'Goals Over/Under') {
-        const totalGoals = score.home + score.away;
-        if (topPick.selection.includes('Over 1.5')) topPickResult = totalGoals > 1.5 ? 'WON' : 'LOST';
-        else if (topPick.selection.includes('Over 2.5')) topPickResult = totalGoals > 2.5 ? 'WON' : 'LOST';
-        else if (topPick.selection.includes('Under 2.5')) topPickResult = totalGoals < 2.5 ? 'WON' : 'LOST';
-        else if (topPick.selection.includes('Under 3.5')) topPickResult = totalGoals < 3.5 ? 'WON' : 'LOST';
-      }
+      topPickResult = settlePredictionResult(topPick, score, home.name, away.name);
     }
 
     const matchId = `${lg.id}-${e.id || matchDate + '-' + normalizeTeamName(home.name) + '-' + normalizeTeamName(away.name)}`;
@@ -4546,15 +4767,16 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
       home,
       away,
       venue: comp.venue?.fullName || '',
-      round: comp.notes?.[0]?.headline || 'Official Match',
+      round: matchRound,
       isBig: isRivalry,
       score,
       finalScore,
-      h2h: buildH2H(rawHomeName, rawAwayName, home, away),
+      h2h: buildH2H(rawHomeName, rawAwayName, home, away, lg.id),
       predictions,
       topPick: {
         market: topPick.market,
         selection: topPick.selection,
+        marketCategory: topPick.marketCategory,
         probability: topPick.probability,
         marketEdge: topPick.marketEdge,
         isValueBet: topPick.isValueBet,
@@ -4562,11 +4784,11 @@ export async function fetchLiveRealFixtures(customBaseDate = null) {
         result: topPickResult
       },
       probabilityIndex: topPick.probability,
-      rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
+      rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles & sharp consensus model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
       matchStatus,
       dataQuality: 'OFFICIAL ESPN LIVE FEED & DIXON-COLES ENGINE',
       isTradeableOnSABooks: SA_TRADEABLE_LEAGUES.has(lg.id),
-      ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick, predictions)
+      ...telePayload
     });
   }
 
@@ -4653,8 +4875,14 @@ export function generateAllFixtures(customBaseDate = null) {
     if (seenMatches.has(dedupeKey)) return null;
     seenMatches.add(dedupeKey);
 
-    const predictions = generatePredictions(home, away, lg.id);
-    const topPick = predictions[0];
+    const roundLabel = item.round || 'Regular Season';
+    const predictions = generatePredictions(home, away, lg.id, { round: roundLabel });
+    const initialTopPick = predictions[0];
+    const telePayload = buildFixtureTelemetryAndValidation(home, away, lg.id, initialTopPick, predictions, roundLabel);
+    const verifiedCandidate = telePayload.engineVerifier?.verifiedTopPick;
+    const topPick = (verifiedCandidate && !isBannedOrDisallowedMarket(verifiedCandidate.market, verifiedCandidate.selection, lg.id).banned)
+      ? verifiedCandidate
+      : initialTopPick;
 
     const isExplicitFinished = !!item.finished;
     const isPastDate = matchDate < '2026-09-22';
@@ -4665,9 +4893,7 @@ export function generateAllFixtures(customBaseDate = null) {
       away: item.awayScore !== undefined ? item.awayScore : 0
     } : null;
     const finalScore = score ? `${score.home} - ${score.away}` : null;
-    const topPickResult = isFinished
-      ? (score.home < score.away && (topPick.selection.startsWith('1') || topPick.selection.startsWith('1X')) ? 'LOST' : 'WON')
-      : undefined;
+    const topPickResult = isFinished ? settlePredictionResult(topPick, score, home.name, away.name) : undefined;
 
     return {
       id: `${lg.id}-${idx}-${item.h.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${item.a.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
@@ -4679,15 +4905,16 @@ export function generateAllFixtures(customBaseDate = null) {
       home,
       away,
       venue: item.venue || '',
-      round: item.round || 'Regular Season',
+      round: roundLabel,
       isBig: !!item.big,
       score,
       finalScore,
-      h2h: buildH2H(item.h, item.a, home, away),
+      h2h: buildH2H(item.h, item.a, home, away, lg.id),
       predictions,
       topPick: {
         market: topPick.market,
         selection: topPick.selection,
+        marketCategory: topPick.marketCategory,
         probability: topPick.probability,
         marketEdge: topPick.marketEdge,
         isValueBet: topPick.isValueBet,
@@ -4695,10 +4922,10 @@ export function generateAllFixtures(customBaseDate = null) {
         result: topPickResult
       },
       probabilityIndex: topPick.probability,
-      rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
+      rationale: `${home.name} (Elo ${home.rating}, xG ${home.xgFor}) vs ${away.name} (Elo ${away.rating}, xG ${away.xgFor}) in ${lg.name}. Dixon-Coles & sharp consensus model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`,
       matchStatus,
       dataQuality: 'OFFICIAL 2026/2027 SCHEDULE & DIXON-COLES ENGINE',
-      ...buildFixtureTelemetryAndValidation(home, away, lg.id, topPick, predictions)
+      ...telePayload
     };
   }
 
@@ -4725,12 +4952,83 @@ export function generateAllFixtures(customBaseDate = null) {
       dataSource: 'OFFICIAL 2026/2027 SCHEDULE & DIXON-COLES ENGINE',
       generated_at: new Date().toISOString(),
       source: 'Official 2026/2027 Schedule & Calibrated Dixon-Coles Model',
-      schema_version: '3.0',
+      schema_version: '3.2',
       league_count: LEAGUES.length,
       match_count: matches.length
     },
     matches
   };
+}
+
+function settlePredictionResult(pick, score, homeName = '', awayName = '') {
+  if (!pick || !score) return undefined;
+  const h = Number(score.home ?? 0);
+  const a = Number(score.away ?? 0);
+  const tot = h + a;
+  const mkt = String(pick.market || '');
+  const sel = String(pick.selection || '');
+
+  if (mkt === 'Match Winner') {
+    if (sel.startsWith('1')) return h > a ? 'WON' : 'LOST';
+    if (sel.startsWith('2')) return a > h ? 'WON' : 'LOST';
+    if (sel.startsWith('X')) return h === a ? 'WON' : 'LOST';
+  } else if (mkt === 'Double Chance') {
+    if (sel.includes('1X')) return h >= a ? 'WON' : 'LOST';
+    if (sel.includes('X2')) return a >= h ? 'WON' : 'LOST';
+  } else if (mkt === 'Draw No Bet') {
+    if (h === a) return 'VOID';
+    if (sel.includes(homeName)) return h > a ? 'WON' : 'LOST';
+    if (sel.includes(awayName)) return a > h ? 'WON' : 'LOST';
+  } else if (mkt === 'Goals Over/Under' || mkt === 'Totals (Over/Under Goals)') {
+    const ov = sel.match(/Over\s+(\d+\.5)/i);
+    const un = sel.match(/Under\s+(\d+\.5)/i);
+    if (ov) return tot > parseFloat(ov[1]) ? 'WON' : 'LOST';
+    if (un) return tot < parseFloat(un[1]) ? 'WON' : 'LOST';
+  } else if (mkt === 'Home Team Total Goals' || mkt === 'Away Team Total Goals') {
+    const teamGoals = mkt === 'Home Team Total Goals' ? h : a;
+    const ov = sel.match(/Over\s+(\d+\.5)/i);
+    const un = sel.match(/Under\s+(\d+\.5)/i);
+    if (ov) return teamGoals > parseFloat(ov[1]) ? 'WON' : 'LOST';
+    if (un) return teamGoals < parseFloat(un[1]) ? 'WON' : 'LOST';
+  } else if (mkt === 'Both Teams to Score') {
+    if (/Yes/i.test(sel)) return (h > 0 && a > 0) ? 'WON' : 'LOST';
+    if (/No/i.test(sel)) return (h === 0 || a === 0) ? 'WON' : 'LOST';
+  } else if (mkt === 'Odd/Even Goals') {
+    return (/Even/i.test(sel) ? (tot % 2 === 0) : (tot % 2 === 1)) ? 'WON' : 'LOST';
+  } else if (mkt === 'Clean Sheet') {
+    const isHomeCs = homeName && sel.includes(homeName);
+    const yes = /Yes/i.test(sel);
+    const cs = isHomeCs ? (a === 0) : (h === 0);
+    return (yes ? cs : !cs) ? 'WON' : 'LOST';
+  } else if (mkt === 'Win to Nil') {
+    const isHomeWin = homeName && sel.includes(homeName);
+    return (isHomeWin ? (h > a && a === 0) : (a > h && h === 0)) ? 'WON' : 'LOST';
+  } else if (mkt === 'Handicap') {
+    if (sel.includes('-1.5')) return (homeName && sel.includes(homeName) ? (h - a >= 2) : (a - h >= 2)) ? 'WON' : 'LOST';
+    if (sel.includes('+1.5')) return (homeName && sel.includes(homeName) ? (h + 1.5 > a) : (a + 1.5 > h)) ? 'WON' : 'LOST';
+  } else if (mkt === 'Matchbet + Totals') {
+    const dcPass = sel.includes('1X') ? (h >= a) : sel.includes('X2') ? (a >= h) : (sel.includes(homeName) ? h > a : a > h);
+    const ov = sel.match(/Over\s+(\d+\.5)/i);
+    const un = sel.match(/Under\s+(\d+\.5)/i);
+    const totPass = ov ? tot > parseFloat(ov[1]) : (un ? tot < parseFloat(un[1]) : true);
+    return (dcPass && totPass) ? 'WON' : 'LOST';
+  } else if (mkt === 'Matchbet & BTTS') {
+    const dcPass = sel.includes('1X') ? (h >= a) : sel.includes('X2') ? (a >= h) : (sel.includes(homeName) ? h > a : a > h);
+    const bttsPass = /Yes/i.test(sel) ? (h > 0 && a > 0) : (h === 0 || a === 0);
+    return (dcPass && bttsPass) ? 'WON' : 'LOST';
+  } else if (mkt === 'BTTS and Totals') {
+    const bttsPass = /BTTS\s*·\s*Yes/i.test(sel) ? (h > 0 && a > 0) : (h === 0 || a === 0);
+    const ov = sel.match(/Over\s+(\d+\.5)/i);
+    const un = sel.match(/Under\s+(\d+\.5)/i);
+    const totPass = ov ? tot > parseFloat(ov[1]) : (un ? tot < parseFloat(un[1]) : true);
+    return (bttsPass && totPass) ? 'WON' : 'LOST';
+  } else if (mkt === 'Multigoals') {
+    const teamTarget = sel.includes(homeName) ? h : (sel.includes(awayName) ? a : tot);
+    const rngMatch = sel.match(/(\d+)-(\d+)/);
+    if (rngMatch) return (teamTarget >= Number(rngMatch[1]) && teamTarget <= Number(rngMatch[2])) ? 'WON' : 'LOST';
+    if (/4\+/.test(sel)) return teamTarget >= 4 ? 'WON' : 'LOST';
+  }
+  return undefined;
 }
 
 function prunePastFixtures(fixturesData) {
@@ -4751,15 +5049,20 @@ function prunePastFixtures(fixturesData) {
 export function optimizeFixturesPayload(fixturesData) {
   if (!fixturesData || !Array.isArray(fixturesData.matches)) return fixturesData;
   fixturesData.matches = fixturesData.matches.map(m => {
-    // Ensure every single fixture has a valid, model-vetted predictions slate and topPick
+    const lid = m.league?.id || 'default';
     if (!Array.isArray(m.predictions) || m.predictions.length === 0) {
-      m.predictions = generatePredictions(m.home, m.away, m.league?.id || 'default');
+      m.predictions = generatePredictions(m.home, m.away, lid, { round: m.round || '' });
     }
-    if (!m.topPick || !m.topPick.selection) {
+    m.predictions = filterPredictionsByMarketRules(m.predictions, lid);
+    if (!m.topPick || !m.topPick.selection || isBannedOrDisallowedMarket(m.topPick.market, m.topPick.selection, lid).banned) {
       m.topPick = m.predictions[0];
     }
-    if (Array.isArray(m.predictions) && m.predictions.length > 34) {
-      m.predictions = m.predictions.slice(0, 34);
+    if (Array.isArray(m.predictions) && m.predictions.length > 40) {
+      m.predictions = m.predictions.slice(0, 40);
+    }
+    if (!isCornerMarketAvailable(lid) && m.cornerVolatilityProfile) {
+      m.cornerVolatilityProfile.cornersSupported = false;
+      m.cornerVolatilityProfile.teamCornerProjections = null;
     }
     if (m.thirdPartySyndicate && Array.isArray(m.thirdPartySyndicate.predictions)) {
       m.thirdPartySyndicate = {
@@ -4899,23 +5202,32 @@ export function recalculateSingleFixture(fixture, overrides = {}) {
   if (overrides.awayXgAgainst !== undefined) fixture.away.xgAgainst = Number(overrides.awayXgAgainst);
   if (overrides.awayForm && Array.isArray(overrides.awayForm)) fixture.away.form = overrides.awayForm;
 
-  // Re-run Dixon-Coles & Poisson model
-  const predictions = generatePredictions(fixture.home, fixture.away, fixture.league.id);
-  const topPick = predictions[0] || { market: 'Match Winner', selection: `1 · ${fixture.home.name}`, probability: 70, marketEdge: 2.0, isValueBet: true, odds: { hollywoodbets: 1.35, betway: 1.38, easybet: 1.34 } };
+  // Re-run Dixon-Coles & Poisson model with full 32-market charter
+  const matchRound = fixture.round || 'Official Match';
+  const predictions = generatePredictions(fixture.home, fixture.away, fixture.league.id, { round: matchRound });
+  const initialTopPick = predictions[0] || { market: 'Match Winner', selection: `1 · ${fixture.home.name}`, probability: 70, marketEdge: 2.0, isValueBet: true, odds: { hollywoodbets: 1.35, betway: 1.38, easybet: 1.34 } };
+  const telem = buildFixtureTelemetryAndValidation(fixture.home, fixture.away, fixture.league.id, initialTopPick, predictions, matchRound);
+  const verifiedCandidate = telem.engineVerifier?.verifiedTopPick;
+  const topPick = (verifiedCandidate && !isBannedOrDisallowedMarket(verifiedCandidate.market, verifiedCandidate.selection, fixture.league.id).banned)
+    ? verifiedCandidate
+    : initialTopPick;
 
   fixture.predictions = predictions;
   fixture.topPick = {
     market: topPick.market,
     selection: topPick.selection,
+    marketCategory: topPick.marketCategory,
     probability: topPick.probability,
     marketEdge: topPick.marketEdge,
     isValueBet: topPick.isValueBet,
-    odds: topPick.odds
+    odds: topPick.odds,
+    result: fixture.matchStatus === 'FINISHED' && fixture.score
+      ? settlePredictionResult(topPick, fixture.score, fixture.home.name, fixture.away.name)
+      : undefined
   };
   fixture.probabilityIndex = topPick.probability;
   fixture.h2h = buildH2H(fixture.home.name, fixture.away.name, fixture.home, fixture.away, fixture.league.id);
-  fixture.rationale = `${fixture.home.name} (Elo ${fixture.home.rating}, xG ${fixture.home.xgFor}) vs ${fixture.away.name} (Elo ${fixture.away.rating}, xG ${fixture.away.xgFor}) in ${fixture.league.name}. Dixon-Coles model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`;
-  const telem = buildFixtureTelemetryAndValidation(fixture.home, fixture.away, fixture.league.id, topPick, predictions);
+  fixture.rationale = `${fixture.home.name} (Elo ${fixture.home.rating}, xG ${fixture.home.xgFor}) vs ${fixture.away.name} (Elo ${fixture.away.rating}, xG ${fixture.away.xgFor}) in ${fixture.league.name}. Dixon-Coles & sharp consensus model favors ${topPick.selection} (${topPick.probability}% calibrated probability).`;
   fixture.tacticalFeeds = telem.tacticalFeeds;
   fixture.situationalFactors = telem.situationalFactors;
   fixture.marketPsychology = telem.marketPsychology;
@@ -4930,6 +5242,7 @@ export function recalculateSingleFixture(fixture, overrides = {}) {
   fixture.cornerVolatilityProfile = telem.cornerVolatilityProfile;
   fixture.shootingMetricsProfile = telem.shootingMetricsProfile;
   fixture.timeSegmentProfile = telem.timeSegmentProfile;
+  fixture.antePostProfile = telem.antePostProfile;
   fixture.hybridLayer = telem.hybridLayer;
   fixture.playerPropAnalytics = telem.playerPropAnalytics;
   fixture.thirdPartySyndicate = telem.thirdPartySyndicate;

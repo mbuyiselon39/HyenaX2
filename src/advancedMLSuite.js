@@ -21,9 +21,11 @@ import {
 import {
   calculateAtmosphericPhysics,
   calculateEntropyAndSkellam,
+  calculateFirst10MinResult,
   calculateFirst15MinDistribution,
   calculateNegativeBinomialCorners
 } from './physicsMathModels.js';
+import { isCornerMarketAvailable } from './marketRules.js';
 
 // Sigmoid activation helper
 export function sigmoid(z) {
@@ -739,20 +741,31 @@ export function runConsolidatedEnsemble({
     diagnostics: entropySkellam
   };
 
-  // 6d. Layer 24: Weibull Early-Tempo & Negative Binomial Micro-Segments
-  const earlyTempo = calculateFirst15MinDistribution({ lambdaHome: lh, lambdaAway: la, isDerby, physicsMetrics: physicsStats });
-  const nbCorners = calculateNegativeBinomialCorners({ totalLambda: lh + la, lambdaHome: lh, lambdaAway: la, isDerby, physicsMetrics: physicsStats });
-  const microShift = (earlyTempo.pDraw15 - 0.72) * 10 + (nbCorners.totalCornersExp - 9.5) * 0.4;
+  // 6d. Layer 24: Weibull Early-Tempo First 10m / 15m Hazard & League-Gated Corners
+  const earlyTempo = calculateFirst10MinResult({ lambdaHome: lh, lambdaAway: la, isDerby, physicsMetrics: physicsStats });
+  const early15Tempo = calculateFirst15MinDistribution({ lambdaHome: lh, lambdaAway: la, isDerby, physicsMetrics: physicsStats });
+  const cornersSupported = isCornerMarketAvailable(leagueId);
+  const nbCorners = cornersSupported
+    ? calculateNegativeBinomialCorners({ totalLambda: lh + la, lambdaHome: lh, lambdaAway: la, isDerby, physicsMetrics: physicsStats })
+    : null;
+  const cornerMicroShift = nbCorners ? (nbCorners.totalCornersExp - 9.5) * 0.4 : 0;
+  const microShift = (earlyTempo.pDraw10 - 0.78) * 10 + cornerMicroShift;
   const rawLayer24Prob = Math.min(96, Math.max(20, +(rawDcHomeProb + microShift).toFixed(1)));
   const layer24Prob = mapDelta(rawLayer24Prob, 0.28);
 
   const m_layer24 = {
-    name: 'Layer 24: Weibull 15m Hazard & Negative Binomial Corners',
+    name: 'Layer 24: Weibull 10m/15m Hazard & League-Gated Corner Model',
     prob: layer24Prob,
     weight: 0.04,
     category: 'Stochastic Micro-Segments',
-    signal: `15m Draw ${(earlyTempo.pDraw15 * 100).toFixed(1)}% · Corners H:${nbCorners.lambdaHomeCorners} / A:${nbCorners.lambdaAwayCorners}`,
-    diagnostics: { first15Min: earlyTempo, corners: { home: nbCorners.lambdaHomeCorners, away: nbCorners.lambdaAwayCorners, total: nbCorners.totalCornersExp } }
+    signal: nbCorners
+      ? `10m Draw ${(earlyTempo.pDraw10 * 100).toFixed(1)}% · 15m Draw ${(early15Tempo.pDraw15 * 100).toFixed(1)}% · Corners H:${nbCorners.lambdaHomeCorners} / A:${nbCorners.lambdaAwayCorners}`
+      : `10m Draw ${(earlyTempo.pDraw10 * 100).toFixed(1)}% · 15m Draw ${(early15Tempo.pDraw15 * 100).toFixed(1)}% · Corners N/A for League`,
+    diagnostics: {
+      first10Min: earlyTempo,
+      first15Min: early15Tempo,
+      corners: nbCorners ? { home: nbCorners.lambdaHomeCorners, away: nbCorners.lambdaAwayCorners, total: nbCorners.totalCornersExp } : null
+    }
   };
 
   // 7. Consolidated Ensemble Composition (24-Model Primary Stack across Statistical, GBDT, GNN, Transformer, Market, Physics & Information Theory)
@@ -963,24 +976,31 @@ export function runHybridPredictionLayer({
 }
 
 /* ============================================================
-   23. ADVANCED PLAYER PROP ANALYTICS (Zero-Guessing Precision Engine)
-   Preserves raw uncompressed telemetry and computes high-probability props.
+   23. GOAL SCORER & MATCHFLOW ANALYTICS (Approved Markets #27 & #28)
+   Covers Anytime Goalscorer, First Goalscorer, and Matchflow
+   without non-bookmaker microprops (no tackles/SCA/saves/SOT).
    ============================================================ */
 export function calculatePlayerPropAnalytics({
   homeName = 'Home',
   awayName = 'Away',
   xgFor = 1.45,
-  ratingDiff = 5,
-  sotExp = 5.2
+  xgAgainst = 1.15,
+  ratingDiff = 5
 } = {}) {
+  const anytimeProb = Math.min(68, Math.max(26, Math.round(xgFor * 32)));
+  const firstScorerProb = Math.min(38, Math.max(14, Math.round(anytimeProb * 0.48)));
+  const awayAnytimeProb = Math.min(58, Math.max(20, Math.round(xgAgainst * 30)));
+  const favIsHome = ratingDiff >= -2;
+  const matchflowProb = Math.min(62, Math.max(22, Math.round((favIsHome ? xgFor : xgAgainst) * 28)));
+
   return {
     compressionPreservationCertified: true,
     depthScore: 99.4,
     leadStriker: {
       playerRole: `${homeName} Primary Striker`,
       metric: 'Anytime Goalscorer',
-      probability: Math.min(88, Math.round(xgFor * 44)),
-      odds: +(1 / Math.max(0.1, xgFor * 0.44 * 0.94)).toFixed(2),
+      probability: anytimeProb,
+      odds: +(100 / Math.max(15, anytimeProb) * 0.94).toFixed(2),
       inTheMoneyStatus: 'HIGH_CONVERSION_PROP',
       confidenceTier: 'VETTED_SHARP',
       xgShare: +(xgFor * 0.42).toFixed(2),
@@ -988,48 +1008,33 @@ export function calculatePlayerPropAnalytics({
       penaltyTaker: true,
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     },
-    shotCreator: {
-      playerRole: `${homeName} Lead Attacker`,
-      metric: 'Over 1.5 Shots on Target',
-      probability: Math.min(86, Math.round(52 + xgFor * 16)),
-      odds: 1.62,
-      inTheMoneyStatus: 'HIGH_VOLUME_SHOT_BASE',
+    firstGoalscorer: {
+      playerRole: `${favIsHome ? homeName : awayName} Lead Striker`,
+      metric: 'First Goalscorer',
+      probability: firstScorerProb,
+      odds: +(100 / Math.max(10, firstScorerProb) * 0.92).toFixed(2),
+      inTheMoneyStatus: 'OPENING_GOAL_SPECIALIST',
       confidenceTier: 'VETTED_SHARP',
-      boxTouchesPer90: 6.8,
-      sotExpectation: 2.1,
+      xgShare: +((favIsHome ? xgFor : xgAgainst) * 0.40).toFixed(2),
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     },
-    defensiveAnchor: {
-      playerRole: `${homeName} Defensive Anchor`,
-      metric: 'Over 2.5 Match Tackles',
-      probability: Math.min(88, Math.round(58 + (ratingDiff < 0 ? 18 : 10))),
-      odds: 1.55,
-      inTheMoneyStatus: 'HIGH_INTERCEPTION_BASE',
+    awayStriker: {
+      playerRole: `${awayName} Primary Striker`,
+      metric: 'Anytime Goalscorer',
+      probability: awayAnytimeProb,
+      odds: +(100 / Math.max(15, awayAnytimeProb) * 0.94).toFixed(2),
+      inTheMoneyStatus: 'COUNTER_ATTACK_THREAT',
       confidenceTier: 'VETTED_SHARP',
-      tackleSuccessRatePct: 76.5,
-      oppositionPressureZone: 'Midfield Transition Block',
+      xgShare: +(xgAgainst * 0.40).toFixed(2),
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     },
-    playmaker: {
-      playerRole: `${homeName} Primary Playmaker`,
-      metric: 'Over 1.5 Shot-Creating Actions',
-      probability: Math.min(89, Math.round(62 + (ratingDiff > 0 ? 14 : 6))),
-      odds: 1.58,
-      inTheMoneyStatus: 'CHANCE_CREATION_ANCHOR',
+    matchflowProfile: {
+      playerRole: `${favIsHome ? homeName : awayName} First Scorer & Win`,
+      metric: 'Matchflow (1st Goal + Match Winner)',
+      probability: matchflowProb,
+      odds: +(100 / Math.max(14, matchflowProb) * 0.93).toFixed(2),
+      inTheMoneyStatus: 'CORRELATED_MATCHFLOW',
       confidenceTier: 'VETTED_SHARP',
-      progressivePassesPer90: 7.2,
-      throughBallFrequency: 'HIGH',
-      dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
-    },
-    goalkeeper: {
-      playerRole: `${awayName} Starting Goalkeeper`,
-      metric: 'Over 2.5 Match Saves',
-      probability: Math.min(88, Math.round(55 + (sotExp > 4.5 ? 22 : 12))),
-      odds: 1.60,
-      inTheMoneyStatus: 'SHOT_STOPPER_REFLEX_BASE',
-      confidenceTier: 'VETTED_SHARP',
-      savePctSeason: 74.2,
-      expectedShotsFaced: sotExp,
       dataResolution: 'FULL_UNCOMPRESSED_TELEMETRY'
     }
   };

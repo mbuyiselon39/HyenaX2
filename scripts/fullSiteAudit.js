@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { LEAGUES } from './generateFixtures.js';
+import { isCornerMarketAvailable, isBannedOrDisallowedMarket } from '../src/marketRules.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,7 +79,18 @@ if (!fs.existsSync(fixturesFile)) {
     console.log(`✓ All ${matches.length * 2} teams (${matches.length * 2} out of ${matches.length * 2}) have verified official crests/logos!`);
   }
 
+  let withFirst10 = 0;
   let withFirst15 = 0;
+  let withMatchShots = 0;
+  let withTeamGoalTotals = 0;
+  let nonTeamGoalOver05Count = 0;
+  let withMultigoals = 0;
+  let withBookingUnders = 0;
+  let bookingOversCount = 0;
+  let bannedMarketsCount = 0;
+  let disallowedCornersCount = 0;
+  let cornerEligibleMatches = 0;
+  let cornerUnsupportedMatches = 0;
   let withTeamCorners = 0;
   let withPlayableTeam55Plus = 0;
   let withPlayableMatch75Plus = 0;
@@ -88,32 +100,71 @@ if (!fs.existsSync(fixturesFile)) {
   let withInvalidAwayHigh = 0;
   let withPhysics = 0;
   let with24Models = 0;
+
   for (const m of matches) {
     const preds = m.predictions || [];
-    if (preds.some(p => p.marketCategory === 'FIRST_15_MIN') && m.timeSegmentProfile?.first15MinModel) {
+    const leagueId = m.league?.id || '';
+    const cornersAllowed = isCornerMarketAvailable(leagueId);
+    if (cornersAllowed) cornerEligibleMatches++;
+    else cornerUnsupportedMatches++;
+
+    if (preds.some(p => p.market === 'First 10 Minutes Result' || p.marketCategory === 'FIRST_10_MIN') && m.timeSegmentProfile?.first10MinModel) {
+      withFirst10++;
+    }
+    if (preds.some(p => p.market === 'First 15 Minutes Result') && m.timeSegmentProfile?.first15MinModel) {
       withFirst15++;
     }
-    if (preds.some(p => p.marketCategory === 'TEAM_CORNERS') && m.cornerVolatilityProfile?.teamCornerProjections) {
-      withTeamCorners++;
+    if (preds.some(p => p.market === 'Match Total Shots' || p.marketCategory === 'SHOOTING') && m.shootingMetricsProfile?.matchTotalShotsExp) {
+      withMatchShots++;
     }
-    if (preds.some(p => (p.market === 'Home Team Total Corners' || p.market === 'Away Team Total Corners') && /(5\.5|6\.5|7\.5|7\+|8\+)/.test(p.selection || ''))) {
-      withPlayableTeam55Plus++;
+    if (preds.some(p => (p.market === 'Home Team Total Goals' || p.market === 'Away Team Total Goals' || p.marketCategory === 'TEAM_GOALS') && /over\s+0\.5/i.test(p.selection || ''))) {
+      withTeamGoalTotals++;
     }
-    if (preds.some(p => p.market === 'Match Total Corners' && /(7\.5|8\.5|9\.5|10\.5|11\.5)/.test(p.selection || ''))) {
-      withPlayableMatch75Plus++;
+    if (preds.some(p => /multigoals/i.test(p.market || ''))) {
+      withMultigoals++;
     }
-    if (preds.some(p => p.market === 'Match Total Corners' && /(over|under)\s+[0-6]\.5/i.test(p.selection || ''))) {
-      withInvalidSub75MatchCorner++;
+    if (preds.some(p => /booking|card/i.test(p.market || '') && /\bunder\b/i.test(p.selection || ''))) {
+      withBookingUnders++;
     }
-    if (preds.some(p => (p.market === 'Home Team Total Corners' || p.market === 'Away Team Total Corners') && /(over|under)\s+[0-4]\.5/i.test(p.selection || ''))) {
-      withInvalidSub55TeamCorner++;
+
+    for (const p of [...preds, ...(m.topPick ? [m.topPick] : [])]) {
+      const check = isBannedOrDisallowedMarket(p?.market, p?.selection, leagueId);
+      if (check.banned) {
+        if (check.reason === 'BOOKINGS_OVER_FORBIDDEN_UNDERS_ONLY') bookingOversCount++;
+        else if (check.reason === 'CORNERS_UNAVAILABLE_IN_LEAGUE') disallowedCornersCount++;
+        else if (check.reason === 'GOAL_OVER_0_5_ONLY_ALLOWED_FOR_TEAM_TOTALS') nonTeamGoalOver05Count++;
+        else bannedMarketsCount++;
+      }
     }
-    if (preds.some(p => p.market === '1st-Half Corners' && /(3\.5|4\.5)/.test(p.selection || ''))) {
-      withFirstHalf3545++;
+
+    if (!cornersAllowed && m.cornerVolatilityProfile?.teamCornerProjections) {
+      disallowedCornersCount++;
     }
-    if (preds.some(p => p.market === 'Away Team Total Corners' && /7\+|8\+|over\s+(6\.5|7\.5)/i.test(p.selection || ''))) {
-      withInvalidAwayHigh++;
+
+    if (cornersAllowed) {
+      if (preds.some(p => p.marketCategory === 'TEAM_CORNERS') && m.cornerVolatilityProfile?.teamCornerProjections) {
+        withTeamCorners++;
+      }
+      if (preds.some(p => (p.market === 'Home Team Total Corners' || p.market === 'Away Team Total Corners') && /(5\.5|6\.5|7\.5|7\+|8\+)/.test(p.selection || ''))) {
+        withPlayableTeam55Plus++;
+      }
+      if (preds.some(p => p.market === 'Match Total Corners' && /(7\.5|8\.5|9\.5|10\.5|11\.5)/.test(p.selection || ''))) {
+        withPlayableMatch75Plus++;
+      }
+      if (preds.some(p => p.market === 'Match Total Corners' && /(over|under)\s+[0-6]\.5/i.test(p.selection || ''))) {
+        withInvalidSub75MatchCorner++;
+      }
+      if (preds.some(p => (p.market === 'Home Team Total Corners' || p.market === 'Away Team Total Corners') && /(over|under)\s+[0-4]\.5/i.test(p.selection || ''))) {
+        withInvalidSub55TeamCorner++;
+      }
+      if (preds.some(p => p.market === '1st-Half Corners' && /(3\.5|4\.5)/.test(p.selection || ''))) {
+        withFirstHalf3545++;
+      }
+      if (preds.some(p => p.market === 'Away Team Total Corners' && /7\+|8\+|over\s+(6\.5|7\.5)/i.test(p.selection || ''))) {
+        withInvalidAwayHigh++;
+      }
     }
+
     if (m.situationalFactors?.physicsMetrics?.airDensityKgM3 !== undefined) {
       withPhysics++;
     }
@@ -121,23 +172,81 @@ if (!fs.existsSync(fixturesFile)) {
       with24Models++;
     }
   }
-  if (withFirst15 === 0) {
-    console.error('❌ FAIL: No fixtures contain FIRST_15_MIN (First 15 Min Draw) markets!');
+
+  if (bookingOversCount > 0) {
+    console.error(`❌ FAIL: Found ${bookingOversCount} disallowed Bookings/Cards OVER selection(s) — strictly Unders only permitted!`);
     errors++;
   } else {
-    console.log(`✓ First 15 Min Draw (Weibull) markets verified on ${withFirst15}/${matches.length} fixtures.`);
+    console.log(`✓ Bookings Discipline verified: 0 Over booking picks across ${matches.length} fixtures (Unders-only active on ${withBookingUnders}/${matches.length}).`);
   }
+
+  if (nonTeamGoalOver05Count > 0) {
+    console.error(`❌ FAIL: Found ${nonTeamGoalOver05Count} non-Team Goal Over 0.5 selection(s) — match goal overs must strictly start at Over 1.5 Goals!`);
+    errors++;
+  } else {
+    console.log('✓ Goal Overs Rule verified: 0 non-team Over 0.5 goal picks (Match Overs >= 1.5; Team Totals allow Over 0.5+).');
+  }
+
+  if (bannedMarketsCount > 0) {
+    console.error(`❌ FAIL: Found ${bannedMarketsCount} banned non-bookmaker market selection(s)!`);
+    errors++;
+  } else {
+    console.log('✓ 35-Market Charter strictly enforced: 0 banned markets (Tackles, SOT, SCA, Saves, Early Payout, 12).');
+  }
+
+  if (disallowedCornersCount > 0) {
+    console.error(`❌ FAIL: Found ${disallowedCornersCount} corner prediction(s) or projection(s) on unsupported leagues!`);
+    errors++;
+  } else {
+    console.log(`✓ League-Gated Corners verified: 0 corner picks on ${cornerUnsupportedMatches} unsupported matches; clean on ${cornerEligibleMatches} corner-eligible matches.`);
+  }
+
+  if (withFirst10 === 0) {
+    console.error('❌ FAIL: No fixtures contain First 10 Minutes Result markets!');
+    errors++;
+  } else {
+    console.log(`✓ First 10 Minutes Result (00:00–09:59) verified on ${withFirst10}/${matches.length} fixtures.`);
+  }
+
+  if (withFirst15 === 0) {
+    console.error('❌ FAIL: No fixtures contain First 15 Minutes Result markets!');
+    errors++;
+  } else {
+    console.log(`✓ First 15 Minutes Draw / Result (00:00–14:59) verified on ${withFirst15}/${matches.length} fixtures.`);
+  }
+
+  if (withMatchShots === 0) {
+    console.error('❌ FAIL: No fixtures contain Total Match Shots markets!');
+    errors++;
+  } else {
+    console.log(`✓ Total Match Shots (NegBin lines) verified on ${withMatchShots}/${matches.length} fixtures.`);
+  }
+
+  if (withTeamGoalTotals === 0) {
+    console.error('❌ FAIL: No fixtures contain Team Goal Totals (Over 0.5+) markets!');
+    errors++;
+  } else {
+    console.log(`✓ Team Goal Totals (Over 0.5+) verified on ${withTeamGoalTotals}/${matches.length} fixtures.`);
+  }
+
+  if (withMultigoals === 0) {
+    console.error('❌ FAIL: No fixtures contain Multigoals markets!');
+    errors++;
+  } else {
+    console.log(`✓ Multigoals (Match/Half/Team) markets verified on ${withMultigoals}/${matches.length} fixtures.`);
+  }
+
   if (withInvalidSub75MatchCorner > 0) {
     console.error(`❌ FAIL: Found ${withInvalidSub75MatchCorner} matches with unplayable sub-7.5 Match Total Corners lines!`);
     errors++;
   } else if (withInvalidSub55TeamCorner > 0) {
     console.error(`❌ FAIL: Found ${withInvalidSub55TeamCorner} matches with unplayable sub-5.5 Team Total Corners lines!`);
     errors++;
-  } else if (withTeamCorners === 0 || withPlayableTeam55Plus === 0 || withPlayableMatch75Plus === 0 || withFirstHalf3545 === 0) {
-    console.error('❌ FAIL: Missing market-ready corner markets (Match 7.5+, Team 5.5+, or 1st-Half 3.5/4.5)!');
+  } else if (cornerEligibleMatches > 0 && (withTeamCorners === 0 || withPlayableTeam55Plus === 0 || withPlayableMatch75Plus === 0 || withFirstHalf3545 === 0)) {
+    console.error('❌ FAIL: Missing market-ready corner markets on corner-eligible leagues (Match 7.5+, Team 5.5+, or 1st-Half 3.5/4.5)!');
     errors++;
   } else {
-    console.log(`✓ Market-Ready Corners verified: Match Total 7.5+ (${withPlayableMatch75Plus}/${matches.length}, zero <7.5), Team Total 5.5+ (${withPlayableTeam55Plus}/${matches.length}, zero <5.5), 1st-Half 3.5/4.5 (${withFirstHalf3545}/${matches.length}).`);
+    console.log(`✓ Market-Ready Corners verified on eligible fixtures: Match Total 7.5+ (${withPlayableMatch75Plus}/${cornerEligibleMatches}), Team Total 5.5+ (${withPlayableTeam55Plus}/${cornerEligibleMatches}), 1st-Half 3.5/4.5 (${withFirstHalf3545}/${cornerEligibleMatches}).`);
   }
   if (withInvalidAwayHigh > 0) {
     console.error(`❌ FAIL: Found ${withInvalidAwayHigh} matches with disallowed 7+/8+ corners on Away Team!`);
@@ -290,7 +399,7 @@ if (fs.existsSync(distDir)) {
 console.log('\n=============================================');
 if (errors === 0) {
   console.log('🎉 AUDIT RESULT: PASSED 100% WITH ZERO ERRORS!');
-  console.log('All supported leagues active, 24-Model + Physics + First 15 Min + Team Corners engines verified, PWA manifest and Cloudflare dist bundle verified.');
+  console.log('All supported leagues active, 35-Market Charter (First 15m Draw, Total Match Shots, Team Goal Totals >=0.5, Match Overs >=1.5, Bookings Unders Only, League-Gated Corners, First 10 Min, Multigoals) + 24-Model + Physics engines verified, PWA manifest and Cloudflare dist bundle verified.');
 } else {
   console.error(`💥 AUDIT RESULT: FAILED with ${errors} error(s) and ${warnings} warning(s).`);
   process.exit(1);

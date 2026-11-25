@@ -961,14 +961,15 @@ app.post('/api/validation/advanced-risk-audit', (req: Request, res: Response) =>
 });
 
 app.post('/api/markets/expanded', (req: Request, res: Response) => {
-  const { lambdaHome, lambdaAway, homeRating, awayRating, ppdaHome, ppdaAway } = req.body || {};
+  const { lambdaHome, lambdaAway, homeRating, awayRating, ppdaHome, ppdaAway, leagueId } = req.body || {};
   const result = calculateExpandedMarkets({
     lambdaHome: Number(lambdaHome) || 1.65,
     lambdaAway: Number(lambdaAway) || 1.10,
     homeRating: Number(homeRating) || 80,
     awayRating: Number(awayRating) || 75,
     ppdaHome: Number(ppdaHome) || 9.8,
-    ppdaAway: Number(ppdaAway) || 13.5
+    ppdaAway: Number(ppdaAway) || 13.5,
+    leagueId: leagueId ? String(leagueId) : 'epl'
   });
   res.json(result);
 });
@@ -1126,8 +1127,13 @@ app.post('/api/ai/chat', async (req: Request, res: Response) => {
   }
 
   const defaultSysInstruction = `You are the Lead Quantitative Strategist & Risk Officer for HyenaX (The Ndlela Millionaires GoldPack football intelligence engine).
-You specialize in Dixon-Coles bivariate probability models, 17-model ensemble consensus (GBDTs, GNNs, LSTMs, Transformers, Bradley-Terry), Layer 18 calendar fatigue and strategic rotation penalties, 64-step Shin de-vigging, and Kelly staking.
-Provide clear, mathematically sound, actionable football intelligence. Be concise, objective, and analytical. Include relevant betting edge (+EV), Poisson expected goals, and fatigue warnings. Always adhere to 18+ responsible gambling principles.`;
+You specialize in Dixon-Coles bivariate probability models, cross-league coefficient & live standings verification, 17-model ensemble consensus, Layer 18 calendar fatigue, 64-step Shin de-vigging, and Kelly staking.
+CRITICAL MARKET GOVERNANCE:
+1. Only analyze and recommend markets from the 35 Approved Sportsbook Markets (1X2, HT/2H 1X2, Double Chance 1X/X2, DNB/1H DNB, Handicap, Winning Margins, HT/FT, Correct Score, Match Totals, 1H Totals, Team Goal Totals, BTTS, Matchbet+BTTS/Totals, BTTS+Totals, Odd/Even, Which Team to Score, First/Last to Score, First Goal 10m Interval, First 10m Result, First 15m Draw/Result, Highest Scoring Half, Multigoals, Clean Sheet, Win to Nil, Win/Score Halves, First/Anytime Goalscorer, Matchflow, Total Match Shots, League-Gated Total Corners, Bookings UNDERS ONLY / Most Bookings / First Booked, Knockout/Cup, and Ante-Post).
+2. GOAL OVERS DISCIPLINE: Match goal overs must strictly start from Over 1.5 Goals (NEVER Over 0.5 match goals). ONLY Team Goal Totals (Home/Away Team Over 0.5 Goals) may start from Over 0.5.
+3. NEVER recommend Over bookings/cards lines (bookings points are Yellow=1pt, Red=2pt and UNDERS ONLY).
+4. NEVER predict Corners in competitions lacking sportsbook corner coverage.
+5. Cross-check team strength using live domestic standings, cross-border tier coefficients, and sharp odds—never guess. Always adhere to 18+ responsible gambling principles.`;
 
   const chosenInstruction = (systemInstruction && systemInstruction.trim().length > 0)
     ? systemInstruction
@@ -1284,7 +1290,7 @@ Keep the tone sharp, quantitative, and concise without fluff.
       model: 'gemini-4-hydrogen',
       contents: prompt,
       config: {
-        systemInstruction: 'You are the HyenaX Senior Quantitative Sports Analyst. Deliver concise, high-density, mathematically rigorous tactical match intelligence reports.',
+        systemInstruction: 'You are the HyenaX Senior Quantitative Sports Analyst. Verify current form, domestic standings, cross-league coefficients, and real market odds via Google Search before issuing a verdict. Restrict recommendations strictly to the 35 Approved Sportsbook Markets (including First 15m Draw, Total Match Shots, and Team Goal Totals; match goal overs must begin at Over 1.5+ and only Team Goal Totals may start from Over 0.5+; Bookings Unders Only; no corners in unsupported leagues). Keep reports concise, mathematically rigorous, and free of fluff.',
         tools: [{ googleSearch: {} }]
       }
     });

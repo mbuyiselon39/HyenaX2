@@ -865,16 +865,17 @@ app.post('/api/validation/sanity-check', (req, res) => {
   res.json(report);
 });
 
-// 16. Expanded Markets API (Player Tackles, Team Corners, Cards, Win Either Half)
+// 16. Expanded Markets API (League-Gated Corners, Bookings Unders Only, First 10m/15m Result, Total Match Shots, Team Goal Totals, Halves)
 app.post('/api/markets/expanded', (req, res) => {
-  const { lambdaHome, lambdaAway, homeRating, awayRating, ppdaHome, ppdaAway } = req.body || {};
+  const { lambdaHome, lambdaAway, homeRating, awayRating, ppdaHome, ppdaAway, leagueId } = req.body || {};
   const result = calculateExpandedMarkets({
     lambdaHome: Number(lambdaHome) || 1.65,
     lambdaAway: Number(lambdaAway) || 1.10,
     homeRating: Number(homeRating) || 80,
     awayRating: Number(awayRating) || 75,
     ppdaHome: Number(ppdaHome) || 9.8,
-    ppdaAway: Number(ppdaAway) || 13.5
+    ppdaAway: Number(ppdaAway) || 13.5,
+    leagueId: leagueId ? String(leagueId) : 'epl'
   });
   res.json(result);
 });

@@ -338,7 +338,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           ...prev,
           {
             role: 'model',
-            text: `ℹ️ **Static Edge Mode Active**: Live Gemini Google Search & Maps grounding requires the Node/Express runtime server, while all **24 quantitative engines**, Dixon-Coles projections, Atmospheric Physics, and Team Corner / First 15 Min Draw probabilities are running live locally across ${fixtures.length} fixtures.`,
+            text: `ℹ️ **Static Edge Mode Active**: Live Gemini Google Search & Maps grounding requires the Node/Express runtime server, while all **24 quantitative engines**, Dixon-Coles projections, Atmospheric Physics, Cross-League Calibration, and First 10m/15m / 35-Market Charter probabilities are running live locally across ${fixtures.length} fixtures.`,
             timestamp: new Date().toLocaleTimeString()
           }
         ]);

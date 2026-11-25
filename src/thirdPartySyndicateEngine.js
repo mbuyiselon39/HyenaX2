@@ -278,18 +278,19 @@ export function generateThirdPartyPredictionsForMatch({
 
       case 'predictz': {
         // Form & clean sheet splits
-        confidence = Math.min(86, Math.max(65, Math.round(74 + ratingDiff * 1.4 + variance)));
-        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isCloseMatch ? '1X' : 'X2'));
+        confidence = Math.min(86, Math.max(65, Math.round(74 + Math.abs(ratingDiff) * 1.4 + variance)));
+        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isAwayFav ? '2' : (isCloseMatch ? '1X' : 'X2')));
         market = pick.length > 1 ? 'Double Chance' : 'Match Winner (1X2)';
-        predictedScore = isHeavyFav ? '3 - 0' : (isModerateFav ? '2 - 1' : '1 - 1');
-        reasoning = `PredictZ form guide favors ${homeName} at home ground based on recent home/away goal differential. Estimated score ${predictedScore}.`;
+        predictedScore = isHeavyFav ? '3 - 0' : (isModerateFav ? '2 - 1' : (isAwayFav ? '1 - 2' : '1 - 1'));
+        const formLeader = isAwayFav ? awayName : homeName;
+        reasoning = `PredictZ form guide favors ${formLeader} based on recent goal differential and tier momentum. Estimated score ${predictedScore}.`;
         break;
       }
 
       case 'tipstrr': {
         // Verified syndicate pro tipsters
-        confidence = Math.min(89, Math.max(70, Math.round(78 + ratingDiff * 1.1 + variance)));
-        pick = isHeavyFav ? '1' : (isModerateFav ? (pRng() > 0.4 ? '1' : '1X') : (isCloseMatch ? 'Under 2.5 Goals' : '2'));
+        confidence = Math.min(89, Math.max(70, Math.round(78 + Math.abs(ratingDiff) * 1.1 + variance)));
+        pick = isHeavyFav ? '1' : (isModerateFav ? (pRng() > 0.4 ? '1' : '1X') : (isAwayFav ? '2' : 'Under 2.5 Goals'));
         market = pick.includes('Goals') ? 'Total Goals' : (pick.length > 1 ? 'Double Chance' : 'Match Winner (1X2)');
         predictedScore = likelyScore;
         reasoning = `84% of verified Tipstrr syndicates backing ${pick}. High unit stakes logged on ${pick.length > 1 ? 'cushion line' : 'outright'}.`;
@@ -298,27 +299,27 @@ export function generateThirdPartyPredictionsForMatch({
 
       case 'olbg': {
         // Community tipster consensus
-        confidence = Math.min(88, Math.max(68, Math.round(77 + ratingDiff * 1.3 + variance)));
-        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isCloseMatch ? '1X' : '2'));
+        confidence = Math.min(88, Math.max(68, Math.round(77 + Math.abs(ratingDiff) * 1.3 + variance)));
+        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isAwayFav ? '2' : '1X'));
         predictedScore = likelyScore;
-        reasoning = `OLBG tipsters poll: 79% win consensus for ${pick === '1' ? homeName : (pick === '2' ? awayName : 'Home/Draw')}. Consensus rating 4.5/5 stars.`;
+        reasoning = `OLBG tipsters poll: 79% consensus for ${pick === '1' ? homeName : (pick === '2' ? awayName : 'Home/Draw')}. Consensus rating 4.5/5 stars.`;
         break;
       }
 
       case 'betensured': {
         // Categorical safety tips (Sure 2, Double Chance)
         confidence = Math.min(91, Math.max(72, Math.round(82 + (isHeavyFav ? 6 : 0) + variance)));
-        pick = isHeavyFav ? '1' : '1X';
+        pick = isHeavyFav ? '1' : (isAwayFav ? 'X2' : '1X');
         market = isHeavyFav ? 'Match Winner (1X2)' : 'Double Chance';
-        predictedScore = isHeavyFav ? '2 - 0' : '1 - 1';
-        reasoning = `Selected for Betensured 'Sure 2 / Low-Risk' category. Protective double chance cushion recommended if away team possesses high counter pace.`;
+        predictedScore = isHeavyFav ? '2 - 0' : (isAwayFav ? '1 - 2' : '1 - 1');
+        reasoning = `Selected for Betensured 'Sure 2 / Low-Risk' category. Protective double chance cushion (${pick}) mitigates draw variance.`;
         break;
       }
 
       case 'sportytrader': {
         // Implied vs fair probability
-        confidence = Math.min(88, Math.max(69, Math.round(76 + ratingDiff * 1.5 + variance)));
-        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isCloseMatch ? 'Over 1.5 Goals' : 'X2'));
+        confidence = Math.min(88, Math.max(69, Math.round(76 + Math.abs(ratingDiff) * 1.5 + variance)));
+        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isAwayFav ? '2' : 'Over 1.5 Goals'));
         market = pick.includes('Goals') ? 'Total Goals' : (pick.length > 1 ? 'Double Chance' : 'Match Winner (1X2)');
         predictedScore = likelyScore;
         reasoning = `SportyTrader odds algorithm indicates positive expected value (+EV) on ${pick} relative to opening bookmaker margin.`;
@@ -327,9 +328,9 @@ export function generateThirdPartyPredictionsForMatch({
 
       case 'soccervista': {
         // Bet value index 1-10
-        const betValueIndex = Math.min(10, Math.max(4, Math.round(7 + ratingDiff * 0.15)));
+        const betValueIndex = Math.min(10, Math.max(4, Math.round(7 + Math.abs(ratingDiff) * 0.15)));
         confidence = Math.min(85, Math.max(65, Math.round(72 + betValueIndex * 1.5 + variance)));
-        pick = isHeavyFav ? '1' : (isModerateFav ? '1X' : (isCloseMatch ? 'X' : '2'));
+        pick = isHeavyFav ? '1' : (isModerateFav ? '1X' : (isAwayFav ? '2' : 'X'));
         predictedScore = likelyScore;
         reasoning = `SoccerVista match rating: Value Index ${betValueIndex}/10. Recommends ${pick} based on defensive concession frequency.`;
         break;
@@ -337,39 +338,43 @@ export function generateThirdPartyPredictionsForMatch({
 
       case 'mrfixit': {
         // NAP of day / goals
-        confidence = Math.min(87, Math.max(70, Math.round(79 + ratingDiff * 1.1 + variance)));
-        pick = isHeavyFav ? '1 & Over 1.5' : (combinedXg >= 2.6 ? 'Over 2.5 Goals' : '1X');
-        market = pick.includes('&') ? 'Match Combo' : (pick.includes('Goals') ? 'Total Goals' : 'Double Chance');
+        confidence = Math.min(87, Math.max(70, Math.round(79 + Math.abs(ratingDiff) * 1.1 + variance)));
+        pick = isHeavyFav ? '1 & Over 1.5' : (isAwayFav ? 'X2 & Under 3.5' : (combinedXg >= 2.6 ? 'Over 2.5 Goals' : '1X'));
+        market = pick.includes('&') ? 'Matchbet + Totals' : (pick.includes('Goals') ? 'Total Goals' : 'Double Chance');
         predictedScore = likelyScore;
-        reasoning = `Mr Fixit Syndicate Key Angle: ${homeName} front-foot possession gives high floor. NAP consideration for ${pick}.`;
+        const domSide = isAwayFav ? awayName : homeName;
+        reasoning = `Mr Fixit Syndicate Key Angle: ${domSide} front-foot chance creation gives high floor. NAP consideration for ${pick}.`;
         break;
       }
 
       case 'footballwhispers': {
         // Tactical preview & curated bets
-        confidence = Math.min(86, Math.max(68, Math.round(75 + ratingDiff * 1.2 + variance)));
-        pick = isHeavyFav ? '1' : (isModerateFav ? '1X' : 'Both Teams To Score - Yes');
+        confidence = Math.min(86, Math.max(68, Math.round(75 + Math.abs(ratingDiff) * 1.2 + variance)));
+        pick = isHeavyFav ? '1' : (isModerateFav ? '1X' : (isAwayFav ? 'X2' : 'Both Teams To Score - Yes'));
         market = pick.includes('Score') ? 'Both Teams To Score' : (pick.length > 1 ? 'Double Chance' : 'Match Winner (1X2)');
         predictedScore = likelyScore;
-        reasoning = `Football Whispers statistical breakdown cites superior midfield duel win rate for ${homeName}. Curated pick: ${pick}.`;
+        const midLeader = isAwayFav ? awayName : homeName;
+        reasoning = `Football Whispers statistical breakdown cites superior midfield duel control for ${midLeader}. Curated pick: ${pick}.`;
         break;
       }
 
       case 'sportsmole': {
         // Journalistic score simulation
-        confidence = Math.min(88, Math.max(70, Math.round(78 + ratingDiff * 1.4 + variance)));
+        confidence = Math.min(88, Math.max(70, Math.round(78 + Math.abs(ratingDiff) * 1.4 + variance)));
         pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isCloseMatch ? 'X' : '2'));
         predictedScore = isHeavyFav ? '2 - 0' : (isModerateFav ? '2 - 1' : (isCloseMatch ? '1 - 1' : '1 - 2'));
-        reasoning = `Sports Mole simulation predicts ${predictedScore} outcome. Squad depth and recent defensive solidity key in verdict.`;
+        reasoning = `Sports Mole simulation predicts ${predictedScore} outcome. Squad quality and recent defensive solidity key in verdict.`;
         break;
       }
 
       case 'tntsports': {
         // Broadcaster tactical battle
-        confidence = Math.min(86, Math.max(68, Math.round(76 + ratingDiff * 1.1 + variance)));
-        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : '1X');
+        confidence = Math.min(86, Math.max(68, Math.round(76 + Math.abs(ratingDiff) * 1.1 + variance)));
+        pick = isHeavyFav ? '1' : (isModerateFav ? '1' : (isAwayFav ? '2' : '1X'));
         predictedScore = likelyScore;
-        reasoning = `TNT Sports tactical focus: ${homeName}'s transition speed overloads ${awayName}'s defensive line. Verdict: ${pick}.`;
+        const attacker = isAwayFav ? awayName : homeName;
+        const defender = isAwayFav ? homeName : awayName;
+        reasoning = `TNT Sports tactical focus: ${attacker}'s transition quality overloads ${defender}'s defensive line. Verdict: ${pick}.`;
         break;
       }
 

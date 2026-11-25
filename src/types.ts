@@ -148,6 +148,7 @@ export interface Fixture {
   strictVetting?: any;
   refereeReport?: any;
   cornerVolatilityProfile?: any;
+  shootingMetricsProfile?: any;
   situationalFactors?: any;
   timeSegmentProfile?: any;
   marketPsychology?: any;

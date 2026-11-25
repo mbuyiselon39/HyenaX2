@@ -22,9 +22,11 @@
 
 import {
   calculateAtmosphericPhysics,
+  calculateFirst10MinResult,
   calculateFirst15MinDistribution,
   calculateNegativeBinomialCorners
 } from './physicsMathModels.js';
+import { isCornerMarketAvailable } from './marketRules.js';
 
 /**
  * Audit a single fixture through the 20-Layer Intelligence & Risk Validation Engine.
@@ -274,7 +276,6 @@ export function auditFixturePrediction(fixture) {
   const layer8 = {
     expectedMatchGoals: expTotalGoals,
     evaluations: {
-      over05: { prob: 94.2, status: 'EXCELLENT_BUT_LOW_ODDS' },
       over15: { prob: 79.5, status: expTotalGoals >= 2.5 ? 'STRONG' : 'MODERATE' },
       over25: { prob: expTotalGoals >= 2.8 ? 62.4 : 44.8, status: expTotalGoals >= 2.8 ? 'VIABLE' : 'RISKY' },
       under25: { prob: expTotalGoals <= 2.3 ? 58.2 : 41.8, status: expTotalGoals <= 2.3 ? 'STRONG' : 'RISKY' },
@@ -283,6 +284,7 @@ export function auditFixturePrediction(fixture) {
       bttsYes: { prob: h2h.bttsPct || 50.0, status: (h2h.bttsPct || 50) > 55 ? 'SUPPORTED' : 'UNFAVORED' },
       bttsNo: { prob: 100 - (h2h.bttsPct || 50.0), status: (h2h.bttsPct || 50) <= 45 ? 'SUPPORTED' : 'UNFAVORED' }
     },
+    teamGoalTotalsNote: 'Team Goal Overs supported from Over 0.5+; Match Goal Overs strictly from Over 1.5+.',
     strongestGoalOpportunity: {
       market: bestGoalMarket,
       selection: bestGoalSelection,
@@ -291,11 +293,13 @@ export function auditFixturePrediction(fixture) {
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 9 — CORNERS VALIDATION (MATCH TOTAL + EACH TEAM CORNERS)
+  // LAYER 9 — CORNERS VALIDATION (STRICTLY LEAGUE-GATED TO BOOKMAKER AVAILABILITY)
   // --------------------------------------------------------------------------
-  let cornerAssessment = 'NO BET';
+  const leagueId = fixture.league?.id || 'default';
+  const cornersSupported = isCornerMarketAvailable(leagueId);
+  let cornerAssessment = cornersSupported ? 'NO BET' : 'NOT OFFERED (No Corner Market in League)';
   const cornerProfile = fixture.cornerVolatilityProfile || fixture.tacticalProfiles?.cornerVolatilityProfile;
-  const nbCornersEval = calculateNegativeBinomialCorners({
+  const nbCornersEval = cornersSupported ? calculateNegativeBinomialCorners({
     totalLambda: expTotalGoals,
     lambdaHome: homeXg,
     lambdaAway: awayXg,
@@ -305,14 +309,17 @@ export function auditFixturePrediction(fixture) {
     awayBlocksPct: cornerProfile?.awayBlocksOutOfBoundsPct || 46,
     isDerby,
     physicsMetrics: physRaw
-  });
-  const firstHalfPick = nbCornersEval.firstHalf.over35 >= 0.65
-    ? `1st-Half Over 3.5 (${(nbCornersEval.firstHalf.over35 * 100).toFixed(1)}%)`
-    : nbCornersEval.firstHalf.under45 >= 0.62
-      ? `1st-Half Under 4.5 (${(nbCornersEval.firstHalf.under45 * 100).toFixed(1)}%)`
-      : `1st-Half Under 3.5 (${(nbCornersEval.firstHalf.under35 * 100).toFixed(1)}%)`;
+  }) : null;
 
-  if (cornerProfile) {
+  const firstHalfPick = cornersSupported && nbCornersEval ? (
+    nbCornersEval.firstHalf.over35 >= 0.65
+      ? `1st-Half Over 3.5 (${(nbCornersEval.firstHalf.over35 * 100).toFixed(1)}%)`
+      : nbCornersEval.firstHalf.under45 >= 0.62
+        ? `1st-Half Under 4.5 (${(nbCornersEval.firstHalf.under45 * 100).toFixed(1)}%)`
+        : `1st-Half Under 3.5 (${(nbCornersEval.firstHalf.under35 * 100).toFixed(1)}%)`
+  ) : 'N/A';
+
+  if (cornersSupported && cornerProfile && nbCornersEval) {
     const homeWing = cornerProfile.homeWingPlayFreq || 70;
     const awayWing = cornerProfile.awayWingPlayFreq || 65;
     if (nbCornersEval.match.over85 >= 0.72 || (homeWing > 75 && awayWing > 75)) {
@@ -324,23 +331,28 @@ export function auditFixturePrediction(fixture) {
     }
   }
 
-  const homeTeamCornerChoice = nbCornersEval.home.over65 >= 0.54
-    ? `${home.name} 7+ Corners / Over 6.5 (${(nbCornersEval.home.over65 * 100).toFixed(1)}%)`
-    : nbCornersEval.home.over55 >= 0.56
-      ? `${home.name} Over 5.5 Corners (${(nbCornersEval.home.over55 * 100).toFixed(1)}%)`
-      : `${home.name} Under 5.5 Corners (${(nbCornersEval.home.under55 * 100).toFixed(1)}%)`;
+  const homeTeamCornerChoice = cornersSupported && nbCornersEval ? (
+    nbCornersEval.home.over65 >= 0.54
+      ? `${home.name} 7+ Corners / Over 6.5 (${(nbCornersEval.home.over65 * 100).toFixed(1)}%)`
+      : nbCornersEval.home.over55 >= 0.56
+        ? `${home.name} Over 5.5 Corners (${(nbCornersEval.home.over55 * 100).toFixed(1)}%)`
+        : `${home.name} Under 5.5 Corners (${(nbCornersEval.home.under55 * 100).toFixed(1)}%)`
+  ) : 'N/A';
 
-  const awayTeamCornerChoice = nbCornersEval.away.under55 >= 0.65
-    ? `${away.name} Under 5.5 Corners (${(nbCornersEval.away.under55 * 100).toFixed(1)}%)`
-    : `${away.name} Over 5.5 Corners (${(nbCornersEval.away.over55 * 100).toFixed(1)}%)`;
+  const awayTeamCornerChoice = cornersSupported && nbCornersEval ? (
+    nbCornersEval.away.under55 >= 0.65
+      ? `${away.name} Under 5.5 Corners (${(nbCornersEval.away.under55 * 100).toFixed(1)}%)`
+      : `${away.name} Over 5.5 Corners (${(nbCornersEval.away.over55 * 100).toFixed(1)}%)`
+  ) : 'N/A';
 
   const layer9 = {
-    dataAvailable: Boolean(cornerProfile),
+    dataAvailable: Boolean(cornersSupported && cornerProfile),
+    cornersSupported,
     cornerVerdict: cornerAssessment,
     firstHalfCorners: firstHalfPick,
     homeTeamCorners: homeTeamCornerChoice,
     awayTeamCorners: awayTeamCornerChoice,
-    expectedCorners: {
+    expectedCorners: cornersSupported && nbCornersEval ? {
       home: nbCornersEval.lambdaHomeCorners,
       away: nbCornersEval.lambdaAwayCorners,
       firstHalf: nbCornersEval.lambdaFirstHalfCorners,
@@ -350,22 +362,22 @@ export function auditFixturePrediction(fixture) {
       awayUnder55Pct: +(nbCornersEval.away.under55 * 100).toFixed(1),
       home7PlusPct: +(nbCornersEval.home.over65 * 100).toFixed(1),
       home8PlusPct: +(nbCornersEval.home.over75 * 100).toFixed(1)
-    }
+    } : null
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 10 — CARDS VALIDATION (Strict: never invent referee info)
+  // LAYER 10 — BOOKINGS / CARDS VALIDATION (UNDERS ONLY + Yellow=1pt, Red=2pt)
   // --------------------------------------------------------------------------
   let cardAssessment = 'NO BET';
   const referee = fixture.refereeReport;
   if (referee && referee.isConfirmed) {
     const yellows = Number(referee.avgYellows || 3.8);
-    if (isDerby || yellows > 4.5) {
-      cardAssessment = 'Over 3.5 Total Cards (Strict Official & Derby Tension)';
-    } else if (yellows < 3.2 && !isDerby) {
-      cardAssessment = 'Under 4.5 Total Cards (Lenient Referee)';
+    if (yellows < 3.4 && !isDerby) {
+      cardAssessment = 'Under 3.5 Total Booking Points (Controlled Official)';
+    } else if (!isDerby && yellows <= 4.3) {
+      cardAssessment = 'Under 4.5 Total Booking Points (Unders Only)';
     } else {
-      cardAssessment = 'Over 2.5 Total Cards';
+      cardAssessment = 'Under 5.5 Total Booking Points (High Cushion Under)';
     }
   }
 
@@ -376,7 +388,7 @@ export function auditFixturePrediction(fixture) {
   };
 
   // --------------------------------------------------------------------------
-  // LAYER 11 — RESULT, HALF & FIRST 15 MIN DRAW VALIDATION
+  // LAYER 11 — RESULT, HALF & FIRST 10 MIN RESULT VALIDATION
   // --------------------------------------------------------------------------
   let dnbChoice = 'NO BET';
   let dcChoice = 'NO BET';
@@ -397,6 +409,14 @@ export function auditFixturePrediction(fixture) {
     dnbChoice = 'Home DNB';
   }
 
+  const first10Eval = calculateFirst10MinResult({
+    lambdaHome: homeXg,
+    lambdaAway: awayXg,
+    ppdaHome: fixture.tacticalFeeds?.ppdaPressing?.home || 10.5,
+    ppdaAway: fixture.tacticalFeeds?.ppdaPressing?.away || 11.2,
+    isDerby,
+    physicsMetrics: physRaw
+  });
   const first15Eval = calculateFirst15MinDistribution({
     lambdaHome: homeXg,
     lambdaAway: awayXg,
@@ -411,7 +431,9 @@ export function auditFixturePrediction(fixture) {
     doubleChance: dcChoice,
     winEitherHalf: eitherHalfChoice,
     highestScoringHalf: highestScoringHalfChoice,
-    first15MinDraw: `15 Min Draw (X) · ${(first15Eval.pDraw15 * 100).toFixed(1)}%`,
+    first10MinResult: `First 10 Min Draw (X) · ${(first10Eval.pDraw10 * 100).toFixed(1)}%`,
+    first10MinDrawProbPct: +(first10Eval.pDraw10 * 100).toFixed(1),
+    first15MinDraw: `First 15 Min Draw (X) · ${(first15Eval.pDraw15 * 100).toFixed(1)}%`,
     first15MinDrawProbPct: +(first15Eval.pDraw15 * 100).toFixed(1)
   };
 
@@ -486,19 +508,25 @@ export function auditFixturePrediction(fixture) {
       strongestRiskAdjusted: `${highestScoringHalfSafeChoice} (Highest Scoring Half)`
     },
     goalsFamily: {
-      markets: ['Over/Under Goals', 'BTTS', 'Team Totals'],
+      markets: ['Over/Under Goals (Over 1.5+)', 'Team Goal Totals (Over 0.5+)', 'BTTS', 'Multigoals', 'Odd/Even Goals'],
       strongestRiskAdjusted: `${bestGoalSelection} (${bestGoalMarket})`
     },
     cornersFamily: {
-      markets: ['Match Total Corners', 'Home Team Total Corners', 'Away Team Total Corners', '1st-Half Corners'],
+      markets: cornersSupported ? ['Total Corners', '1st-Half Corners', 'Team Corners'] : [],
       strongestRiskAdjusted: cornerAssessment
     },
     timeSegmentFamily: {
-      markets: ['First 15 Minutes (0-15 min) Draw', 'Goal in First 10 Minutes'],
-      strongestRiskAdjusted: layer11.first15MinDraw
+      markets: ['First 10 Minutes Result', 'First 15 Minutes Draw', 'First Goal Interval (10m)', 'First / Last Team to Score'],
+      strongestRiskAdjusted: `${layer11.first10MinResult} · ${layer11.first15MinDraw}`
+    },
+    shotsFamily: {
+      markets: ['Match Total Shots'],
+      strongestRiskAdjusted: fixture.shootingMetricsProfile?.matchTotalShotsExp
+        ? `Expected ${fixture.shootingMetricsProfile.matchTotalShotsExp} Total Match Shots`
+        : 'Modeled Total Match Shots'
     },
     cardsFamily: {
-      markets: ['Total Cards', 'Each Team Cards'],
+      markets: ['Bookings Unders (Yellow=1pt, Red=2pt)', 'Most Bookings', 'First Team Booked'],
       strongestRiskAdjusted: cardAssessment
     }
   };

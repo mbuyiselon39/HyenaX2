@@ -340,3 +340,196 @@ export function calculateEntropyAndSkellam({
     expectedGoalMargin: +(Number(lambdaHome) - Number(lambdaAway)).toFixed(2)
   };
 }
+
+/**
+ * 5. Non-Homogeneous Early-Tempo First 10 Minutes Result (00:00–09:59) - Market #21
+ */
+export function calculateFirst10MinResult({
+  lambdaHome = 1.45,
+  lambdaAway = 1.15,
+  rho = -0.125,
+  ppdaHome = 10.5,
+  ppdaAway = 11.2,
+  isDerby = false,
+  physicsMetrics = null
+} = {}) {
+  // Empirical ~8.4% of 90-min goals happen inside 00:00-09:59
+  const avgPpda = (Number(ppdaHome || 10.5) + Number(ppdaAway || 11.2)) / 2;
+  const pressFactor = Math.min(1.16, Math.max(0.86, 1 + (10.5 - avgPpda) * 0.02));
+  const derbyCaution = isDerby ? 0.88 : 1.0;
+  const physMult = physicsMetrics?.goalHazardPhysicsMult || 1.0;
+
+  const share10 = 0.084 * pressFactor * derbyCaution * physMult;
+  const lH10 = Math.max(0.03, Math.min(0.42, Number(lambdaHome) * share10));
+  const lA10 = Math.max(0.02, Math.min(0.38, Number(lambdaAway) * share10));
+
+  let totalNorm = 0;
+  for (let x = 0; x <= 3; x++) {
+    for (let y = 0; y <= 3; y++) {
+      totalNorm += poissonPm(lH10, x) * poissonPm(lA10, y) * dixonColesTau(x, y, lH10, lA10, rho);
+    }
+  }
+  const invNorm = totalNorm > 0 ? 1 / totalNorm : 1;
+
+  let pDraw10 = 0;
+  let pHomeLead10 = 0;
+  let pAwayLead10 = 0;
+  let pNoGoal10 = 0;
+
+  for (let x = 0; x <= 3; x++) {
+    for (let y = 0; y <= 3; y++) {
+      const p = poissonPm(lH10, x) * poissonPm(lA10, y) * dixonColesTau(x, y, lH10, lA10, rho) * invNorm;
+      if (x === y) pDraw10 += p;
+      else if (x > y) pHomeLead10 += p;
+      else pAwayLead10 += p;
+      if (x === 0 && y === 0) pNoGoal10 = p;
+    }
+  }
+
+  return {
+    lambdaHome10: +lH10.toFixed(3),
+    lambdaAway10: +lA10.toFixed(3),
+    pDraw10: +Math.min(0.92, Math.max(0.58, pDraw10)).toFixed(3),
+    pHomeLead10: +Math.min(0.28, Math.max(0.04, pHomeLead10)).toFixed(3),
+    pAwayLead10: +Math.min(0.24, Math.max(0.03, pAwayLead10)).toFixed(3),
+    pNoGoal10: +Math.min(0.90, Math.max(0.55, pNoGoal10)).toFixed(3),
+    pGoal10: +Math.min(0.45, Math.max(0.10, 1 - pNoGoal10)).toFixed(3)
+  };
+}
+
+/**
+ * 6. First Goal Interval (10-Minute Brackets) - Market #20
+ * Models P(T_first_goal in [a, b]) using inhomogeneous Weibull match hazard.
+ */
+export function calculateFirstGoalIntervals10m({
+  lambdaHome = 1.45,
+  lambdaAway = 1.15,
+  isDerby = false,
+  physicsMetrics = null
+} = {}) {
+  const totalL = Math.max(0.8, Number(lambdaHome) + Number(lambdaAway)) * (physicsMetrics?.goalHazardPhysicsMult || 1.0);
+  // 9 intervals calibrated to football match scoring curve (slightly suppressed 1-10, higher 31-40, 76-90)
+  const intervalWeights = [
+    { label: '1-10 Min', share: 0.084 },
+    { label: '11-20 Min', share: 0.102 },
+    { label: '21-30 Min', share: 0.108 },
+    { label: '31-40 Min', share: 0.114 },
+    { label: '41-50 Min', share: 0.118 },
+    { label: '51-60 Min', share: 0.112 },
+    { label: '61-70 Min', share: 0.116 },
+    { label: '71-80 Min', share: 0.118 },
+    { label: '81-90+ Min', share: 0.128 }
+  ];
+  const derbyFactor = isDerby ? 0.94 : 1.0;
+
+  let survivalProb = 1.0;
+  const brackets = [];
+  for (const iv of intervalWeights) {
+    const rate = totalL * iv.share * derbyFactor;
+    const pGoalInBucket = 1 - Math.exp(-rate);
+    const pFirstInBucket = survivalProb * pGoalInBucket;
+    brackets.push({
+      bracket: iv.label,
+      probability: +pFirstInBucket.toFixed(4)
+    });
+    survivalProb *= Math.exp(-rate);
+  }
+  const pNoGoal = +survivalProb.toFixed(4);
+  const topBracket = [...brackets].sort((a, b) => b.probability - a.probability)[0];
+
+  return {
+    brackets,
+    noGoalProbability: pNoGoal,
+    mostLikelyBracket: topBracket.bracket,
+    mostLikelyBracketProb: topBracket.probability,
+    goalBefore30MinProb: +(brackets[0].probability + brackets[1].probability + brackets[2].probability).toFixed(3),
+    goalBefore45MinProb: +(brackets[0].probability + brackets[1].probability + brackets[2].probability + brackets[3].probability + brackets[4].probability * 0.5).toFixed(3)
+  };
+}
+
+/**
+ * 7. Exact Skellam Winning Margins (Market #8) & Handicaps (Market #7)
+ */
+export function calculateMatchWinningMarginsAndHandicaps(lambdaHome = 1.45, lambdaAway = 1.15) {
+  let homeBy1 = 0, homeBy2 = 0, homeBy3Plus = 0;
+  let awayBy1 = 0, awayBy2 = 0, awayBy3Plus = 0;
+  let draw = 0;
+
+  for (let k = -7; k <= 7; k++) {
+    const pk = skellamPmLocal(k, lambdaHome, lambdaAway);
+    if (k === 0) draw += pk;
+    else if (k === 1) homeBy1 += pk;
+    else if (k === 2) homeBy2 += pk;
+    else if (k >= 3) homeBy3Plus += pk;
+    else if (k === -1) awayBy1 += pk;
+    else if (k === -2) awayBy2 += pk;
+    else if (k <= -3) awayBy3Plus += pk;
+  }
+
+  return {
+    margins: {
+      draw: +draw.toFixed(3),
+      homeBy1: +homeBy1.toFixed(3),
+      homeBy2: +homeBy2.toFixed(3),
+      homeBy3Plus: +homeBy3Plus.toFixed(3),
+      awayBy1: +awayBy1.toFixed(3),
+      awayBy2: +awayBy2.toFixed(3),
+      awayBy3Plus: +awayBy3Plus.toFixed(3)
+    },
+    handicaps: {
+      homeMinus15: +(homeBy2 + homeBy3Plus).toFixed(3),   // Home -1.5
+      awayPlus15: +(awayBy1 + awayBy2 + awayBy3Plus + draw + homeBy1).toFixed(3), // Away +1.5
+      awayMinus15: +(awayBy2 + awayBy3Plus).toFixed(3),   // Away -1.5
+      homePlus15: +(homeBy1 + homeBy2 + homeBy3Plus + draw + awayBy1).toFixed(3), // Home +1.5
+      homeMinus05: +(homeBy1 + homeBy2 + homeBy3Plus).toFixed(3),
+      awayPlus05: +(draw + awayBy1 + awayBy2 + awayBy3Plus).toFixed(3)
+    }
+  };
+}
+
+/**
+ * 8. Correlated Negative Binomial Total Match Shots Engine (#34)
+ */
+export function calculateTotalMatchShotsDistribution({
+  matchTotalShotsExp = 23.5,
+  homeTotalShotsExp = 13.5,
+  awayTotalShotsExp = 10.0,
+  isDerby = false,
+  physicsMetrics = null
+} = {}) {
+  const physBoost = physicsMetrics?.ballVelocityMultiplier ? Math.min(1.06, Math.max(0.95, physicsMetrics.ballVelocityMultiplier)) : 1.0;
+  const meanShots = Math.max(17.5, Math.min(31.5, Number(matchTotalShotsExp || 23.5) * physBoost * (isDerby ? 1.03 : 1.0)));
+
+  const calcShotCdf = (mu, maxLine, rDisp = 20.0) => {
+    let underProb = 0;
+    for (let s = 0; s <= maxLine; s++) {
+      underProb += negativeBinomialPm(mu, s, rDisp);
+    }
+    underProb = Math.min(0.95, Math.max(0.05, underProb));
+    return {
+      under: +underProb.toFixed(3),
+      over: +(1 - underProb).toFixed(3)
+    };
+  };
+
+  const line195 = calcShotCdf(meanShots, 19);
+  const line215 = calcShotCdf(meanShots, 21);
+  const line235 = calcShotCdf(meanShots, 23);
+  const line255 = calcShotCdf(meanShots, 25);
+  const line275 = calcShotCdf(meanShots, 27);
+
+  return {
+    expectedTotalShots: +meanShots.toFixed(1),
+    homeShotsExp: +Number(homeTotalShotsExp || meanShots * 0.56).toFixed(1),
+    awayShotsExp: +Number(awayTotalShotsExp || meanShots * 0.44).toFixed(1),
+    match: {
+      over195: line195.over, under195: line195.under,
+      over215: line215.over, under215: line215.under,
+      over235: line235.over, under235: line235.under,
+      over255: line255.over, under255: line255.under,
+      over275: line275.over, under275: line275.under
+    }
+  };
+}
+
+

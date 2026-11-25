@@ -53,7 +53,7 @@ export const MatchDrawer: React.FC = () => {
   const [fetchedEnsemble, setFetchedEnsemble] = useState<any[]>([]);
   const [ensembleLoading, setEnsembleLoading] = useState<boolean>(false);
 
-  const [marketSubFilter, setMarketSubFilter] = useState<'ALL' | 'FIRST_15_MIN' | 'TEAM_CORNERS' | 'CORNERS' | 'CORE'>('ALL');
+  const [marketSubFilter, setMarketSubFilter] = useState<'ALL' | 'CORE' | 'GOALS_COMBOS' | 'HALVES_TIMING' | 'BOOKINGS_SCORERS' | 'CORNERS'>('ALL');
 
   // Reset per-match state whenever user switches match
   useEffect(() => {
@@ -154,8 +154,11 @@ export const MatchDrawer: React.FC = () => {
 
   const travel = m.situationalFactors?.travelFatigue || {};
   const weather = m.situationalFactors?.weatherConditions || {};
-  const cornerProj = m.cornerVolatilityProfile?.teamCornerProjections || null;
+  const cornersSupported = m.cornerVolatilityProfile?.cornersSupported !== false && Boolean(m.cornerVolatilityProfile?.teamCornerProjections);
+  const cornerProj = cornersSupported ? m.cornerVolatilityProfile?.teamCornerProjections : null;
+  const first10Proj = m.timeSegmentProfile?.first10MinModel || null;
   const first15Proj = m.timeSegmentProfile?.first15MinModel || null;
+  const shotsProj = m.shootingMetricsProfile?.matchShotLines || null;
   const bayesian = bMeta.bayesianDynamicUpdate || {};
   const verifier = m.engineVerifier || {};
   const layer18Payload = bMeta.layer18 || m.situationalFactors || {};
@@ -191,15 +194,18 @@ export const MatchDrawer: React.FC = () => {
       }
 
       if (res.isHtmlFallback) {
-        const f15Str = first15Proj ? `First 15-Min Draw (X): ${first15Proj.drawProbPct}% (0-15' Goalless: ${first15Proj.noGoalProbPct}%)` : 'First 15-Min Draw modeled via Weibull hazard decay';
-        const cornStr = cornerProj ? `Corner Projections: ${m.home.name} ${cornerProj.homeExp} vs ${m.away.name} ${cornerProj.awayExp} (Total ${cornerProj.totalExp})` : 'Corner distribution calibrated via Negative Binomial overdispersion';
+        const f10Str = first10Proj ? `0-10' Draw (X): ${first10Proj.drawProbPct}% (0-10' No Goal: ${first10Proj.noGoalProbPct}%)` : '0-10m Weibull hazard decay active';
+        const f15Str = first15Proj ? ` | 0-15' Draw (X): ${first15Proj.drawProbPct}% (0-15' No Goal: ${first15Proj.noGoalProbPct}%)` : '';
+        const shotsStr = shotsProj ? `Total Match Shots xShots: ${shotsProj.expectedTotalShots} (O19.5: ${shotsProj.over195Pct}% · U27.5: ${shotsProj.under275Pct}%)` : 'Negative Binomial shot line active';
+        const cornStr = cornerProj ? `Corner Projections: ${m.home.name} ${cornerProj.homeExp} vs ${m.away.name} ${cornerProj.awayExp} (Total ${cornerProj.totalExp})` : 'Corner market suppressed (not offered on sportsbooks for this competition)';
         const physStr = physicsSnapshot ? `Atmospheric Density: ${physicsSnapshot.airDensityKgM3} kg/m³ · Drag Delta: ${physicsSnapshot.dragSpeedupPct}% · Altitude Hypoxia Factor: ${physicsSnapshot.altitudeHypoxiaFactor}` : '';
         setAiReport(
           `[QUANTITATIVE ENGINE BRIEFING — ${m.home.name} vs ${m.away.name}]\n\n` +
           `• Top Consensus Market: ${top?.selection} (${top?.market}) at ${top?.probability}% calibrated probability (@${topOdds.toFixed(2)}).\n` +
           `• 24-Model Agreement: ${ens.modelAgreementScore ?? 88}% | Bayesian Elo: ${bayesian.posteriorElo ?? m.home.rating}.\n` +
-          `• Micro-Segments: ${f15Str}.\n` +
-          `• Set-Piece Siege: ${cornStr}.\n` +
+          `• Time Segments: ${f10Str}${f15Str}.\n` +
+          `• Shooting Volume: ${shotsStr}.\n` +
+          `• Corner Governance: ${cornStr}.\n` +
           (physStr ? `• Pitch & Fluid Physics: ${physStr}.\n` : '') +
           (entropySnapshot ? `• Shannon Outcome Entropy: ${entropySnapshot.entropyBits} bits (Skellam Dominant Margin: ${entropySnapshot.dominantMargin > 0 ? `+${entropySnapshot.dominantMargin}` : entropySnapshot.dominantMargin}).` : '')
         );
@@ -396,7 +402,7 @@ export const MatchDrawer: React.FC = () => {
                   )}
                 </div>
                 <p className="text-slate-300">
-                  Evaluates rest intervals, travel load, aerodynamic drag &amp; pitch friction, hypoxic altitude load, Weibull first-15m hazards, Negative Binomial corner siege, and Shannon entropy before publishing any conviction pick.
+                  Evaluates rest intervals, travel load, aerodynamic drag &amp; pitch friction, hypoxic altitude load, Weibull first-10m hazards &amp; goal intervals, league-gated Negative Binomial corners, Bookings Unders discipline, and Shannon entropy before publishing any conviction pick.
                 </p>
                 <div className="grid grid-cols-2 gap-2 pt-1 text-[11px] font-num">
                   <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
@@ -440,11 +446,27 @@ export const MatchDrawer: React.FC = () => {
                       </strong>
                     </div>
                   )}
+                  {first10Proj && (
+                    <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
+                      <span className="text-slate-400 block">Weibull First 10 Min Result:</span>
+                      <strong className="text-amber-300">
+                        {first10Proj.drawProbPct}% Draw · {first10Proj.noGoalProbPct}% 0-0 (0-10&apos;)
+                      </strong>
+                    </div>
+                  )}
                   {first15Proj && (
                     <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46]">
                       <span className="text-slate-400 block">Weibull First 15 Min Draw:</span>
-                      <strong className="text-amber-300">
+                      <strong className="text-sky-300">
                         {first15Proj.drawProbPct}% Draw · {first15Proj.noGoalProbPct}% 0-0 (0-15&apos;)
+                      </strong>
+                    </div>
+                  )}
+                  {shotsProj && (
+                    <div className="p-2.5 rounded bg-[#0A0E17] border border-[#222E46] col-span-2">
+                      <span className="text-slate-400 block">Negative Binomial Match Total Shots:</span>
+                      <strong className="text-violet-300">
+                        Exp {shotsProj.expectedTotalShots} Shots · O19.5 {shotsProj.over195Pct}% · O21.5 {shotsProj.over215Pct}% · U27.5 {shotsProj.under275Pct}%
                       </strong>
                     </div>
                   )}
@@ -557,10 +579,11 @@ export const MatchDrawer: React.FC = () => {
               <div className="flex items-center gap-1.5 flex-wrap">
                 {[
                   { id: 'ALL', label: `All (${(m.predictions || []).length})` },
-                  { id: 'FIRST_15_MIN', label: 'First 15 Min Draw' },
-                  { id: 'TEAM_CORNERS', label: 'Team Corners (5.5+ / Home 7+)' },
-                  { id: 'CORNERS', label: '1H (3.5/4.5) & Total Corners (7.5+)' },
-                  { id: 'CORE', label: 'Core & Totals' }
+                  { id: 'CORE', label: '1X2, DC, Handicap & Margins' },
+                  { id: 'GOALS_COMBOS', label: 'Totals (1.5+), Team Goals, BTTS & Combos' },
+                  { id: 'HALVES_TIMING', label: 'Halves, HT/FT & First 10m/15m' },
+                  { id: 'BOOKINGS_SCORERS', label: 'Shots, Bookings (Unders) & Scorers' },
+                  ...(cornerProj ? [{ id: 'CORNERS' as const, label: 'Corners (1H / Team / Match)' }] : [])
                 ].map(sf => (
                   <button
                     key={sf.id}
@@ -579,17 +602,24 @@ export const MatchDrawer: React.FC = () => {
               <div className="space-y-2">
                 {(m.predictions || [])
                   .filter(pred => {
+                    const cat = pred.marketCategory || '';
                     if (marketSubFilter === 'ALL') return true;
-                    if (marketSubFilter === 'FIRST_15_MIN') {
-                      return pred.marketCategory === 'FIRST_15_MIN' || (pred.market || '').toLowerCase().includes('first 15');
+                    if (marketSubFilter === 'CORE') {
+                      return cat === 'WINNERS_DC' || cat === 'HANDICAP_MARGINS' || cat === 'EXACT_SCORE' || cat === 'TEAM_PERFORMANCE';
                     }
-                    if (marketSubFilter === 'TEAM_CORNERS') {
-                      return pred.marketCategory === 'TEAM_CORNERS' || (pred.market || '').toLowerCase().includes('team total corners');
+                    if (marketSubFilter === 'GOALS_COMBOS') {
+                      return cat === 'GOAL_OVERS_UNDERS' || cat === 'TEAM_GOALS' || cat === 'BTTS' || cat === 'BTTS_COMBOS';
+                    }
+                    if (marketSubFilter === 'HALVES_TIMING') {
+                      return cat === 'HALF_MARKETS' || cat === 'TIME_SEGMENTS' || /half|first 10|first 15|goal interval|first \/ last/i.test(pred.market || '');
+                    }
+                    if (marketSubFilter === 'BOOKINGS_SCORERS') {
+                      return cat === 'SHOOTING' || cat === 'BOOKINGS' || cat === 'SCORER_MATCHFLOW' || cat === 'KNOCKOUT_CUP' || /shots|booking|card|scorer|matchflow|qualify/i.test(pred.market || '');
                     }
                     if (marketSubFilter === 'CORNERS') {
-                      return pred.marketCategory === 'CORNERS' || /1st-half corners|match total corners/i.test(pred.market || '');
+                      return cat === 'CORNERS' || cat === 'TEAM_CORNERS' || /corner/i.test(pred.market || '');
                     }
-                    return pred.marketCategory !== 'FIRST_15_MIN' && pred.marketCategory !== 'TEAM_CORNERS' && pred.marketCategory !== 'CORNERS';
+                    return true;
                   })
                   .map((pred, i) => {
                     const isLegAdded = accumulatorLegs.some(l => l.matchId === m.id && l.selection === pred.selection);
